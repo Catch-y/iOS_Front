@@ -105,14 +105,14 @@ if let user = self.veryLongFunctionNameWhichReturnsOptionalUser(),
 ## 8. 커밋 컨벤션
 | 아이콘 | 코드 | 설명 | 원문 |
 | :---: | :---: | :---: | :---: |
-| 🐛 | :bug: | 버그 수정 | Fix a bug |
-| ✨ | :sparkles: | 새 기능 | Introduce new features. |
-| 💄 | :lipstick: | UI/스타일 파일 추가/수정 | Add or update the UI and style files. |
-| ♻️ | :recycle: | 코드 리팩토링 | Refactor code. |
-| ➕ | :heavy_plus_sign: | 의존성 추가 | Add a dependency. |
-| 🔀 | :twisted_rightwards_arrows: | 브랜치 합병 | Merge branches. |
-| 💡 | :bulb: | 주석 추가/수정 | Add or update comments in source code |
-| 🔥 | :fire: | 코드 파일 삭제 | Remove code or files. |
-| 🚑 | :ambulance: | 긴급 수정 | Critical hotfix. |
-| 🎉 | :tada: | 프로젝트 시작 | Begin a project. |
-| 🔒 | :lock: | 보안 이슈 | :lock: | 보안 이슈 수정 |
+| 🐛 | bug | 버그 수정 | Fix a bug |
+| ✨ | sparkles | 새 기능 | Introduce new features. |
+| 💄 | lipstick:| UI/스타일 파일 추가/수정 | Add or update the UI and style files. |
+| ♻️ | recycle | 코드 리팩토링 | Refactor code. |
+| ➕ | heavy_plus_sign | 의존성 추가 | Add a dependency. |
+| 🔀 | twisted_rightwards_arrows | 브랜치 합병 | Merge branches. |
+| 💡 | bulb | 주석 추가/수정 | Add or update comments in source code |
+| 🔥 | fire | 코드 파일 삭제 | Remove code or files. |
+| 🚑 | ambulance | 긴급 수정 | Critical hotfix. |
+| 🎉 | tada | 프로젝트 시작 | Begin a project. |
+| 🔒 | lock | 보안 이슈 | :lock: | 보안 이슈 수정 |
