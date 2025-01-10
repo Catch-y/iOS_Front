@@ -73,6 +73,7 @@ DerivedData/
 *.ipa
 *.dSYM.zip
 *.dSYM
+*.xcuserstate
 
 ## Playgrounds
 timeline.xctimeline
