@@ -100,7 +100,7 @@ if let user = self.veryLongFunctionNameWhichReturnsOptionalUser(),
     1. `PR 유형 작성`, 어떤 변경 사항이 있었는지 [] 괄호 사이에 x를 입력하여 체크할 수 있도록 한다.
     2. `작업 내용 작성`, 작업 내용에 대해 자세하게 작성을 한다.
     3. `추후 진행할 작업`, PR 이후 작업할 내용에 대해 작성한다.
-    4. `리뷰 포인트`, 본인 PR에서 꼭 확인해ㅑ 할 부분을 작성한다.
+    4. `리뷰 포인트`, 본인 PR에서 꼭 확인해야 할 부분을 작성한다.
 
 ## 8. 커밋 컨벤션
 | 아이콘 | 코드 | 설명 | 원문 |
@@ -116,3 +116,43 @@ if let user = self.veryLongFunctionNameWhichReturnsOptionalUser(),
 | 🚑 | ambulance | 긴급 수정 | Critical hotfix. |
 | 🎉 | tada | 프로젝트 시작 | Begin a project. |
 | 🔒 | lock | 보안 이슈 | :lock: | 보안 이슈 수정 |
+
+## 9. 폴더 컨벤션
+```
+📦Catchy
+ ┣ 📂API
+ ┃ ┣ 📂APITarget
+ ┃ ┣ 📂Protocol
+ ┃ ┣ 📂Repository
+ ┃ ┣ 📂Service
+ ┃ ┣ 📂UseCase
+ ┃ ┗ 📂Util
+ ┃ ┃ ┣ 📂TokenRefresher
+ ┣ 📂APP
+ ┣ 📂Common
+ ┃ ┣ 📂Enum
+ ┃ ┣ 📂Protocol
+ ┃ ┗ 📂UIComponents
+ ┣ 📂Core
+ ┃ ┣ 📂DIContainer
+ ┃ ┗ 📂Util
+ ┃ ┃ ┗ 📂Navigation
+ ┣ 📂Model
+ ┃ ┣ 📂Request
+ ┃ ┣ 📂Response
+ ┣ 📂Modules
+ ┣ 📂Preview Content
+ ┃ ┗ 📂Preview Assets.xcassets
+ ┣ 📂Resources
+ ┃ ┣ 📂Assets.xcassets
+ ┃ ┃ ┣ 📂AccentColor.colorset
+ ┃ ┃ ┣ 📂AppIcon.appiconset
+ ┃ ┣ 📂Color.xcassets
+ ┃ ┣ 📂Fonts
+ ┃ ┣ 📂Image
+ ┃ ┣ 📂Keyboard
+ ┃ ┣ 📂Keychain
+ ┃ ┣ 📂Modifier
+ ┃ ┗ 📂Shadow
+ ┗ 📜ContentView.swift
+```
