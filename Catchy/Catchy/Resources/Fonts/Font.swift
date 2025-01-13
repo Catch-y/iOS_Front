@@ -78,4 +78,8 @@ extension Font {
     static var titleLogo: Font {
         return .pretend(type: .regular, size: 14)
     }
+    
+    static var inputText: Font {
+        return .pretend(type: .medium, size: 15)
+    }
 }

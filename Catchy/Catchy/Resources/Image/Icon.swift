@@ -18,6 +18,9 @@ enum Icon: String {
     case apple = "apple"
     case appIcon = "appIcon"
     
+    //MARK: - SignUp
+    case signupProfile = "signupProfile"
+    
     var image: Image {
         return Image(self.rawValue)
     }
