@@ -207,6 +207,8 @@
 /* Begin XCBuildConfiguration section */
 		48F248742D2EB42D0079E120 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 48F2486A2D2EB42C0079E120 /* Catchy */;
+			baseConfigurationReferenceRelativePath = Core/Util/Secret.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -270,6 +272,8 @@
 		};
 		48F248752D2EB42D0079E120 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 48F2486A2D2EB42C0079E120 /* Catchy */;
+			baseConfigurationReferenceRelativePath = Core/Util/Secret.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -326,6 +330,8 @@
 		};
 		48F248772D2EB42D0079E120 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 48F2486A2D2EB42C0079E120 /* Catchy */;
+			baseConfigurationReferenceRelativePath = Core/Util/Secret.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -356,6 +362,8 @@
 		};
 		48F248782D2EB42D0079E120 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 48F2486A2D2EB42C0079E120 /* Catchy */;
+			baseConfigurationReferenceRelativePath = Core/Util/Secret.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
