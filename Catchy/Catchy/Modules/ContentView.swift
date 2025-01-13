@@ -14,6 +14,18 @@ struct ContentView: View {
                 .imageScale(.large)
                 .foregroundStyle(.tint)
             Text("Hello, world!")
+            
+            
+        }
+        .onAppear {
+            // 폰트 체크 하기
+            UIFont.familyNames.sorted().forEach { familyName in
+                print("*** \(familyName) ***")
+                UIFont.fontNames(forFamilyName: familyName).forEach { fontName in
+                    print("\(fontName)")
+                }
+                print("---------------------")
+            }
         }
         .padding()
     }
