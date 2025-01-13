@@ -74,4 +74,8 @@ extension Font {
     static var caption2: Font {
         .pretend(type: .regular, size: 11)
     }
+    
+    static var titleLogo: Font {
+        return .pretend(type: .regular, size: 14)
+    }
 }
