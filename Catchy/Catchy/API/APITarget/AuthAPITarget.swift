@@ -26,7 +26,7 @@ extension AuthAPITarget: APITargetType {
     }
     
     var headers: [String : String]? {
-        var headers = ["Content-Type": "application/json"]
+        let headers = ["Content-Type": "application/json"]
         
         return headers
     }
