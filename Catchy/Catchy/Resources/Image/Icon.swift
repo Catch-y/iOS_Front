@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 enum Icon: String {
-    case test = "Test"
+    case logo = "logo"
     
     var image: Image {
         return Image(self.rawValue)
