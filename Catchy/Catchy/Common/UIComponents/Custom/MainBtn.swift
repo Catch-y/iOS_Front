@@ -34,14 +34,16 @@ struct MainBtn: View {
             action()
         }, label: {
             Text(text)
+                .frame(width: width, height: height)
                 .font(.ButtonText)
                 .foregroundStyle(returnTextColor())
                 .background {
                     RoundedRectangle(cornerRadius: 30)
                         .fill(returnBtnColor())
-                        .frame(width: width, height: height)
+                        
                 }
         })
+
     }
     
     func returnBtnColor() -> Color {

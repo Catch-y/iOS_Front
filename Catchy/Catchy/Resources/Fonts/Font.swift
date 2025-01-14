@@ -82,4 +82,8 @@ extension Font {
     static var inputText: Font {
         return .pretend(type: .medium, size: 15)
     }
+    
+    static var naviFont: Font {
+        return .pretend(type: .bold, size: 17)
+    }
 }
