@@ -36,6 +36,12 @@ struct S4B: ViewModifier {
     }
 }
 
+struct EmptyModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+    }
+}
+
 extension View {
     func s1w() -> some View {
         self.modifier(S1W())
@@ -51,5 +57,9 @@ extension View {
     
     func s4b() -> some View {
         self.modifier(S4B())
+    }
+    
+    func empty() -> some View {
+        self.modifier(EmptyModifier())
     }
 }

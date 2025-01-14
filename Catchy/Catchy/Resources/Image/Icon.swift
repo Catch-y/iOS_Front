@@ -25,6 +25,7 @@ enum Icon: String {
     //MARK: - ETC
     case leftChevron = "leftChevron"
     case close = "close"
+    case search = "search"
     
     var image: Image {
         return Image(self.rawValue)
