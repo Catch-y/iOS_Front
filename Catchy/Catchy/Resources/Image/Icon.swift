@@ -27,6 +27,9 @@ enum Icon: String {
     case close = "close"
     case search = "search"
     
+    //MARK: - Home
+    case topLogo = "topLogo"
+    
     var image: Image {
         return Image(self.rawValue)
     }
