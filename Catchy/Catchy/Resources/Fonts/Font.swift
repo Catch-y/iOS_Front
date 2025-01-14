@@ -74,4 +74,16 @@ extension Font {
     static var caption2: Font {
         .pretend(type: .regular, size: 11)
     }
+    
+    static var titleLogo: Font {
+        return .pretend(type: .regular, size: 14)
+    }
+    
+    static var inputText: Font {
+        return .pretend(type: .medium, size: 15)
+    }
+    
+    static var naviFont: Font {
+        return .pretend(type: .bold, size: 17)
+    }
 }
