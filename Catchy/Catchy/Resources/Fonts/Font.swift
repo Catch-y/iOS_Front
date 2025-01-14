@@ -43,7 +43,11 @@ extension Font {
         return .pretend(type: .medium, size: 16)
     }
     
-    static var Headline: Font {
+    static var Headline1: Font {
+        return .pretend(type: .bold, size: 40)
+    }
+    
+    static var Headline2: Font {
         return .pretend(type: .bold, size: 32)
     }
     
@@ -59,20 +63,36 @@ extension Font {
         return .pretend(type: .medium, size: 17)
     }
     
+    static var Subtitle3_SM: Font {
+        return .pretend(type: .semibold, size: 17)
+    }
+    
     static var body1: Font {
         return .pretend(type: .semibold, size: 14)
     }
     
     static var body2: Font {
+        return .pretend(type: .regular, size: 13)
+    }
+    
+    static var body3: Font {
         return .pretend(type: .regular, size: 12)
     }
     
+    static var body3_SM: Font {
+        return .pretend(type: .semibold, size: 12)
+    }
+    
     static var caption1: Font {
-        .pretend(type: .regular, size: 13)
+        .pretend(type: .regular, size: 11)
+    }
+    
+    static var caption1_SM: Font {
+        .pretend(type: .semibold, size: 11)
     }
     
     static var caption2: Font {
-        .pretend(type: .regular, size: 11)
+        .pretend(type: .semibold, size: 8)
     }
     
     static var titleLogo: Font {
@@ -85,5 +105,9 @@ extension Font {
     
     static var naviFont: Font {
         return .pretend(type: .bold, size: 17)
+    }
+    
+    static var courseTag: Font {
+        return .pretend(type: .medium, size: 9)
     }
 }
