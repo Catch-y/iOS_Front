@@ -34,6 +34,11 @@ class DataFormatter {
             attributedString[keywordRange].font = .Subtitle2
         }
         
+        if let keywordRange = attributedString.range(of: "방문 체크하기") {
+            attributedString[keywordRange].foregroundColor = Color.main
+            attributedString[keywordRange].font = .Subtitle3_SM
+        }
+        
         return attributedString
     }
 }
