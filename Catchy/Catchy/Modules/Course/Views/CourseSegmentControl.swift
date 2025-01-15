@@ -50,6 +50,11 @@ class CourseSegmentControl: UISegmentedControl {
     /// 하단 바 위치의 선을 위한 UIView
     private let segmentLine = UIView()
     
+    // MARK: - Properties
+    
+    /// 세그먼트 컨트롤러가 탭 될 때, 뷰 컨트롤러의 핸들러 함수
+    private var onSegementChange : ((Int) -> Void)?
+    
     // MARK: - Init
     
     init(items: [String]){
@@ -118,6 +123,13 @@ class CourseSegmentControl: UISegmentedControl {
         
     }
     
+    /// 외부(뷰 컨트롤러)에서 핸들러 함수 등록
+    /// 세그먼트 컨트롤 탭 시 뷰 컨트롤러에서 등록된 핸들러 함수가 실행
+    /// - Parameter handler: 핸들러 함수 (뷰 컨트롤러에 정의)
+    public func setHandler(_ handler: @escaping (Int) -> Void) {
+        self.onSegementChange = handler
+    }
+    
     
 }
 
@@ -156,9 +168,13 @@ extension CourseSegmentControl {
         }
     }
     
-    // MARK: - @objc Methods
-
-    @objc private func didTapSegmentControl(){
+    // MARK: - Handler Methods
+    
+    /// 세그먼트 컨트롤 탭 시 실행
+    @objc public func didTapSegmentControl() {
         self.updateIndicatorPosition()
+        self.onSegementChange?(self.selectedSegmentIndex)
     }
+    
+    
 }
