@@ -25,6 +25,15 @@ enum Icon: String {
     //MARK: - ETC
     case leftChevron = "leftChevron"
     case close = "close"
+    case search = "search"
+    
+    //MARK: - Home
+    case topLogo = "topLogo"
+    case heart = "heart"
+    case empyHeart = "empyHeart"
+    case location = "location"
+    case star = "star"
+    case time = "time"
     
     var image: Image {
         return Image(self.rawValue)
