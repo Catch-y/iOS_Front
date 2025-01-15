@@ -80,7 +80,7 @@ struct CustomTextField: View {
                 .foregroundStyle(Color.g7)
                 .focused($isTextFocused)
                 .background(Color.clear)
-                .padding(.leading, 10)
+                .padding(.leading, 15)
                 .onSubmit {
                     onSubmit?()
                 }

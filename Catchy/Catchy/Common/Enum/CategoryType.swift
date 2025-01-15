@@ -8,11 +8,11 @@
 import Foundation
 
 enum CategoryType: String, Codable {
-    case cafe = "카페"
-    case bar = "주류"
-    case restaurant = "음식점"
-    case experience = "체험"
-    case culturalLife = "문화생활"
-    case sport = "스포츠"
-    case rest = "휴식/웰니스"
+    case CAFE = "카페"
+    case BAR = "주류"
+    case RESTAURANT = "음식점"
+    case EXPRERIENCE = "체험"
+    case CULTURELIFE = "문화생활"
+    case SPROT = "스포츠"
+    case REST = "휴식/웰니스"
 }

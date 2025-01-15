@@ -14,6 +14,7 @@ struct RecommendPlaceResponse: Codable {
     let subCategory: String
     var isLike: Bool
     let starPoint: Double
+    let reviewCnt: Int
     let placeLocation: String
     let placeOperTime: String
 }

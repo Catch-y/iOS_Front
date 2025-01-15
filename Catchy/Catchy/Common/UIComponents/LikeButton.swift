@@ -45,9 +45,3 @@ struct LikeButton: View {
         }
     }
 }
-
-struct LikeButton_Preview: PreviewProvider {
-    static var previews: some View {
-        LikeButton(data: .constant(RecommendPlaceResponse(placeId: 1, placeImage: "s", placeName: "s", subCategory: "s", isLike: true, starPoint: 2.1, placeLocation: "s", placeOperTime: "s")), action: {print("hello")})
-    }
-}

@@ -17,7 +17,7 @@ struct RecommendPlaceCard: View {
             placeImage
             
             VStack(alignment: .leading, content: {
-                placeTitleTage
+                placeTitleTag
                 placePointInfo
                 placeLocationInfo
                     .padding(.top, 11)
@@ -49,7 +49,7 @@ struct RecommendPlaceCard: View {
         })
     }
     
-    private var placeTitleTage: some View {
+    private var placeTitleTag: some View {
         HStack(spacing: 15 ,content: {
             Text(data.placeName)
                 .font(.body1)
@@ -72,7 +72,7 @@ struct RecommendPlaceCard: View {
         HStack(spacing: 8, content: {
             makeInfoTitle(Icon.star.image, "평점 \(data.starPoint)")
             
-            makeInfoTitle(Icon.star.image, "평점 \(data.starPoint)")
+            makeReview(Icon.review.image, "리뷰 \(data.reviewCnt)개", Icon.rightChevron.image)
         })
     }
     
@@ -97,11 +97,17 @@ extension RecommendPlaceCard {
                 .foregroundStyle(Color.g4)
         })
     }
-}
-
-struct RecommendPlaceCard_Previews: PreviewProvider {
-    static var previews: some View {
-        RecommendPlaceCard(data: .constant(RecommendPlaceResponse(placeId: 0, placeImage: "https://i.namu.wiki/i/Q3ru_aVczQgaq1Z1Ptvhktl9fM57cRQkBtn0_DWXyPvXuP3jj8zanjgG_0Cvdim3fN4cXHQ-2QAD2U7opRL9KMb6eWQzo9zpAM9jZA7xxuaMbgF0y08EFC-jcOPgKE5CawVI5g_W_Ku4GmpIL7d5RA.webp", placeName: "심퍼티쿠시 용산점", subCategory: "양식", isLike: false, starPoint: 4.3, placeLocation: "서울시 동작구", placeOperTime: "월-금 16:00 ~ 18:00")))
-            .previewLayout(.sizeThatFits)
+    
+    func makeReview(_ leftImage: Image, _ title: String, _ rightImage: Image) -> some View {
+        HStack(spacing: 6, content: {
+            leftImage
+                .fixedSize()
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(Color.g4)
+            
+            rightImage
+                .fixedSize()
+        })
     }
 }
