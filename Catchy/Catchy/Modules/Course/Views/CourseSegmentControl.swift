@@ -130,6 +130,7 @@ extension CourseSegmentControl {
     private func selectedSegmentIndicator(){
         
         self.selectedIndicator.backgroundColor = self.selectedColor
+        
         self.selectedSegmentIndex = 0
         self.addSubview(self.selectedIndicator)
         
@@ -145,10 +146,10 @@ extension CourseSegmentControl {
         let leftOffset: CGFloat = 1
         
         // 세그먼트 컨트롤 바의 가로 길이
-        let indicatorWidth = maxSegmentLabelWidth + 30
+        let indicatorWidth = maxSegmentLabelWidth + 35
 
         let indicatorPositionX = segmentWidth * CGFloat(selectedSegmentIndex) + (segmentWidth - indicatorWidth) / 2 - leftOffset
-        let indicatorFrame = CGRect(x: indicatorPositionX, y: bounds.height - 3, width: indicatorWidth, height: 2)
+        let indicatorFrame = CGRect(x: indicatorPositionX, y: bounds.height - 4, width: indicatorWidth, height: 4)
         
         UIView.animate(withDuration: 0.25) {
             self.selectedIndicator.frame = indicatorFrame
@@ -161,4 +162,3 @@ extension CourseSegmentControl {
         self.updateIndicatorPosition()
     }
 }
-

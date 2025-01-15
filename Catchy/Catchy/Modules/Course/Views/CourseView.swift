@@ -6,17 +6,27 @@
 //
 
 import UIKit
+import SwiftUI
 import SnapKit
 
 class CourseView: UIView {
 
     
     // MARK: - UIView Properties
-    
-    /// "catch:y" 로고 헤더 뷰
-    private lazy var mainHeaderView: MainHeaderView = {
-        let headerView = MainHeaderView()
-        return headerView
+    /// 로고 네비게이션 바
+    /// SwiftUI객체를 UIKit에서 사용하기 위해 UIHostingController 객체로 감쌈
+    private lazy var logoNavigationView: UIView = {
+        let logoView = CustomLogoNavi(onlyLogo: true)
+        let hostingController = UIHostingController(rootView: logoView)
+        
+        // 배경색 투명하개
+        hostingController.view.backgroundColor = .clear
+        
+        // TODO: - 네비게이션 바 상단의 그림자만 제거해야함
+        // 상하단 그림자 모두 제거
+        hostingController.view.layer.masksToBounds = true
+        
+        return hostingController.view
     }()
     
     /// 세그먼트 컨트롤
@@ -58,26 +68,34 @@ class CourseView: UIView {
     
     private func addComponents(){
         
-        [self.mainHeaderView, self.segmentControl, self.segmentLineView].forEach{ self.addSubview($0) }
+        [
+            self.logoNavigationView,
+            self.segmentControl,
+            self.segmentLineView
+        ].forEach{
+            self.addSubview($0)
+        }
         
     }
     
     private func setConstraints(){
         
-        self.mainHeaderView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide.snp.top)
-            make.width.equalToSuperview()
-            make.height.equalTo(70)
-        }
-        
-        self.segmentControl.snp.makeConstraints{ make in
-            make.height.equalTo(50)
+        // Catch:y 로고 네비게이션 뷰 레이아웃
+        self.logoNavigationView.snp.makeConstraints { make in
+            make.width.equalTo(UIScreen.main.bounds.width)
             make.centerX.equalToSuperview()
-            make.width.equalTo(300)
-            make.top.equalTo(mainHeaderView.snp.bottom)
-        
+            make.top.equalTo(safeAreaLayoutGuide.snp.top)
         }
         
+        // 세그먼트 컨트롤 레이아웃
+        self.segmentControl.snp.makeConstraints{ make in
+            make.height.equalTo(45)
+            make.width.equalTo(350)
+            make.left.right.equalToSuperview()
+            make.top.equalTo(logoNavigationView.snp.bottom)
+        }
+        
+        // 세그먼트 컨트롤 하단 선 래이아웃
         self.segmentLineView.snp.makeConstraints{ make in
             make.height.equalTo(1)
             make.centerX.equalToSuperview()
