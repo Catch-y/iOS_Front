@@ -12,14 +12,15 @@ class DropDownCell: UITableViewCell {
     
     // MARK: - Design Properties
     
-    // TODO: - 드랍 다운 메뉴 와이어 프레임 나오면 오토 레이아웃 값 수정
+    // TODO: - 드랍 다운 메뉴 와이어 프레임 나오면 오토 레이아웃 값 적용
     
     // MARK: - Properties
     static let identifier = "DropDownCell"
     
+    // TODO: - 드랍 다운 메뉴 와이어 프레임 나오면 폰트 및 색상 적용
     override var isSelected: Bool{
         didSet{
-            
+            // itemLabel.textColor = isSelected ?
         }
     }
     
