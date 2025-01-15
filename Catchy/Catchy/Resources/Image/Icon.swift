@@ -29,6 +29,11 @@ enum Icon: String {
     
     //MARK: - Home
     case topLogo = "topLogo"
+    case heart = "heart"
+    case empyHeart = "empyHeart"
+    case location = "location"
+    case star = "star"
+    case time = "time"
     
     var image: Image {
         return Image(self.rawValue)
