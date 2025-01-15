@@ -40,6 +40,7 @@ class CourseView: UIView {
         
     }()
     
+    /// 세그먼트 컨트롤 하단 뷰
     private lazy var segmentLineView: UIView = {
         let lineView = UIView()
         lineView.backgroundColor = UIColor.g2
@@ -48,6 +49,7 @@ class CourseView: UIView {
         return lineView
     }()
     
+    private lazy var provinceDropDown:
     
     // MARK: - Init
     
