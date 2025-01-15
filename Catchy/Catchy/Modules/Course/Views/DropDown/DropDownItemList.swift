@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DropDownItemList: View {
 
+    // MARK: - Properties
     var items : [String]
     
     let didTapItem: (_ item: String) -> Void
@@ -30,7 +31,7 @@ struct DropDownItemList: View {
             }
             .padding(.vertical)
         }
-        .frame(width: 180, height: 150)
+        .frame(width: 180, height: 100)
         .background {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(.g3, lineWidth: 1)

@@ -9,26 +9,21 @@ import SwiftUI
 
 struct DropDownView: View {
     
+    // MARK: - Properties
+    @Binding var selectedItem: String
     @State private var isPresented: Bool = false
-    @State private var selectedItem: String? = nil
     
     var placeholder: String
-    
-    @Binding var items: [String]
-    
+    var items: [String]
     var onItemSelected: ((String) -> Void)?
     
-    init(placeholder: String, items: Binding<[String]>){
-        self.placeholder = placeholder
-        self._items = items
-    }
-    
+    // MARK: - UI Components
     var body: some View {
         Button {
             isPresented.toggle()
         } label: {
             HStack {
-                Text(self.selectedItem ?? self.placeholder)
+                Text(self.selectedItem.isEmpty ? self.placeholder : self.selectedItem)
                     .foregroundColor(.g5)
                 Spacer()
                 // TODO: - 이미지 카탈로그 필요함.
@@ -45,7 +40,7 @@ struct DropDownView: View {
         .overlay(alignment: .top) {
             VStack{
                 if isPresented {
-                    Spacer(minLength: 60)
+                    Spacer(minLength: 45)
                     DropDownItemList(items: items){ item in
                         isPresented = false
                         selectedItem = item

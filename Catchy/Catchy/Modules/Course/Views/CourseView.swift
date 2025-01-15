@@ -11,6 +11,8 @@ import SnapKit
 
 class CourseView: UIView {
 
+    // MARK: - Propertice
+    @State private var selectedProvince: String = ""
     
     // MARK: - UIView Properties
     /// 로고 네비게이션 바
@@ -49,7 +51,38 @@ class CourseView: UIView {
         return lineView
     }()
     
-    private lazy var provinceDropDown:
+    /// 도 선택 드랍다운 메뉴
+    private lazy var provinceDropDown: UIView = {
+        
+        let dropDownMenu = UIView.convert(from: DropDownView(
+            selectedItem: $selectedProvince,
+            placeholder: "도 선택",
+            items: ["경상남도", "전라남도", "충청남도", "경상북도", "전라북도", "충청북도", "함경북도", "함경남도"],
+            onItemSelected: {
+                selectedItem in
+                self.selectedProvince = selectedItem
+            }
+            
+        ))
+        
+        return dropDownMenu
+    }()
+    
+    /// 시/군/구 선택 드랍다운 메뉴
+    private lazy var districtDropDown: UIView = {
+        let dropDownMenu = UIView.convert(from: DropDownView(
+            selectedItem: $selectedProvince,
+            placeholder: "시/군/구 선택",
+            items: ["경상남도", "전라남도", "충청남도", "경상북도", "전라북도", "충청북도", "함경북도", "함경남도"],
+            onItemSelected: {
+                selectedItem in
+                self.selectedProvince = selectedItem
+            }
+            
+        ))
+        
+        return dropDownMenu
+    }()
     
     // MARK: - Init
     
@@ -73,7 +106,9 @@ class CourseView: UIView {
         [
             self.logoNavigationView,
             self.segmentControl,
-            self.segmentLineView
+            self.segmentLineView,
+            self.provinceDropDown,
+            self.districtDropDown
         ].forEach{
             self.addSubview($0)
         }
@@ -81,7 +116,7 @@ class CourseView: UIView {
     }
     
     private func setConstraints(){
-        
+                
         // Catch:y 로고 네비게이션 뷰 레이아웃
         self.logoNavigationView.snp.makeConstraints { make in
             make.width.equalTo(UIScreen.main.bounds.width)
@@ -103,6 +138,16 @@ class CourseView: UIView {
             make.centerX.equalToSuperview()
             make.top.equalTo(segmentControl.snp.bottom).offset(-1)
             make.width.equalTo(UIScreen.main.bounds.width)
+        }
+        
+        self.provinceDropDown.snp.makeConstraints{ make in
+            make.left.equalTo(safeAreaLayoutGuide.snp.left).offset(-10)
+            make.top.equalTo(segmentLineView.snp.bottom).offset(22)
+        }
+        
+        self.districtDropDown.snp.makeConstraints{ make in
+            make.right.equalTo(safeAreaLayoutGuide.snp.right).offset(10)
+            make.top.equalTo(segmentLineView.snp.bottom).offset(22)
         }
         
     }
