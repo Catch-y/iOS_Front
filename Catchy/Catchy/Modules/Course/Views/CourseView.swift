@@ -51,6 +51,7 @@ class CourseView: UIView {
         return lineView
     }()
     
+    // TODO: - UIViewController에서 드랍다운 메뉴 아이템 전달할 수 있도록 수정해야함.
     /// 도 선택 드랍다운 메뉴
     private lazy var provinceDropDown: UIView = {
         
@@ -68,6 +69,7 @@ class CourseView: UIView {
         return dropDownMenu
     }()
     
+    // TODO: - UIViewController에서 드랍다운 메뉴 아이템 전달할 수 있도록 수정해야함.
     /// 시/군/구 선택 드랍다운 메뉴
     private lazy var districtDropDown: UIView = {
         let dropDownMenu = UIView.convert(from: DropDownView(

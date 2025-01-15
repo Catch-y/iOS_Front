@@ -15,6 +15,7 @@ struct DropDownItemList: View {
     let didTapItem: (_ item: String) -> Void
     
     var body: some View {
+        // TODO: - 스크롤 안되는 문제있음.
         ScrollView {
             LazyVStack {
                 ForEach(items, id: \.self) { item in
