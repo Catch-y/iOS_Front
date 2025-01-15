@@ -13,7 +13,7 @@ struct CalenderView: View {
     var body: some View {
         VStack {
             headerView
-            Spacer().frame(height: 31) // 헤더와 날짜 간 간격
+            Spacer().frame(height: 35) // 헤더와 날짜 간 간격
             calendarGridView
         }
         .padding(.horizontal, 33)
@@ -29,20 +29,20 @@ struct CalenderView: View {
                     action: { viewModel.changeMonth(by: -1) }
                 ) {
                     Image(systemName: "chevron.left")
-                        .font(.title)
-                        .foregroundStyle(.g3)
+                        .font(.custom("Bold", size: 20))
+                        .foregroundStyle(Color.g3)
                 }
                 .accessibilityLabel("이전 달로 이동")
 
                 Text(viewModel.currentMonth, formatter: Self.calendarHeaderDateFormatter)
-                    .font(.Subtitle3)
+                    .font(.custom("Medium", size: 17))
 
                 Button(
                     action: { viewModel.changeMonth(by: 1) }
                 ) {
                     Image(systemName: "chevron.right")
-                        .font(.title)
-                        .foregroundStyle(.g3)
+                        .font(.custom("Bold", size: 20))
+                        .foregroundStyle(Color.g3)
                 }
                 .accessibilityLabel("다음 달로 이동")
             }
@@ -52,9 +52,12 @@ struct CalenderView: View {
                 ForEach(Self.localizedWeekdaySymbols.indices, id: \.self) { index in
                     Text(Self.localizedWeekdaySymbols[index])
                         .foregroundStyle(
-                            index == 0 ? .red : (index == 6 ? .blue : .gray)
+                            index == 0 ? Color.red :
+                            index == 6 ? Color.blue :
+                            Color.g5
                         )
                         .frame(maxWidth: .infinity)
+                        .font(.custom("SemiBold", size: 14))
                 }
             }
             .padding(.top, 31) // 요일과 날짜 사이 간격 설정
@@ -136,8 +139,8 @@ private struct CellView: View {
                 .fill(backgroundColor)
                 .overlay(
                     Text("\(day)")
-                        .font(.body)
-                        .foregroundColor(textColor)
+                        .font(.custom("semiBold", size: 14))
+                        .foregroundStyle(Color.g5)
                 )
                 .onTapGesture {
                     clicked.toggle() // 클릭 시 상태 변경
