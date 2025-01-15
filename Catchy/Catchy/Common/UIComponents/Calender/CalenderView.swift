@@ -29,19 +29,19 @@ struct CalenderView: View {
                     action: { viewModel.changeMonth(by: -1) }
                 ) {
                     Image(systemName: "chevron.left")
-                        .font(.custom("Bold", size: 20))
+                        .font(.title)
                         .foregroundStyle(Color.g3)
                 }
                 .accessibilityLabel("이전 달로 이동")
 
                 Text(viewModel.currentMonth, formatter: Self.calendarHeaderDateFormatter)
-                    .font(.custom("Medium", size: 17))
+                    .font(.Subtitle3)
 
                 Button(
                     action: { viewModel.changeMonth(by: 1) }
                 ) {
                     Image(systemName: "chevron.right")
-                        .font(.custom("Bold", size: 20))
+                        .font(.title)
                         .foregroundStyle(Color.g3)
                 }
                 .accessibilityLabel("다음 달로 이동")
@@ -139,7 +139,7 @@ private struct CellView: View {
                 .fill(backgroundColor)
                 .overlay(
                     Text("\(day)")
-                        .font(.custom("semiBold", size: 14))
+                        .font(.body)
                         .foregroundStyle(Color.g5)
                 )
                 .onTapGesture {
