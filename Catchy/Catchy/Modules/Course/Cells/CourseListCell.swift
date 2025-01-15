@@ -42,6 +42,8 @@ class CourseListCell: UITableViewCell {
     private lazy var courseDescription : UILabel = {
         let label = UILabel()
         label.font = UIFont.pretend(type: .light, size: 13)
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
         label.text = "코스 설명글입니다. \n한 두 줄 정도 쓰면 딱이겠네"
         return label
     }()
@@ -52,6 +54,7 @@ class CourseListCell: UITableViewCell {
         self.layer.cornerRadius = 20
         self.addComponents()
         self.setConstraints()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -67,6 +70,13 @@ class CourseListCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.courseImageView.image = nil
+        self.courseTitleLabel.text = nil
+        self.courseDescription.text = nil
     }
     
     // MARK: - Add Components & Set Constraints Methods
@@ -130,5 +140,7 @@ class CourseListCell: UITableViewCell {
 }
 
 #Preview{
-    CourseListCell(style: .default, reuseIdentifier: CourseListCell.identifier)
+    let cell = CourseListCell(style: .default, reuseIdentifier: CourseListCell.identifier)
+    cell.frame = CGRect(x:0, y:0, width: 370, height: 158)
+    return cell
 }
