@@ -34,6 +34,8 @@ enum Icon: String {
     case location = "location"
     case star = "star"
     case time = "time"
+    case review = "review"
+    case rightChevron = "rightChevron"
     
     var image: Image {
         return Image(self.rawValue)

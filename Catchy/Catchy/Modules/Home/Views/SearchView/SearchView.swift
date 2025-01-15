@@ -18,28 +18,47 @@ struct SearchView: View {
     var body: some View {
         VStack(alignment: .center, content: {
             
-            Spacer()
-            
             CustomNavigation(action: {
                 viewModel.container.navigationRouter.pop()
             }, title: nil, rightNaviIcon: nil)
             
+            if viewModel.searchKeyword.isEmpty {
             Spacer().frame(height: 95)
-            
-            topTitle
-                .padding(.leading, 15)
+                topTitle
+                    .padding(.leading, 15)
+                    .transition(.opacity)
+            }
             
             CustomTextField(text: $viewModel.searchKeyword, searchTextField: .searchView)
                 .padding(.top, 20)
+                .animation(.easeInOut(duration: 0.5), value: viewModel.searchKeyword)
             
-            if !viewModel.recentWords.isEmpty {
+            if !viewModel.recentWords.isEmpty && viewModel.searchKeyword.isEmpty {
                 recenteKeywords
                     .padding(.top, 38)
                     .padding(.horizontal, 15)
             }
             
+            if !viewModel.searchKeyword.isEmpty {
+                if let placeResult = viewModel.searchResult {
+                    placeLazy(placeResult: placeResult)
+                } else {
+                    if !viewModel.searchLoad {
+                        Text("검색된 데이터가 없습니다!")
+                            .font(.body2)
+                            .foregroundStyle(Color.g5)
+                            .overlay(content: {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color.g4, lineWidth: 1)
+                                    .frame(width: 370, height: 100)
+                            })
+                            .padding(.top, 60)
+                    }
+                }
+            }
             Spacer()
         })
+        .animation(.easeInOut(duration: 0.5), value: viewModel.searchKeyword)
     }
     
     
@@ -71,6 +90,22 @@ struct SearchView: View {
                     }
         })
         .frame(width: 352, alignment: .leading)
+    }
+    
+    private func placeLazy(placeResult: SearchPlaceResponse) -> some View {
+        LazyVGrid(columns: Array(repeating: GridItem(.fixed(336)), count: 1), spacing: 30, content: {
+            ForEach(Array(placeResult.content.enumerated()), id: \.element.id) { index, result in
+                VStack(spacing: 19, content: {
+                    SearchRecommendPlaceCard(data: result)
+                    
+                    if index < placeResult.content.count - 1 {
+                        Divider()
+                            .background(Color.g2)
+                            .frame(height: 1)
+                    }
+                })
+            }
+        })
     }
 }
 
