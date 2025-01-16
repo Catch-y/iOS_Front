@@ -70,9 +70,9 @@ struct RecommendPlaceCard: View {
     
     private var placePointInfo: some View {
         HStack(spacing: 8, content: {
-            makeInfoTitle(Icon.star.image, "평점 \(data.starPoint)")
+            StarPoint(point: data.starPoint)
             
-            makeReview(Icon.review.image, "리뷰 \(data.reviewCnt)개", Icon.rightChevron.image)
+            ReviewComponent(reviewCount: data.reviewCnt)
         })
     }
     
@@ -95,19 +95,6 @@ extension RecommendPlaceCard {
             Text(title)
                 .font(.caption)
                 .foregroundStyle(Color.g4)
-        })
-    }
-    
-    func makeReview(_ leftImage: Image, _ title: String, _ rightImage: Image) -> some View {
-        HStack(spacing: 6, content: {
-            leftImage
-                .fixedSize()
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(Color.g4)
-            
-            rightImage
-                .fixedSize()
         })
     }
 }

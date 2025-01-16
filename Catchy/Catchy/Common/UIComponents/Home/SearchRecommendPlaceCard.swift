@@ -40,9 +40,9 @@ struct SearchRecommendPlaceCard: View {
     
     private var placePointInfo: some View {
         HStack(spacing: 12, content: {
-            makeInfoTitle(Icon.star.image, "평점 \(data.averageRating)")
+            StarPoint(point: data.averageRating)
             
-            makeReview(Icon.time.image, "리뷰 \(data.reviewCount)개", Icon.rightChevron.image)
+            ReviewComponent(reviewCount: data.reviewCount)
         })
     }
 }

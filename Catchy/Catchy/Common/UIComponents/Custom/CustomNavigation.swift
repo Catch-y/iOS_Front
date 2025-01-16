@@ -7,35 +7,65 @@
 
 import SwiftUI
 
+enum CustomNavigationType {
+    case base
+    case shadow
+}
+
 struct CustomNavigation: View {
     
     let action: () -> Void
     let title: String?
     var leftNaviIcon: Image? = Icon.leftChevron.image
     var rightNaviIcon: Image? = Icon.close.image
+    let customNavigationType: CustomNavigationType
     
     init(
         action: @escaping () -> Void,
         title: String?,
-        rightNaviIcon: Image?
+        rightNaviIcon: Image?,
+        customNavigationType: CustomNavigationType = .base
     ) {
         self.action = action
         self.title = title
         self.rightNaviIcon = rightNaviIcon
+        self.customNavigationType = customNavigationType
     }
     
     init(
         action: @escaping () -> Void,
         title: String?,
-        leftNaviIcon: Image?
+        leftNaviIcon: Image?,
+        customNavigationType: CustomNavigationType = .base
     ) {
         self.action = action
         self.title = title
         self.leftNaviIcon = leftNaviIcon
+        self.customNavigationType = customNavigationType
     }
     
     
     var body: some View {
+        switch customNavigationType {
+        case .base:
+            baseNavi
+        case .shadow:
+            shadowNavi
+        }
+    }
+    
+    private var shadowNavi: some View {
+        ZStack(alignment: .bottom, content: {
+            Color.white
+                .s1w()
+            
+            baseNavi
+                .padding(.bottom, 14)
+        })
+        .frame(maxWidth: .infinity, maxHeight: 115)
+    }
+    
+    private var baseNavi: some View {
         HStack(alignment: .center, content: {
             if let leftNaviIcon = leftNaviIcon {
                 makeNaviButton(image: leftNaviIcon)
