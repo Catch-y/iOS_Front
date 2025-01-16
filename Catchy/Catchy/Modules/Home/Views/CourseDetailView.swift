@@ -26,25 +26,20 @@ struct CourseDetailView: View {
             if let data = viewModel.courseDetailResponse {
                 makeTopCouseInfoView(data: data)
                 
-                // TODo: 지도 생성
-            } else {
-                Spacer()
-                
-                ProgressView()
-                    .controlSize(.regular)
-                
                 Spacer()
             }
             
             
-        }).ignoresSafeArea(.all)
+        })
+        .ignoresSafeArea(.all)
+        .background(Color.bg1)
     }
     
 }
 
 extension CourseDetailView {
     private func makeTopCouseInfoView(data: CourseDetailResponse) -> some View {
-        return VStack(alignment: .leading, content: {
+        return VStack(alignment: .leading, spacing: 0, content: {
             
             if let url = URL(string: data.courseImage) {
                 KFImage(url)
@@ -59,20 +54,20 @@ extension CourseDetailView {
             }
             
             
-            VStack(alignment: .leading, content: {
+            VStack(alignment: .leading, spacing: 0, content: {
                 courTitleInfo(data.courseName)
                 
                 Text(data.courseDescription)
-                    .frame(width: 298)
+                    .frame(width: 370, height: 50, alignment: .leading)
                     .font(.body2)
                     .foregroundStyle(Color.g4)
                     .lineLimit(2)
                     .lineSpacing(2.5)
-                    .padding(.top, 9)
                 
                 pointReviewInfo(data.rating, data.reviewCount)
                     .padding(.top, 13)
             })
+            .padding(.top, 24)
             
             
             Divider()
@@ -81,11 +76,13 @@ extension CourseDetailView {
                 .padding(.top, 29)
             
             timePersoneCount(data: data)
+                .padding(.top, 11)
         })
         .frame(width: 370, height: 435)
         .padding(.horizontal, 16)
-        .padding(.vertical, 28)
+        .padding(.vertical, 29)
         .background(Color.white)
+        
     }
     
     private func courTitleInfo(_ text: String) -> some View {
@@ -101,7 +98,7 @@ extension CourseDetailView {
     }
     
     private func pointReviewInfo(_ point: Double, _ review: Int) -> some View {
-        HStack(spacing: 48, content: {
+        HStack(spacing: 26, content: {
             StarPoint(point: point)
             
             ReviewComponent(reviewCount: review)
@@ -112,7 +109,14 @@ extension CourseDetailView {
         HStack(spacing: 9, content: {
             CourseTimePerson(name: "추천 시간대", num: data.recommendTime)
             
-            CourseTimePerson(name: "코스 참여자 수", num: String(data.participantsNumber))
+            CourseTimePerson(name: "코스 참여자 수", num: "\(data.participantsNumber)명")
         })
+    }
+}
+
+struct CourseDetailView_Preview: PreviewProvider {
+    static var previews: some View {
+        CourseDetailView(container: DIContainer())
+            .environmentObject(DIContainer())
     }
 }

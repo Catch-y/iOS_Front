@@ -16,7 +16,7 @@ struct StarPoint: View {
             Icon.star.image
                 .fixedSize()
             
-            Text("평점 \(point)")
+            Text("평점 \(String(format: "%.1f", point))")
                 .font(.caption)
                 .foregroundStyle(Color.g4)
         })

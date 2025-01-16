@@ -60,7 +60,7 @@ struct CustomNavigation: View {
                 .s1w()
             
             baseNavi
-                .padding(.bottom, 14)
+                .padding(.bottom, 24)
         })
         .frame(maxWidth: .infinity, maxHeight: 115)
     }
