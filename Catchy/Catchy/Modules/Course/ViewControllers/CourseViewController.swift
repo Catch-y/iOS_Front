@@ -19,7 +19,7 @@ class CourseViewController: UIViewController {
     /// 코스 데이터를 담는 배열
     private var courses: [Course] = []
     
-    
+
     // MARK: - UIComponents Properties
     /// 코스 탭 바 터치 시 나타나는 메인 화면
     private lazy var courseView: CourseView = {
@@ -48,6 +48,7 @@ class CourseViewController: UIViewController {
         self.courseView.collectionView.dataSource = self
         self.courseView.collectionView.refreshControl = self.refreshControl
         
+        self.courseView.floatingButton.addTarget(self, action: #selector(didTapFloatingButton), for: .touchUpInside)
         self.loadData()
     }
     
@@ -94,6 +95,13 @@ class CourseViewController: UIViewController {
         }
     }
     
+    
+    @objc private func didTapFloatingButton() {
+        
+        let floatingButtonVC = FloatingButtonViewController()
+        
+        self.present(floatingButtonVC, animated: false)
+    }
 
 }
 

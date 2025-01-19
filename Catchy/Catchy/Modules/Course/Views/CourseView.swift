@@ -104,6 +104,18 @@ class CourseView: UIView {
         return collectionView
     }()
     
+    /// 플로팅 버튼
+    lazy var floatingButton: UIButton = {
+        let button = UIButton()
+        var config = UIButton.Configuration.filled()
+        config.baseBackgroundColor = .white
+        config.cornerStyle = .capsule
+        config.image = Icon.add.uiImage
+        button.configuration = config
+        button.applyShadow(.S1W)
+        return button
+    }()
+    
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -111,12 +123,12 @@ class CourseView: UIView {
         self.addComponents()
         self.setConstraints()
         
+
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     // MARK: - Add Components & Set Constraints Methods
     private func addComponents(){
@@ -127,7 +139,8 @@ class CourseView: UIView {
             self.segmentLineView,
             self.provinceDropDown,
             self.districtDropDown,
-            self.collectionView
+            self.collectionView,
+            self.floatingButton,
         ].forEach{
             self.addSubview($0)
         }
@@ -136,9 +149,6 @@ class CourseView: UIView {
     
     private func setConstraints(){
                 
-        self.snp.makeConstraints{ make in
-            make.width.equalTo(UIScreen.main.bounds.width)
-        }
     
         // Catch:y 로고 네비게이션 뷰 레이아웃
         self.logoNavigationView.snp.makeConstraints { make in
@@ -163,28 +173,39 @@ class CourseView: UIView {
             make.width.equalTo(UIScreen.main.bounds.width)
         }
         
-        // 도 전체 옵션
+        // 도 전체 옵션 레이아웃
         self.provinceDropDown.snp.makeConstraints{ make in
             make.left.equalToSuperview().offset(16)
             make.top.equalTo(segmentLineView.snp.bottom).offset(22)
         }
         
-        // 시/군/구 전체 옵션
+        // 시/군/구 전체 옵션 레이아웃
         self.districtDropDown.snp.makeConstraints{ make in
             make.right.equalToSuperview().offset(-16)
             make.top.equalTo(segmentLineView.snp.bottom).offset(22)
         }
         
-        // 컬렉션 뷰 설정
+        // 컬렉션 뷰 레이아웃
         self.collectionView.snp.makeConstraints{ make in
             make.top.equalTo(provinceDropDown.snp.bottom).offset(18)
             make.left.right.equalToSuperview()
             make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
         }
         
+        // 플로팅 버튼 레이아웃
+        self.floatingButton.snp.makeConstraints { make in
+            make.width.height.equalTo(70)
+            make.right.equalToSuperview().inset(16)
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(85)
+        }
         
         
     }
+    
+
+
+    
+
 
 }
 

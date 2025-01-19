@@ -35,7 +35,17 @@ enum Icon: String {
     case star = "star"
     case time = "time"
     
+    //MARK: - Course
+    case add = "add"
+    case add_clicked = "add_clicked"
+    case courseAI = "courseAI"
+    case courseDIY = "courseDIY"
+    
     var image: Image {
         return Image(self.rawValue)
+    }
+    
+    var uiImage: UIImage {
+        return UIImage(named: self.rawValue)!
     }
 }

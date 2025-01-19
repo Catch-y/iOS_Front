@@ -16,7 +16,7 @@ class CourseListCell: UICollectionViewCell {
     
     var categoryTypes : [CategoryType] = []
     
-    // MARK: - UIComponents
+    // MARK: - UIComponents Properties
     
     /// 코스 이미지 뷰
     // TODO: - API 연결 후 작성. 다운 샘플링도 해야함.

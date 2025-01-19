@@ -12,7 +12,7 @@ class CategoryTagCell: UICollectionViewCell {
     // MARK: - Properties
     static let identifier = "CategoryTagCell"
     
-    // MARK: - UI Components
+    // MARK: - UI Components Properties
     private let textLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
