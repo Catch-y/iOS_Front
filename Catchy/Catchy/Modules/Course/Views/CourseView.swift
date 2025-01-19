@@ -90,6 +90,9 @@ class CourseView: UIView {
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(CourseListCell.self, forCellReuseIdentifier: CourseListCell.identifier)
+        tableView.showsVerticalScrollIndicator = false
+        tableView.separatorStyle = .none
+        
         return tableView
     }()
     
@@ -129,6 +132,7 @@ class CourseView: UIView {
         self.snp.makeConstraints{ make in
             make.width.equalTo(UIScreen.main.bounds.width)
         }
+    
         // Catch:y 로고 네비게이션 뷰 레이아웃
         self.logoNavigationView.snp.makeConstraints { make in
             make.width.equalTo(UIScreen.main.bounds.width)
@@ -167,7 +171,7 @@ class CourseView: UIView {
         // 테이블 뷰 설정
         self.tableView.snp.makeConstraints{ make in
             make.top.equalTo(provinceDropDown.snp.bottom).offset(36)
-            make.left.right.equalToSuperview().inset(16)
+            make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
         }
         

@@ -41,9 +41,12 @@ class CourseViewController: UIViewController {
         // Delegete 설정
         self.courseView.tableView.delegate = self
         self.courseView.tableView.dataSource = self
+        
+        self.loadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.loadData()
     }
     
@@ -87,10 +90,12 @@ extension CourseViewController: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CourseListCell.identifier, for: indexPath) as? CourseListCell else {
             return UITableViewCell()
         }
+        
         let course = courses[indexPath.row]
-        cell.configure(categoryTypes: course.categories)
+        
+        cell.configure(with: course)
         cell.applyShadow(.S1W)
-        cell.layer.cornerRadius = 20
+        
         return cell
         
     }
@@ -100,6 +105,11 @@ extension CourseViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: false)
         
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 158
+    }
+    
 }
 
 

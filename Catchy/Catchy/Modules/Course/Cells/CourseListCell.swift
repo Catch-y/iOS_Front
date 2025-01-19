@@ -27,7 +27,6 @@ class CourseListCell: UITableViewCell {
     private lazy var courseTitleLabel : UILabel = {
         let label = UILabel()
         label.font = UIFont.pretend(type: .medium, size: 17)
-        label.text = "코스 이름"
         return label
     }()
     
@@ -44,7 +43,6 @@ class CourseListCell: UITableViewCell {
         label.font = UIFont.pretend(type: .light, size: 12)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.text = "코스 설명글입니다. \n한 두 줄 정도 쓰면 딱이겠네"
         return label
     }()
     
@@ -54,6 +52,7 @@ class CourseListCell: UITableViewCell {
 
         self.addComponents()
         self.setConstraints()
+        self.contentView.layer.cornerRadius = 10
 
     }
     
@@ -79,6 +78,12 @@ class CourseListCell: UITableViewCell {
         self.courseDescription.text = nil
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 16, bottom: 18, right: 16)
+        )
+    }
+    
     // MARK: - Add Components & Set Constraints Methods
     private func addComponents(){
         
@@ -88,18 +93,13 @@ class CourseListCell: UITableViewCell {
             self.categoryTagView,
             self.courseDescription
         ].forEach {
-            self.addSubview($0)
+            self.contentView.addSubview($0)
         }
         
     }
 
     private func setConstraints(){
         
-        // 셀 자체 레이아웃
-        self.snp.makeConstraints { make in
-            make.width.equalTo(370)
-            make.height.equalTo(158)
-        }
         
         // 코스 사진 레이아웃
         self.courseImageView.snp.makeConstraints { make in
@@ -125,6 +125,7 @@ class CourseListCell: UITableViewCell {
         self.courseDescription.snp.makeConstraints { make in
             make.left.equalTo(self.categoryTagView.snp.left)
             make.height.equalTo(36)
+            make.width.equalTo(130)
             make.bottom.equalTo(self.courseImageView.snp.bottom).offset(-7)
         }
         
@@ -134,13 +135,10 @@ class CourseListCell: UITableViewCell {
     /// 뷰 컨트롤러에서 호출한다.
     /// - Parameter categoryTypes: 코스가 갖고 있는 카테고리타입
     // TODO: - 코스 모델을 인자로 받아오도록 수정해야함. (API 명세 나오면)
-    func configure(categoryTypes: [CategoryType]){
-        self.categoryTypes = categoryTypes
+    func configure(with course: Course){
+        // self.imageView = ...
+        self.courseTitleLabel.text = course.name
+        self.courseDescription.text = course.description
+        self.categoryTypes = course.categories
     }
-}
-
-#Preview{
-    let cell = CourseListCell(style: .default, reuseIdentifier: CourseListCell.identifier)
-    cell.frame = CGRect(x:0, y:0, width: 370, height: 158)
-    return cell
 }
