@@ -98,6 +98,8 @@ class CourseView: UIView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(CourseListCell.self, forCellWithReuseIdentifier: CourseListCell.identifier)
         collectionView.showsVerticalScrollIndicator = false
+        
+        collectionView.tag = 0
         return collectionView
     }()
     

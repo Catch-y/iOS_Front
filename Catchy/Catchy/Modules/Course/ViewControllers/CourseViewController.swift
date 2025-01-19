@@ -41,6 +41,7 @@ class CourseViewController: UIViewController {
         // Delegete 설정
         self.courseView.collectionView.delegate = self
         self.courseView.collectionView.dataSource = self
+        
         self.loadData()
     }
     
@@ -111,10 +112,13 @@ struct Course: Codable {
 }
 
 let dummyCourses: [Course] = [
+    Course(name: "경주 역사와 자연 탐방", description: "경주의 역사적인 장소와 자연을 탐방하는 코스입니다.", categories: [.culturalLife, .experience, .rest, .sport, .cafe]),
     Course(name: "서울 카페 투어", description: "서울의 유명한 카페를 둘러보는 코스입니다.", categories: [.cafe, .culturalLife]),
     Course(name: "한강 자전거 라이딩", description: "한강을 따라 자전거를 타며 경치를 즐기는 코스입니다.", categories: [.sport, .rest]),
     Course(name: "홍대 맛집 탐방", description: "홍대의 인기 맛집을 방문하는 코스입니다.", categories: [.restaurant, .cafe]),
+    Course(name: "강릉 해변과 문화 탐방", description: "강릉의 해변과 문화를 둘러보는 다양한 체험 코스입니다.", categories: [.rest, .cafe, .culturalLife, .experience, .sport]),
     Course(name: "전통주 체험", description: "한국 전통주를 맛보고 체험하는 코스입니다.", categories: [.bar, .experience]),
+    Course(name: "제주도 자연과 음식 체험", description: "제주도의 자연과 전통 음식을 모두 체험하는 코스입니다.", categories: [.sport, .restaurant, .culturalLife, .experience, .rest]),
     Course(name: "남산 등산", description: "남산을 등산하며 자연을 느끼는 코스입니다.", categories: [.sport, .rest]),
     Course(name: "인사동 문화 산책", description: "인사동의 전통 문화와 예술을 감상하는 코스입니다.", categories: [.culturalLife, .experience]),
     Course(name: "강릉 해변 여행", description: "강릉의 아름다운 해변을 즐기는 코스입니다.", categories: [.rest, .cafe]),
@@ -123,14 +127,9 @@ let dummyCourses: [Course] = [
     Course(name: "경복궁 역사 탐방", description: "경복궁을 방문하여 한국의 역사를 배우는 코스입니다.", categories: [.culturalLife, .experience]),
     Course(name: "서울 야시장 투어", description: "서울의 다양한 야시장을 둘러보는 코스입니다.", categories: [.restaurant, .culturalLife]),
     Course(name: "한옥 마을 체험", description: "전통 한옥에서의 생활을 체험하는 코스입니다.", categories: [.experience, .rest]),
-    Course(name: "강원도 스키 여행", description: "강원도의 스키장에서 스키를 즐기는 코스입니다.", categories: [.sport, .rest]),
-    Course(name: "부산 해산물 맛보기", description: "부산의 신선한 해산물을 맛보는 코스입니다.", categories: [.restaurant, .cafe]),
-    Course(name: "서울 박물관 투어", description: "서울의 주요 박물관을 방문하는 코스입니다.", categories: [.culturalLife, .experience]),
-    Course(name: "전주 한옥마을 여행", description: "전주의 한옥마을을 둘러보는 코스입니다.", categories: [.culturalLife, .rest]),
-    Course(name: "속초 등대 해안 산책", description: "속초의 등대와 해안을 따라 걷는 코스입니다.", categories: [.rest, .cafe]),
-    Course(name: "대구 먹거리 투어", description: "대구의 유명한 먹거리를 탐방하는 코스입니다.", categories: [.restaurant, .bar]),
-    Course(name: "광주 예술 거리 산책", description: "광주의 예술 거리를 둘러보는 코스입니다.", categories: [.culturalLife, .experience]),
-    Course(name: "울산 바다 낚시 체험", description: "울산에서 바다 낚시를 체험하는 코스입니다.", categories: [.experience, .rest])
+    Course(name: "서울 종합 체험 여행", description: "서울의 다양한 매력을 체험하는 종합적인 코스입니다.", categories: [.cafe, .restaurant, .experience, .culturalLife, .sport]),
+    Course(name: "부산 문화와 자연 탐방", description: "부산의 자연과 문화를 모두 즐기는 종합적인 코스입니다.", categories: [.sport, .culturalLife, .experience, .restaurant, .bar]),
+
 ]
 
 

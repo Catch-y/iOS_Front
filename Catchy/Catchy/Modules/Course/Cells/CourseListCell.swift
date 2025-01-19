@@ -27,15 +27,24 @@ class CourseListCell: UICollectionViewCell {
     /// 코스 이름 레이블
     private lazy var courseTitleLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont.pretend(type: .medium, size: 17)
+        label.font = UIFont.Subtitle3
         return label
     }()
     
-    /// 코스의 카테고리 태그
-    // TODO: - 4~5개의 카테고리가 있는 경우의 와이어 프레임이 나와야함.
-    private lazy var categoryTagView : CategoryTagView = {
-        let categoryTagView = CategoryTagView(category: .bar)
-        return categoryTagView
+    /// 코스의 카테고리 태그를 보여주는 컬렉션 뷰
+    lazy var collectionView : UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 37, height: 14)
+        layout.minimumLineSpacing = 5
+        layout.minimumInteritemSpacing = 0
+        layout.scrollDirection = .horizontal
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(CategoryTagCell.self, forCellWithReuseIdentifier: CategoryTagCell.identifier)
+        collectionView.showsHorizontalScrollIndicator = false
+
+        
+        return collectionView
     }()
     
     /// 코스의 상세 설명
@@ -56,6 +65,9 @@ class CourseListCell: UICollectionViewCell {
         self.layer.cornerRadius = 20
         self.applyShadow(.S1W)
         self.backgroundColor = .white
+        
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
     }
     
     
@@ -74,6 +86,8 @@ class CourseListCell: UICollectionViewCell {
         self.courseImageView.image = nil
         self.courseTitleLabel.text = nil
         self.courseDescription.text = nil
+        self.categoryTypes.removeAll()
+        
     }
     
     
@@ -83,7 +97,7 @@ class CourseListCell: UICollectionViewCell {
         [
             self.courseImageView,
             self.courseTitleLabel,
-            self.categoryTagView,
+            self.collectionView,
             self.courseDescription
         ].forEach {
             self.addSubview($0)
@@ -99,7 +113,7 @@ class CourseListCell: UICollectionViewCell {
             make.width.equalTo(133)
             make.height.equalTo(116)
             make.centerY.equalToSuperview()
-            make.left.equalToSuperview().offset(15)
+            make.left.equalToSuperview().offset(8)
         }
         
         // 코스 이름 레이블 레이아웃
@@ -109,14 +123,16 @@ class CourseListCell: UICollectionViewCell {
         }
         
         // 카테고리 테그 레이아웃
-        self.categoryTagView.snp.makeConstraints { make in
+        self.collectionView.snp.makeConstraints { make in
             make.top.equalTo(self.courseTitleLabel.snp.bottom).offset(6)
             make.left.equalTo(self.courseTitleLabel.snp.left)
+            make.width.equalTo(206)
+            make.height.equalTo(14)
         }
         
         // 코스 상세 설명 레이아웃
         self.courseDescription.snp.makeConstraints { make in
-            make.left.equalTo(self.categoryTagView.snp.left)
+            make.left.equalTo(self.collectionView.snp.left)
             make.height.equalTo(36)
             make.width.equalTo(130)
             make.bottom.equalTo(self.courseImageView.snp.bottom).offset(-7)
@@ -134,7 +150,31 @@ class CourseListCell: UICollectionViewCell {
         self.courseTitleLabel.text = course.name
         self.courseDescription.text = course.description
         self.categoryTypes = course.categories
+        self.collectionView.reloadData()
     }
+}
+
+// MARK: - Extension
+extension CourseListCell : UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return categoryTypes.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryTagCell.identifier, for: indexPath) as? CategoryTagCell else {
+            return UICollectionViewCell()
+        }
+        
+        let category = categoryTypes[indexPath.item]
+        cell.configure(with: category)
+
+        return cell
+    }
+    
+    
+    
 }
 
 
