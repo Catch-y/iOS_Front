@@ -16,6 +16,13 @@ enum Shadow{
 }
 
 extension UIView {
+    
+    
+    /// UIKit에서 에셋 내 그림자 적용하는 메소드
+    /// - Parameter shadow: figma에 명시된 값 전달
+    ///
+    /// view = UIView()
+    /// view.applyShadow(.S1W)
     func applyShadow(_ shadow: Shadow){
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.masksToBounds = false

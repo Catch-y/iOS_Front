@@ -86,6 +86,13 @@ class CourseView: UIView {
         return dropDownMenu
     }()
     
+    /// 코스 셀이 있을 테이블 뷰
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(CourseListCell.self, forCellReuseIdentifier: CourseListCell.identifier)
+        return tableView
+    }()
+    
     // MARK: - Init
     
     override init(frame: CGRect) {
@@ -102,7 +109,6 @@ class CourseView: UIView {
     
     
     // MARK: - Add Components & Set Constraints Methods
-    
     private func addComponents(){
         
         [
@@ -110,7 +116,8 @@ class CourseView: UIView {
             self.segmentControl,
             self.segmentLineView,
             self.provinceDropDown,
-            self.districtDropDown
+            self.districtDropDown,
+            self.tableView
         ].forEach{
             self.addSubview($0)
         }
@@ -119,6 +126,9 @@ class CourseView: UIView {
     
     private func setConstraints(){
                 
+        self.snp.makeConstraints{ make in
+            make.width.equalTo(UIScreen.main.bounds.width)
+        }
         // Catch:y 로고 네비게이션 뷰 레이아웃
         self.logoNavigationView.snp.makeConstraints { make in
             make.width.equalTo(UIScreen.main.bounds.width)
@@ -142,14 +152,23 @@ class CourseView: UIView {
             make.width.equalTo(UIScreen.main.bounds.width)
         }
         
+        // 도 전체 옵션
         self.provinceDropDown.snp.makeConstraints{ make in
-            make.left.equalTo(safeAreaLayoutGuide.snp.left).offset(-10)
+            make.left.equalToSuperview().offset(16)
             make.top.equalTo(segmentLineView.snp.bottom).offset(22)
         }
         
+        // 시/군/구 전체 옵션
         self.districtDropDown.snp.makeConstraints{ make in
-            make.right.equalTo(safeAreaLayoutGuide.snp.right).offset(10)
+            make.right.equalToSuperview().offset(-16)
             make.top.equalTo(segmentLineView.snp.bottom).offset(22)
+        }
+        
+        // 테이블 뷰 설정
+        self.tableView.snp.makeConstraints{ make in
+            make.top.equalTo(provinceDropDown.snp.bottom).offset(36)
+            make.left.right.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview()
         }
         
     }

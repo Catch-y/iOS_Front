@@ -41,7 +41,7 @@ class CourseListCell: UITableViewCell {
     /// 코스의 상세 설명
     private lazy var courseDescription : UILabel = {
         let label = UILabel()
-        label.font = UIFont.pretend(type: .light, size: 13)
+        label.font = UIFont.pretend(type: .light, size: 12)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.text = "코스 설명글입니다. \n한 두 줄 정도 쓰면 딱이겠네"
@@ -51,10 +51,10 @@ class CourseListCell: UITableViewCell {
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.layer.cornerRadius = 20
+
         self.addComponents()
         self.setConstraints()
-        
+
     }
     
     required init?(coder: NSCoder) {
@@ -125,7 +125,7 @@ class CourseListCell: UITableViewCell {
         self.courseDescription.snp.makeConstraints { make in
             make.left.equalTo(self.categoryTagView.snp.left)
             make.height.equalTo(36)
-            make.bottom.equalTo(self.courseImageView.snp.bottom).offset(-5)
+            make.bottom.equalTo(self.courseImageView.snp.bottom).offset(-7)
         }
         
     }

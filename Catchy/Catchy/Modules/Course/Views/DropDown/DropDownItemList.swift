@@ -40,8 +40,3 @@ struct DropDownItemList: View {
     }
 }
  
-struct DropDownItem_Previews: PreviewProvider {
-    static var previews: some View {
-        DropDownItemList(items: ["1","2","3","4"], didTapItem: { _ in })
-    }
-}

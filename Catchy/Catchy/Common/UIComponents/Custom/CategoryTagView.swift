@@ -82,8 +82,8 @@ class CategoryTagView: UIView {
         
         /// 태그 뷰 자체 레이아웃
         self.snp.makeConstraints { make in
-            make.width.equalTo(53)
-            make.height.equalTo(20)
+            make.width.equalTo(37)
+            make.height.equalTo(14)
         }
         
         /// 텍스트의 레이아웃
