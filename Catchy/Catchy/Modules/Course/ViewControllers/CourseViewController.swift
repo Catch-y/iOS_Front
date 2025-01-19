@@ -39,9 +39,8 @@ class CourseViewController: UIViewController {
         }
         
         // Delegete 설정
-        self.courseView.tableView.delegate = self
-        self.courseView.tableView.dataSource = self
-        
+        self.courseView.collectionView.delegate = self
+        self.courseView.collectionView.dataSource = self
         self.loadData()
     }
     
@@ -70,48 +69,38 @@ class CourseViewController: UIViewController {
         }
         
         self.courses = dummyCourses
-        self.courseView.tableView.reloadData()
+        self.courseView.collectionView.reloadData()
         
     }
 
 }
 
-// MARK: - UITableViewDataSource
-extension CourseViewController: UITableViewDataSource, UITableViewDelegate {
+// MARK: - Extension
+extension CourseViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    /// 테이블 뷰 셀의 개수 반환
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return courses.count
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.courses.count
     }
     
-    /// 테이블 뷰 셀 configure
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CourseListCell.identifier, for: indexPath) as? CourseListCell else {
-            return UITableViewCell()
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CourseListCell.identifier, for: indexPath) as? CourseListCell else {
+            return UICollectionViewCell()
         }
         
-        let course = courses[indexPath.row]
-        
+        let course = courses[indexPath.item]
         cell.configure(with: course)
-        cell.applyShadow(.S1W)
         
         return cell
-        
     }
     
-    // TODO: - 테이블 뷰 셀 탭 시 이벤트 함수.
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: false)
-        
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 158
-    }
-    
-}
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+    }
+}
 
 // TODO: - API 명세에 맞게 Course 모델 설계.
 // 현재는 더미데이터.

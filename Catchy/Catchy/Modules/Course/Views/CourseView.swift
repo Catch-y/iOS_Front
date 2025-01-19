@@ -86,14 +86,19 @@ class CourseView: UIView {
         return dropDownMenu
     }()
     
-    /// 코스 셀이 있을 테이블 뷰
-    lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(CourseListCell.self, forCellReuseIdentifier: CourseListCell.identifier)
-        tableView.showsVerticalScrollIndicator = false
-        tableView.separatorStyle = .none
+    /// 코스 셀이 있을 컬렉션 뷰
+    lazy var collectionView: UICollectionView = {
         
-        return tableView
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 370, height: 158)
+        layout.minimumLineSpacing = 18
+        layout.minimumInteritemSpacing = 0
+        layout.sectionInset = UIEdgeInsets(top: 18, left: 16, bottom: 18, right: 16)
+                
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(CourseListCell.self, forCellWithReuseIdentifier: CourseListCell.identifier)
+        collectionView.showsVerticalScrollIndicator = false
+        return collectionView
     }()
     
     // MARK: - Init
@@ -120,7 +125,7 @@ class CourseView: UIView {
             self.segmentLineView,
             self.provinceDropDown,
             self.districtDropDown,
-            self.tableView
+            self.collectionView
         ].forEach{
             self.addSubview($0)
         }
@@ -168,12 +173,14 @@ class CourseView: UIView {
             make.top.equalTo(segmentLineView.snp.bottom).offset(22)
         }
         
-        // 테이블 뷰 설정
-        self.tableView.snp.makeConstraints{ make in
-            make.top.equalTo(provinceDropDown.snp.bottom).offset(36)
+        // 컬렉션 뷰 설정
+        self.collectionView.snp.makeConstraints{ make in
+            make.top.equalTo(provinceDropDown.snp.bottom).offset(18)
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+        
+        
         
     }
 

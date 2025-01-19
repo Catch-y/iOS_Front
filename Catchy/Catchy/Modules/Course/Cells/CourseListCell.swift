@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import SwiftUI
 
 // TODO: - Course List를 받아오는 API가 나오면 모델 작성 후 수정.
-class CourseListCell: UITableViewCell {
+class CourseListCell: UICollectionViewCell {
 
     static let identifier : String = "CourseListCell"
     
@@ -47,14 +48,16 @@ class CourseListCell: UITableViewCell {
     }()
     
     // MARK: - Init
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        self.addComponents()
-        self.setConstraints()
-        self.contentView.layer.cornerRadius = 10
-
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addComponents()
+        setConstraints()
+        
+        self.layer.cornerRadius = 20
+        self.applyShadow(.S1W)
+        self.backgroundColor = .white
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -65,11 +68,6 @@ class CourseListCell: UITableViewCell {
         // Initialization code
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -78,11 +76,6 @@ class CourseListCell: UITableViewCell {
         self.courseDescription.text = nil
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 16, bottom: 18, right: 16)
-        )
-    }
     
     // MARK: - Add Components & Set Constraints Methods
     private func addComponents(){
@@ -93,7 +86,7 @@ class CourseListCell: UITableViewCell {
             self.categoryTagView,
             self.courseDescription
         ].forEach {
-            self.contentView.addSubview($0)
+            self.addSubview($0)
         }
         
     }
@@ -128,6 +121,7 @@ class CourseListCell: UITableViewCell {
             make.width.equalTo(130)
             make.bottom.equalTo(self.courseImageView.snp.bottom).offset(-7)
         }
+    
         
     }
     
@@ -142,3 +136,5 @@ class CourseListCell: UITableViewCell {
         self.categoryTypes = course.categories
     }
 }
+
+
