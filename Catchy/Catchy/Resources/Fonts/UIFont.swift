@@ -59,20 +59,36 @@ extension UIFont {
         return .pretend(type: .medium, size: 17)
     }
     
+    static var Subtitle3_SM: UIFont {
+        return .pretend(type: .semibold, size: 17)
+    }
+    
     static var body1: UIFont {
         return .pretend(type: .semibold, size: 14)
     }
     
     static var body2: UIFont {
+        return .pretend(type: .regular, size: 13)
+    }
+    
+    static var body3: UIFont {
         return .pretend(type: .regular, size: 12)
     }
     
+    static var body3_SM: UIFont {
+        return .pretend(type: .semibold, size: 12)
+    }
+    
     static var caption1: UIFont {
-        .pretend(type: .regular, size: 13)
+        .pretend(type: .regular, size: 11)
+    }
+    
+    static var caption1_SM: UIFont {
+        .pretend(type: .semibold, size: 11)
     }
     
     static var caption2: UIFont {
-        .pretend(type: .regular, size: 11)
+        .pretend(type: .semibold, size: 8)
     }
     
     static var titleLogo: UIFont {
@@ -85,6 +101,10 @@ extension UIFont {
     
     static var naviFont: UIFont {
         return .pretend(type: .bold, size: 17)
+    }
+    
+    static var courseTag: UIFont {
+        return .pretend(type: .medium, size: 9)
     }
 }
 
