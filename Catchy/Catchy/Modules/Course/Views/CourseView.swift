@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 import SnapKit
+import FloatingButton
 
 class CourseView: UIView {
 
@@ -104,7 +105,6 @@ class CourseView: UIView {
     }()
     
     // MARK: - Init
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -179,7 +179,7 @@ class CourseView: UIView {
         self.collectionView.snp.makeConstraints{ make in
             make.top.equalTo(provinceDropDown.snp.bottom).offset(18)
             make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
         }
         
         

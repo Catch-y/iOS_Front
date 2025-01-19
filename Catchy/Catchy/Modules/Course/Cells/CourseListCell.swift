@@ -11,6 +11,7 @@ import SwiftUI
 // TODO: - Course List를 받아오는 API가 나오면 모델 작성 후 수정.
 class CourseListCell: UICollectionViewCell {
 
+    // MARK: - Properties
     static let identifier : String = "CourseListCell"
     
     var categoryTypes : [CategoryType] = []
@@ -28,6 +29,7 @@ class CourseListCell: UICollectionViewCell {
     private lazy var courseTitleLabel : UILabel = {
         let label = UILabel()
         label.font = UIFont.Subtitle3
+        label.textColor = .g7
         return label
     }()
     
@@ -50,7 +52,8 @@ class CourseListCell: UICollectionViewCell {
     /// 코스의 상세 설명
     private lazy var courseDescription : UILabel = {
         let label = UILabel()
-        label.font = UIFont.pretend(type: .light, size: 12)
+        label.font = UIFont.body3
+        label.textColor = UIColor.g5
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         return label
@@ -152,6 +155,8 @@ class CourseListCell: UICollectionViewCell {
         self.categoryTypes = course.categories
         self.collectionView.reloadData()
     }
+    
+
 }
 
 // MARK: - Extension

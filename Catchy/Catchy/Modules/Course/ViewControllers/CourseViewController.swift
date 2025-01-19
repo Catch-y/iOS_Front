@@ -27,6 +27,11 @@ class CourseViewController: UIViewController {
         return courseView
     }()
     
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return refreshControl
+    }()
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -41,6 +46,7 @@ class CourseViewController: UIViewController {
         // Delegete 설정
         self.courseView.collectionView.delegate = self
         self.courseView.collectionView.dataSource = self
+        self.courseView.collectionView.refreshControl = self.refreshControl
         
         self.loadData()
     }
@@ -52,10 +58,14 @@ class CourseViewController: UIViewController {
     
     
     // MARK: - Handler Methods
+    /// 세그먼트 컨트롤 터치 시 실행
+    /// - Parameter index: 코스 DIY, AI 추천 각각 0, 1
+    ///
     private func handleSegmentChange(at index: Int) {
         selectedTapIndex = index
-        
+        self.loadData()
     }
+    
     
     // TODO: - API 연결 전, 더미데이터로 구현.
     private func loadData(){
@@ -73,6 +83,17 @@ class CourseViewController: UIViewController {
         self.courseView.collectionView.reloadData()
         
     }
+    
+    /// 리프레시 함수. 화면을 아래로 스크롤 시 수행
+    /// 1초간 데이터를 받아오고 종료.
+    @objc func refresh() {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.loadData()
+            self.refreshControl.endRefreshing()
+        }
+    }
+    
 
 }
 
@@ -97,10 +118,6 @@ extension CourseViewController: UICollectionViewDataSource, UICollectionViewDele
         return cell
     }
     
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-    }
 }
 
 // TODO: - API 명세에 맞게 Course 모델 설계.
