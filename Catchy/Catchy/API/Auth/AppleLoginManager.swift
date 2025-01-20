@@ -31,6 +31,7 @@ extension AppleLoginManager: ASAuthorizationControllerDelegate {
                         .joined(separator: "")
                 }
                 
+                
                 let appleUserData = AppleUserData(
                     userIdentifier: appleIDCredential.user,
                     fullName: fullName ?? "사용자 이름 없음",
