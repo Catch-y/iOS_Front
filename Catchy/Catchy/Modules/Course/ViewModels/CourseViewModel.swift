@@ -15,17 +15,6 @@ class CourseViewModel: ObservableObject{
     
     //let container : DIContainer
     
-    /// 코스 타입
-    @Published var courseType: CourseType = .diy
-    
-    /// 도 검색 옵션
-    /// default = ""
-    @Published var upperLocation: String = ""
-    
-    /// 시/군/구 검색 옵션
-    /// default = ""
-    @Published var lowerLocation: String = ""
-    
     /// 코스 리스트
     @Published var courseList: [CourseListResponse] = []
     
@@ -41,9 +30,8 @@ final class dummnyCourseViewModel{
     
     static func dummy() -> CourseViewModel{
         let viewModel = CourseViewModel()
-        
-        viewModel.courseType = .diy
-        
+    
+
         viewModel.courseList = [
             CourseListResponse(
                 courseId: 1,
@@ -51,7 +39,7 @@ final class dummnyCourseViewModel{
                 courseImage: "image1.jpg",
                 courseName: "한강 걷기 코스",
                 courseDescription: "한강을 따라 걷는 코스입니다.",
-                categorise: [.SPROT],
+                categorise: [.SPORT],
                 createdDate: Date()
             ),
             CourseListResponse(
@@ -78,7 +66,7 @@ final class dummnyCourseViewModel{
                 courseImage: "image4.jpg",
                 courseName: "도심 속 힐링 코스",
                 courseDescription: "도심에서 휴식을 즐길 수 있는 코스입니다.",
-                categorise: [.REST, .SPROT, .EXPRERIENCE, .CULTURELIFE],
+                categorise: [.REST, .SPORT, .EXPRERIENCE, .CULTURELIFE],
                 createdDate: Date()
             ),
             CourseListResponse(
@@ -96,7 +84,7 @@ final class dummnyCourseViewModel{
                 courseImage: "image6.jpg",
                 courseName: "남산 둘레길 걷기",
                 courseDescription: "남산을 둘러보는 코스입니다.",
-                categorise: [.SPROT],
+                categorise: [.SPORT],
                 createdDate: Date()
             ),
             CourseListResponse(
@@ -123,7 +111,7 @@ final class dummnyCourseViewModel{
                 courseImage: "image9.jpg",
                 courseName: "한강 자전거 코스",
                 courseDescription: "한강을 따라 자전거를 탈 수 있는 코스입니다.",
-                categorise: [.SPROT, .REST],
+                categorise: [.SPORT, .REST],
                 createdDate: Date()
             ),
             CourseListResponse(
@@ -150,7 +138,7 @@ final class dummnyCourseViewModel{
                 courseImage: "image12.jpg",
                 courseName: "제주 오름 탐방",
                 courseDescription: "제주의 아름다운 오름을 탐방하는 코스입니다.",
-                categorise: [.SPROT, .EXPRERIENCE],
+                categorise: [.SPORT, .EXPRERIENCE],
                 createdDate: Date()
             ),
             CourseListResponse(
@@ -168,7 +156,7 @@ final class dummnyCourseViewModel{
                 courseImage: "image14.jpg",
                 courseName: "산악 등반 코스",
                 courseDescription: "산악을 등반하며 자연을 만끽하는 코스입니다.",
-                categorise: [.SPROT],
+                categorise: [.SPORT],
                 createdDate: Date()
             ),
             CourseListResponse(
@@ -186,7 +174,7 @@ final class dummnyCourseViewModel{
                 courseImage: "image16.jpg",
                 courseName: "강원도 스키 코스",
                 courseDescription: "강원도에서 스키를 즐길 수 있는 코스입니다.",
-                categorise: [.SPROT, .REST],
+                categorise: [.SPORT, .REST],
                 createdDate: Date()
             ),
             CourseListResponse(
@@ -195,7 +183,7 @@ final class dummnyCourseViewModel{
                 courseImage: "image17.jpg",
                 courseName: "서울 마라톤 코스",
                 courseDescription: "서울에서 마라톤을 경험할 수 있는 코스입니다.",
-                categorise: [.SPROT, .EXPRERIENCE],
+                categorise: [.SPORT, .EXPRERIENCE],
                 createdDate: Date()
             ),
             CourseListResponse(
@@ -213,7 +201,7 @@ final class dummnyCourseViewModel{
                 courseImage: "image19.jpg",
                 courseName: "영남 알프스 트레킹",
                 courseDescription: "영남 알프스를 트레킹하며 자연을 만끽하는 코스입니다.",
-                categorise: [.SPROT, .EXPRERIENCE],
+                categorise: [.SPORT, .EXPRERIENCE],
                 createdDate: Date()
             ),
             CourseListResponse(
@@ -226,5 +214,7 @@ final class dummnyCourseViewModel{
                 createdDate: Date()
             )
         ]
+        
+        return viewModel
     }
 }

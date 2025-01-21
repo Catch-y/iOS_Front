@@ -9,19 +9,30 @@ import SwiftUI
 
 struct CourseView: View {
     
-    @ObservedObject var viewModel: CourseViewModel = .init()
+    @ObservedObject var viewModel: CourseViewModel = dummnyCourseViewModel.dummy()
+    
+    @State private var isDropdownOpen = false
+    @State private var selectedCategoryType : CourseType = .diy
     
     var body: some View {
-        VStack(alignment: .leading, content: {
+        
+        VStack(alignment: .center){
             CustomLogoNavi(onlyLogo: true)
-            Spacer()
             // TODO: - 세그먼트 컨트롤
             // TODO: - 드랍 다운 메뉴
-        })
+        }
         .ignoresSafeArea(.all)
-        VStack(alignment: .center, content: {
-            CourseListCard(course: <#T##CourseListResponse#>)
-        })
+        
+        ScrollView{
+            VStack(alignment: .center, spacing: 18){
+                ForEach(viewModel.courseList, id: \.id){ course in
+                    CourseListCard(course: course)
+                }
+            }
+            .padding(.top, 10)
+            .padding(.horizontal, 16)
+        }.padding(.bottom, 80)
+        
     }
     
 }
