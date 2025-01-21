@@ -22,19 +22,21 @@ struct CourseListCard: View {
                 .s1w()
                 .frame(width: 370, height: 158)
             
-            HStack{
+            HStack(alignment: .top){
                 Image(course.courseImage)
+                    .resizable()
                     .frame(width: 133, height: 116)
                     .clipShape(RoundedRectangle(cornerRadius: 15))
-                    
+                
                 VStack(alignment: .leading){
-                    
+
                     /// 코스 이름
                     Text(course.courseName)
                         .font(.Subtitle3_SM)
-                        .padding(.bottom, 6)
+                        .padding(.bottom, 4)
                         .lineLimit(1)
                         .truncationMode(.tail)
+                        .padding(.top, 10)
                     
                     /// 카테고리 태그
                     LazyVGrid(
@@ -60,7 +62,7 @@ struct CourseListCard: View {
                         .frame(width: 150, height: 36, alignment: .topLeading)
                         .lineLimit(2)
                         .truncationMode(.tail)
-                }
+                }.frame(height: 116)
             }
         }
     
