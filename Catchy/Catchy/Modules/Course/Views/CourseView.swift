@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FloatingButton
 
 struct CourseView: View {
     
@@ -31,7 +32,11 @@ struct CourseView: View {
             }
             .padding(.top, 10)
             .padding(.horizontal, 16)
-        }.padding(.bottom, 80)
+        }
+        .padding(.bottom, 80)
+        .refreshable{
+            
+        }
         
     }
     
