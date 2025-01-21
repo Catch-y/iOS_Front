@@ -20,6 +20,8 @@ struct MainFloatingButton: View {
             Image(systemName: "plus")
                 .frame(width: 17, height: 17)
                 .foregroundStyle(isOpen ? .white : .g4)
+                .rotationEffect(.degrees(isOpen ? 45 : 0))
+                .animation(.spring(), value: isOpen)
         }
     }
 }
