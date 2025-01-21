@@ -13,16 +13,19 @@ struct CourseView: View {
     @ObservedObject var viewModel: CourseViewModel = dummnyCourseViewModel.dummy()
     
     @State private var isDropdownOpen = false
-    @State private var selectedCategoryType : CourseType = .diy
+    @State var segment: CourseSegment = .diy
     
     var body: some View {
         
         VStack(alignment: .center){
             CustomLogoNavi(onlyLogo: true)
-            // TODO: - 세그먼트 컨트롤
+            CustomSegment<CourseSegment>(selectedSegment: $segment)
+                .frame(height: 66)
             // TODO: - 드랍 다운 메뉴
         }
         .ignoresSafeArea(.all)
+        
+        
         
         ScrollView{
             VStack(alignment: .center, spacing: 18){
