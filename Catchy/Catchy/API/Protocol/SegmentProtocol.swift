@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+protocol SegmentProtocol: Hashable {
+    var segmentTitle: String { get }
+}
