@@ -37,6 +37,12 @@ enum Icon: String {
     case review = "review"
     case rightChevron = "rightChevron"
     
+    //MARK: - Course
+    case add = "add"
+    case add_clicked = "add_clicked"
+    case courseAI = "courseAI"
+    case courseDIY = "courseDIY"
+    
     var image: Image {
         return Image(self.rawValue)
     }
