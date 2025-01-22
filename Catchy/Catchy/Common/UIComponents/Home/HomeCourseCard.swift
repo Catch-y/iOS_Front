@@ -8,7 +8,7 @@
 import SwiftUI
 import Kingfisher
 
-struct CourseCard: View {
+struct HomeCourseCard: View {
     
     let data: CourseInfoResponse
     
@@ -79,7 +79,7 @@ struct CourseCard: View {
 
 struct CourseCard_Preview: PreviewProvider {
     static var previews: some View {
-        CourseCard(data: CourseInfoResponse(courseId: UUID(), id: 1, courseType: .diy, courseImage: "https://i.namu.wiki/i/tFLNGekMqpK-fhVmb0NZk-9eBwj5Z6bN5LSGdOqV6t96kfz135jcbZrOuLb_76rMFLMxCy0EgTjeMauhP5SWPSCQXWD7bFRUJBGSDscQaXKyT20t3Mp3buFiW_92UEu99f58pBnGrAtrSaOaHE9JGw.webp", courseName: "코스 이름 아홉자 정도", courseDescription: "코스에 대한 설명 어쩌구 저쩌구 텍스트 길이 테스트 해볼게요 두줄 정렬 하게 되면 이 정도 간격으로 그리고 최대 길이", categories: [.CAFE, .BAR]))
+        HomeCourseCard(data: CourseInfoResponse(courseId: UUID(), id: 1, courseType: .diy, courseImage: "https://i.namu.wiki/i/tFLNGekMqpK-fhVmb0NZk-9eBwj5Z6bN5LSGdOqV6t96kfz135jcbZrOuLb_76rMFLMxCy0EgTjeMauhP5SWPSCQXWD7bFRUJBGSDscQaXKyT20t3Mp3buFiW_92UEu99f58pBnGrAtrSaOaHE9JGw.webp", courseName: "코스 이름 아홉자 정도", courseDescription: "코스에 대한 설명 어쩌구 저쩌구 텍스트 길이 테스트 해볼게요 두줄 정렬 하게 되면 이 정도 간격으로 그리고 최대 길이", categories: [.CAFE, .BAR]))
             .previewLayout(.sizeThatFits)
     }
 }

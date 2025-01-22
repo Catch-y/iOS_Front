@@ -23,6 +23,8 @@ struct CustomLogoNavi: View {
                 .s1w()
             
             logoGroup
+                .padding(.leading, 22)
+                .padding(.trailing, 29)
         })
         .frame(maxWidth: .infinity, maxHeight: 115)
     }
@@ -44,7 +46,7 @@ struct CustomLogoNavi: View {
                 CustomTextField(text: .constant(""), searchTextField: .homeView)
             }
         })
-        .frame(width: 351, height: 32)
+        .frame(height: 32)
         .padding(.bottom, 14)
     }
 }

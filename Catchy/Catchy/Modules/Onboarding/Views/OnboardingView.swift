@@ -40,6 +40,15 @@ struct OnboardingView: View {
     }
 }
 
-#Preview {
-    OnboardingView()
+struct OnboardingView_Previews: PreviewProvider {
+    
+    static var devices: [String] = ["iPhone 16 Pro", "iPhone 11"]
+    
+    static var previews: some View {
+        ForEach(devices, id: \.self) { device in
+            OnboardingView()
+                .previewDevice(PreviewDevice(rawValue: device))
+                .previewDisplayName(device)
+        }
+    }
 }

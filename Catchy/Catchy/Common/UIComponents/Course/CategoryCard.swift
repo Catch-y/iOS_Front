@@ -22,11 +22,12 @@ struct CategoryCard: View {
         Text(categoryType.rawValue)
             .font(.pretend(type: .extraBold, size: 9))
             .foregroundStyle(.white)
-            .padding(.vertical, 3)
-            .frame(width: 50, height: 14)
-            .background(color)
-            .clipShape(RoundedRectangle(cornerRadius: 4))
-
+            .padding(.vertical, 4)
+            .frame(width: 50)
+            .background {
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(color)
+            }
     }
     
     private mutating func setColor(){

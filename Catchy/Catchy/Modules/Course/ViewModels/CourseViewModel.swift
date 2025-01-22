@@ -17,6 +17,7 @@ class CourseViewModel: ObservableObject{
     
     /// 코스 리스트
     @Published var courseList: [CourseListResponse] = []
+    @Published var segment: CourseSegment = .diy
     
     // MARK: - Init
     
@@ -34,13 +35,13 @@ final class dummnyCourseViewModel{
 
         viewModel.courseList = [
             CourseListResponse(
-                courseId: 1,
-                courseType: .diy,
-                courseImage: "image1.jpg",
-                courseName: "한강 걷기 코스",
-                courseDescription: "한강을 따라 걷는 코스입니다.",
-                categorise: [.SPORT],
-                createdDate: Date()
+                    courseId: 1,
+                    courseType: .diy,
+                    courseImage: "https://i.namu.wiki/i/sopEHIQMRri9OEV0gBMh2xV0WVKv8yKvGB_-9A14bpRhRKNKJG8xCOtiN7yUuyETF52H_aKS3gTxjFHNge6yQLV5dSL8nTzGY79D8ygwut5gTvPb52s3l2a8DIKXcahnJC6RE9L_-6uL4tTCoY5W6g.webp",
+                    courseName: "한강 걷기 코스한강을 따라 걷는 코스입니다.",
+                    courseDescription: "한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.",
+                    categorise: [.SPORT, .BAR, .CULTURELIFE, .REST, .RESTAURANT],
+                    createdDate: Date()
             ),
             CourseListResponse(
                 courseId: 2,
