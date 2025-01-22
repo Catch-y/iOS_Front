@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct CourseListResponse: Codable, Identifiable{
+struct CourseResponse: Codable, Identifiable{
     
     // 고유 ID
     var id = UUID()

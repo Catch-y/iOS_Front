@@ -12,17 +12,30 @@ struct CourseView: View {
     
     @StateObject var viewModel: CourseViewModel = dummnyCourseViewModel.dummy()
     
-    @State private var isDropdownOpen = false
-    @State private var isFloatingButtonOpen = false
+    //@State private var isDropdownOpen = false
+    //@State private var isFloatingButtonOpen = false
     
     var body: some View {
-
-        VStack {
-            navigationGroup
-            Spacer()
-            scrollView
-        }
-
+        ZStack {
+            VStack {
+                navigationGroup
+                Spacer()
+                scrollView
+            }
+                   
+            /// 화면 어둡게
+            /// 플로팅 버튼이 열려 있을 때,
+            if viewModel.isOpen {
+                Color.black
+                    .opacity(0.8)
+                    .ignoresSafeArea(.all)
+                    .zIndex(1)
+            }
+                   
+            /// 플로팅 버튼
+            AddFloatingButton(isOpen: $viewModel.isOpen)
+                .zIndex(2)
+            }
     }
 
 
@@ -46,7 +59,8 @@ struct CourseView: View {
                     CourseGroupCard(course: course)
                 }
             })
-            .padding(.horizontal, 15)
+            .padding(.horizontal, 16)
+            .padding(.top, 11)
         })
         .padding(.bottom, 110)
         .frame(maxWidth: .infinity)

@@ -13,11 +13,19 @@ class CourseViewModel: ObservableObject{
     
     // MARK: - Properties
     
-    //let container : DIContainer
+//    let container : DIContainer
     
     /// 코스 리스트
-    @Published var courseList: [CourseListResponse] = []
+    @Published var courseList: [CourseResponse] = []
+    
+    /// 코스 타입
     @Published var segment: CourseSegment = .diy
+    
+    /// 플로팅 버튼 상태
+    @Published var isOpen: Bool = false
+    
+    /// 드랍 다운 메뉴 상태
+    @Published var isDrop: Bool = false 
     
     // MARK: - Init
     
@@ -34,7 +42,7 @@ final class dummnyCourseViewModel{
     
 
         viewModel.courseList = [
-            CourseListResponse(
+            CourseResponse(
                     courseId: 1,
                     courseType: .diy,
                     courseImage: "https://i.namu.wiki/i/sopEHIQMRri9OEV0gBMh2xV0WVKv8yKvGB_-9A14bpRhRKNKJG8xCOtiN7yUuyETF52H_aKS3gTxjFHNge6yQLV5dSL8nTzGY79D8ygwut5gTvPb52s3l2a8DIKXcahnJC6RE9L_-6uL4tTCoY5W6g.webp",
@@ -43,7 +51,7 @@ final class dummnyCourseViewModel{
                     categorise: [.SPORT, .BAR, .CULTURELIFE, .REST, .RESTAURANT],
                     createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 2,
                 courseType: .diy,
                 courseImage: "image2.jpg",
@@ -52,7 +60,7 @@ final class dummnyCourseViewModel{
                 categorise: [.CULTURELIFE, .REST],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 3,
                 courseType: .diy,
                 courseImage: "image3.jpg",
@@ -61,7 +69,7 @@ final class dummnyCourseViewModel{
                 categorise: [.CAFE, .BAR, .RESTAURANT],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 4,
                 courseType: .diy,
                 courseImage: "image4.jpg",
@@ -70,7 +78,7 @@ final class dummnyCourseViewModel{
                 categorise: [.REST, .SPORT, .EXPRERIENCE, .CULTURELIFE],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 5,
                 courseType: .diy,
                 courseImage: "image5.jpg",
@@ -79,7 +87,7 @@ final class dummnyCourseViewModel{
                 categorise: [.RESTAURANT, .CAFE, .BAR, .EXPRERIENCE, .CULTURELIFE],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 6,
                 courseType: .diy,
                 courseImage: "image6.jpg",
@@ -88,7 +96,7 @@ final class dummnyCourseViewModel{
                 categorise: [.SPORT],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 7,
                 courseType: .diy,
                 courseImage: "image7.jpg",
@@ -97,7 +105,7 @@ final class dummnyCourseViewModel{
                 categorise: [.CULTURELIFE, .REST],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 8,
                 courseType: .diy,
                 courseImage: "image8.jpg",
@@ -106,7 +114,7 @@ final class dummnyCourseViewModel{
                 categorise: [.RESTAURANT, .CAFE],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 9,
                 courseType: .diy,
                 courseImage: "image9.jpg",
@@ -115,7 +123,7 @@ final class dummnyCourseViewModel{
                 categorise: [.SPORT, .REST],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 10,
                 courseType: .diy,
                 courseImage: "image10.jpg",
@@ -124,7 +132,7 @@ final class dummnyCourseViewModel{
                 categorise: [.EXPRERIENCE, .CULTURELIFE],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 11,
                 courseType: .diy,
                 courseImage: "image11.jpg",
@@ -133,7 +141,7 @@ final class dummnyCourseViewModel{
                 categorise: [.REST],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 12,
                 courseType: .diy,
                 courseImage: "image12.jpg",
@@ -142,7 +150,7 @@ final class dummnyCourseViewModel{
                 categorise: [.SPORT, .EXPRERIENCE],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 13,
                 courseType: .diy,
                 courseImage: "image13.jpg",
@@ -151,7 +159,7 @@ final class dummnyCourseViewModel{
                 categorise: [.CULTURELIFE, .EXPRERIENCE, .REST],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 14,
                 courseType: .diy,
                 courseImage: "image14.jpg",
@@ -160,7 +168,7 @@ final class dummnyCourseViewModel{
                 categorise: [.SPORT],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 15,
                 courseType: .diy,
                 courseImage: "image15.jpg",
@@ -169,7 +177,7 @@ final class dummnyCourseViewModel{
                 categorise: [.CULTURELIFE, .RESTAURANT],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 16,
                 courseType: .diy,
                 courseImage: "image16.jpg",
@@ -178,7 +186,7 @@ final class dummnyCourseViewModel{
                 categorise: [.SPORT, .REST],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 17,
                 courseType: .diy,
                 courseImage: "image17.jpg",
@@ -187,7 +195,7 @@ final class dummnyCourseViewModel{
                 categorise: [.SPORT, .EXPRERIENCE],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 18,
                 courseType: .diy,
                 courseImage: "image18.jpg",
@@ -196,7 +204,7 @@ final class dummnyCourseViewModel{
                 categorise: [.REST, .CULTURELIFE],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 19,
                 courseType: .diy,
                 courseImage: "image19.jpg",
@@ -205,7 +213,7 @@ final class dummnyCourseViewModel{
                 categorise: [.SPORT, .EXPRERIENCE],
                 createdDate: Date()
             ),
-            CourseListResponse(
+            CourseResponse(
                 courseId: 20,
                 courseType: .diy,
                 courseImage: "image20.jpg",

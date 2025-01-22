@@ -10,9 +10,9 @@ import Kingfisher
 
 struct CourseGroupCard: View {
     
-    var course : CourseListResponse
+    var course : CourseResponse
     
-    init(course: CourseListResponse) {
+    init(course: CourseResponse) {
         self.course = course
     }
     
@@ -33,7 +33,7 @@ struct CourseGroupCard: View {
             /// 코스 카드의 텍스트 그룹
             courseTextGroup
         }
-        .padding(.vertical, 21)
+        .padding(.vertical, 18)
         .padding(.leading, 8)
         .padding(.trailing, 9)
         .background {
@@ -78,7 +78,7 @@ struct CourseListCard_Preview: PreviewProvider {
     
     static var previews: some View {
         CourseGroupCard(course:
-            CourseListResponse(
+            CourseResponse(
                     courseId: 1,
                     courseType: .diy,
                     courseImage: "https://i.namu.wiki/i/sopEHIQMRri9OEV0gBMh2xV0WVKv8yKvGB_-9A14bpRhRKNKJG8xCOtiN7yUuyETF52H_aKS3gTxjFHNge6yQLV5dSL8nTzGY79D8ygwut5gTvPb52s3l2a8DIKXcahnJC6RE9L_-6uL4tTCoY5W6g.webp",

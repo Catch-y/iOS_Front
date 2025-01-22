@@ -33,7 +33,6 @@ struct AddFloatingButton : View {
                 .animation(.bouncy)
                 .spacing(10)
                 .initialOpacity(0)
-                .border(Color.red)
             }
 
             .frame(alignment: .trailing)
@@ -58,7 +57,6 @@ struct AddFloatingButton : View {
                 .rotationEffect(.degrees(isOpen ? 45 : 0))
                 .animation(.easeInOut, value: isOpen)
         }
-        .border(Color.red)
     }
 
     
@@ -85,7 +83,6 @@ struct AddFloatingButton : View {
             }
         }
         .frame(width: 152, height: 71, alignment: .trailing)
-        .border(Color.red)
         .backgroundStyle(Color.clear)
     }
     

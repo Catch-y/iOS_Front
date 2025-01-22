@@ -12,7 +12,6 @@ struct CategoryCard: View {
     var categoryType: CategoryType
     var color : Color = Color.clear 
     
-    
     init(categoryType: CategoryType) {
         self.categoryType = categoryType
         self.setColor()
