@@ -32,9 +32,9 @@ struct CourseResponse: Codable, Identifiable{
     let categorise : [CategoryType]
     
     // 코스 생성 날짜
-    let createdDate : Date
+    let createdDate : String
 
-    init(id: UUID = UUID(), courseId: Int, courseType: CourseType, courseImage: String, courseName: String, courseDescription: String, categorise: [CategoryType], createdDate: Date) {
+    init(id: UUID = UUID(), courseId: Int, courseType: CourseType, courseImage: String, courseName: String, courseDescription: String, categorise: [CategoryType], createdDate: String) {
         self.id = id
         self.courseId = courseId
         self.courseType = courseType
