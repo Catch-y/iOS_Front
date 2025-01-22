@@ -9,19 +9,29 @@ import SwiftUI
 
 struct LoginView: View {
     
+    @EnvironmentObject var container: DIContainer
+    @EnvironmentObject var appFlowViewModel: AppFlowViewModel
+    
+    @StateObject var viewModel: LoginViewModel
+    
+    init(container: DIContainer, appFlowViewModel: AppFlowViewModel) {
+        self._viewModel = StateObject(wrappedValue: .init(container: container, appflowViewModel: appFlowViewModel))
+    }
+    
     var body: some View {
         VStack(alignment: .leading, content: {
+            
             topLogoGroup
             
             Spacer()
             
             bottomBtnGroup
         })
-        .safeAreaPadding(EdgeInsets(top: 178, leading: 0, bottom: 98, trailing: 0))
+        .safeAreaPadding(EdgeInsets(top: 162, leading: 0, bottom: 62, trailing: 0))
     }
     
     private var topLogoGroup: some View {
-        VStack(alignment: .leading, spacing: 0, content: {
+        VStack(alignment: .leading, spacing: 7, content: {
             Icon.appIcon.image
                 .fixedSize()
             
@@ -29,14 +39,13 @@ struct LoginView: View {
                 .resizable()
                 .frame(width: 138, height: 50)
                 .aspectRatio(contentMode: .fit)
-                .padding(.top, 5)
             
             Text("특별한 하루를 위해 \n취향을 catch:y")
-                .font(.body1)
+                .font(.Subtitle3)
                 .lineSpacing(2.5)
-                .foregroundStyle(Color.g4)
+                .foregroundStyle(Color.g6)
                 .multilineTextAlignment(.leading)
-                .padding(.leading, 5)
+                .padding(.leading, 9)
         })
         .padding(.leading, 25)
     }
@@ -52,6 +61,8 @@ struct LoginView: View {
     }
 }
 
-#Preview {
-    LoginView()
+struct LoginView_Preview: PreviewProvider {
+    static var previews: some View {
+        LoginView(container: DIContainer(), appFlowViewModel: AppFlowViewModel())
+    }
 }

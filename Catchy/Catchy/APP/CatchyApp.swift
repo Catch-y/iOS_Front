@@ -24,7 +24,9 @@ struct CatchyApp: App {
             case .onBoarding:
                 OnboardingView(viewModel: appFlowViewModel)
             case .login:
-                LoginView()
+                LoginView(container: container, appFlowViewModel: appFlowViewModel)
+                    .environmentObject(container)
+                    .environmentObject(appFlowViewModel)
             case .tabView:
                 ContentView()
             }
