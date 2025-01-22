@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct OnboardingView: View {
+    
+    @ObservedObject var viewModel: AppFlowViewModel
+    
     var body: some View {
         ZStack(alignment: .center, content: {
             Ellipse()
@@ -41,5 +44,5 @@ struct OnboardingView: View {
 }
 
 #Preview {
-    OnboardingView()
+    OnboardingView(viewModel: AppFlowViewModel())
 }
