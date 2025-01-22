@@ -21,6 +21,7 @@ class SignUpViewModel: ObservableObject, ImageHandling {
     
     @Published var isImagePickerPresented: Bool = false
     @Published var selectedImageCount: Int = 0
+    
     var profileImage: [UIImage] = []
     
     public func checkMainBtn() -> Bool {
