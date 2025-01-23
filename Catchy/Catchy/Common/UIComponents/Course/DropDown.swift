@@ -173,17 +173,24 @@ struct DropDown: View {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(.m1)
                             .frame(height: 34)
+                            
                     }
                     HStack{
                         Text(locations[index].addr_name)
                             .font(.body2)
                             .foregroundStyle(isSelected ? .main : .g6)
+                            .padding(.leading, 18)
                         Spacer()
-                        if isSelected { Icon.check.image }
+                        if isSelected {
+                            Icon.check.image
+                                .fixedSize()
+                                .padding(.trailing, 15)
+                        }
+
                     }
                 }
             })
-        .padding(.horizontal, 25)
+        .padding(.horizontal, 5)
         .frame(width: buttonWidth, height: itemHeight, alignment: .center)
     }
 
