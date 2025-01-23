@@ -4,9 +4,9 @@
 3. [기술 스택](#3-기술-스택)
 
 ## 1. 개발 환경
-* Front : SwiftUI, Swift UIkit
+* Front : SwiftUI
 * 버전 및 이슈 관리 : Github, Github Issues
-* 협업 툴 : Discord, Notion, Github Wiki
+* 협업 툴 : Discord, Notion
 
 ## 2. 사용 라이브러리
 ### API

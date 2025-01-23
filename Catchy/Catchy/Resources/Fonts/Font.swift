@@ -71,6 +71,10 @@ extension Font {
         return .pretend(type: .semibold, size: 14)
     }
     
+    static var Body1_2: Font {
+        return .pretend(type: .regular, size: 14)
+    }
+    
     static var body2: Font {
         return .pretend(type: .regular, size: 13)
     }
@@ -87,7 +91,7 @@ extension Font {
         .pretend(type: .regular, size: 11)
     }
     
-    static var caption1_SM: Font {
+    static var caption_SM: Font {
         .pretend(type: .semibold, size: 11)
     }
     
@@ -95,8 +99,8 @@ extension Font {
         .pretend(type: .semibold, size: 8)
     }
     
-    static var titleLogo: Font {
-        return .pretend(type: .regular, size: 14)
+    static var caption3: Font {
+        .pretend(type: .regular, size: 7)
     }
     
     static var inputText: Font {

@@ -8,5 +8,5 @@
 import Foundation
 
 enum NavigationDestination {
-    
+    case SignUpView(signUpNaviData: SignUpNaviData)
 }

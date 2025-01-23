@@ -21,4 +21,32 @@ enum Config {
         }
         return baseURL
     }()
+    
+    static let kakaoKey: String = {
+        guard let kakao = Config.infoDictionary["KAKAO_KEY"] as? String else {
+            fatalError("KakaoKey not found")
+        }
+        return kakao
+    }()
+    
+    static let consumerKey: String = {
+        guard let consumerKey = Config.infoDictionary["CONSUMER_KEY"] as? String else {
+            fatalError("consumerKey not found")
+        }
+        return consumerKey
+    }()
+    
+    static let consumerSecretKey: String = {
+        guard let consumerSecretKey = Config.infoDictionary["CONSUMER_SECRET"] as? String else {
+            fatalError("consumerSecretKey not found")
+        }
+        return consumerSecretKey
+    }()
+    
+    static let locationImageKey: String = {
+        guard let locationImageKey = Config.infoDictionary["LOCATIONIMAGE_KEY"] as? String else {
+            fatalError("KakaoKey")
+        }
+        return locationImageKey
+    }()
 }

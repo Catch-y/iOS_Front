@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct OnboardingView: View {
+    
+    @ObservedObject var viewModel: AppFlowViewModel
+    
     var body: some View {
         ZStack(alignment: .center, content: {
             Ellipse()
@@ -17,38 +20,28 @@ struct OnboardingView: View {
                 .opacity(0.3)
                 .offset(y: 80)
             
-            VStack(spacing: 26, content: {
-                
-                Spacer().frame(height: 226)
-                
-                Icon.logo.image
-                    .fixedSize()
-                
-                onboardingText
-                
-                Spacer()
-            })
+            onboardingLogo
         })
+        .task {
+            viewModel.stateAppFlow { result, error in
+                if let error = error {
+                    print("최초 사용자 혹은 등록된 유저 아님: \(error)")
+                }
+            }
+        }
     }
     
-    private var onboardingText: some View {
-        Text("특별한 하루를 위해 \n취향을 catch:y")
-            .font(.Subtitle2)
-            .lineSpacing(3)
-            .foregroundStyle(Color.g5)
-            .multilineTextAlignment(.center)
+    private var onboardingLogo: some View {
+        VStack(spacing: 7, content: {
+            Icon.appIcon.image
+                .fixedSize()
+            
+            Icon.logo.image
+                .fixedSize()
+        })
     }
 }
 
-struct OnboardingView_Previews: PreviewProvider {
-    
-    static var devices: [String] = ["iPhone 16 Pro", "iPhone 11"]
-    
-    static var previews: some View {
-        ForEach(devices, id: \.self) { device in
-            OnboardingView()
-                .previewDevice(PreviewDevice(rawValue: device))
-                .previewDisplayName(device)
-        }
-    }
+#Preview {
+    OnboardingView(viewModel: AppFlowViewModel())
 }
