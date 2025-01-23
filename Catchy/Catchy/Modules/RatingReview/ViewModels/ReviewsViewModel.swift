@@ -9,7 +9,7 @@ import Foundation
 
 class ReviewsViewModel: ObservableObject {
     @Published var reviewResponse: ReviewResponse? = .init(
-        totalRating: 2.0,
+        totalRating: 3.5,
         reviewCount: [.init(score: 1, count: 20),
                       .init(score: 2, count: 999),
                       .init(score: 3, count: 1500),
@@ -18,7 +18,7 @@ class ReviewsViewModel: ObservableObject {
         totalCount: 2520,
         content: [.init(
             reviewId: 1,
-            comment: "ssss",
+            comment: "캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅 캐치 파이팅",
             rating: 1,
             reviewImages: [.init(
                 reviewImageId: 1,

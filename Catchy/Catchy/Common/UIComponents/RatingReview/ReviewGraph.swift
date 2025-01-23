@@ -38,32 +38,32 @@ struct ReviewGraph: View {
                 .progressViewStyle(.linear)
                 .background(Color.g2)
                 .tint(Color.m5)
-                .frame(maxWidth: 80, maxHeight: 8)
+                .frame(width: 80, height: 8)
                 .scaleEffect(x: 1.0, y: 2.0, anchor: .center)
                 .clipShape(RoundedRectangle(cornerRadius: 5.5))
                 
 
             /// 특정 점수를 준 사람 수 표시 (최대 999명으로 제한)
-            if personCount <= 999 {
-                Text("\(personCount)명")
-                    .font(.caption2)
-                    .foregroundColor(.g4)
-            }
-            else {
-                Text("999+명")
-                    .font(.caption2)
-                    .foregroundColor(.g4)
-            }
-                
+            Text(returnCount(count: personCount))
+                .font(.caption2)
+                .foregroundColor(.g4)
+                .frame(width: 28, alignment: .leading)
         })
-        .frame(width: 140, alignment: .leading)
+    }
+    
+    func returnCount(count: Int) -> String {
+        if count <= 999 {
+            return "\(count)명"
+        } else {
+            return "999+"
+        }
     }
 }
 
 struct ResultReviewGraph_Previews : PreviewProvider {
     static var previews: some View {
-        ReviewView(container: DIContainer())
-            .environmentObject(DIContainer())
+        ReviewGraph(score: 1, personCount: 20000000, totalPersonCount: 12)
+            .previewLayout(.sizeThatFits)
     }
 }
 

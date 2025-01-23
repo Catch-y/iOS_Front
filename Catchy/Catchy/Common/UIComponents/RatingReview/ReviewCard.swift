@@ -27,13 +27,15 @@ struct ReviewCard: View {
     /// - Parameter content: 리뷰 내용 데이터 모델
     /// - Returns: 리뷰 카드 뷰
     private func reviewTableSection(content: ReviewContents) -> some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: 14) {
             ratingAndReport(rating: content.rating) // 별점 및 신고하기 버튼
+            
             reviewImages(images: content.reviewImages)          // 사진 섹션
+            
             reviewContent(comment: content.comment)             // 리뷰 내용
+            
             reviewFooter(nickname: content.creatorNickname, visitedDate: content.visitedDate) // 닉네임 및 방문일
         }
-        .padding()
     }
 
     /// 1. 별점 및 신고하기 버튼
@@ -59,21 +61,28 @@ struct ReviewCard: View {
     /// - Parameter images: 리뷰 이미지 데이터 배열
     /// - Returns: 리뷰 이미지 뷰
     private func reviewImages(images: [ReviewImageData]) -> some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 6) {
-                ForEach(images, id: \.reviewImageId) { image in
-                    if let url = URL(string: image.imageUrl) {
-                        KFImage(url)
-                            .placeholder {
-                                ProgressView()
-                                    .controlSize(.regular)
-                            }.retry(maxCount: 2, interval: .seconds(2))
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 85, height: 85)
-                            .clipShape(.rect(cornerRadius: 15))
-                    }
-                }
+        ScrollView(.horizontal) {
+            LazyHGrid(rows: Array(repeating: GridItem(.fixed(85)), count: 1), spacing: 6, content: {
+                placeImage(images: images)
+            })
+            .padding(.trailing, 10)
+        }
+        .frame(height: 85)
+    }
+    
+    @ViewBuilder
+    private func placeImage(images: [ReviewImageData]) -> some View {
+        ForEach(images, id: \.reviewImageId) { image in
+            if let url = URL(string: image.imageUrl) {
+                KFImage(url)
+                    .placeholder {
+                        ProgressView()
+                            .controlSize(.regular)
+                    }.retry(maxCount: 2, interval: .seconds(2))
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 85, height: 85)
+                    .clipShape(.rect(cornerRadius: 15))
             }
         }
     }
@@ -82,9 +91,11 @@ struct ReviewCard: View {
     /// - Parameter comment: 리뷰 내용 텍스트
     /// - Returns: 리뷰 내용 뷰
     private func reviewContent(comment: String) -> some View {
-        Text(comment)
+        Text(comment.split(separator: "").joined(separator: "\u{200B}"))
             .font(.body2)
             .foregroundColor(.g7)
+            .lineLimit(nil)
+            .lineSpacing(2)
     }
 
     
@@ -104,7 +115,7 @@ struct ReviewCard: View {
                 .fill(.g5)
                 .frame(width: 1, height: 8)
             
-            Text(visitedDate ?? "방문일 모름")
+            Text("방문일 \(visitedDate ?? "모름")")
                 .font(.caption)
                 .foregroundColor(.g4)
         }
@@ -113,9 +124,6 @@ struct ReviewCard: View {
 
 }
 
-
-
-
 #Preview {
-    ReviewCard(data: ReviewContents(reviewId: 1, comment: "ssss", rating: 1, reviewImages: [.init(reviewImageId: 1, imageUrl: "https://i.namu.wiki/i/tWggtBqowGk0W5pu6Z9uZi_8qs_iAbdMC573fPCsrFuMPuPuTEiYZDyXGUsCymPqZTNv6gslp9TUsAEQ2v_it3vytlJnMG1Mhdz0bxHUZ2e5u1CJhPn7GsnNx3sLtR77Fx-6EybMT9g2MvJL4NoPlw.webp")], creatorNickname: "dragon", visitedDate: "1111"))
+    ReviewCard(data: ReviewContents(reviewId: 1, comment: "안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다.안녕하세요 저는 중앙대학교 학생 정의찬입니다.", rating: 1, reviewImages: [.init(reviewImageId: 1, imageUrl: "https://i.namu.wiki/i/tWggtBqowGk0W5pu6Z9uZi_8qs_iAbdMC573fPCsrFuMPuPuTEiYZDyXGUsCymPqZTNv6gslp9TUsAEQ2v_it3vytlJnMG1Mhdz0bxHUZ2e5u1CJhPn7GsnNx3sLtR77Fx-6EybMT9g2MvJL4NoPlw.webp")], creatorNickname: "dragon", visitedDate: "1111"))
 }
