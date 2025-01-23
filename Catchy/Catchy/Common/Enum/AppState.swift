@@ -10,5 +10,6 @@ import Foundation
 enum AppState {
     case onBoarding
     case login
+    case preferrenceSurvey
     case tabView
 }

@@ -32,4 +32,16 @@ class AppFlowViewModel: ObservableObject {
             }
         }
     }
+    
+    /// 로그인 성공 후 호출
+    /// - Parameter loginViewModel: 로그인 뷰모델
+    public func onLoginSuccess(loginViewModel: LoginViewModel) {
+        if loginViewModel.isLogin {
+            appState = .tabView
+        }
+    }
+    
+    public func onSignupSuccess() {
+        appState = .preferrenceSurvey
+    }
 }

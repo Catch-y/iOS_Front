@@ -52,11 +52,19 @@ struct LoginView: View {
     
     private var bottomBtnGroup: some View {
         VStack(alignment: .center, spacing: 21, content: {
-            Icon.kakao.image
-                .fixedSize()
+            Button(action: {
+                viewModel.kakaoLogin()
+            }, label: {
+                Icon.kakao.image
+                    .fixedSize()
+                })
             
-            Icon.apple.image
-                .fixedSize()
+            Button(action: {
+                viewModel.appleLogin()
+            }, label: {
+                Icon.apple.image
+                    .fixedSize()
+            })
         })
     }
 }
