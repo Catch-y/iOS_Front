@@ -7,9 +7,6 @@
 
 import Foundation
 
-
-
-
 struct AddressResponse : Codable, Hashable {
     
     let id : String

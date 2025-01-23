@@ -85,7 +85,7 @@ struct CourseListCard_Preview: PreviewProvider {
                     courseName: "한강 걷기 코스한강을 따라 걷는 코스입니다.",
                     courseDescription: "한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.",
                     categorise: [.SPORT, .BAR, .CULTURELIFE, .REST, .RESTAURANT],
-                    createdDate: Date()
+                    createdDate: ""
             )
         )
         .previewLayout(.sizeThatFits)
