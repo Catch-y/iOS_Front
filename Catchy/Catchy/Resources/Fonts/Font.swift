@@ -114,4 +114,8 @@ extension Font {
     static var courseTag: Font {
         return .pretend(type: .medium, size: 9)
     }
+    
+    static var categoryBtn: Font {
+        return .pretend(type: .medium, size: 14)
+    }
 }

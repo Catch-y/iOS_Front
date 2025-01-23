@@ -43,6 +43,15 @@ enum Icon: String {
     case downChevron = "downChevron"
     case check = "check"
     
+    //MARK: - Category
+    case breaks = "breaks"
+    case cafe = "cafe"
+    case cultureLife = "cultureLife"
+    case experience = "experience"
+    case restaurant = "restaurant"
+    case sports = "sports"
+    case tassels = "tassels"
+    
     var image: Image {
         return Image(self.rawValue)
     }
