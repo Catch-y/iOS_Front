@@ -8,9 +8,13 @@
 import Foundation
 
 protocol UseCaseProtocol {
-    
+    var authUseCase: AuthUseCase { get set }
 }
 
 class UseCaseProvider: UseCaseProtocol {
+    var authUseCase: AuthUseCase
     
+    init() {
+        self.authUseCase = AuthUseCase()
+    }
 }

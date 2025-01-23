@@ -4,12 +4,23 @@
 <dict>
 	<key>BASE_URL</key>
 	<string>$(BASE_URL)</string>
-	<key>KAKAO_KEY</key>
-	<string>$(KAKAO_KEY)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>kakao697b2998ebd4e787b65f71b021f6f7dd</string>
+			</array>
+		</dict>
+	</array>
 	<key>CONSUMER_KEY</key>
 	<string>$(CONSUMER_KEY)</string>
 	<key>CONSUMER_SECRET</key>
 	<string>$(CONSUMER_SECRET)</string>
+	<key>KAKAO_KEY</key>
+	<string>$(KAKAO_KEY)</string>
 	<key>LOCATIONIMAGE_KEY</key>
 	<string>$(LOCATIONIMAGE_KEY)</string>
 	<key>UIAppFonts</key>

@@ -10,10 +10,18 @@ import SwiftUI
 struct SignUpView: View {
     
     @StateObject var viewModel: SignUpViewModel
+    
     @EnvironmentObject var container: DIContainer
     
-    init(container: DIContainer) {
-        self._viewModel = StateObject(wrappedValue: .init(container: container))
+    let signUpNaviData: SignUpNaviData
+    
+    init(
+        container: DIContainer,
+        appFlowViewModel: AppFlowViewModel,
+        signUpNaviData: SignUpNaviData
+    ) {
+        self._viewModel = StateObject(wrappedValue: .init(container: container, appFlowViewModel: appFlowViewModel))
+        self.signUpNaviData = signUpNaviData
     }
     
     var body: some View {
@@ -31,7 +39,9 @@ struct SignUpView: View {
             inputUserInfoGroup
                 .padding(.top, 44)
             
-            MainBtn(text: "확인", action: {print("hello")}, width: 370, height: 60, onoff: viewModel.checkMainBtn() ? .on : .off)
+            MainBtn(text: "확인", action: {
+                viewModel.signupAction(signUpNaviData: signUpNaviData)
+            }, width: 370, height: 60, onoff: viewModel.checkMainBtn() ? .on : .off)
                 .padding(.top, 104)
             
             Spacer()
@@ -39,11 +49,15 @@ struct SignUpView: View {
         .sheet(isPresented: $viewModel.isImagePickerPresented, content: {
             ImagePicker(imageHandler: viewModel, selectedLimit: 1)
         })
+        .ignoresSafeArea(.keyboard)
+        .onAppear {
+            UIApplication.shared.hideKeyboard()
+        }
     }
     
     private var topTitle: some View {
         Text("프로필을 설정하고 \n회원 가입을 완료해주세요")
-            .font(.Subtitle2)
+            .font(.Subtitle1)
             .lineSpacing(3.3)
             .foregroundStyle(Color.g7)
             .kerning(-0.32)
@@ -77,7 +91,7 @@ struct SignUpView: View {
     
     private var inputUserInfoGroup: some View {
         VStack(alignment: .leading, spacing: 44, content: {
-            makeInputUserInfo("이메일", "", .constant(UserState.shared.getUserEmail()))
+            makeInputUserInfo("이메일", "", .constant(signUpNaviData.email))
                 .disabled(true)
             
             makeInputUserInfo("닉네임", "닉네임 8자까지 입력해주세요.", $viewModel.nickname)
@@ -118,7 +132,7 @@ extension SignUpView {
 
 struct SignupView_Preview: PreviewProvider {
     static var previews: some View {
-        SignUpView(container: DIContainer())
+        SignUpView(container: DIContainer(), appFlowViewModel: AppFlowViewModel() ,signUpNaviData: .init(accessToken: "11", authorizationCode: "11", email: "asbcsw@naver.com", loginType: .apple))
             .environmentObject(DIContainer())
     }
 }
