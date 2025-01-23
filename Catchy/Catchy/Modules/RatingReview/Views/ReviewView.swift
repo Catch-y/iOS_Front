@@ -20,7 +20,7 @@ struct ReviewView: View {
     // MARK: - Body
     var body: some View {
         if let data = viewModel.reviewResponse {
-            VStack(alignment: .leading, spacing: 26,content: {
+            VStack(alignment: .center, spacing: 20, content: {
                 
                 CustomNavigation(action: {
                     print("hello")
@@ -29,9 +29,14 @@ struct ReviewView: View {
                 
                 ScrollView(.vertical, content: {
                     topReviewInfo(data: data)
+                    
                     reviewTableSection(content: data.content)
+                        .padding(.top, 7)
                 })
+                .frame(maxWidth: .infinity)
+                
             })
+            .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
         } else {
             VStack(alignment: .center, content: {
                 Spacer()
@@ -52,26 +57,35 @@ struct ReviewView: View {
     private func topReviewInfo(data: ReviewResponse) -> some View {
         VStack(spacing: 27, content: {
             reviewTotalCount(totalCount: data.totalCount)
-            HStack(alignment: .center, spacing: 29, content: {
+            
+            HStack(alignment: .center, content: {
+                
                 reviewTotalStar(totalRating: data.totalRating)
                 
+                Spacer()
                 /* 세로선 */
                 Rectangle()
                     .fill(.g3)
                     .frame(width: 1, height: 60)
-                    .padding(.leading, 25)
+                
+                Spacer()
                 
                 reviewGraphSection(reviewCount: data.reviewCount, totalPersonCount: data.totalCount)
+                
             })
+            .frame(height: 74)
         })
-        .padding([.top, .trailing], 16)
+
+        .padding(.top, 16)
         .padding(.bottom, 32)
         .padding(.leading, 29)
+        .padding(.trailing, 16)
         .overlay(content: {
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.clear)
                 .stroke(Color.g3, lineWidth: 1)
         })
+        
     }
     
     
@@ -94,7 +108,7 @@ struct ReviewView: View {
     /// - Parameter totalRating: 평균 평점 값 (소수점 한 자리까지)
     /// - Returns: 평균 평점과 별점 표시, 별점 그래프 포함
     private func reviewTotalStar(totalRating: Double) -> some View {
-        return VStack(alignment: .leading, spacing: 2,content: {
+        return VStack(alignment: .center, spacing: 2,content: {
             HStack(spacing: 9, content: {
                 Text(String(format: "%.1f", totalRating))
                     .font(.Headline1)
@@ -108,6 +122,7 @@ struct ReviewView: View {
                 .font(.Subtitle1)
                 .foregroundColor(.g4)
             })
+            .frame(width: 122)
             
             StarRating(rating: totalRating)
         })
@@ -120,7 +135,7 @@ struct ReviewView: View {
     ///   - totalPersonCount: 총 리뷰 개수
     /// - Returns: 별점 분포를 나타내는 막대그래프 뷰
     private func reviewGraphSection(reviewCount: [ScoreCount], totalPersonCount: Int) -> some View {
-        VStack(alignment: .leading, spacing: 6, content: {
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 0, maximum: 140)), count: 1), spacing: 6,  content: {
             ForEach(reviewCount.reversed(), id: \.score) { scoreData in
                 ReviewGraph(
                     score: scoreData.score,
@@ -129,6 +144,7 @@ struct ReviewView: View {
                 )
             }
         })
+        .frame(width: 140)
     }
     
     // MARK: - 하단 리뷰 테이블 섹션
@@ -137,14 +153,13 @@ struct ReviewView: View {
     /// - Parameter content: 리뷰 데이터 배열
     /// - Returns: 리뷰 목록과 구분선을 포함하는 뷰
     private func reviewTableSection(content: [ReviewContents]) -> some View {
-        VStack(alignment: .leading, spacing: 8, content: {
+        VStack(alignment: .center, spacing: 8, content: {
             ForEach(content, id: \.reviewId) { review in
                 ReviewCard(data: review)
             }
             
             Divider()
                 .background(.g3)
-                .padding(.horizontal, 16)
         })
     }
 }

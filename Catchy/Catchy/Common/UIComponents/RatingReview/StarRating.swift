@@ -20,13 +20,14 @@ struct StarRating: View {
             ForEach(0..<5, id: \.self) { index in
                 if index < Int(rating.rounded()) {
                     Icon.star.image
-                        .padding(2)
+                        .padding(4)
                 } else {
                     Icon.emptyStar.image
-                        .padding(2)
+                        .padding(4)
                 }
             }
         }
+        .frame(width: 118)
     }
 }
 
