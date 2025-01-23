@@ -17,7 +17,12 @@ struct CourseView: View {
         ZStack{
             VStack{
                 navigationGroup
-                scrollView
+                if !viewModel.courseList.isEmpty{
+                    infoView
+                    
+                }else{
+                    scrollView
+                }
             }
             VStack{
                 DropDown(viewModel: viewModel)
@@ -64,6 +69,21 @@ struct CourseView: View {
         .padding(.bottom, 110)
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
+    }
+    
+    /// 코스가 없을 때 텍스트 뷰
+    private var infoView : some View {
+        VStack(spacing: 9){
+            Text("생성된 코스가 없습니다.")
+                .font(.Subtitle2)
+                .foregroundStyle(.g7)
+            Text("코스를 새로 만들어보세요!")
+                .font(.body1)
+                .foregroundStyle(.g4)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .ignoresSafeArea(edges: .all)
+        .padding(.bottom, 110)
     }
 }
 
