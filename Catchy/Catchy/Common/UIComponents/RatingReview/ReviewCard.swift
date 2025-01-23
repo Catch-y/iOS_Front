@@ -20,7 +20,12 @@ struct ReviewCard: View {
         reviewTableSection(content: data)
     }
     
-    // 리뷰 테이블 섹션
+    // MARK: - 리뷰 테이블 카드
+
+    
+    /// 리뷰 테이블 섹션
+    /// - Parameter content: 리뷰 내용 데이터 모델
+    /// - Returns: 리뷰 카드 뷰
     private func reviewTableSection(content: ReviewContents) -> some View {
         VStack(alignment: .leading, spacing: 20) {
             ratingAndReport(rating: content.rating) // 별점 및 신고하기 버튼
@@ -31,9 +36,9 @@ struct ReviewCard: View {
         .padding()
     }
 
-
-
-    // 1. 별점 및 신고하기 버튼
+    /// 1. 별점 및 신고하기 버튼
+    /// - Parameter rating: 리뷰의 별점 (Int)
+    /// - Returns: 별점 및 신고하기 버튼 뷰
     private func ratingAndReport(rating: Int) -> some View {
         HStack {
             // 별점 표시
@@ -49,8 +54,10 @@ struct ReviewCard: View {
         }
     }
 
-
-    // 2. 사진
+    
+    /// 2. 리뷰 이미지
+    /// - Parameter images: 리뷰 이미지 데이터 배열
+    /// - Returns: 리뷰 이미지 뷰
     private func reviewImages(images: [ReviewImageData]) -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 6) {
@@ -70,16 +77,22 @@ struct ReviewCard: View {
             }
         }
     }
-
-    // 3. 리뷰 내용
+    
+    /// 3. 리뷰 내용
+    /// - Parameter comment: 리뷰 내용 텍스트
+    /// - Returns: 리뷰 내용 뷰
     private func reviewContent(comment: String) -> some View {
         Text(comment)
             .font(.body2)
             .foregroundColor(.g7)
     }
 
-
-    // 4. 닉네임 및 방문일
+    
+    /// 4. 닉네임과 방문일
+    /// - Parameters:
+    ///   - nickname: 작성자 닉네임
+    ///   - visitedDate: 방문일 텍스트
+    /// - Returns: 닉네임과 방문일 뷰
     private func reviewFooter(nickname: String, visitedDate: String?) -> some View {
         HStack {
             Text(nickname)

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 별점 표시 뷰
 struct StarRating: View {
     let rating: Double
 
