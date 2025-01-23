@@ -48,6 +48,11 @@ class CourseViewModel: ObservableObject{
     /// [시/군/구 전체]의 드랍 상태
     @Published var isLowerDrop: Bool = false
     
+    /// 드랍 다운 메뉴 스크롤 뷰의 초기 인덱스
+    /// 선택된 인덱스를 스크롤 뷰에 바로 표시될 수 있도록함.
+    @Published var upperScrollPosition: Int? = nil
+    @Published var lowerScrollPosition: Int? = nil
+    
     
     // MARK: - FLoating Button Properties
     
@@ -85,13 +90,26 @@ extension CourseViewModel {
     func resetUpperDropState(){
         self.isUpperDrop = false
         self.selectedUpperIndex = nil
+        self.upperScrollPosition = nil
     }
     
     func resetLowerDropState(){
         self.isLowerDrop = false
         self.selectedLowerIndex = nil
+        self.lowerScrollPosition = nil
     }
     
+    /// 왼쪽 드랍 다운 메뉴의 스크롤 인덱스 값을 설정합니다.
+    /// - Parameter index: 스크롤 뷰의 인덱스
+    func setUpperScrollPosition(by index: Int?){
+        self.upperScrollPosition = index
+    }
+    
+    /// 오른쪽 드랍 다운 메뉴의 스크롤 인덱스 값을 설정합니다.
+    /// - Parameter index: 스크롤 뷰의 인덱스
+    func setLowerScrollPosition(by index: Int?){
+        self.lowerScrollPosition = index
+    }
     
     // TODO: - 도 전체 버튼의 들어갈 값 요청
     func requestUpperDropMenuItems(){

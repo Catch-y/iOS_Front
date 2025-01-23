@@ -35,7 +35,6 @@ struct CourseView: View {
         
     }
 
-
     /// 네비게이션 바와 세그먼트 그룹
     private var navigationGroup : some View {
         VStack(alignment: .center) {

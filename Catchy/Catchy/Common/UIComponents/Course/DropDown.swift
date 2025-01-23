@@ -68,30 +68,36 @@ struct DropDown: View {
         let isDrop = isUpper ? viewModel.isUpperDrop : viewModel.isLowerDrop
         let locations = isUpper ? viewModel.upperLocations : viewModel.lowerLocations
         
-        return Button(action: {
-                isUpper ? viewModel.isUpperDrop.toggle() : viewModel.isLowerDrop.toggle()
-        }, label: {
-            HStack {
-                Text(selectedIndex == nil ? text : locations[selectedIndex!].addr_name)
+        return Button(
+            action: {
+                isUpper ? viewModel.isUpperDrop
+                    .toggle() : viewModel.isLowerDrop
+                    .toggle()
+            },
+            label: {
+                HStack {
+                    Text(
+                        selectedIndex == nil ? text : locations[selectedIndex!].addr_name
+                    )
                     .font(.body2)
                     .foregroundStyle(.g5)
                 
-                Spacer()
+                    Spacer()
                 
-                Icon.downChevron.image
-                    .rotationEffect(.degrees((isDrop ? -180 : 0)))
-            }
-            .frame(width: 140, height: 20, alignment: .leading)
-            .padding(.vertical, 12.5)
-            .padding(.leading, 25)
-            .padding(.trailing, 15)
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.clear)
-                    .stroke(Color.g3, lineWidth: 1)
-            )
+                    Icon.downChevron.image
+                        .rotationEffect(.degrees((isDrop ? -180 : 0)))
+                }
+                .frame(width: 140, height: 20, alignment: .leading)
+                .padding(.vertical, 12.5)
+                .padding(.leading, 25)
+                .padding(.trailing, 15)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.clear)
+                        .stroke(Color.g3, lineWidth: 1)
+                )
             
-        })
+            })
         .buttonStyle(.plain)
     }
     
@@ -110,23 +116,29 @@ struct DropDown: View {
             }
         }
         .scrollTargetLayout()
-        .scrollPosition(id: isUpper ? $viewModel.selectedUpperIndex : $viewModel.selectedLowerIndex)
+        .scrollPosition(
+            id: isUpper ? $viewModel.upperScrollPosition : $viewModel.lowerScrollPosition
+        )
         .scrollDisabled(locations.count <= 3)
         .frame(width: buttonWidth, height: 180)
         .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.g3, lineWidth: 1)
-            )
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.white)
-            )
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.g3, lineWidth: 1)
+        )
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white)
+        )
         .padding(isUpper ? .leading : .trailing , 16)
         .onAppear{
-            print("dsds")
+            isUpper ?
+            viewModel.setUpperScrollPosition(by: viewModel.selectedUpperIndex)
+            : viewModel.setLowerScrollPosition(by: viewModel.selectedLowerIndex)
+        
         }
-
     }
+    
+     
 
     /// 각 드랍 메뉴의 아이템
     /// - Parameters:
@@ -139,29 +151,38 @@ struct DropDown: View {
         let isSelected = (index == selectedIndex)
         let locations = isUpper ? viewModel.upperLocations : viewModel.lowerLocations
         
-        return Button(action: {
-            isUpper ? (viewModel.selectedUpperIndex = index) : (viewModel.selectedLowerIndex = index)
-            isUpper ? viewModel.isUpperDrop.toggle() : viewModel.isLowerDrop.toggle()
-            if isUpper {
-                viewModel.resetLowerDropState()
-                viewModel.requestLowerDropMenuItems()
-            }
-        }, label: {
-            ZStack{
-                if isSelected {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(.m1)
-                        .frame(height: 34)
+        return Button(
+            action: {
+                isUpper ? (viewModel.selectedUpperIndex = index) : (
+                    viewModel.selectedLowerIndex = index
+                )
+                isUpper ? viewModel.isUpperDrop
+                    .toggle() : viewModel.isLowerDrop
+                    .toggle()
+                if isUpper {
+                
+                    viewModel.resetLowerDropState()
+                
+                    viewModel.requestLowerDropMenuItems()
                 }
-                HStack{
-                    Text(locations[index].addr_name)
-                        .font(.body2)
-                        .foregroundStyle(isSelected ? .main : .g6)
-                    Spacer()
-                    if isSelected { Icon.check.image }
+            
+            },
+            label: {
+                ZStack{
+                    if isSelected {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(.m1)
+                            .frame(height: 34)
+                    }
+                    HStack{
+                        Text(locations[index].addr_name)
+                            .font(.body2)
+                            .foregroundStyle(isSelected ? .main : .g6)
+                        Spacer()
+                        if isSelected { Icon.check.image }
+                    }
                 }
-            }
-        })
+            })
         .padding(.horizontal, 25)
         .frame(width: buttonWidth, height: itemHeight, alignment: .center)
     }

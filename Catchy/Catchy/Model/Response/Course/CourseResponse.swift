@@ -10,28 +10,28 @@ import Foundation
 
 struct CourseResponse: Codable, Identifiable{
     
-    // 고유 ID
+    /// 고유 ID
     var id = UUID()
     
-    // 코스 ID
+    /// 코스 ID
     let courseId : Int
     
-    // 코스 타입
+    /// 코스 타입
     let courseType : CourseType
     
-    // 코스 이미지
+    /// 코스 이미지
     let courseImage : String
     
-    // 코스 이름
+    /// 코스 이름
     let courseName : String
     
-    // 코스 설명
+    /// 코스 설명
     let courseDescription : String
     
-    // 코스 카테고리 (최대 5개)
+    /// 코스 카테고리 (최대 5개)
     let categorise : [CategoryType]
     
-    // 코스 생성 날짜
+    /// 코스 생성 날짜
     let createdDate : String
 
     init(id: UUID = UUID(), courseId: Int, courseType: CourseType, courseImage: String, courseName: String, courseDescription: String, categorise: [CategoryType], createdDate: String) {
