@@ -15,7 +15,7 @@ struct CustomSegment<T: SegmentProtocol & CaseIterable>: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-                HStack(spacing: 113, content: {
+                HStack(spacing: 93, content: {
                     ForEach(Array(T.allCases), id: \.self) { segment in
                         Button(action: {
                             withAnimation(.easeInOut(duration: 0.4)) {

@@ -9,8 +9,14 @@ import Foundation
 import SwiftUI
 
 extension String {
+    
     func width(usingFont font: UIFont) -> CGFloat {
         let attributes = [NSAttributedString.Key.font: font]
         return self.size(withAttributes: attributes).width
     }
+    
+    func customLineBreak() -> String {
+        return self.split(separator: "").joined(separator: "\u{200B}")
+    }
+    
 }

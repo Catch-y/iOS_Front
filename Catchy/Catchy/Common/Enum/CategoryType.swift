@@ -13,6 +13,6 @@ enum CategoryType: String, Codable {
     case RESTAURANT = "음식점"
     case EXPRERIENCE = "체험"
     case CULTURELIFE = "문화생활"
-    case SPROT = "스포츠"
+    case SPORT = "스포츠"
     case REST = "휴식/웰니스"
 }
