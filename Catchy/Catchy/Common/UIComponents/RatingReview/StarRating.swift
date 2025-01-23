@@ -1,0 +1,39 @@
+//
+//  StarRating.swift
+//  Catchy
+//
+//  Created by 권용빈 on 1/23/25.
+//
+
+import SwiftUI
+
+struct StarRating: View {
+    let rating: Double
+
+    init(rating: Double) {
+        self.rating = rating
+    }
+    
+    var body: some View {
+        HStack(spacing: 2) {
+            ForEach(0..<5, id: \.self) { index in
+                if index < Int(rating.rounded()) {
+                    Icon.star.image
+                        .padding(2)
+                } else {
+                    Icon.emptyStar.image
+                        .padding(2)
+                }
+            }
+        }
+    }
+}
+
+
+struct StarRating_Previews: PreviewProvider {
+    static var previews: some View {
+        StarRating(rating: 2.7)
+            .previewLayout(.sizeThatFits)
+    }
+}
+   

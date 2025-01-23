@@ -33,6 +33,7 @@ enum Icon: String {
     case empyHeart = "empyHeart"
     case location = "location"
     case star = "star"
+    case emptyStar = "emptyStar"
     case time = "time"
     case review = "review"
     case rightChevron = "rightChevron"
