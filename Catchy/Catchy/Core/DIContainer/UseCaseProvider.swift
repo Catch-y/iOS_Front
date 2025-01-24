@@ -10,14 +10,21 @@ import Foundation
 protocol UseCaseProtocol {
     var authUseCase: AuthUseCase { get set }
     var courseUseCase: CourseUseCase { get set }
+    
+    /// [코스 관리] UseCase
+    var courseManagementUseCase: CourseManagementUseCase { get set }
 }
 
 class UseCaseProvider: UseCaseProtocol {
     var authUseCase: AuthUseCase
     var courseUseCase: CourseUseCase
     
+    /// [코스 관리] UseCase
+    var courseManagementUseCase: CourseManagementUseCase
+    
     init() {
         self.authUseCase = AuthUseCase()
         self.courseUseCase = CourseUseCase()
+        self.courseManagementUseCase = CourseManagementUseCase()
     }
 }

@@ -7,16 +7,22 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 class CourseViewModel: ObservableObject{
     
     
-    //  let container : DIContainer
+    let container: DIContainer
+    
+    var cancellables = Set<AnyCancellable>()
     
     // MARK: - Course View Properties
     
     /// 코스 리스트
-    @Published var courseList: [CourseResponse] = []
+    @Published var courseResponse: CourseResponse?
+    
+    /// 코스 리스트가 로딩 중?
+    @Published var isCourseListLoading: Bool = false
     
     // MARK: - Segment Control Properties
     
@@ -48,9 +54,12 @@ class CourseViewModel: ObservableObject{
     /// [시/군/구 전체]의 드랍 상태
     @Published var isLowerDrop: Bool = false
     
-    /// 드랍 다운 메뉴 스크롤 뷰의 초기 인덱스
+    /// 왼쪽 드랍 다운 메뉴 스크롤 뷰의 초기 인덱스
     /// 선택된 인덱스를 스크롤 뷰에 바로 표시될 수 있도록함.
     @Published var upperScrollPosition: Int? = nil
+    
+    /// 오른쪽 드랍 다운 메뉴 스크롤 뷰의 초기 인덱스
+    /// 선택된 인덱스를 스크롤 뷰에 바로 표시될 수 있도록함.
     @Published var lowerScrollPosition: Int? = nil
     
     
@@ -59,18 +68,63 @@ class CourseViewModel: ObservableObject{
     /// 플로팅 버튼 상태
     @Published var isFloating: Bool = false
     
-    
     // MARK: - Init
     
-//    init(container: DIContainer){
-//        self.container = container
-//    }
+    init(container: DIContainer) {
+        self.container = container
+    }
 
 }
 
 extension CourseViewModel {
     
+    // MARK: - API 호출 함수
+    func getCourseList(courseRequest: CourseRequest){
+        
+        isCourseListLoading = true
+        
+        container.useCaseProvider.courseManagementUseCase
+            .executeGetCourseList(courseRequest: courseRequest)
+            .tryMap{ responseData -> ResponseData<CourseResponse> in
+                if !responseData.isSuccess{
+                    throw APIError
+                        .serverError(
+                            message: responseData.message,
+                            code: responseData.code
+                        )
+                }
+                
+                return responseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: {
+                [weak self] completion in
+                guard let self = self else { return }
+                self.isCourseListLoading = false
+                    
+                switch completion {
+                case .finished:
+                    print("✅ Get CourseList Server Completed")
+                case .failure(let failure):
+                    print("❌ Get CourseList Failed: \(failure)")
+                }
+            },receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                
+                if let response = response.result{
+                    self.courseResponse = response
+                }
+                
+            })
+            .store(in: &cancellables)
+            
+    }
+        
+
     
+    
+    
+    // MARK: - API 호출 없는 함수
     /// 세그먼트 컨트롤의 값이 바뀌었을 때 호출
     /// - Parameter segment: newValue
     func segmentDidChange(to segment : CourseSegment){

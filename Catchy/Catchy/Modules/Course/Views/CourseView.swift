@@ -10,21 +10,35 @@ import FloatingButton
 
 struct CourseView: View {
     
-    @StateObject var viewModel: CourseViewModel = dummyCourseViewModel.dummy()
+    @StateObject var viewModel: CourseViewModel
+    
+    init(container: DIContainer) {
+        self._viewModel = StateObject(wrappedValue: .init(container: container))
+    }
     
     var body: some View {
         
         ZStack{
             VStack{
-                navigationGroup
-                if !viewModel.courseList.isEmpty{
-                    infoView
+                if !viewModel.isCourseListLoading {
+                    navigationGroup
+                    if let data = viewModel.courseResponse {
+                        if data.content.isEmpty {
+                            infoView
+                        }else {
+                            scrollView
+                        }
+                    }
+                }else {
+                    Spacer()
                     
-                }else{
-                    scrollView
+                    ProgressView()
+                    
+                    Spacer()
                 }
+                
             }
-            VStack{
+            VStack {
                 DropDown(viewModel: viewModel)
                 Spacer()
             }
@@ -35,6 +49,8 @@ struct CourseView: View {
             }
             AddFloatingButton(isOpen: $viewModel.isFloating)
             
+        }.task{
+            viewModel.getCourseList(courseRequest: .init(type: .ai, upperLocation: "", lowerLocation: "", lastId: 0))
         }
 
         
@@ -58,7 +74,7 @@ struct CourseView: View {
     private var scrollView : some View {
         ScrollView(.vertical, content: {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 0, maximum: 400)), count: 1), spacing: 18, content: {
-                ForEach(viewModel.courseList, id: \.id) { course in
+                ForEach(viewModel.courseResponse!.content, id: \.id) { course in
                     CourseGroupCard(course: course)
                 }
             })
@@ -90,7 +106,7 @@ struct CourseView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
-            CourseView()
+            CourseView(container: DIContainer())
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
         }
