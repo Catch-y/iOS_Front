@@ -16,6 +16,7 @@ protocol UseCaseProtocol {
 
 class UseCaseProvider: UseCaseProtocol {
     var authUseCase: AuthUseCase
+    var courseUseCase: CourseUseCase
     
     /// [코스 관리] UseCase
     var courseManagementUseCase: CourseManagementUseCase
