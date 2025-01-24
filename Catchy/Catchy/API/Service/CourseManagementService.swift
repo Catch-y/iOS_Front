@@ -10,7 +10,7 @@ import Combine
 import CombineMoya
 import Moya
 
-/// [코스 관리[ Service 객체
+/// [코스 관리] Service 객체
 class CourseManagementService: CourseManagementServiceProtocol {
     
     let provider: MoyaProvider<CourseManagementAPITarget>

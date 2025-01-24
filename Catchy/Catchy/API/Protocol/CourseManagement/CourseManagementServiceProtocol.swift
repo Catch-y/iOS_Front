@@ -10,7 +10,7 @@ import Combine
 import CombineMoya
 import Moya
 
-/// [코스관리] ServiceProtocl
+/// [코스 관리] ServiceProtocol
 protocol CourseManagementServiceProtocol {
     
     /// 코스 조회

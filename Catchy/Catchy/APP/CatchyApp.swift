@@ -20,19 +20,18 @@ struct CatchyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            TestView(container: container)
-//            switch appFlowViewModel.appState {
-//            case .onBoarding:
-//                OnboardingView(viewModel: appFlowViewModel)
-//            case .login:
-//                LoginView(container: container, appFlowViewModel: appFlowViewModel)
-//                    .environmentObject(container)
-//                    .environmentObject(appFlowViewModel)
-//            case .preferrenceSurvey:
-//                Text("dummy")
-//            case .tabView:
-//                ContentView()
-//            }
+            switch appFlowViewModel.appState {
+            case .onBoarding:
+                OnboardingView(viewModel: appFlowViewModel)
+            case .login:
+                LoginView(container: container, appFlowViewModel: appFlowViewModel)
+                    .environmentObject(container)
+                    .environmentObject(appFlowViewModel)
+            case .preferrenceSurvey:
+                Text("dummy")
+            case .tabView:
+                ContentView()
+            }
         }
     }
 }

@@ -196,10 +196,3 @@ struct DropDown: View {
 
 
 }
-
-
-//#Preview{
-//    DropDown(viewModel: <#T##CourseViewModel#>, selectedOptionIndex: <#T##Int#>, scrollPosition: <#T##Int?#>)
-//}
-//
-

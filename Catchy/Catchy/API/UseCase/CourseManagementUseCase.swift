@@ -10,7 +10,7 @@ import Combine
 import CombineMoya
 import Moya
 
-/// [코스 조회] UseCasa 객체
+/// [코스 관리] UseCase 객체
 class CourseManagementUseCase: CourseManagementUseCaseProtocol {
     
     let repository: CourseManagementRepositoryProtocol
