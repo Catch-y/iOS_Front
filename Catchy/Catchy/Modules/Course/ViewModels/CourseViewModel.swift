@@ -179,7 +179,7 @@ final class dummyCourseViewModel{
                 courseImage: "image4.jpg",
                 courseName: "도심 속 힐링 코스",
                 courseDescription: "도심에서 휴식을 즐길 수 있는 코스입니다.",
-                categorise: [.REST, .SPORT, .EXPRERIENCE, .CULTURELIFE],
+                categorise: [.REST, .SPORT, .EXPERIENCE, .CULTURELIFE],
                 createdDate: ""
             ),
             CourseResponse(
@@ -188,7 +188,7 @@ final class dummyCourseViewModel{
                 courseImage: "image5.jpg",
                 courseName: "강릉 바다 맛집 코스",
                 courseDescription: "강릉에서 맛집과 함께 바다를 즐길 수 있는 코스입니다.",
-                categorise: [.RESTAURANT, .CAFE, .BAR, .EXPRERIENCE, .CULTURELIFE],
+                categorise: [.RESTAURANT, .CAFE, .BAR, .EXPERIENCE, .CULTURELIFE],
                 createdDate: ""
             ),
             CourseResponse(
@@ -233,7 +233,7 @@ final class dummyCourseViewModel{
                 courseImage: "image10.jpg",
                 courseName: "인사동 전통 체험",
                 courseDescription: "인사동에서 전통 체험을 즐길 수 있는 코스입니다.",
-                categorise: [.EXPRERIENCE, .CULTURELIFE],
+                categorise: [.EXPERIENCE, .CULTURELIFE],
                 createdDate: ""
             ),
             CourseResponse(
@@ -251,7 +251,7 @@ final class dummyCourseViewModel{
                 courseImage: "image12.jpg",
                 courseName: "제주 오름 탐방",
                 courseDescription: "제주의 아름다운 오름을 탐방하는 코스입니다.",
-                categorise: [.SPORT, .EXPRERIENCE],
+                categorise: [.SPORT, .EXPERIENCE],
                 createdDate: ""
             ),
             CourseResponse(
@@ -260,7 +260,7 @@ final class dummyCourseViewModel{
                 courseImage: "image13.jpg",
                 courseName: "영화 촬영지 투어",
                 courseDescription: "영화 촬영지로 유명한 곳을 방문하는 코스입니다.",
-                categorise: [.CULTURELIFE, .EXPRERIENCE, .REST],
+                categorise: [.CULTURELIFE, .EXPERIENCE, .REST],
                 createdDate: ""
             ),
             CourseResponse(
@@ -296,7 +296,7 @@ final class dummyCourseViewModel{
                 courseImage: "image17.jpg",
                 courseName: "서울 마라톤 코스",
                 courseDescription: "서울에서 마라톤을 경험할 수 있는 코스입니다.",
-                categorise: [.SPORT, .EXPRERIENCE],
+                categorise: [.SPORT, .EXPERIENCE],
                 createdDate: ""
             ),
             CourseResponse(
@@ -314,7 +314,7 @@ final class dummyCourseViewModel{
                 courseImage: "image19.jpg",
                 courseName: "영남 알프스 트레킹",
                 courseDescription: "영남 알프스를 트레킹하며 자연을 만끽하는 코스입니다.",
-                categorise: [.SPORT, .EXPRERIENCE],
+                categorise: [.SPORT, .EXPERIENCE],
                 createdDate: ""
             ),
             CourseResponse(

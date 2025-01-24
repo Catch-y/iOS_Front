@@ -14,7 +14,7 @@ enum CategoryType: String, Codable, CaseIterable {
     case RESTAURANT = "음식점"
     case EXPERIENCE = "체험"
     case CULTURELIFE = "문화생활"
-    case SPROT = "스포츠"
+    case SPORT = "스포츠"
     case REST = "휴식"
     
     func reeturnIcon() -> Image {
@@ -29,7 +29,7 @@ enum CategoryType: String, Codable, CaseIterable {
             return Icon.experience.image
         case .CULTURELIFE:
             return Icon.cultureLife.image
-        case .SPROT:
+        case .SPORT:
             return Icon.sports.image
         case .REST:
             return Icon.breaks.image
