@@ -17,7 +17,7 @@ struct NavigationRoutingView: View {
     var body: some View {
         switch destination {
         case .SignUpView(let signUpNaviData):
-            SignUpView(container: container, appFlowViewModel: appFlowViewModel ,signUpNaviData: signUpNaviData)
+            SignUpView(container: container, appFlowViewModel: appFlowViewModel, signUpNaviData: signUpNaviData)
         }
     }
 }

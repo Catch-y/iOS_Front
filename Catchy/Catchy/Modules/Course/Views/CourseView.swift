@@ -112,8 +112,8 @@ struct CourseView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ForEach(["iPhone 16 Pro Max", "iPhone 11"], id: \.self) { deviceName in
-            CourseView(container: DIContainer())
+        ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
+            CourseView()
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
         }
