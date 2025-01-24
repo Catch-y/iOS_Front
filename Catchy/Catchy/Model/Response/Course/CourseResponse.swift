@@ -1,5 +1,5 @@
 //
-//  CourseListResponse.swift
+//  CourseResponse.swift
 //  Catchy
 //
 //  Created by LEE on 1/20/25.
@@ -7,16 +7,24 @@
 
 import Foundation
 
+struct CourseResponse: Codable {
+    
+    /// 데이터를 담고 있는 배열
+    let content: [CourseResponseData]
+    
+}
 
-struct CourseResponse: Codable, Identifiable{
+struct CourseResponseData: Codable, Identifiable{
     
     /// 고유 ID
+    /// 뷰를 생성할 때만 사용, API와 관련 없음.
     var id = UUID()
     
     /// 코스 ID
     let courseId : Int
     
     /// 코스 타입
+    /// DIY or AI
     let courseType : CourseType
     
     /// 코스 이미지
@@ -31,10 +39,10 @@ struct CourseResponse: Codable, Identifiable{
     /// 코스 카테고리 (최대 5개)
     let categorise : [CategoryType]
     
-    /// 코스 생성 날짜
-    let createdDate : String
-
-    init(id: UUID = UUID(), courseId: Int, courseType: CourseType, courseImage: String, courseName: String, courseDescription: String, categorise: [CategoryType], createdDate: String) {
+    /// 마지막 데이터를 포함한 응답인지
+    let isLast: Bool
+    
+    init(id: UUID = UUID(), courseId: Int, courseType: CourseType, courseImage: String, courseName: String, courseDescription: String, categorise: [CategoryType], isLast: Bool) {
         self.id = id
         self.courseId = courseId
         self.courseType = courseType
@@ -42,6 +50,19 @@ struct CourseResponse: Codable, Identifiable{
         self.courseName = courseName
         self.courseDescription = courseDescription
         self.categorise = categorise
-        self.createdDate = createdDate
+        self.isLast = isLast
+    }
+    
+    enum CodingKeys : String, CodingKey {
+        case courseId
+        case courseType
+        case courseImage
+        case courseName
+        case courseDescription
+        case categorise
+        case isLast
     }
 }
+
+
+
