@@ -12,6 +12,9 @@ struct CourseResponse: Codable {
     /// 데이터를 담고 있는 배열
     let content: [CourseResponseData]
     
+    /// 마지막 데이터를 포함한 응답인지
+    let isLast: Bool
+    
 }
 
 struct CourseResponseData: Codable, Identifiable{
@@ -25,24 +28,21 @@ struct CourseResponseData: Codable, Identifiable{
     
     /// 코스 타입
     /// DIY or AI
-    let courseType : CourseType
+    let courseType: CourseType
     
     /// 코스 이미지
-    let courseImage : String
+    let courseImage: String
     
     /// 코스 이름
-    let courseName : String
+    let courseName: String
     
     /// 코스 설명
-    let courseDescription : String
+    let courseDescription: String
     
     /// 코스 카테고리 (최대 5개)
-    let categorise : [CategoryType]
+    let categorise: [CategoryType]
     
-    /// 마지막 데이터를 포함한 응답인지
-    let isLast: Bool
-    
-    init(id: UUID = UUID(), courseId: Int, courseType: CourseType, courseImage: String, courseName: String, courseDescription: String, categorise: [CategoryType], isLast: Bool) {
+    init(id: UUID = UUID(), courseId: Int, courseType: CourseType, courseImage: String, courseName: String, courseDescription: String, categorise: [CategoryType]) {
         self.id = id
         self.courseId = courseId
         self.courseType = courseType
@@ -50,7 +50,6 @@ struct CourseResponseData: Codable, Identifiable{
         self.courseName = courseName
         self.courseDescription = courseDescription
         self.categorise = categorise
-        self.isLast = isLast
     }
     
     enum CodingKeys : String, CodingKey {
@@ -60,7 +59,6 @@ struct CourseResponseData: Codable, Identifiable{
         case courseName
         case courseDescription
         case categorise
-        case isLast
     }
 }
 
