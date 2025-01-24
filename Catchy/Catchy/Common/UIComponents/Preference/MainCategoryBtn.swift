@@ -10,11 +10,11 @@ import SwiftUI
 struct MainCategoryBtn: View {
     
     let categoryType: CategoryType
-    let onCategorySelected: (String) -> Void
+    let onCategorySelected: (CategoryType) -> Void
     
     @State private var isSelected: Bool = false
     
-    init(categoryType: CategoryType, onCategorySelected: @escaping (String) -> Void) {
+    init(categoryType: CategoryType, onCategorySelected: @escaping (CategoryType) -> Void) {
         self.categoryType = categoryType
         self.onCategorySelected = onCategorySelected
     }
@@ -22,7 +22,7 @@ struct MainCategoryBtn: View {
     var body: some View {
         Button(action: {
             isSelected.toggle()
-            onCategorySelected(categoryType.rawValue)
+            onCategorySelected(categoryType)
         }, label: {
                 HStack(spacing: 35, content: {
                     categoryType.reeturnIcon()

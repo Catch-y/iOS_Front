@@ -49,8 +49,8 @@ enum Icon: String {
     case cultureLife = "cultureLife"
     case experience = "experience"
     case restaurant = "restaurant"
-    case sports = "sports"
-    case tassels = "tassels"
+    case sport = "sport"
+    case bar = "bar"
     
     var image: Image {
         return Image(self.rawValue)

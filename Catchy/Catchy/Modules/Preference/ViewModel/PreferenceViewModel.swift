@@ -12,5 +12,10 @@ class PreferenceViewModel: ObservableObject {
     @Published var preferenceStep: Int = 0
     
     @Published var pageCount: Int = 0
-    @Published var selectedBtn: [String] = []
+    @Published var bigCategoryBtn: [CategoryType] = []
+    @Published var smallCategoryBtn: [String] = []
+    
+    func getSmallCategory(category: CategoryType) -> [String] {
+        return category.subcategories
+    }
 }
