@@ -12,7 +12,7 @@ struct PreferencePageView: View {
     @ObservedObject var viewModel: PreferenceViewModel
     
     var body: some View {
-        switch viewModel.pageCount {
+        switch viewModel.preferenceStep {
         case 0:
             pageOne
         default:
@@ -31,7 +31,7 @@ struct PreferencePageView: View {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 0, maximum: 190), spacing: 30), count: 2), spacing: 28, content: {
                 ForEach(CategoryType.allCases, id: \.self) { category in
                     MainCategoryBtn(categoryType: category) { selectedCategory in
-                        print(selectedCategory)
+                        viewModel.selectedBtn.append(selectedCategory)
                     }
                 }
             })
