@@ -19,23 +19,23 @@ enum CategoryType: String, Codable, CaseIterable {
     
     /// 소 카테고리 작성
     var subcategories: [String] {
-            switch self {
-            case .CAFE:
-                return ["프렌차이즈", "커피 전문점", "베이커리", "애견카페", "보드게임카페"]
-            case .BAR:
-                return ["요리 주점", "호프집", "바", "와인"]
-            case .RESTAURANT:
-                return ["한식", "분식", "중식", "일식", "양식", "동남아 음식", "멕시코 음식", "인도 음식", "고기 전문점", "해산물", "비건", "패스트푸드"]
-            case .EXPERIENCE:
-                return ["놀이공원", "VR/방탈출", "공방"]
-            case .CULTURELIFE:
-                return ["전시회", "영화관", "공연", "쇼핑", "책", "페스티벌"]
-            case .SPORT:
-                return ["축구", "농구", "야구", "탁구", "배구", "골프", "사격", "양궁"]
-            case .REST:
-                return ["캠핑", "공원", "테라피", "마사지"]
-            }
+        switch self {
+        case .CAFE:
+            return ["프렌차이즈", "커피 전문점", "베이커리", "애견카페", "보드게임카페"]
+        case .BAR:
+            return ["요리 주점", "호프집", "바", "와인"]
+        case .RESTAURANT:
+            return ["한식", "분식", "중식", "일식", "양식", "동남아 음식", "멕시코 음식", "인도 음식", "고기 전문점", "해산물", "비건", "패스트푸드"]
+        case .EXPERIENCE:
+            return ["놀이공원", "VR/방탈출", "공방"]
+        case .CULTURELIFE:
+            return ["전시회", "영화관", "공연", "쇼핑", "책", "페스티벌"]
+        case .SPORT:
+            return ["축구", "농구", "야구", "탁구", "배구", "골프", "사격", "양궁"]
+        case .REST:
+            return ["캠핑", "공원", "테라피", "마사지"]
         }
+    }
     
     func reeturnIcon() -> Image {
         switch self {
@@ -53,6 +53,25 @@ enum CategoryType: String, Codable, CaseIterable {
             return Icon.sport.image
         case .REST:
             return Icon.breaks.image
+        }
+    }
+    
+    func returnBackground() -> Image {
+        switch self {
+        case .CAFE:
+            return Icon.cafeBackground.image
+        case .BAR:
+            return Icon.barBackground.image
+        case .RESTAURANT:
+            return Icon.retaurantBackground.image
+        case .EXPERIENCE:
+            return Icon.experienceBackground.image
+        case .CULTURELIFE:
+            return Icon.cultureLifeBackground.image
+        case .SPORT:
+            return Icon.sportBackground.image
+        case .REST:
+            return Icon.restBackground.image
         }
     }
     

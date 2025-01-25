@@ -9,11 +9,11 @@ import Foundation
 
 class PreferenceViewModel: ObservableObject {
     
-    @Published var preferenceStep: Int = 0
+    @Published var preferenceStep: Int = 1
     
     @Published var pageCount: Int = 0
     @Published var bigCategoryBtn: [CategoryType] = []
-    @Published var smallCategoryBtn: [String] = []
+    @Published var smallCategoryBtn: [CategoryType: [String]] = [:]
     
     func getSmallCategory(category: CategoryType) -> [String] {
         return category.subcategories

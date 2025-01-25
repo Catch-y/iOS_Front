@@ -52,6 +52,14 @@ enum Icon: String {
     case sport = "sport"
     case bar = "bar"
     
+    case barBackground = "barBackground"
+    case cafeBackground = "cafeBackground"
+    case cultureLifeBackground = "cultureLifeBackground"
+    case experienceBackground = "experienceBackground"
+    case restBackground = "restBackground"
+    case retaurantBackground = "retaurantBackground"
+    case sportBackground = "sportBackground"
+    
     var image: Image {
         return Image(self.rawValue)
     }
