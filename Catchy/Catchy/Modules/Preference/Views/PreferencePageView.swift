@@ -24,12 +24,18 @@ struct PreferencePageView: View {
     
     // MARK: - Page 1
     
+    /// 취향 설문 조사 스텝 1
     private var pageOne: some View {
         VStack(alignment: .leading, spacing: 69, content: {
+            
+            Spacer()
+            
             Text("반가워요 \(DataFormatter.shared.makeStyledText(for: UserState.shared.getUserNickname())) 님!\n관심 있는 카테고리를 선택해주세요")
                 .font(.Subtitle1)
                 .foregroundStyle(Color.g7)
                 .lineSpacing(3.3)
+            
+            Spacer()
             
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 0, maximum: 190), spacing: 30), count: 2), spacing: 28, content: {
                 ForEach(CategoryType.allCases, id: \.self) { category in
@@ -38,18 +44,44 @@ struct PreferencePageView: View {
                             viewModel.bigCategoryBtn.remove(at: index)
                         } else {
                             viewModel.bigCategoryBtn.append(selectedCategory)
+                            print("1단계 취향 카테고리 : \(viewModel.bigCategoryBtn)")
                         }
                     }
                 }
             })
+            HStack {
+                
+                Spacer()
+                
+                MainBtn(text: "다음", action: {
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        viewModel.preferenceStep += 1
+                    }
+                }, width: 366, height: 60, onoff: (viewModel.bigCategoryBtn.isEmpty ? .off : .on))
+                
+                Spacer()
+            }
+            
         })
+        .onAppear {
+            viewModel.bigCategoryBtn.removeAll()
+        }
+        .transition(.move(edge: .leading).combined(with: .opacity))
+        .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
     }
     
     // MARK: - Page 2
     
+    /// 취향 설문 조사 스텝 2
     private var pageTwo: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
+                
+                CustomNavigation(action: {
+                    viewModel.preferenceStep -= 1
+                }, title: nil, rightNaviIcon: nil)
+                .padding(.leading, 25)
+                
                 CustomPageControl(pageCount: $viewModel.pageCount, totalPageCount: viewModel.bigCategoryBtn.count)
                     .padding(.top, 20)
                     .padding(.leading, 25)
@@ -72,7 +104,9 @@ struct PreferencePageView: View {
                                     Spacer()
                                     
                                     MainBtn(text: "다음", action: {
-                                        viewModel.preferenceStep += 1
+                                        withAnimation(.easeIn(duration: 0.5)) {
+                                            viewModel.preferenceStep += 1
+                                        }
                                     }, width: 366, height: 60, onoff: (viewModel.smallCategoryBtn[viewModel.bigCategoryBtn.last!] ?? []).isEmpty ? .off : .on)
                                     
                                     Spacer()
@@ -107,6 +141,7 @@ struct PreferencePageView: View {
                 .animation(.easeInOut(duration: 0.5), value: viewModel.pageCount)
             }
         }
+        .transition(.move(edge: .leading).combined(with: .opacity))
     }
     
     /// 두 번째 설문조사 상단 타이틀
@@ -163,8 +198,12 @@ struct PreferencePageView: View {
                 })
             })
             .frame(height: 208)
+            .padding(.horizontal, 25)
+            .padding(.vertical, 10)
         })
     }
+    
+    // MARK: - Page
     
     
 }

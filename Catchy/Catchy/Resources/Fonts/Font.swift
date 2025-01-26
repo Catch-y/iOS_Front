@@ -39,10 +39,6 @@ extension Font {
         return .custom(type.value, size: size)
     }
     
-    static var ButtonText: Font {
-        return .pretend(type: .medium, size: 16)
-    }
-    
     static var Headline1: Font {
         return .pretend(type: .bold, size: 40)
     }
@@ -103,19 +99,30 @@ extension Font {
         .pretend(type: .regular, size: 7)
     }
     
+    //MARK: - ETC
+    static var naviFont: Font {
+        return .pretend(type: .bold, size: 17)
+    }
+    
+    static var buttonText: Font {
+        return .pretend(type: .medium, size: 16)
+    }
+    
+    static var dateBtnText: Font {
+        return .pretend(type: .regular, size: 16)
+    }
+    
     static var inputText: Font {
         return .pretend(type: .medium, size: 15)
     }
     
-    static var naviFont: Font {
-        return .pretend(type: .bold, size: 17)
+    static var categoryBtn: Font {
+        return .pretend(type: .medium, size: 14)
     }
     
     static var courseTag: Font {
         return .pretend(type: .medium, size: 9)
     }
     
-    static var categoryBtn: Font {
-        return .pretend(type: .medium, size: 14)
-    }
+    
 }

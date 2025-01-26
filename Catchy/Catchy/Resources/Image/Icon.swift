@@ -26,6 +26,7 @@ enum Icon: String {
     case leftChevron = "leftChevron"
     case close = "close"
     case search = "search"
+    case bottomChevron = "bottomChevron"
     
     //MARK: - Home
     case topLogo = "topLogo"
@@ -59,6 +60,13 @@ enum Icon: String {
     case restBackground = "restBackground"
     case retaurantBackground = "retaurantBackground"
     case sportBackground = "sportBackground"
+    
+    
+    //MARK: - Perference
+    case couple = "couple"
+    case family = "family"
+    case friends = "friends"
+    case solo = "solo"
     
     var image: Image {
         return Image(self.rawValue)
