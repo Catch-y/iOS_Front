@@ -33,7 +33,7 @@ struct PlaceSearchResponseData: Codable, Identifiable{
     
     /// 장소의 카테고리
     /// ex) 프랜차이즈, 놀이공원
-    let category: String
+    let category: CategoryType
     
     /// 장소 주소
     let roadAddress: String
