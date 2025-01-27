@@ -30,7 +30,10 @@ struct ReviewCard: View {
         VStack(alignment: .leading, spacing: 14) {
             ratingAndReport(rating: content.rating) // 별점 및 신고하기 버튼
             
-            reviewImages(images: content.reviewImages)          // 사진 섹션
+            if !content.reviewImages.isEmpty {
+                // 사진이 있는 경우만 표시
+                reviewImages(images: content.reviewImages)
+            }
             
             reviewContent(comment: content.comment)             // 리뷰 내용
             
@@ -124,6 +127,16 @@ struct ReviewCard: View {
 
 }
 
+//#Preview {
+//    ReviewCard(data: ReviewContents(reviewId: 1, comment: "안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다.안녕하세요 저는 중앙대학교 학생 정의찬입니다.", rating: 1, reviewImages: [.init(reviewImageId: 1, imageUrl: "https://i.namu.wiki/i/tWggtBqowGk0W5pu6Z9uZi_8qs_iAbdMC573fPCsrFuMPuPuTEiYZDyXGUsCymPqZTNv6gslp9TUsAEQ2v_it3vytlJnMG1Mhdz0bxHUZ2e5u1CJhPn7GsnNx3sLtR77Fx-6EybMT9g2MvJL4NoPlw.webp")], creatorNickname: "dragon", visitedDate: "1111"))
+//}
 #Preview {
-    ReviewCard(data: ReviewContents(reviewId: 1, comment: "안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다.안녕하세요 저는 중앙대학교 학생 정의찬입니다.", rating: 1, reviewImages: [.init(reviewImageId: 1, imageUrl: "https://i.namu.wiki/i/tWggtBqowGk0W5pu6Z9uZi_8qs_iAbdMC573fPCsrFuMPuPuTEiYZDyXGUsCymPqZTNv6gslp9TUsAEQ2v_it3vytlJnMG1Mhdz0bxHUZ2e5u1CJhPn7GsnNx3sLtR77Fx-6EybMT9g2MvJL4NoPlw.webp")], creatorNickname: "dragon", visitedDate: "1111"))
+    ReviewCard(data: ReviewContents(
+        reviewId: 1,
+        comment: "안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다.안녕하세요 저는 중앙대학교 학생 정의찬입니다.",
+        rating: 1,
+        reviewImages: [], // 사진이 없는 경우
+        creatorNickname: "dragon",
+        visitedDate: "1111"
+    ))
 }
