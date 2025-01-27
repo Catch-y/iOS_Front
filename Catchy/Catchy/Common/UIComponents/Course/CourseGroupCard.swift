@@ -58,7 +58,6 @@ struct CourseGroupCard: View {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: 4), content: {
                 ForEach(course.categorise, id: \.self) { categoryType in
                     CategoryCard(categoryType: categoryType)
-                        .frame(maxWidth: .infinity, minHeight: 14 )
                 }
             })
             
@@ -71,5 +70,12 @@ struct CourseGroupCard: View {
                 .lineSpacing(2)
         }
         .padding(.vertical, 7)
+    }
+}
+
+struct COurseGroupCard_Preview: PreviewProvider {
+    static var previews: some View {
+        CourseGroupCard(course: .init(courseId: 0, courseType: .diy, courseImage: "https://i.namu.wiki/i/-UcsURAHAZ80XN7--nJenrc3typ4s4Hi6meDe5cdmvYiqdW7nvGb8mXJHFZXUE1e8_2rkPiEGU6KNl5bfPa_i5MfsS3buN88ZXGVCVajv-ANun91l4of6AlwW7wEtF7-A6w9t4Y9PtPg1pnizVO3fw.webp", courseName: "경복궁", courseDescription: "여기는 경복궁 입니다.", categorise: [.CAFE, .BAR, .SPORT, .RESTAURANT, .REST, .CULTURELIFE]))
+            .previewLayout(.sizeThatFits)
     }
 }

@@ -61,7 +61,7 @@ extension CourseManagementAPITarget: APITargetType {
             "courseImage": "https://example.com/images/course1.jpg",
             "courseName": "맛집 탐방 코스",
             "courseDescription": "지역의 인기 맛집을 탐방하는 코스입니다.",
-            "categorise": ["음식점", "카페"]
+            "categorise": ["휴식", "카페"]
           },
           {
             "courseId": 2,
@@ -77,7 +77,7 @@ extension CourseManagementAPITarget: APITargetType {
             "courseImage": "https://example.com/images/course3.jpg",
             "courseName": "웰니스 힐링 코스",
             "courseDescription": "휴식과 재충전을 위한 웰니스 코스입니다.",
-            "categorise": ["휴식/웰니스", "스포츠"]
+            "categorise": ["휴식", "스포츠"]
           },
           {
             "courseId": 4,
@@ -125,7 +125,7 @@ extension CourseManagementAPITarget: APITargetType {
             "courseImage": "https://example.com/images/course9.jpg",
             "courseName": "힐링 스팟",
             "courseDescription": "휴식을 취하며 재충전할 수 있는 코스입니다.",
-            "categorise": ["휴식/웰니스"]
+            "categorise": ["휴식"]
           },
           {
             "courseId": 10,
@@ -173,7 +173,7 @@ extension CourseManagementAPITarget: APITargetType {
             "courseImage": "https://example.com/images/course15.jpg",
             "courseName": "자연 속 휴식",
             "courseDescription": "자연에서 힐링할 수 있는 코스입니다.",
-            "categorise": ["휴식/웰니스", "체험"]
+            "categorise": ["휴식", "체험"]
           },
           {
             "courseId": 16,
@@ -213,7 +213,7 @@ extension CourseManagementAPITarget: APITargetType {
             "courseImage": "https://example.com/images/course20.jpg",
             "courseName": "웰니스 탈출",
             "courseDescription": "스파와 웰니스를 즐길 수 있는 코스입니다.",
-            "categorise": ["휴식/웰니스"]
+            "categorise": ["휴식"]
           }
         ],
         "isLast": true

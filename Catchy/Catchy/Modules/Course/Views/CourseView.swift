@@ -18,18 +18,22 @@ struct CourseView: View {
     
     var body: some View {
         
-        ZStack{
-            VStack{
+        ZStack(alignment: .top) {
+            
+            DropDown(viewModel: viewModel) /*  이 부분 데이터 없으면 안 보이도록 수정 */
+                .zIndex(1)
+            
+            VStack {
                 if !viewModel.isCourseListLoading {
                     navigationGroup
                     if let data = viewModel.courseResponse {
                         if data.content.isEmpty {
                             infoView
-                        }else {
+                        } else {
                             scrollView
                         }
                     }
-                }else {
+                } else {
                     Spacer()
                     
                     ProgressView()
@@ -38,10 +42,8 @@ struct CourseView: View {
                 }
                 
             }
-            VStack {
-                DropDown(viewModel: viewModel)
-                Spacer()
-            }
+            .zIndex(2)
+            
             if viewModel.isFloating {
                 Color.black
                     .opacity(0.8)
@@ -82,6 +84,7 @@ struct CourseView: View {
                     }
                 }
             })
+            
             .padding(.horizontal, 16)
             .padding(.top, 10)
         })
@@ -109,7 +112,7 @@ struct CourseView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
+        ForEach(["iPhone 16 Pro Max", "iPhone 11"], id: \.self) { deviceName in
             CourseView(container: DIContainer())
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)

@@ -93,4 +93,24 @@ enum CategoryType: String, Codable, CaseIterable {
             return "몸과 마음의 힐링을 위한 휴식과 웰니스 공간을 추천드립니다."
         }
     }
+    
+    
+    func setColor() -> Color {
+        switch self {
+        case .BAR:
+            return Color.bar
+        case .CAFE :
+            return Color.cafe
+        case .CULTURELIFE:
+            return Color.culturaLife
+        case .EXPERIENCE :
+            return Color.experience
+        case .REST :
+            return Color.rest
+        case .RESTAURANT :
+            return Color.restaurant
+        case .SPORT :
+            return Color.sport
+        }
+    }
 }

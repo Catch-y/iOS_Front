@@ -10,41 +10,20 @@ import SwiftUI
 struct CategoryCard: View {
     
     var categoryType: CategoryType
-    var color : Color = Color.clear 
     
     init(categoryType: CategoryType) {
         self.categoryType = categoryType
-        self.setColor()
     }
     
     var body: some View {
         Text(categoryType.rawValue)
-            .font(.pretend(type: .extraBold, size: 9))
+            .font(.pretend(type: .extraBold, size: 9)) /* 1번째 수정 -> 폰트 스타일 정의해라 */
             .foregroundStyle(.white)
             .padding(.vertical, 4)
-            .frame(width: 50)
+            .frame(maxWidth: .infinity, minHeight: 14) /* 2번째 수정 -> 프레임 동적으로 */
             .background {
                 RoundedRectangle(cornerRadius: 4)
-                    .fill(color)
+                    .fill(categoryType.setColor())
             }
-    }
-    
-    private mutating func setColor(){
-        switch categoryType {
-        case .BAR:
-            color = Color.bar
-        case .CAFE :
-            color = Color.cafe
-        case .CULTURELIFE:
-            color = Color.culturaLife
-        case .EXPERIENCE :
-            color = Color.experience
-        case .REST :
-            color = Color.rest
-        case .RESTAURANT :
-            color = Color.restaurant
-        case .SPORT :
-            color = Color.sport
-        }
     }
 }
