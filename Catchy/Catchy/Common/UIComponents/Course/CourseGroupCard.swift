@@ -10,9 +10,9 @@ import Kingfisher
 
 struct CourseGroupCard: View {
     
-    var course : CourseResponse
+    var course : CourseResponseData
     
-    init(course: CourseResponse) {
+    init(course: CourseResponseData) {
         self.course = course
     }
     
@@ -55,9 +55,10 @@ struct CourseGroupCard: View {
                 .lineLimit(2)
             
             /// 카테고리 태그
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 0, maximum: 60), spacing: 5), count: 4), content: {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: 4), content: {
                 ForEach(course.categorise, id: \.self) { categoryType in
                     CategoryCard(categoryType: categoryType)
+                        .frame(maxWidth: .infinity, minHeight: 14 )
                 }
             })
             
@@ -70,24 +71,5 @@ struct CourseGroupCard: View {
                 .lineSpacing(2)
         }
         .padding(.vertical, 7)
-    }
-}
-
-
-struct CourseListCard_Preview: PreviewProvider {
-    
-    static var previews: some View {
-        CourseGroupCard(course:
-            CourseResponse(
-                    courseId: 1,
-                    courseType: .diy,
-                    courseImage: "https://i.namu.wiki/i/sopEHIQMRri9OEV0gBMh2xV0WVKv8yKvGB_-9A14bpRhRKNKJG8xCOtiN7yUuyETF52H_aKS3gTxjFHNge6yQLV5dSL8nTzGY79D8ygwut5gTvPb52s3l2a8DIKXcahnJC6RE9L_-6uL4tTCoY5W6g.webp",
-                    courseName: "한강 걷기 코스한강을 따라 걷는 코스입니다.",
-                    courseDescription: "한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.한강을 따라 걷는 코스입니다.",
-                    categorise: [.SPORT, .BAR, .CULTURELIFE, .REST, .RESTAURANT],
-                    createdDate: ""
-            )
-        )
-        .previewLayout(.sizeThatFits)
     }
 }
