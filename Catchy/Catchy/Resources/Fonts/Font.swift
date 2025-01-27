@@ -124,5 +124,8 @@ extension Font {
         return .pretend(type: .medium, size: 9)
     }
     
+    static var categoryTag: Font{
+        return .pretend(type: .extraBold, size: 9)
+    }
     
 }

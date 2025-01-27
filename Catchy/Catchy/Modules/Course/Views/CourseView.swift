@@ -19,12 +19,12 @@ struct CourseView: View {
     var body: some View {
         
         ZStack(alignment: .top) {
-            
-            DropDown(viewModel: viewModel) /*  이 부분 데이터 없으면 안 보이도록 수정 */
-                .zIndex(1)
-            
+            if let data = viewModel.courseResponse, !data.content.isEmpty {
+                DropDown(viewModel: viewModel).zIndex(1)
+            }
             VStack {
                 if !viewModel.isCourseListLoading {
+                    
                     navigationGroup
                     if let data = viewModel.courseResponse {
                         if data.content.isEmpty {
@@ -33,14 +33,15 @@ struct CourseView: View {
                             scrollView
                         }
                     }
-                } else {
+                    
+                } else {    /// 데이터 로딩 중
                     Spacer()
-                    
+                        
                     ProgressView()
-                    
+                        
                     Spacer()
                 }
-                
+                    
             }
             .zIndex(0)
             
@@ -48,11 +49,20 @@ struct CourseView: View {
                 Color.black
                     .opacity(0.8)
                     .ignoresSafeArea(.all)
+                    .zIndex(2)
             }
-            AddFloatingButton(isOpen: $viewModel.isFloating)
+            AddFloatingButton(isOpen: $viewModel.isFloating).zIndex(3)
             
         }.task{
-            viewModel.getCourseList(courseRequest: .init(type: .ai, upperLocation: "", lowerLocation: "", lastId: 0))
+            viewModel
+                .getCourseList(
+                    courseRequest: .init(
+                        type: .ai,
+                        upperLocation: "",
+                        lowerLocation: "",
+                        lastId: 0
+                    )
+                )
         }
 
         
