@@ -19,7 +19,8 @@ struct ReviewView: View {
     
     // MARK: - Body
     var body: some View {
-        if let data = viewModel.reviewResponse {
+        
+        if let data = viewModel.reviewData {
             VStack(alignment: .center, spacing: 20, content: {
                 
                 CustomNavigation(action: {
@@ -46,6 +47,9 @@ struct ReviewView: View {
                 
                 Spacer()
             })
+            .task {
+                viewModel.getReviewData(reviewData: GetReviewRequest(placeId: 12345, page: 2))
+            }
         }
     }
     
@@ -156,25 +160,28 @@ struct ReviewView: View {
         VStack(alignment: .center, spacing: 8, content: {
             ForEach(content, id: \.reviewId) { review in
                 ReviewCard(data: review)
+                Divider()
+                    .background(.g3)
             }
-            
-            Divider()
-                .background(.g3)
         })
     }
 }
 
+//
+//struct ReviewView_Preview: PreviewProvider {
+//    
+//    static var devices = ["iPhone 11", "iPhone 16 Pro"]
+//    
+//    static var previews: some View {
+//        ForEach(devices, id: \.self) { device in
+//            ReviewView(container: DIContainer())
+//                .environmentObject(DIContainer())
+//                .previewDevice(PreviewDevice(rawValue: device))
+//                .previewDisplayName(device)
+//        }
+//    }
+//}
 
-struct ReviewView_Preview: PreviewProvider {
-    
-    static var devices = ["iPhone 11", "iPhone 16 Pro"]
-    
-    static var previews: some View {
-        ForEach(devices, id: \.self) { device in
-            ReviewView(container: DIContainer())
-                .environmentObject(DIContainer())
-                .previewDevice(PreviewDevice(rawValue: device))
-                .previewDisplayName(device)
-        }
-    }
+#Preview {
+    ReviewView(container: DIContainer())
 }

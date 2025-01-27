@@ -28,7 +28,7 @@ struct CatchyApp: App {
                     .environmentObject(container)
                     .environmentObject(appFlowViewModel)
             case .preferrenceSurvey:
-                Text("dummy")
+                Text("11")
             case .tabView:
                 ContentView()
             }
