@@ -1,0 +1,78 @@
+//
+//  PlaceCard.swift
+//  Catchy
+//
+//  Created by LEE on 1/27/25.
+//
+
+import SwiftUI
+import Kingfisher
+
+struct PlaceCard: View {
+    
+    var place : PlaceSearchResponseData
+    
+    init(place: PlaceSearchResponseData){
+        self.place = place
+    }
+    
+    var body: some View {
+        
+        HStack(spacing: 17) {
+            /// 이미지
+            if let url = URL(string: place.placeImage) {
+                KFImage(url)
+                    .placeholder{
+                        ProgressView()
+                            .controlSize(.regular)
+                    }.retry(maxCount: 2, interval: .seconds(2))
+                    .resizable()
+                    .frame(width: 133, height: 116)
+                    .clipShape(RoundedRectangle(cornerRadius: 15)
+                    )
+            }
+            
+            placeTextGroup
+        }
+    }
+    
+    private var placeTextGroup: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            
+            
+            HStack(spacing: 8) {
+                /// 장소  이름
+                Text(place.placeName.customLineBreak())
+                    .font(.Subtitle3_SM)
+                    .foregroundStyle(.g7)
+                
+                /// 장소 카테고리
+                CategoryCard(categoryType: place.category)
+                    .padding(.trailing, 19)
+                    
+            }
+            
+            /// 장소 위치
+            PlaceAddressText(addressText: place.roadAddress)
+                .padding(.top, 6)
+            
+            /// 장소 운영 시간
+            PlaceTimeText(timeText: place.activeTime)
+                .padding(.bottom, 8)
+            
+            HStack(spacing: 12) {
+                PlaceRatingText(rating: place.rating)
+                placeReviewButton(reviewCount: place.reviewCount)
+            }
+            
+            
+            
+            
+        }
+    }
+}
+
+#Preview{
+    PlaceCard(place: PlaceSearchResponseData(placeId: 1, placeName: "심퍼티쿠시 용산점", placeImage: "https://static.wanted.co.kr/images/company/21181/dazl35csneuul4f9__1080_790.jpg", category: .RESTAURANT , roadAddress: "서울시 용산구 한강대로52길 17-3 1F", activeTime: "월-금 · 16:00 - 21:00", rating: 4.3, reviewCount: 203)
+    )
+}

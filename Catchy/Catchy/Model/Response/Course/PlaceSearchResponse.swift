@@ -47,4 +47,27 @@ struct PlaceSearchResponseData: Codable, Identifiable{
     /// 장소 리뷰 개수
     let reviewCount: Int
     
+    init(id: UUID = UUID(), placeId: Int, placeName: String, placeImage: String, category: CategoryType, roadAddress: String, activeTime: String, rating: Float, reviewCount: Int) {
+        self.id = id
+        self.placeId = placeId
+        self.placeName = placeName
+        self.placeImage = placeImage
+        self.category = category
+        self.roadAddress = roadAddress
+        self.activeTime = activeTime
+        self.rating = rating
+        self.reviewCount = reviewCount
+    }
+    
+    enum CodingKeys: CodingKey {
+        case placeId
+        case placeName
+        case placeImage
+        case category
+        case roadAddress
+        case activeTime
+        case rating
+        case reviewCount
+    }
+    
 }
