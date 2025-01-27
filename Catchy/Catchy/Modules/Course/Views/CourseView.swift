@@ -120,7 +120,7 @@ struct CourseView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct CourseView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(["iPhone 16 Pro Max", "iPhone 11"], id: \.self) { deviceName in
             CourseView(container: DIContainer())

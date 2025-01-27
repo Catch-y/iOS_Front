@@ -24,6 +24,8 @@ struct PlaceRatingText: View {
             Text("평점 \(rating)")
                 .font(.caption)
                 .foregroundStyle(.g5)
+                .lineLimit(1)
+
         }
     }
     

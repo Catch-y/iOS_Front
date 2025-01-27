@@ -22,6 +22,7 @@ struct PlaceAddressText: View {
             Text(addressText)
                 .font(.caption)
                 .foregroundStyle(.g5)
+                .lineLimit(1)
         }
     }
 }

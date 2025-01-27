@@ -60,116 +60,198 @@ extension CourseManagementAPITarget: APITargetType {
     
     var sampleData: Data {
         let jsonString = """
-    {
-      "isSuccess": true,
-      "code": "COMMON200",
-      "message": "성공입니다.",
-      "result": {
+  {
+    "isSuccess": true,
+    "code": "COMMON200",
+    "message": "성공입니다.",
+    "result": {
         "placeInfoPreviews": [
           {
             "placeId": 1,
-            "placeName": "커피에리어",
-            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=AVzFdblZbagJ74Nav7gKViv_BRYLnx4JzJLQLTqgTzwQUj9-UPOvXnvr0Xd7v2NKuCkbzMZrX1NKRyfACzZU_n0PlQ4qWyL5YFUvHd7LgF3QFepYs03u9CFEqv-T3_y1U05KLDcIUBFjErBq3qmtkWoCSMoOFOAGF9gbCNvKMQBqZulSwLmD&key=GOOGLE_API_KEY",
-            "category": "프랜차이즈",
+            "placeName": "커피하우스",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "카페",
             "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
-            "activeTime": "[영업시간]매일 09:00~22:00;",
-            "rating": 0,
-            "reviewCount": 0
+            "activeTime": "[영업시간] 매일 09:00~22:00",
+            "rating": 4.3,
+            "reviewCount": 124
           },
           {
             "placeId": 2,
-            "placeName": "블랙드롭커피 덕소강변점",
-            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=GOOGLE_API_KEY",
-            "category": "프랜차이즈",
+            "placeName": "블랙드롭커피",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "",
             "roadAddress": "경기 남양주시 와부읍 덕소로2번길 78",
-            "activeTime": "[영업시간]매일 09:00~18:00;[휴무]연중무휴;",
-            "rating": 0,
-            "reviewCount": 0
+            "activeTime": "[영업시간] 매일 09:00~18:00",
+            "rating": 3.7,
+            "reviewCount": 78
           },
           {
             "placeId": 3,
-            "placeName": "카페베네 덕소역점",
-            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=GOOGLE_API_KEY",
-            "category": "",
+            "placeName": "스카이라운지",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "주류",
             "roadAddress": "경기 남양주시 와부읍 덕소로 72",
-            "activeTime": "[영업시간]07:00~24:00;[좌석수]127;[휴무]연중무휴;",
-            "rating": 0,
-            "reviewCount": 0
+            "activeTime": "[영업시간] 19:00~03:00",
+            "rating": 4.0,
+            "reviewCount": 45
           },
           {
             "placeId": 4,
-            "placeName": "이디야커피 덕소삼거리점",
-            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=GOOGLE_API_KEY",
-            "category": "",
+            "placeName": "피자나라",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "음식점",
             "roadAddress": "경기 남양주시 와부읍 덕소로 87-1",
-            "activeTime": "[영업시간]09:00~23:00;",
-            "rating": 0,
-            "reviewCount": 0
+            "activeTime": "[영업시간] 11:00~23:00",
+            "rating": 4.2,
+            "reviewCount": 56
           },
           {
             "placeId": 5,
-            "placeName": "달콤커피 덕소리버사이드점",
-            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=AVzFdblFeDTCnCog1onHLpn-hpqrKiBCpIAeLkpxaYBGUmHeCOa8duxb9jOHj_9omnaNMAEDhoaSncwV-f2N7AiVhnGjN1sfF9-jC895r9le_Ydo6cHlxXOdRtk1h7AxiVi31Ogw3e2dWxw7Dea1hMDRQN0Md0xoOK8sttIw_rsLzlO41nyp&key=GOOGLE_API_KEY",
-            "category": "",
+            "placeName": "미술관 카페",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "문화생활",
             "roadAddress": "경기 남양주시 와부읍 덕소로2번길 90",
-            "activeTime": "[영업시간]매일 08:00~23:00;",
-            "rating": 0,
-            "reviewCount": 0
+            "activeTime": "[영업시간] 10:00~18:00",
+            "rating": 3.5,
+            "reviewCount": 65
           },
           {
             "placeId": 6,
-            "placeName": "메가커피 덕소삼거리점",
-            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=AVzFdbkXxFkrKs0f2WKQopYxeNSBg1v3rYOZB51PZmgY9eeCb1cIH1eI_HJj1McFFDHIXazMfS2NqOBnqW-MYcBKWK0JbSL35dS9cWQQnAE130-cG5OVdOP_pDLSkDeSOlg-YDHi-PEE0MkK2b17D9pQJVr-32Oz1yW3ZGb92aALmlgvuNky&key=GOOGLE_API_KEY",
-            "category": "",
+            "placeName": "클럽나이트",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "주류",
             "roadAddress": "경기 남양주시 와부읍 덕소로 89",
-            "activeTime": "",
-            "rating": 0,
-            "reviewCount": 0
+            "activeTime": "[영업시간] 22:00~05:00",
+            "rating": 3.9,
+            "reviewCount": 210
           },
           {
             "placeId": 7,
-            "placeName": "센틴컵",
-            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=AVzFdbkdcDvmrPtomI33u2xkfQCxgyL73FwfE3ChLqlWHegRK6VNlLw0x0OmwiEPno0DX6WCzSB_5Z-PZdHqo3O5dmJV3QOEZRgi5D58_wWZwpB-ObbC0928FW7pFNhYN1cWbk1bbTLzOiM-n6bLO_dHO_eoj7eZiz6bce51PrNVlT_vGFAu&key=GOOGLE_API_KEY",
+            "placeName": "도시락 전문점",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
             "category": "",
             "roadAddress": "경기 남양주시 와부읍 덕소로116번길 23",
-            "activeTime": "",
-            "rating": 0,
-            "reviewCount": 0
+            "activeTime": "[영업시간] 11:00~20:00",
+            "rating": 4.1,
+            "reviewCount": 140
           },
           {
             "placeId": 8,
-            "placeName": "러브프롬",
-            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=GOOGLE_API_KEY",
-            "category": "",
+            "placeName": "스크린골프",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "스포츠",
             "roadAddress": "경기 남양주시 와부읍 덕소로116번길 20",
-            "activeTime": "",
-            "rating": 0,
-            "reviewCount": 0
+            "activeTime": "[영업시간] 09:00~22:00",
+            "rating": 4.2,
+            "reviewCount": 98
           },
           {
             "placeId": 9,
-            "placeName": "설빙 덕소점",
-            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=AVzFdbmH7Akg_wXuX1kk-0qorPJIYibbBq6g7UoGvMw6fp_hoYNopY10whQd2MilSGv3v7e_J8JFqw6naeC9jwCWx1BuR_lVeSQQLLfXc3tN2S5ru2Wt6j8JA_CEJ9gb7zXbR0LTJr6t4p3Qsk_P4aWsF8Mph3_P-A9FJ-cYYXSVa8yj7SQl&key=GOOGLE_API_KEY",
-            "category": "",
+            "placeName": "도자기 체험",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "체험",
             "roadAddress": "경기 남양주시 와부읍 덕소로 94",
-            "activeTime": "[휴무]연중무휴;",
-            "rating": 0,
-            "reviewCount": 0
+            "activeTime": "[영업시간] 10:00~19:00",
+            "rating": 4.7,
+            "reviewCount": 176
           },
           {
             "placeId": 10,
-            "placeName": "스테이얼라이브",
-            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=AVzFdbmFgwlZR7Vtx2ica_RkDJOTxLvqleAnxhl4KJrpst-_5LnW4P9nRNTTruT2J1V6kZx2XBkIza5W9NMi66hpe0FpOTFgNa3wcdwtnfhiAmI_JinhRIip6HLomRNH-iOxKgGwJ3XjaMVDdau1L3q_ge5EiiYM8rnyV0oIjGpj1ps2v0Fc&key=GOOGLE_API_KEY",
-            "category": "",
+            "placeName": "힐링 스파",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "휴식",
             "roadAddress": "경기 남양주시 와부읍 덕소로 66-46",
-            "activeTime": "[영업시간]평일 08:00~18:00;토 08:00~18:00;일 12:00~18:00;",
-            "rating": 0,
-            "reviewCount": 0
+            "activeTime": "[영업시간] 10:00~20:00",
+            "rating": 4.3,
+            "reviewCount": 432
+          },
+          {
+            "placeId": 11,
+            "placeName": "북카페",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "카페",
+            "roadAddress": "경기 남양주시 와부읍 덕소로2번길 90",
+            "activeTime": "[영업시간] 09:00~21:00",
+            "rating": 4.5,
+            "reviewCount": 88
+          },
+          {
+            "placeId": 12,
+            "placeName": "드라마관람",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "문화생활",
+            "roadAddress": "경기 남양주시 와부읍 덕소로 66",
+            "activeTime": "[영업시간] 09:00~18:00",
+            "rating": 4.1,
+            "reviewCount": 134
+          },
+          {
+            "placeId": 13,
+            "placeName": "피트니스",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "스포츠",
+            "roadAddress": "경기 남양주시 와부읍 덕소로2번길 50",
+            "activeTime": "[영업시간] 06:00~22:00",
+            "rating": 4.4,
+            "reviewCount": 76
+          },
+          {
+            "placeId": 14,
+            "placeName": "이색 체험",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "",
+            "roadAddress": "경기 남양주시 와부읍 덕소로 70",
+            "activeTime": "[영업시간] 10:00~17:00",
+            "rating": 3.8,
+            "reviewCount": 63
+          },
+          {
+            "placeId": 15,
+            "placeName": "하이볼 바",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "주류",
+            "roadAddress": "경기 남양주시 와부읍 덕소로116번길 50",
+            "activeTime": "[영업시간] 20:00~04:00",
+            "rating": 3.6,
+            "reviewCount": 112
+          },
+          {
+            "placeId": 16,
+            "placeName": "카페 모던",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "카페",
+            "roadAddress": "경기 남양주시 와부읍 덕소로 90",
+            "activeTime": "[영업시간] 10:00~22:00",
+            "rating": 4.6,
+            "reviewCount": 87
+          },
+          {
+            "placeId": 17,
+            "placeName": "레스토랑 그라시아",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "음식점",
+            "roadAddress": "경기 남양주시 와부읍 덕소로116번길 30",
+            "activeTime": "[영업시간] 11:30~22:00",
+            "rating": 4.8,
+            "reviewCount": 92
+          },
+          {
+            "placeId": 18,
+            "placeName": "야경 맛집",
+            "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+            "category": "문화생활",
+            "roadAddress": "경기 남양주시 와부읍 덕소로 85",
+            "activeTime": "[영업시간] 18:00~23:00",
+            "rating": 4.2,
+            "reviewCount": 150
           }
         ],
-        "isLast": false
-      }
-    } 
+    "isLast": false
+    }
+  }
+
+
 """.data(using: .utf8)!
         return jsonString
         

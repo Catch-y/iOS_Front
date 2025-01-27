@@ -21,6 +21,8 @@ struct PlaceTimeText: View {
             Text(timeText)
                 .font(.caption)
                 .foregroundStyle(.g5)
+                .lineLimit(1)
+
         }
     }
 }

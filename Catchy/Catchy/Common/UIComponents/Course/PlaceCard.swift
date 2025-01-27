@@ -39,17 +39,19 @@ struct PlaceCard: View {
     private var placeTextGroup: some View {
         VStack(alignment: .leading, spacing: 6) {
             
-            
             HStack(spacing: 8) {
                 /// 장소  이름
                 Text(place.placeName.customLineBreak())
                     .font(.Subtitle3_SM)
                     .foregroundStyle(.g7)
+                    .lineLimit(1)
+                
+                Spacer()
                 
                 /// 장소 카테고리
                 CategoryCard(categoryType: place.category)
+                    .frame(width: 60)
                     .padding(.trailing, 19)
-                    
             }
             
             /// 장소 위치
@@ -64,12 +66,10 @@ struct PlaceCard: View {
                 PlaceRatingText(rating: place.rating)
                 placeReviewButton(reviewCount: place.reviewCount)
             }
-            
-            
-            
-            
         }
+
     }
+
 }
 
 #Preview{

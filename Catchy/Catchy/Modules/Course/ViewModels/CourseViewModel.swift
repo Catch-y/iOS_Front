@@ -79,6 +79,7 @@ class CourseViewModel: ObservableObject{
 extension CourseViewModel {
     
     // MARK: - API 호출 함수
+    /// 코스 조회
     func getCourseList(courseRequest: CourseRequest){
         
         isCourseListLoading = true

@@ -22,6 +22,8 @@ struct placeReviewButton: View {
             Text("리뷰 \(reviewCount)개")
                 .font(.caption)
                 .foregroundStyle(.g5)
+                .lineLimit(1)
+
             
             Icon.rightChevron.image.resizable()
                 .frame(width: 4, height: 8)

@@ -29,3 +29,48 @@ class PlaceSearchViewModel: ObservableObject {
     }
     
 }
+
+extension PlaceSearchViewModel {
+    
+    // MARK: - API 호출 함수
+    /// 장소 검색 - 지역명 기반
+    func getPlaceList(placeSearchRequest: PlaceSearchRequest) {
+        
+        isLoading = true
+        
+        container.useCaseProvider.courseManagementUseCase.executeGetPlaceList(placeSearchRequest: placeSearchRequest)
+            .tryMap {
+                responseData ->
+                ResponseData<PlaceSearchResponse> in
+                if !responseData.isSuccess {
+                    throw APIError
+                        .serverError(message: responseData.message,
+                            code: responseData.code
+                        )
+                }
+                
+                return responseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: {
+                [weak self] completion in
+                guard let self = self else { return }
+                self.isLoading = false
+                    
+                switch completion {
+                case .finished:
+                    print("✅ Get PlaceSearchList Server Completed")
+                case .failure(let failure):
+                    print("❌ Get PlaceSearchList Failed: \(failure)")
+                }
+            },receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                
+                if let response = response.result{
+                    self.placeSearchResponse = response
+                }
+                
+            })
+            .store(in: &cancellables)
+    }
+}
