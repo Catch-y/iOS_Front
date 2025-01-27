@@ -37,7 +37,7 @@ struct CategoryCard: View {
             color = Color.cafe
         case .CULTURELIFE:
             color = Color.culturaLife
-        case .EXPRERIENCE :
+        case .EXPERIENCE :
             color = Color.experience
         case .REST :
             color = Color.rest

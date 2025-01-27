@@ -67,7 +67,7 @@ struct CustomNavigation: View {
     
     private func makeNaviButton(image: Image) -> some View {
         return Button(action: {
-            action()
+                action()
         }, label: {
             image
             .fixedSize()

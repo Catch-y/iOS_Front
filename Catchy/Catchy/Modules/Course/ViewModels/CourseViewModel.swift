@@ -185,12 +185,5 @@ extension CourseViewModel {
         
         /// 해당 데이터의 cd값.
         let cd = upperLocation.cd
-        
-        
-        // let response =
-        // self.lowerLocations = response
     }
-
 }
-
-

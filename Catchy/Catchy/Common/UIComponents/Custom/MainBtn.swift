@@ -31,11 +31,11 @@ struct MainBtn: View {
     
     var body: some View {
         Button(action: {
-            action()
+                action()
         }, label: {
             Text(text)
                 .frame(width: width, height: height)
-                .font(.ButtonText)
+                .font(.buttonText)
                 .foregroundStyle(returnTextColor())
                 .background {
                     RoundedRectangle(cornerRadius: 30)
