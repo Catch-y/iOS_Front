@@ -32,12 +32,14 @@ struct SubCategoryBtn: View {
                 RoundedRectangle(cornerRadius: 30)
                     .fill(isSelected ? Color.m2 : Color.white)
                     .stroke(isSelected ? Color.m6 : Color.clear, lineWidth: 1)
-                    .frame(maxWidth: 153, minHeight: 48)
+                    .frame(maxWidth: .infinity, minHeight: 48)
 
                 Text(subCategoryName)
                     .font(.Subtitle3)
                     .foregroundStyle(isSelected ? Color.m6 : Color.g6)
-            })  
+                    .frame(minWidth: 60)
+                    .lineLimit(1)
+            })
         })
     }
 }

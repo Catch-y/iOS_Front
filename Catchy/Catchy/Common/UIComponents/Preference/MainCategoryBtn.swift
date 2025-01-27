@@ -9,20 +9,19 @@ import SwiftUI
 
 struct MainCategoryBtn: View {
     
+    @Binding var isSelected: Bool
+    
     let categoryType: CategoryType
-    let onCategorySelected: (CategoryType) -> Void
     
-    @State private var isSelected: Bool = false
     
-    init(categoryType: CategoryType, onCategorySelected: @escaping (CategoryType) -> Void) {
+    init(isSelected: Binding<Bool>, categoryType: CategoryType) {
+        self._isSelected = isSelected
         self.categoryType = categoryType
-        self.onCategorySelected = onCategorySelected
     }
     
     var body: some View {
         Button(action: {
             isSelected.toggle()
-            onCategorySelected(categoryType)
         }, label: {
                 HStack(spacing: 35, content: {
                     categoryType.reeturnIcon()
@@ -32,7 +31,7 @@ struct MainCategoryBtn: View {
                         .font(.categoryBtn)
                         .foregroundStyle(isSelected ? Color.m6 : Color.g7)
                 })
-                .frame(width: 114, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 11)
                 .padding(.horizontal, 28)
                 .background(
@@ -42,11 +41,5 @@ struct MainCategoryBtn: View {
                         .s1w()
                 )
         })
-    }
-}
-
-#Preview {
-    MainCategoryBtn(categoryType: .CULTURELIFE) { catgory in
-        print(catgory)
     }
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum CompanionType: String, CaseIterable {
+enum CompanionType: String, CaseIterable, Codable {
     case alone = "ALONE"
     case friends = "FFRIENDSR"
     case couple = "COUPLE"

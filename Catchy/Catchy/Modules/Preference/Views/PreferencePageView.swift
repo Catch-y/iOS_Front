@@ -9,7 +9,11 @@ import SwiftUI
 
 struct PreferencePageView: View {
     
-    @ObservedObject var viewModel: PreferenceViewModel
+    @StateObject var viewModel: PreferenceViewModel
+    
+    init(container: DIContainer) {
+        self._viewModel = StateObject(wrappedValue: .init(container: container))
+    }
     
     var body: some View {
         switch viewModel.preferenceStep {
@@ -17,6 +21,8 @@ struct PreferencePageView: View {
             pageOne
         case 1:
             pageTwo
+        case 2:
+            pageThird
         default:
             Text("11")
         }
@@ -37,16 +43,19 @@ struct PreferencePageView: View {
             
             Spacer()
             
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 0, maximum: 190), spacing: 30), count: 2), spacing: 28, content: {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 30), count: 2), spacing: 28, content: {
                 ForEach(CategoryType.allCases, id: \.self) { category in
-                    MainCategoryBtn(categoryType: category) { selectedCategory in
-                        if let index = viewModel.bigCategoryBtn.firstIndex(of: selectedCategory) {
-                            viewModel.bigCategoryBtn.remove(at: index)
-                        } else {
-                            viewModel.bigCategoryBtn.append(selectedCategory)
-                            print("1단계 취향 카테고리 : \(viewModel.bigCategoryBtn)")
-                        }
-                    }
+                    MainCategoryBtn(
+                        isSelected: Binding(
+                            get: { viewModel.bigCategoryBtn.contains(category) },
+                            set: { newValue in
+                                if newValue {
+                                    viewModel.bigCategoryBtn.append(category)
+                                    print("1단계 취향 카테고리: \(viewModel.bigCategoryBtn)")
+                                } else {
+                                    viewModel.bigCategoryBtn.removeAll { $0 == category }
+                                }
+                    }), categoryType: category)
                 }
             })
             HStack {
@@ -58,14 +67,12 @@ struct PreferencePageView: View {
                         viewModel.preferenceStep += 1
                     }
                 }, width: 366, height: 60, onoff: (viewModel.bigCategoryBtn.isEmpty ? .off : .on))
+                .disabled(viewModel.bigCategoryBtn.isEmpty)
                 
                 Spacer()
             }
             
         })
-        .onAppear {
-            viewModel.bigCategoryBtn.removeAll()
-        }
         .transition(.move(edge: .leading).combined(with: .opacity))
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
     }
@@ -108,6 +115,7 @@ struct PreferencePageView: View {
                                             viewModel.preferenceStep += 1
                                         }
                                     }, width: 366, height: 60, onoff: (viewModel.smallCategoryBtn[viewModel.bigCategoryBtn.last!] ?? []).isEmpty ? .off : .on)
+                                    .disabled((viewModel.smallCategoryBtn[viewModel.bigCategoryBtn.last!] ?? []).isEmpty)
                                     
                                     Spacer()
                                 }
@@ -170,7 +178,7 @@ struct PreferencePageView: View {
     }
     
     private func pageTwoContent(_ index: Int) -> some View {
-        VStack(alignment: .center, spacing: 39, content: {
+        VStack(alignment: .leading, spacing: 39, content: {
             Group {
                 Text("선호하는 ")
                     .font(.Subtitle3)
@@ -180,9 +188,10 @@ struct PreferencePageView: View {
                     .font(.Subtitle3)
             }
             .foregroundStyle(Color.categoryDes)
+            .padding(.leading, 30)
             
             ScrollView(.vertical, content: {
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 0 , maximum: 180), spacing: 56), count: 2), spacing: 32, content: {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 56), count: 2), spacing: 32, content: {
                     ForEach(viewModel.bigCategoryBtn[index].subcategories, id: \.self) { subCategory in
                         SubCategoryBtn(subCategoryName: subCategory) { subCategory in
                             if viewModel.smallCategoryBtn[viewModel.bigCategoryBtn[index]] == nil {
@@ -203,12 +212,70 @@ struct PreferencePageView: View {
         })
     }
     
-    // MARK: - Page
+    // MARK: - Page 3
+    
+    private var pageThird: some View {
+        VStack(alignment: .leading, content: {
+            
+            CustomNavigation(action: {
+                viewModel.preferenceStep -= 1
+            }, title: nil, rightNaviIcon: nil)
+            
+            Text("거의 다 끝났어요!\n활동을 선택해주세요")
+                .font(.Subtitle1)
+                .foregroundStyle(Color.g7)
+                .padding(.top, 50)
+                .lineSpacing(3.3)
+            
+            pageThirdCompanion
+                .padding(.top, 47)
+        })
+        .padding(.horizontal, 16)
+    }
+    
+    private var pageThirdCompanion: some View {
+           VStack(alignment: .leading, spacing: 20, content: {
+               Text("누구랑 함께 하시나요?")
+                   .font(.Subtitle3)
+                   .foregroundStyle(Color.g7)
+               
+               LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 14, content: {
+                   ForEach(CompanionType.allCases, id: \.self) { type in
+                       CompanionSelectionBtn(companionType: type) { selectedType in
+                           if let selectedIndex = viewModel.selectedCompanion.firstIndex(of: selectedType) {
+                               viewModel.selectedCompanion.remove(at: selectedIndex)
+                           } else {
+                               viewModel.selectedCompanion.append(selectedType)
+                           }
+                       }
+                   }
+               })
+           })
+       }
+    
+    private var pageThirdActivityWeekDay: some View {
+        VStack(alignment: .leading, spacing: 20, content: {
+            HStack(content: {
+                Text("활동 가능한 요일을 선택해주세요")
+                    .font(.Subtitle3)
+                    .foregroundStyle(Color.g7)
+                
+            })
+        })
+    }
+    
+    private var appendAllWeekDays: some View {
+        Button(action: {
+            
+        }, label: {
+            
+        })
+    }
     
     
 }
 struct PerferencePageView_Preview: PreviewProvider {
     static var previews: some View {
-        PreferencePageView(viewModel: PreferenceViewModel())
+        PreferencePageView(container: DIContainer())
     }
 }
