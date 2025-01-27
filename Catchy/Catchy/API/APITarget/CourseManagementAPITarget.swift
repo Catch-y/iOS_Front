@@ -16,6 +16,11 @@ enum CourseManagementAPITarget {
     /// API Path : /course/search
     case getCourseList(course: CourseRequest)
     
+    /// 장소 검색 - 지역명 기반
+    /// HTTP 메소드 : GET
+    /// API Path : /course/place/region
+    case getPlaceList(place : PlaceSearchRequest)
+    
 }
 
 extension CourseManagementAPITarget: APITargetType {
@@ -25,12 +30,16 @@ extension CourseManagementAPITarget: APITargetType {
         switch self {
         case .getCourseList:
             return "/course/search"
+        case .getPlaceList:
+            return "/course/place/region"
         }
     }
     
     var method: Moya.Method {
         switch self {
         case .getCourseList:
+            return .get
+        case .getPlaceList:
             return .get
         }
     }
@@ -39,6 +48,8 @@ extension CourseManagementAPITarget: APITargetType {
         switch self {
         case .getCourseList(let course):
             return .requestJSONEncodable(course)
+        case .getPlaceList(let place):
+            return .requestJSONEncodable(place)
         }
     }
     
@@ -54,173 +65,114 @@ extension CourseManagementAPITarget: APITargetType {
       "code": "COMMON200",
       "message": "성공입니다.",
       "result": {
-        "content": [
+        "placeInfoPreviews": [
           {
-            "courseId": 1,
-            "courseType": "DIY",
-            "courseImage": "https://example.com/images/course1.jpg",
-            "courseName": "맛집 탐방 코스",
-            "courseDescription": "지역의 인기 맛집을 탐방하는 코스입니다.",
-            "categorise": ["휴식", "카페"]
+            "placeId": 1,
+            "placeName": "커피에리어",
+            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=AVzFdblZbagJ74Nav7gKViv_BRYLnx4JzJLQLTqgTzwQUj9-UPOvXnvr0Xd7v2NKuCkbzMZrX1NKRyfACzZU_n0PlQ4qWyL5YFUvHd7LgF3QFepYs03u9CFEqv-T3_y1U05KLDcIUBFjErBq3qmtkWoCSMoOFOAGF9gbCNvKMQBqZulSwLmD&key=GOOGLE_API_KEY",
+            "category": "프랜차이즈",
+            "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
+            "activeTime": "[영업시간]매일 09:00~22:00;",
+            "rating": 0,
+            "reviewCount": 0
           },
           {
-            "courseId": 2,
-            "courseType": "AI",
-            "courseImage": "https://example.com/images/course2.jpg",
-            "courseName": "문화 체험 여행",
-            "courseDescription": "다양한 문화와 예술을 체험할 수 있는 코스입니다.",
-            "categorise": ["문화생활", "체험"]
+            "placeId": 2,
+            "placeName": "블랙드롭커피 덕소강변점",
+            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=GOOGLE_API_KEY",
+            "category": "프랜차이즈",
+            "roadAddress": "경기 남양주시 와부읍 덕소로2번길 78",
+            "activeTime": "[영업시간]매일 09:00~18:00;[휴무]연중무휴;",
+            "rating": 0,
+            "reviewCount": 0
           },
           {
-            "courseId": 3,
-            "courseType": "DIY",
-            "courseImage": "https://example.com/images/course3.jpg",
-            "courseName": "웰니스 힐링 코스",
-            "courseDescription": "휴식과 재충전을 위한 웰니스 코스입니다.",
-            "categorise": ["휴식", "스포츠"]
+            "placeId": 3,
+            "placeName": "카페베네 덕소역점",
+            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=GOOGLE_API_KEY",
+            "category": "",
+            "roadAddress": "경기 남양주시 와부읍 덕소로 72",
+            "activeTime": "[영업시간]07:00~24:00;[좌석수]127;[휴무]연중무휴;",
+            "rating": 0,
+            "reviewCount": 0
           },
           {
-            "courseId": 4,
-            "courseType": "AI",
-            "courseImage": "https://example.com/images/course4.jpg",
-            "courseName": "카페 투어",
-            "courseDescription": "트렌디한 카페를 방문하는 투어입니다.",
-            "categorise": ["카페"]
+            "placeId": 4,
+            "placeName": "이디야커피 덕소삼거리점",
+            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=GOOGLE_API_KEY",
+            "category": "",
+            "roadAddress": "경기 남양주시 와부읍 덕소로 87-1",
+            "activeTime": "[영업시간]09:00~23:00;",
+            "rating": 0,
+            "reviewCount": 0
           },
           {
-            "courseId": 5,
-            "courseType": "DIY",
-            "courseImage": "https://example.com/images/course5.jpg",
-            "courseName": "밤 문화 탐방",
-            "courseDescription": "도시의 활기찬 밤 문화를 체험할 수 있는 코스입니다.",
-            "categorise": ["주류", "체험", "카페", "음식점"]
+            "placeId": 5,
+            "placeName": "달콤커피 덕소리버사이드점",
+            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=AVzFdblFeDTCnCog1onHLpn-hpqrKiBCpIAeLkpxaYBGUmHeCOa8duxb9jOHj_9omnaNMAEDhoaSncwV-f2N7AiVhnGjN1sfF9-jC895r9le_Ydo6cHlxXOdRtk1h7AxiVi31Ogw3e2dWxw7Dea1hMDRQN0Md0xoOK8sttIw_rsLzlO41nyp&key=GOOGLE_API_KEY",
+            "category": "",
+            "roadAddress": "경기 남양주시 와부읍 덕소로2번길 90",
+            "activeTime": "[영업시간]매일 08:00~23:00;",
+            "rating": 0,
+            "reviewCount": 0
           },
           {
-            "courseId": 6,
-            "courseType": "AI",
-            "courseImage": "https://example.com/images/course6.jpg",
-            "courseName": "스포츠 어드벤처",
-            "courseDescription": "스포츠와 모험을 좋아하는 사람들을 위한 코스입니다.",
-            "categorise": ["스포츠", "체험", "주류", "카페", "음식점"]
+            "placeId": 6,
+            "placeName": "메가커피 덕소삼거리점",
+            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=AVzFdbkXxFkrKs0f2WKQopYxeNSBg1v3rYOZB51PZmgY9eeCb1cIH1eI_HJj1McFFDHIXazMfS2NqOBnqW-MYcBKWK0JbSL35dS9cWQQnAE130-cG5OVdOP_pDLSkDeSOlg-YDHi-PEE0MkK2b17D9pQJVr-32Oz1yW3ZGb92aALmlgvuNky&key=GOOGLE_API_KEY",
+            "category": "",
+            "roadAddress": "경기 남양주시 와부읍 덕소로 89",
+            "activeTime": "",
+            "rating": 0,
+            "reviewCount": 0
           },
           {
-            "courseId": 7,
-            "courseType": "DIY",
-            "courseImage": "https://example.com/images/course7.jpg",
-            "courseName": "미식 여행",
-            "courseDescription": "다양한 음식을 맛볼 수 있는 여행 코스입니다.",
-            "categorise": ["음식점", "카페", "주류"]
+            "placeId": 7,
+            "placeName": "센틴컵",
+            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=AVzFdbkdcDvmrPtomI33u2xkfQCxgyL73FwfE3ChLqlWHegRK6VNlLw0x0OmwiEPno0DX6WCzSB_5Z-PZdHqo3O5dmJV3QOEZRgi5D58_wWZwpB-ObbC0928FW7pFNhYN1cWbk1bbTLzOiM-n6bLO_dHO_eoj7eZiz6bce51PrNVlT_vGFAu&key=GOOGLE_API_KEY",
+            "category": "",
+            "roadAddress": "경기 남양주시 와부읍 덕소로116번길 23",
+            "activeTime": "",
+            "rating": 0,
+            "reviewCount": 0
           },
           {
-            "courseId": 8,
-            "courseType": "AI",
-            "courseImage": "https://example.com/images/course8.jpg",
-            "courseName": "도시 탐험",
-            "courseDescription": "도시의 숨겨진 명소를 탐험하는 코스입니다.",
-            "categorise": ["문화생활", "카페"]
+            "placeId": 8,
+            "placeName": "러브프롬",
+            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=&key=GOOGLE_API_KEY",
+            "category": "",
+            "roadAddress": "경기 남양주시 와부읍 덕소로116번길 20",
+            "activeTime": "",
+            "rating": 0,
+            "reviewCount": 0
           },
           {
-            "courseId": 9,
-            "courseType": "DIY",
-            "courseImage": "https://example.com/images/course9.jpg",
-            "courseName": "힐링 스팟",
-            "courseDescription": "휴식을 취하며 재충전할 수 있는 코스입니다.",
-            "categorise": ["휴식"]
+            "placeId": 9,
+            "placeName": "설빙 덕소점",
+            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=AVzFdbmH7Akg_wXuX1kk-0qorPJIYibbBq6g7UoGvMw6fp_hoYNopY10whQd2MilSGv3v7e_J8JFqw6naeC9jwCWx1BuR_lVeSQQLLfXc3tN2S5ru2Wt6j8JA_CEJ9gb7zXbR0LTJr6t4p3Qsk_P4aWsF8Mph3_P-A9FJ-cYYXSVa8yj7SQl&key=GOOGLE_API_KEY",
+            "category": "",
+            "roadAddress": "경기 남양주시 와부읍 덕소로 94",
+            "activeTime": "[휴무]연중무휴;",
+            "rating": 0,
+            "reviewCount": 0
           },
           {
-            "courseId": 10,
-            "courseType": "AI",
-            "courseImage": "https://example.com/images/course10.jpg",
-            "courseName": "창의 워크숍",
-            "courseDescription": "창의력을 키울 수 있는 워크숍 코스입니다.",
-            "categorise": ["체험", "문화생활"]
-          },
-          {
-            "courseId": 11,
-            "courseType": "DIY",
-            "courseImage": "https://example.com/images/course11.jpg",
-            "courseName": "지역 맛집 투어",
-            "courseDescription": "현지의 대표 맛집을 방문하는 코스입니다.",
-            "categorise": ["음식점"]
-          },
-          {
-            "courseId": 12,
-            "courseType": "AI",
-            "courseImage": "https://example.com/images/course12.jpg",
-            "courseName": "스포츠 데이",
-            "courseDescription": "스포츠 활동을 즐길 수 있는 하루 코스입니다.",
-            "categorise": ["스포츠"]
-          },
-          {
-            "courseId": 13,
-            "courseType": "DIY",
-            "courseImage": "https://example.com/images/course13.jpg",
-            "courseName": "문화 여행",
-            "courseDescription": "지역의 문화유산을 체험할 수 있는 여행입니다.",
-            "categorise": ["문화생활"]
-          },
-          {
-            "courseId": 14,
-            "courseType": "AI",
-            "courseImage": "https://example.com/images/course14.jpg",
-            "courseName": "바 호핑 투어",
-            "courseDescription": "도시 최고의 바를 탐방하는 코스입니다.",
-            "categorise": ["주류"]
-          },
-          {
-            "courseId": 15,
-            "courseType": "DIY",
-            "courseImage": "https://example.com/images/course15.jpg",
-            "courseName": "자연 속 휴식",
-            "courseDescription": "자연에서 힐링할 수 있는 코스입니다.",
-            "categorise": ["휴식", "체험"]
-          },
-          {
-            "courseId": 16,
-            "courseType": "AI",
-            "courseImage": "https://example.com/images/course16.jpg",
-            "courseName": "예술과 문화",
-            "courseDescription": "갤러리와 문화 공간을 탐방하는 코스입니다.",
-            "categorise": ["문화생활", "카페"]
-          },
-          {
-            "courseId": 17,
-            "courseType": "DIY",
-            "courseImage": "https://example.com/images/course17.jpg",
-            "courseName": "피트니스 캠프",
-            "courseDescription": "건강과 운동을 위한 코스입니다.",
-            "categorise": ["스포츠"]
-          },
-          {
-            "courseId": 18,
-            "courseType": "AI",
-            "courseImage": "https://example.com/images/course18.jpg",
-            "courseName": "고급 레스토랑 투어",
-            "courseDescription": "최고급 음식을 경험할 수 있는 코스입니다.",
-            "categorise": ["음식점", "주류"]
-          },
-          {
-            "courseId": 19,
-            "courseType": "DIY",
-            "courseImage": "https://example.com/images/course19.jpg",
-            "courseName": "도시 명소 투어",
-            "courseDescription": "도시의 주요 명소를 방문하는 코스입니다.",
-            "categorise": ["문화생활", "음식점"]
-          },
-          {
-            "courseId": 20,
-            "courseType": "AI",
-            "courseImage": "https://example.com/images/course20.jpg",
-            "courseName": "웰니스 탈출",
-            "courseDescription": "스파와 웰니스를 즐길 수 있는 코스입니다.",
-            "categorise": ["휴식"]
+            "placeId": 10,
+            "placeName": "스테이얼라이브",
+            "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=AVzFdbmFgwlZR7Vtx2ica_RkDJOTxLvqleAnxhl4KJrpst-_5LnW4P9nRNTTruT2J1V6kZx2XBkIza5W9NMi66hpe0FpOTFgNa3wcdwtnfhiAmI_JinhRIip6HLomRNH-iOxKgGwJ3XjaMVDdau1L3q_ge5EiiYM8rnyV0oIjGpj1ps2v0Fc&key=GOOGLE_API_KEY",
+            "category": "",
+            "roadAddress": "경기 남양주시 와부읍 덕소로 66-46",
+            "activeTime": "[영업시간]평일 08:00~18:00;토 08:00~18:00;일 12:00~18:00;",
+            "rating": 0,
+            "reviewCount": 0
           }
         ],
-        "isLast": true
+        "isLast": false
       }
-    }
-
-    """.data(using: .utf8)!
+    } 
+""".data(using: .utf8)!
         return jsonString
+        
     }
+    
 }
