@@ -93,7 +93,7 @@ extension CourseManagementAPITarget: APITargetType {
             "courseImage": "https://example.com/images/course5.jpg",
             "courseName": "밤 문화 탐방",
             "courseDescription": "도시의 활기찬 밤 문화를 체험할 수 있는 코스입니다.",
-            "categorise": ["주류"]
+            "categorise": ["주류", "체험", "카페", "음식점"]
           },
           {
             "courseId": 6,
@@ -101,7 +101,7 @@ extension CourseManagementAPITarget: APITargetType {
             "courseImage": "https://example.com/images/course6.jpg",
             "courseName": "스포츠 어드벤처",
             "courseDescription": "스포츠와 모험을 좋아하는 사람들을 위한 코스입니다.",
-            "categorise": ["스포츠", "체험"]
+            "categorise": ["스포츠", "체험", "주류", "카페", "음식점"]
           },
           {
             "courseId": 7,

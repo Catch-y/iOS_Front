@@ -73,9 +73,13 @@ struct CourseView: View {
     /// 스크롤 뷰 
     private var scrollView : some View {
         ScrollView(.vertical, content: {
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 0, maximum: 400)), count: 1), spacing: 18, content: {
-                ForEach(viewModel.courseResponse!.content, id: \.id) { course in
-                    CourseGroupCard(course: course)
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 18, content: {
+                if let content = viewModel.courseResponse?.content {
+                    ForEach(content, id: \.id) { course in
+                        CourseGroupCard(course: course)
+                            .frame(maxWidth: .infinity, minHeight: 158)
+                            
+                    }
                 }
             })
             .padding(.horizontal, 16)
