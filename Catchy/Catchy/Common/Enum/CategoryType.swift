@@ -124,4 +124,24 @@ enum CategoryType: String, Codable, CaseIterable {
             return Color.clear
         }
     }
+    
+    
+    func setColor() -> Color {
+        switch self {
+        case .BAR:
+            return Color.bar
+        case .CAFE :
+            return Color.cafe
+        case .CULTURELIFE:
+            return Color.culturaLife
+        case .EXPERIENCE :
+            return Color.experience
+        case .REST :
+            return Color.rest
+        case .RESTAURANT :
+            return Color.restaurant
+        case .SPORT :
+            return Color.sport
+        }
+    }
 }
