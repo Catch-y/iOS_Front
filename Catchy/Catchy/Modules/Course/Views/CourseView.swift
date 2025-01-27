@@ -42,7 +42,7 @@ struct CourseView: View {
                 }
                 
             }
-            .zIndex(2)
+            .zIndex(0)
             
             if viewModel.isFloating {
                 Color.black
@@ -112,7 +112,7 @@ struct CourseView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
+        ForEach(["iPhone 16 Pro Max", "iPhone 11"], id: \.self) { deviceName in
             CourseView(container: DIContainer())
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
