@@ -20,39 +20,40 @@ struct ReviewView: View {
     // MARK: - Body
     var body: some View {
         
-        if let data = viewModel.reviewData {
-            VStack(alignment: .center, spacing: 20, content: {
-                
-                CustomNavigation(action: {
-                    print("hello")
-                }, title: "평점, 리뷰 보기", leftNaviIcon: nil)
-                .s1w()
-                
-                ScrollView(.vertical, content: {
-                    topReviewInfo(data: data)
+        VStack(alignment: .center, spacing: 20, content: {
+            if !viewModel.isLoading {
+                if let data = viewModel.reviewData {
                     
-                    reviewTableSection(content: data.content)
-                        .padding(.top, 7)
-                })
-                .frame(maxWidth: .infinity)
-                
-            })
-            .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
-        } else {
-            VStack(alignment: .center, content: {
+                    CustomNavigation(action: {
+                        print("hello")
+                    }, title: "평점, 리뷰 보기", leftNaviIcon: nil)
+                    .s1w()
+                    
+                    ScrollView(.vertical, content: {
+                        topReviewInfo(data: data)
+                        
+                        reviewTableSection(content: data.content)
+                            .padding(.top, 7)
+                    })
+                    .frame(maxWidth: .infinity)
+                } else {
+                    // 값을 들고 있지 않다면 가이드 보여주기
+                }
+            } else {
                 Spacer()
                 
                 ProgressView()
                     .controlSize(.regular)
                 
                 Spacer()
-            })
-            .task {
-                viewModel.getReviewData(reviewData: GetReviewRequest(placeId: 12345, page: 2))
             }
+        })
+        .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+        .task {
+            viewModel.getReviewData(reviewData: GetReviewRequest(placeId: 12345, page: 2))
         }
     }
-    
+
     // MARK: - 상단 평점 및 리뷰 전체 정보
     
     /// 상단 리뷰 평점 정보
@@ -167,21 +168,21 @@ struct ReviewView: View {
     }
 }
 
-//
-//struct ReviewView_Preview: PreviewProvider {
-//    
-//    static var devices = ["iPhone 11", "iPhone 16 Pro"]
-//    
-//    static var previews: some View {
-//        ForEach(devices, id: \.self) { device in
-//            ReviewView(container: DIContainer())
-//                .environmentObject(DIContainer())
-//                .previewDevice(PreviewDevice(rawValue: device))
-//                .previewDisplayName(device)
-//        }
-//    }
-//}
 
-#Preview {
-    ReviewView(container: DIContainer())
+struct ReviewView_Preview: PreviewProvider {
+    
+    static var devices = ["iPhone 11", "iPhone 16 Pro"]
+    
+    static var previews: some View {
+        ForEach(devices, id: \.self) { device in
+            ReviewView(container: DIContainer())
+                .environmentObject(DIContainer())
+                .previewDevice(PreviewDevice(rawValue: device))
+                .previewDisplayName(device)
+        }
+    }
 }
+
+//#Preview {
+//    ReviewView(container: DIContainer())
+//}

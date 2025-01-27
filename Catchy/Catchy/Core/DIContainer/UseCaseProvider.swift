@@ -24,5 +24,6 @@ class UseCaseProvider: UseCaseProtocol {
     init() {
         self.authUseCase = AuthUseCase()
         self.courseManagementUseCase = CourseManagementUseCase()
+        self.reviewUseCase = ReviewUseCase()
     }
 }
