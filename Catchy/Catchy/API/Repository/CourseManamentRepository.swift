@@ -23,4 +23,9 @@ class CourseManamentRepository: CourseManagementRepositoryProtocol {
     func getCourseListData(courseRequest: CourseRequest) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError> {
         return provider.getCourseList(courseRequest: courseRequest)
     }
+    
+    /// 장소 검색 - 지역명 기반
+    func getPlaceListData(placeSearchReqeust: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError> {
+        return provider.getPlaceList(placeSearchRequest: placeSearchReqeust)
+    }
 }

@@ -26,4 +26,12 @@ class CourseManagementUseCase: CourseManagementUseCaseProtocol {
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }
+    
+    /// 장소 검색 - 지역명 기반
+    func executeGetPlaceList(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError> {
+        
+        return repository.getPlaceListData(placeSearchReqeust: placeSearchRequest)
+            .mapError { $0 as MoyaError }
+            .eraseToAnyPublisher()
+    }
 }
