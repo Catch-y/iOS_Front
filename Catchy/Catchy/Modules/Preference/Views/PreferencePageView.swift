@@ -277,5 +277,6 @@ struct PreferencePageView: View {
 struct PerferencePageView_Preview: PreviewProvider {
     static var previews: some View {
         PreferencePageView(container: DIContainer())
+            .previewLayout(.sizeThatFits)
     }
 }

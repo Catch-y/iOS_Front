@@ -9,6 +9,12 @@ import Foundation
 
 class PreferenceViewModel: ObservableObject {
     
+    let container: DIContainer
+    
+    init(container: DIContainer) {
+        self.container = container
+    }
+    
     @Published var preferenceStep: Int = 2
     
     //MARK: - 1번째, 2번째 스텝 관리
