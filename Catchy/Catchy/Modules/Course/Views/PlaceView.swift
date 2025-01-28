@@ -78,14 +78,17 @@ struct PlaceView: View {
 
     }
                    
-    
+    /// 검색 결과가 없을 떄의 뷰
     private var infoView : some View {
         VStack(spacing: 9){
-            Text("검색 결과가 없습니다.")
+            Icon.smileSearch.image
+                .fixedSize()
+                .padding(.bottom, 6)
+            Text("검색어와 일치하는 내용이 없어요!")
                 .font(.Subtitle2)
                 .foregroundStyle(.g7)
-            Text("다른 장소를 찾아보세요!")
-                .font(.body1)
+            Text("확인 후 다시 검색해주세요.")
+                .font(.Body1_2)
                 .foregroundStyle(.g4)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
