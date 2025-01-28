@@ -25,6 +25,9 @@ struct PlaceView: View {
                         infoView
                     } else {
                         scrollView
+                            .refreshable {
+                                // TODO: - 리프레쉬 구현
+                            }
                     }
                 }
             } else { /// 데이터 요청 중
