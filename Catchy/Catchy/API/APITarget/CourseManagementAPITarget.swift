@@ -21,6 +21,11 @@ enum CourseManagementAPITarget {
     /// API Path : /course/place/region
     case getPlaceList(place : PlaceSearchRequest)
     
+    /// 장소 검색 - 상세 화면
+    /// HTTP 메소드 : GET.
+    /// API Path : /course/place/{placeId}
+    case getPlaceDetail(place : PlaceDetailRequest)
+    
 }
 
 extension CourseManagementAPITarget: APITargetType {
@@ -32,6 +37,8 @@ extension CourseManagementAPITarget: APITargetType {
             return "/course/search"
         case .getPlaceList:
             return "/course/place/region"
+        case .getPlaceDetail(let place):
+            return "/course/place/\(place.placeId)"
         }
     }
     
@@ -41,6 +48,8 @@ extension CourseManagementAPITarget: APITargetType {
             return .get
         case .getPlaceList:
             return .get
+        case .getPlaceDetail:
+            return .get
         }
     }
     
@@ -49,6 +58,8 @@ extension CourseManagementAPITarget: APITargetType {
         case .getCourseList(let course):
             return .requestJSONEncodable(course)
         case .getPlaceList(let place):
+            return .requestJSONEncodable(place)
+        case .getPlaceDetail(let place):
             return .requestJSONEncodable(place)
         }
     }
