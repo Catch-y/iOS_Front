@@ -33,4 +33,11 @@ class CourseManagementService: CourseManagementServiceProtocol {
             .map(ResponseData<PlaceSearchResponse>.self)
             .eraseToAnyPublisher()
     }
+    
+    /// 장소 검색 - 상세 화면
+    func getPlaceDetail(placeDetailRequest: PlaceDetailRequest) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
+        return provider.requestPublisher(.getPlaceDetail(place: placeDetailRequest))
+            .map(ResponseData<PlaceDetailResponse>.self)
+            .eraseToAnyPublisher()
+    }
 }

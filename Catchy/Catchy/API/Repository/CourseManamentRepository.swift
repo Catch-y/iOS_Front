@@ -25,7 +25,12 @@ class CourseManamentRepository: CourseManagementRepositoryProtocol {
     }
     
     /// 장소 검색 - 지역명 기반
-    func getPlaceListData(placeSearchReqeust: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError> {
-        return provider.getPlaceList(placeSearchRequest: placeSearchReqeust)
+    func getPlaceListData(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError> {
+        return provider.getPlaceList(placeSearchRequest: placeSearchRequest)
+    }
+    
+    /// 장소 검색 - 상세 화면
+    func getPlaceDetailData(placeDetailRequest: PlaceDetailRequest) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
+        return provider.getPlaceDetail(placeDetailRequest: placeDetailRequest)
     }
 }
