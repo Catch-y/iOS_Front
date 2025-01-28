@@ -17,6 +17,9 @@ protocol CourseManagementRepositoryProtocol {
     func getCourseListData(courseRequest: CourseRequest) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError>
     
     /// 장소 검색 - 지역명 기반
-    func getPlaceListData(placeSearchReqeust: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError>
+    func getPlaceListData(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError>
+    
+    /// 장소 검색 - 상세 화면
+    func getPlaceDetailData(placeDetailRequest: PlaceDetailRequest) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError>
 }
 
