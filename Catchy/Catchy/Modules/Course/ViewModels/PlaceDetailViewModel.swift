@@ -1,53 +1,48 @@
 //
-//  PlaceSearchViewModel.swift
+//  PlaceDetailViewModel.swift
 //  Catchy
 //
-//  Created by LEE on 1/27/25.
+//  Created by LEE on 1/28/25.
 //
 
 import Foundation
 import SwiftUI
 import Combine
 
-class PlaceSearchViewModel: ObservableObject {
+class PlaceDetailViewModel: ObservableObject {
     
     let container: DIContainer
     
     var cancellables = Set<AnyCancellable>()
     
-    // MARK: - Place Search View Properties
-    
-    /// 장소 검색 결과
-    @Published var placeSearchResponse: PlaceSearchResponse?
-    
-    /// 검색어
-    @Published var searchText: String = ""
+    // MARK: - Place Detail View Properties
+    /// 장소 상세 정보
+    @Published var placeDetailResponse: PlaceDetailResponse?
     
     /// API 통신 중인가?
     @Published var isLoading: Bool = false
     
-    /// 현재 코스에 담은 장소들의 ID 리스트
-    /// placeId가 있음.
-    @Published var places: [Int] = []
+    /// 해당 장소를 현재 코스에 담았는가?
+    @Published var isIncluded: Bool = false
     
-    init(container: DIContainer){
+    init(container: DIContainer) {
         self.container = container
     }
     
 }
 
-extension PlaceSearchViewModel {
+extension PlaceDetailViewModel {
     
     // MARK: - API 호출 함수
-    /// 장소 검색 - 지역명 기반
-    func getPlaceList(placeSearchRequest: PlaceSearchRequest) {
+    /// 장소 검색 - 상세 화면
+    func getPlaceDetail(placeDetailRequest: PlaceDetailRequest){
         
         isLoading = true
         
-        container.useCaseProvider.courseManagementUseCase.executeGetPlaceList(placeSearchRequest: placeSearchRequest)
+        container.useCaseProvider.courseManagementUseCase.executeGetPlaceDetail(placeDetailRequest: placeDetailRequest)
             .tryMap {
                 responseData ->
-                ResponseData<PlaceSearchResponse> in
+                ResponseData<PlaceDetailResponse> in
                 if !responseData.isSuccess {
                     throw APIError
                         .serverError(message: responseData.message,
@@ -65,18 +60,20 @@ extension PlaceSearchViewModel {
                     
                 switch completion {
                 case .finished:
-                    print("✅ Get PlaceSearchList Server Completed")
+                    print("✅ Get PlaceDetail Server Completed")
                 case .failure(let failure):
-                    print("❌ Get PlaceSearchList Failed: \(failure)")
+                    print("❌ Get PlaceDetail Failed: \(failure)")
                 }
             },receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 
                 if let response = response.result{
-                    self.placeSearchResponse = response
+                    self.placeDetailResponse = response
                 }
                 
             })
             .store(in: &cancellables)
+        
+        
     }
 }
