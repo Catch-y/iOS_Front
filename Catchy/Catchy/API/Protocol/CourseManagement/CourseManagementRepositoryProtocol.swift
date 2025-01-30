@@ -20,6 +20,6 @@ protocol CourseManagementRepositoryProtocol {
     func getPlaceListData(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError>
     
     /// 장소 검색 - 상세 화면
-    func getPlaceDetailData(placeDetailRequest: PlaceDetailRequest) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError>
+    func getPlaceDetailData(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError>
 }
 

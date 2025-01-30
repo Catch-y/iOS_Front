@@ -16,7 +16,8 @@ struct PlaceTimeText: View {
     }
     var body: some View {
         HStack(spacing: 5) {
-            Icon.time.image.fixedSize()
+            Icon.time.image.resizable()
+                .frame(width: 12, height: 12)
             
             Text(timeText)
                 .font(.caption)

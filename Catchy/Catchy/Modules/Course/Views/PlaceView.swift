@@ -9,25 +9,24 @@ import SwiftUI
 
 struct PlaceView: View {
     
-    
     @StateObject var viewModel: PlaceSearchViewModel
+    
+    @EnvironmentObject var container: DIContainer
     
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
     }
     
     var body: some View {
+       
         VStack {
-            if !viewModel.isLoading { /// 데이터 요청 완료
+            if !viewModel.isPlaceListLoading { /// 데이터 요청 완료
                 
                 if let data = viewModel.placeSearchResponse {
                     if data.placeInfoPreviews.isEmpty { /// 데이터가 0개인 경우
                         infoView
                     } else {
                         scrollView
-                            .refreshable {
-                                // TODO: - 리프레쉬 구현
-                            }
                     }
                 }
             } else { /// 데이터 요청 중
@@ -48,34 +47,62 @@ struct PlaceView: View {
                     )
                 )
         }
+            
     }
     
     /// 스크롤 뷰
     private var scrollView: some View {
-        ScrollView(.vertical) {
-            LazyVGrid(
-                columns: [GridItem(.flexible())]
-            ) {
-                if let content = viewModel.placeSearchResponse?.placeInfoPreviews {
-                    ForEach(
-                        Array(content.enumerated()),
-                        id: \.1.id
-                    ) { index, place in
-                        VStack(spacing: 0) {
-                            PlaceCard(place: place)
-                            if index < content.count - 1 {
-                                Divider()
-                                     .padding(.vertical, 20)
+        NavigationStack(path: $container.navigationRouter.destination) {
+            ScrollView(.vertical) {
+                LazyVGrid(
+                    columns: [GridItem(.flexible())]
+                ) {
+                    if let content = viewModel.placeSearchResponse?.placeInfoPreviews {
+                        ForEach(
+                            Array(content.enumerated()),
+                            id: \.1.id
+                        ) {
+                            index,
+                            place in
+                            VStack(spacing: 0) {
+                                PlaceCard(place: place).onTapGesture{
+                                    Task{
+                                        await viewModel
+                                            .getPlaceDetail(
+                                                placeId: place.placeId
+                                            )
+                                        
+                                        if let placeData = viewModel.placeDetailResponse {
+                                            
+                                            container.navigationRouter.push(
+                                                to: .PlaceDetailView(
+                                                    placeDetailResponse: placeData
+                                                )
+                                            )
+                                        }
+                                    }
+                                    
+                                }
+                                
+                                if index < content.count - 1 {
+                                    Divider()
+                                        .padding(.vertical, 20)
+                                }
                             }
                         }
                     }
                 }
+                .padding(.horizontal, 16)
+                .padding(.top, 43)
+                .padding(.bottom, 17)
+            }.navigationDestination(
+                for: NavigationDestination.self
+            ) { destination in
+                NavigationRoutingView(destination: destination)
+                    .environmentObject(container)
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 43)
-            .padding(.bottom, 17)
+            
         }
-
     }
                    
     /// 검색 결과가 없을 떄의 뷰
@@ -95,8 +122,6 @@ struct PlaceView: View {
         .ignoresSafeArea(edges: .all)
         
     }
-                   
-                   
     
 }
 
@@ -109,6 +134,7 @@ struct PlaceView_Previews: PreviewProvider {
             PlaceView(container: DIContainer())
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
+                .environmentObject(DIContainer())
         }
     }
 }

@@ -44,6 +44,7 @@ enum Icon: String {
     case downChevron = "downChevron"
     case check = "check"
     case smileSearch = "smileSearch"
+    case domain = "domain"
     
     //MARK: - Category
     case breaks = "breaks"

@@ -20,6 +20,6 @@ protocol CourseManagementUseCaseProtocol {
     func executeGetPlaceList(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError>
     
     /// 장소 검색 - 상세 화면
-    func executeGetPlaceDetail(placeDetailRequest: PlaceDetailRequest) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError>
+    func executeGetPlaceDetail(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError>
     
 }

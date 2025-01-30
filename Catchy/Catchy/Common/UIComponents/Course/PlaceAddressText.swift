@@ -17,7 +17,8 @@ struct PlaceAddressText: View {
     }
     var body: some View {
         HStack(spacing: 5) {
-            Icon.location.image.fixedSize()
+            Icon.location.image.resizable()
+                .frame(width: 12, height: 12)
             
             Text(addressText)
                 .font(.caption)

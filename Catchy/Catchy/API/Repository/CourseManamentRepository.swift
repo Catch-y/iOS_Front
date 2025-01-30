@@ -13,9 +13,9 @@ import Moya
 /// [코스 관리] Repository 객체
 class CourseManamentRepository: CourseManagementRepositoryProtocol {
     
-    let provider: CourseManagementService
+    let provider: CourseManagementServiceProtocol
     
-    init(provider: CourseManagementService = CourseManagementService()){
+    init(provider: CourseManagementServiceProtocol = CourseManagementService()){
         self.provider = provider
     }
     
@@ -30,7 +30,7 @@ class CourseManamentRepository: CourseManagementRepositoryProtocol {
     }
     
     /// 장소 검색 - 상세 화면
-    func getPlaceDetailData(placeDetailRequest: PlaceDetailRequest) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
-        return provider.getPlaceDetail(placeDetailRequest: placeDetailRequest)
+    func getPlaceDetailData(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
+        return provider.getPlaceDetail(placeId: placeId)
     }
 }

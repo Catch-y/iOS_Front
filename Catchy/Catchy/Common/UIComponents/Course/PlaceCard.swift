@@ -36,6 +36,7 @@ struct PlaceCard: View {
         }
     }
     
+    /// 장소 이름, 카테고리, 위치, 운영 시간을 표시하는 그룹 뷰
     private var placeTextGroup: some View {
         VStack(alignment: .leading, spacing: 6) {
             

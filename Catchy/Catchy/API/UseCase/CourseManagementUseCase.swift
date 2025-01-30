@@ -35,8 +35,8 @@ class CourseManagementUseCase: CourseManagementUseCaseProtocol {
     }
     
     /// 장소 검색 - 상세 화면
-    func executeGetPlaceDetail(placeDetailRequest: PlaceDetailRequest) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
-        return repository.getPlaceDetailData(placeDetailRequest: placeDetailRequest)
+    func executeGetPlaceDetail(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
+        return repository.getPlaceDetailData(placeId: placeId)
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }

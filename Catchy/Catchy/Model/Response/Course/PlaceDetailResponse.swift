@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PlaceDetailResponse: Codable {
+struct PlaceDetailResponse: Codable, Hashable {
     
     /// 장소 ID
     let placeId: Int

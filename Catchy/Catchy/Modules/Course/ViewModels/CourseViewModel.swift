@@ -132,7 +132,7 @@ extension CourseViewModel {
         
         self.setInitialState()
         self.segment = segment
-        // TODO: - 세그먼트 컨트롤 변경시 API 요청
+    // TODO: - 세그먼트 컨트롤 변경시 API 요청
     }
     
     /// 모든 상태를 처음 화면의 상태와 동일하게 합니다.
