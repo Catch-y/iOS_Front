@@ -62,6 +62,9 @@ enum Icon: String {
     case retaurantBackground = "retaurantBackground"
     case sportBackground = "sportBackground"
     
+    //MARK: - Review
+    case checkBtnSelected = "checkBtnSelected"
+    case checkBtnUnselected = "checkBtnUnselected"
     
     //MARK: - Perference
     case couple = "couple"

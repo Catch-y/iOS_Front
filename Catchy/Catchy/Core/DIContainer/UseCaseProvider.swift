@@ -12,12 +12,15 @@ protocol UseCaseProtocol {
     
     /// [코스 관리] UseCase
     var courseManagementUseCase: CourseManagementUseCase { get set }
+    
+    var reviewUseCase: ReviewUseCase { get set }
+    var reviewReportUseCase: ReviewReportUseCase { get set }
 }
 
 class UseCaseProvider: UseCaseProtocol {
     var authUseCase: AuthUseCase
     var reviewUseCase: ReviewUseCase
-    
+    var reviewReportUseCase: ReviewReportUseCase
     /// [코스 관리] UseCase
     var courseManagementUseCase: CourseManagementUseCase
     
@@ -25,5 +28,6 @@ class UseCaseProvider: UseCaseProtocol {
         self.authUseCase = AuthUseCase()
         self.courseManagementUseCase = CourseManagementUseCase()
         self.reviewUseCase = ReviewUseCase()
+        self.reviewReportUseCase = ReviewReportUseCase()
     }
 }

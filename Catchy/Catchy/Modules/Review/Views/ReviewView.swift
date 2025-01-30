@@ -1,5 +1,5 @@
 //
-//  RatingReviewView.swift
+//  ReviewView.swift
 //  Catchy
 //
 //  Created by 권용빈 on 1/20/25.
@@ -23,11 +23,9 @@ struct ReviewView: View {
         VStack(alignment: .center, spacing: 20, content: {
             if !viewModel.isLoading {
                 if let data = viewModel.reviewData {
-                    
                     CustomNavigation(action: {
                         print("hello")
-                    }, title: "평점, 리뷰 보기", leftNaviIcon: nil)
-                    .s1w()
+                    }, title: "새 그룹 만들기", leftNaviIcon: nil, isShadow: true)
                     
                     ScrollView(.vertical, content: {
                         topReviewInfo(data: data)
@@ -48,12 +46,21 @@ struct ReviewView: View {
                 Spacer()
             }
         })
+        .ignoresSafeArea(.all)
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
         .task {
             viewModel.getReviewData(reviewData: GetReviewRequest(placeId: 12345, page: 2))
         }
     }
 
+    // MARK: - 리뷰 없을 때, 보일 가이드 뷰
+    
+    private func infoView() -> some View {
+        return VStack(content: {
+            topReviewInfo(data: .init(totalRating: 0, reviewCount: [], totalCount: 0, content: [], last: true))
+            
+        })
+    }
     // MARK: - 상단 평점 및 리뷰 전체 정보
     
     /// 상단 리뷰 평점 정보
@@ -182,7 +189,3 @@ struct ReviewView_Preview: PreviewProvider {
         }
     }
 }
-
-//#Preview {
-//    ReviewView(container: DIContainer())
-//}

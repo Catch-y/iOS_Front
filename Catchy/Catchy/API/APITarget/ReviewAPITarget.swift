@@ -86,7 +86,7 @@ extension ReviewAPITarget: APITargetType {
                                 "imageUrl": "https://example.com/image2.jpg"
                             }
                         ],
-                        "visitedDate": "2025-01-13T05:03:17.752Z",
+                        "visitedDate": "2025.01.13",
                         "creatorNickname": "Traveler101"
                     },
                     {
@@ -99,7 +99,7 @@ extension ReviewAPITarget: APITargetType {
                                 "imageUrl": "https://example.com/image3.jpg"
                             }
                         ],
-                        "visitedDate": "2025-01-12T08:22:45.152Z",
+                        "visitedDate": "2025.01.12",
                         "creatorNickname": "FoodieLover"
                     },
                     {
@@ -107,7 +107,7 @@ extension ReviewAPITarget: APITargetType {
                         "comment": "가족들과 함께 즐거운 시간을 보냈습니다!",
                         "rating": 4,
                         "reviewImages": [],
-                        "visitedDate": "2025-01-10T15:30:17.456Z",
+                        "visitedDate": "2025.01.10",
                         "creatorNickname": "FamilyFirst"
                     },
                     {
@@ -115,7 +115,7 @@ extension ReviewAPITarget: APITargetType {
                         "comment": "위치는 좋은데 주변 소음이 조금 있었습니다.",
                         "rating": 2,
                         "reviewImages": [],
-                        "visitedDate": "2025-01-09T10:45:12.789Z",
+                        "visitedDate": "2025.01.09",
                         "creatorNickname": "QuietSeeker"
                     },
                     {
@@ -132,7 +132,7 @@ extension ReviewAPITarget: APITargetType {
                                 "imageUrl": "https://example.com/image5.jpg"
                             }
                         ],
-                        "visitedDate": "2025-01-08T14:00:00.000Z",
+                        "visitedDate": "2025.01.08",
                         "creatorNickname": "HappyCamper"
                     }
                 ],
