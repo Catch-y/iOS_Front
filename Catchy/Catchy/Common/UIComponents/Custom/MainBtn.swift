@@ -10,6 +10,7 @@ import SwiftUI
 enum MainBtnClick {
     case on
     case off
+    case custom
 }
 
 struct MainBtn: View {
@@ -20,7 +21,13 @@ struct MainBtn: View {
     let height: CGFloat
     let onoff: MainBtnClick
     
-    init(text: String, action: @escaping () -> Void, width: CGFloat, height: CGFloat, onoff: MainBtnClick) {
+    init(
+        text: String,
+        action: @escaping () -> Void,
+        width: CGFloat,
+        height: CGFloat,
+        onoff: MainBtnClick
+    ) {
         self.text = text
         self.action = action
         self.width = width
@@ -30,19 +37,27 @@ struct MainBtn: View {
     
     
     var body: some View {
-        Button(action: {
+        Button(
+            action: {
                 action()
-        }, label: {
-            Text(text)
-                .frame(width: width, height: height)
-                .font(.buttonText)
-                .foregroundStyle(returnTextColor())
-                .background {
-                    RoundedRectangle(cornerRadius: 30)
-                        .fill(returnBtnColor())
-                        
-                }
-        })
+            },
+            label: {
+                Text(text)
+                    .frame(width: width, height: height)
+                    .font(.buttonText)
+                    .foregroundStyle(returnTextColor())
+                    .background {
+                        RoundedRectangle(cornerRadius: 30)
+                            .fill(returnBtnColor())
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 30)
+                                    .stroke(
+                                        onoff == .custom ? returnTextColor() : Color.clear,
+                                        lineWidth: 1
+                                    )
+                            )
+                    }
+            })
 
     }
     
@@ -52,6 +67,8 @@ struct MainBtn: View {
             return Color.m5
         case .off:
             return Color.g2
+        case .custom:
+            return Color.white
         }
     }
     
@@ -61,10 +78,18 @@ struct MainBtn: View {
             return Color.white
         case .off:
             return Color.g4
+        case .custom:
+            return Color.m5
         }
     }
 }
 
 #Preview {
-    MainBtn(text: "Hello, World!", action: {}, width: 370, height: 60, onoff: .on)
+    MainBtn(
+        text: "Hello, World!",
+        action: {
+        },
+        width: 370,
+        height: 60,
+        onoff: .on)
 }

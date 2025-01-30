@@ -25,7 +25,7 @@ struct PlaceDetailView: View {
             
             MainBtn(text: "코스에 담기", action: {
                 
-            }, width: 370, height: 55, onoff: .off)
+            }, width: 370, height: 55, onoff: .custom)
         }.navigationBarBackButtonHidden()
     }
     
