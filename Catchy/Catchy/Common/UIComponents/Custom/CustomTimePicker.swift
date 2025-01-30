@@ -9,40 +9,34 @@ import SwiftUI
 
 struct CustomTimePicker: View {
     
-    @State var selectedTime = Date()
+    @Binding var selectedTime: Date?
     @Binding var isExpand: Bool
     
     
     var body: some View {
-        VStack {
             Button(action: {
                 withAnimation {
                     isExpand.toggle()
                 }
             }, label: {
-                ZStack(alignment: .center, content: {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.clear)
-                        .stroke(Color.g2, style: .init(lineWidth: 1))
-                        .frame(width: 177, height: 54)
-                    
-                    HStack(spacing: 75, content: {
-                        Text(DataFormatter.shared.timeString(from: selectedTime))
+                    HStack(content: {
+                        Text(selectedTime == nil ? "00:00" : DataFormatter.shared.timeString(from: selectedTime!))
+                            .frame(minWidth: 36, minHeight: 20)
                             .font(.Body1_2)
-                            .foregroundStyle(Color.g3)
+                            .foregroundStyle(selectedTime == nil ? Color.g3 : Color.g6)
+                        
+                        Spacer()
                         
                         Icon.bottomChevron.image
                             .fixedSize()
                     })
-                })
+                    .padding(.vertical, 17)
+                    .padding(.horizontal, 29)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(Color.clear)
+                            .stroke(Color.g3, style: .init(lineWidth: 1))
+                    }
             })
-        }
-    }
-}
-
-struct CustomTimePicker_Preview: PreviewProvider {
-    static var previews: some View {
-        CustomTimePicker(isExpand: .constant(true))
-            .previewLayout(.sizeThatFits)
     }
 }

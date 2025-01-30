@@ -16,13 +16,13 @@ class PreferenceViewModel: ObservableObject {
     }
     
     //MARK: - 전체 스텝 관리
-    @Published var preferenceStep: Int = 0
+    @Published var preferenceStep: Int = 2
     
     //MARK: - 1번째, 2번째 스텝 관리
     @Published var pageCount: Int = 0
     
     /* Request 저장 */
-    @Published var bigCategoryBtn: [CategoryType] = []
+    @Published var bigCategoryBtn: [CategoryType] = [.BAR, .CAFE]
     @Published var smallCategoryBtn: [CategoryType: [String]] = [:]
     
     func getSmallCategory(category: CategoryType) -> [String] {
@@ -37,4 +37,9 @@ class PreferenceViewModel: ObservableObject {
     @Published var selectedWeekDay: [ActiveDate] = []
     @Published var startTime: String = ""
     @Published var endTime: String = ""
+    
+    @Published var leftSelectedTime: Date? = nil
+    @Published var rightSelectedTime: Date? = nil
+    
+    @Published var isExpand: [Int:Bool] = [0: false, 1: false]
 }

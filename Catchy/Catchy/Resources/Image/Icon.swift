@@ -69,6 +69,8 @@ enum Icon: String {
     case family = "family"
     case friends = "friends"
     case solo = "solo"
+    case allCheckBtn = "allCheckBtn"
+    case allSelectCheckBtn = "allSelectCheckBtn"
     
     var image: Image {
         return Image(self.rawValue)

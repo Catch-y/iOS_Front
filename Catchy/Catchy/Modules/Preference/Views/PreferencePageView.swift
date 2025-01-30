@@ -55,7 +55,7 @@ struct PreferencePageView: View {
                                 } else {
                                     viewModel.bigCategoryBtn.removeAll { $0 == category }
                                 }
-                    }), categoryType: category)
+                            }), categoryType: category)
                 }
             })
             HStack {
@@ -87,24 +87,24 @@ struct PreferencePageView: View {
                 CustomNavigation(action: {
                     viewModel.preferenceStep -= 1
                 }, title: nil, rightNaviIcon: nil)
-                .padding(.leading, 25)
+                .padding(.leading, 16)
                 
                 CustomPageControl(pageCount: $viewModel.pageCount, totalPageCount: viewModel.bigCategoryBtn.count)
                     .padding(.top, 20)
-                    .padding(.leading, 25)
-
+                    .padding(.leading, 35)
+                
                 TabView(selection: $viewModel.pageCount) {
                     ForEach(0..<viewModel.bigCategoryBtn.count, id: \.self) { index in
                         VStack(alignment: .leading, content: {
                             pageTwoTitle(index)
                                 .padding(.top, 40)
-                                .padding(.leading, 25)
-
+                                .padding(.leading, 35)
+                            
                             pageTwoContent(index)
                                 .padding(.top, 113)
-
+                            
                             Spacer()
-
+                            
                             if viewModel.pageCount == viewModel.bigCategoryBtn.count - 1 {
                                 HStack {
                                     
@@ -135,7 +135,7 @@ struct PreferencePageView: View {
                         .aspectRatio(contentMode: .fill)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .blur(radius: 7.5)
-
+                    
                     LinearGradient(
                         stops: [
                             Gradient.Stop(color: .black.opacity(0.8), location: 0.00),
@@ -193,21 +193,26 @@ struct PreferencePageView: View {
             ScrollView(.vertical, content: {
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 56), count: 2), spacing: 32, content: {
                     ForEach(viewModel.bigCategoryBtn[index].subcategories, id: \.self) { subCategory in
-                        SubCategoryBtn(subCategoryName: subCategory) { subCategory in
-                            if viewModel.smallCategoryBtn[viewModel.bigCategoryBtn[index]] == nil {
-                                viewModel.smallCategoryBtn[viewModel.bigCategoryBtn[index]] = []
-                            }
-                            if let selectedIndex = viewModel.smallCategoryBtn[viewModel.bigCategoryBtn[index]]?.firstIndex(of: subCategory) {
-                                viewModel.smallCategoryBtn[viewModel.bigCategoryBtn[index]]?.remove(at: selectedIndex)
-                            } else {
-                                viewModel.smallCategoryBtn[viewModel.bigCategoryBtn[index]]?.append(subCategory)
-                            }
-                        }
+                        SubCategoryBtn(
+                            isSelected: Binding(
+                                get: { viewModel.smallCategoryBtn[viewModel.bigCategoryBtn[index]]?.contains(subCategory) ?? false },
+                                set: { isSelected in
+                                    if isSelected {
+                                        if viewModel.smallCategoryBtn[viewModel.bigCategoryBtn[index]] == nil {
+                                            viewModel.smallCategoryBtn[viewModel.bigCategoryBtn[index]] = []
+                                            
+                                        }
+                                        viewModel.smallCategoryBtn[viewModel.bigCategoryBtn[index]]?.append(subCategory)
+                                    } else {
+                                        viewModel.smallCategoryBtn[viewModel.bigCategoryBtn[index]]?.removeAll { $0 == subCategory }
+                                    }
+                                }), subCategoryName: subCategory
+                        )
                     }
                 })
             })
             .frame(height: 208)
-            .padding(.horizontal, 25)
+            .padding(.horizontal, 20)
             .padding(.vertical, 10)
         })
     }
@@ -215,65 +220,209 @@ struct PreferencePageView: View {
     // MARK: - Page 3
     
     private var pageThird: some View {
-        VStack(alignment: .leading, content: {
+        
+        VStack(alignment: .leading, spacing: 50, content: {
             
             CustomNavigation(action: {
                 viewModel.preferenceStep -= 1
             }, title: nil, rightNaviIcon: nil)
             
-            Text("거의 다 끝났어요!\n활동을 선택해주세요")
-                .font(.Subtitle1)
-                .foregroundStyle(Color.g7)
-                .padding(.top, 50)
-                .lineSpacing(3.3)
-            
-            pageThirdCompanion
-                .padding(.top, 47)
+            ScrollView(.vertical, content: {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("거의 다 끝났어요!\n활동을 선택해주세요")
+                        .font(.Subtitle1)
+                        .foregroundStyle(Color.g7)
+                        .lineSpacing(3.3)
+                    
+                    pageThirdCompanion
+                        .padding(.top, 47)
+                    
+                    pageThirdActivityWeekDay
+                        .padding(.top, 46)
+                    
+                    pageThirdActiveTime
+                        .padding(.top, 56)
+                    
+                    makeMainButton(false)
+                        .padding(.top, viewModel.isExpand.values.contains(true) ? 15 : 98)
+                }
+            })
+            .scrollIndicators(.hidden)
         })
-        .padding(.horizontal, 16)
+        .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
     }
     
+    /// 같이 하는 동료 정하기
     private var pageThirdCompanion: some View {
-           VStack(alignment: .leading, spacing: 20, content: {
-               Text("누구랑 함께 하시나요?")
-                   .font(.Subtitle3)
-                   .foregroundStyle(Color.g7)
-               
-               LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 14, content: {
-                   ForEach(CompanionType.allCases, id: \.self) { type in
-                       CompanionSelectionBtn(companionType: type) { selectedType in
-                           if let selectedIndex = viewModel.selectedCompanion.firstIndex(of: selectedType) {
-                               viewModel.selectedCompanion.remove(at: selectedIndex)
-                           } else {
-                               viewModel.selectedCompanion.append(selectedType)
-                           }
-                       }
-                   }
-               })
-           })
-       }
-    
-    private var pageThirdActivityWeekDay: some View {
         VStack(alignment: .leading, spacing: 20, content: {
-            HStack(content: {
-                Text("활동 가능한 요일을 선택해주세요")
-                    .font(.Subtitle3)
-                    .foregroundStyle(Color.g7)
-                
+            Text("누구랑 함께 하시나요?")
+                .font(.Subtitle3)
+                .foregroundStyle(Color.g7)
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 14, content: {
+                ForEach(CompanionType.allCases, id: \.self) { type in
+                    CompanionSelectionBtn(
+                        isSelected: Binding(
+                            get: { viewModel.selectedCompanion.contains(type)},
+                            set: { selected in
+                                if selected {
+                                    viewModel.selectedCompanion.append(type)
+                                    print(viewModel.selectedCompanion)
+                                } else {
+                                    viewModel.selectedCompanion.removeAll { $0 == type }
+                                }
+                            }), companionType: type)
+                }
             })
         })
     }
     
-    private var appendAllWeekDays: some View {
-        Button(action: {
+    /// 활동 가능한 요일 그룹
+    private var pageThirdActivityWeekDay: some View {
+        VStack(alignment: .leading, spacing: 20, content: {
             
-        }, label: {
+            HStack(alignment: .firstTextBaseline, content: {
+                Text("활동 가능한 요일을 선택해주세요")
+                    .font(.Subtitle3)
+                    .foregroundStyle(Color.g7)
+                
+                Spacer()
+                
+                appendAllWeekDays
+            })
             
+            rowWeekDayBtn
         })
     }
     
+    /// 전체 일주일 선택하기 버튼
+    private var appendAllWeekDays: some View {
+        Button(action: {
+            withAnimation {
+                if viewModel.selectedWeekDay.count == ActiveDate.allCases.count {
+                    viewModel.selectedWeekDay.removeAll()
+                } else {
+                    viewModel.selectedWeekDay = ActiveDate.allCases
+                }
+            }
+        }, label: {
+            HStack(spacing: 5, content: {
+                if viewModel.selectedWeekDay.count == ActiveDate.allCases.count {
+                    Icon.allSelectCheckBtn.image
+                        .fixedSize()
+                } else {
+                    Icon.allCheckBtn.image
+                        .fixedSize()
+                }
+                
+                Text("전체 선택하기")
+                    .font(.body3)
+                    .foregroundStyle(Color.g7)
+            })
+        })
+    }
     
+    /// 일주일 선택 버튼
+    private var rowWeekDayBtn: some View {
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 11), count: 7), content: {
+            ForEach(ActiveDate.allCases, id: \.self) { day in
+                DateSelectButton(
+                    isSelected: Binding(
+                        get: { viewModel.selectedWeekDay.contains(day) },
+                        set: { isSelected in
+                            if isSelected {
+                                viewModel.selectedWeekDay.append(day)
+                            } else {
+                                viewModel.selectedWeekDay.removeAll { $0 == day }
+                            }
+                        }), activeDate: day)
+            }
+        })
+    }
+    
+    private var pageThirdActiveTime: some View {
+        VStack(alignment: .leading, spacing: 20, content: {
+            Text("활동 시간대를 알려주세요")
+                .font(.Subtitle3)
+                .foregroundStyle(Color.g7)
+            
+            HStack(spacing: 16, content: {
+                CustomTimePicker(selectedTime: $viewModel.leftSelectedTime,
+                                 isExpand: Binding(
+                                    get: { viewModel.isExpand[0] ?? false },
+                                    set: { newValue in
+                                        togglePicker(index: 0, newValue: newValue)
+                                    }
+                                 )
+                )
+                
+                CustomTimePicker(selectedTime: $viewModel.rightSelectedTime,
+                                 isExpand: Binding(
+                                    get: { viewModel.isExpand[1] ?? false },
+                                    set: { newValue in
+                                        togglePicker(index: 1, newValue: newValue)
+                                    }
+                                 )
+                )
+            })
+            
+            if viewModel.isExpand[0] == true {
+                DatePicker("", selection: Binding(get: { viewModel.leftSelectedTime ?? Date() }, set: { viewModel.leftSelectedTime = $0 }), displayedComponents: .hourAndMinute)
+                    .datePickerStyle(.wheel)
+                    .labelsHidden()
+                    .frame(width: 370, height: 150)
+                    .clipped()
+                    .transition(.opacity)
+            }
+            
+            if viewModel.isExpand[1] == true {
+                DatePicker("", selection: Binding(get: { viewModel.rightSelectedTime ?? Date() }, set: { viewModel.rightSelectedTime = $0 }), displayedComponents: .hourAndMinute)
+                    .datePickerStyle(.wheel)
+                    .labelsHidden()
+                    .frame(width: 370, height: 150)
+                    .clipped()
+                    .transition(.opacity)
+            }
+        })
+    }
 }
+
+extension PreferencePageView {
+    
+    func makeMainButton(_ conditional: Bool) -> some View {
+        MainBtn(text: "다음", action: {
+            withAnimation(.easeInOut(duration: 0.5)) {
+                viewModel.preferenceStep += 1
+            }
+        }, width:  366, height: 60, onoff: (conditional ? .off : .on))
+        .disabled(conditional)
+    }
+    
+    private func togglePicker(index: Int, newValue: Bool) {
+        if newValue {
+            if viewModel.isExpand.values.allSatisfy({ !$0 }) {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    viewModel.isExpand[index] = true
+                }
+            } else {
+                withAnimation {
+                    viewModel.isExpand = [0: false, 1: false]
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        viewModel.isExpand[index] = true
+                    }
+                }
+            }
+        } else {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                viewModel.isExpand[index] = false
+            }
+        }
+    }
+}
+
 struct PerferencePageView_Preview: PreviewProvider {
     static var previews: some View {
         PreferencePageView(container: DIContainer())
