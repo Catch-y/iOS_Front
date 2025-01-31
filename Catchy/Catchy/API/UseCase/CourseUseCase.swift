@@ -34,11 +34,5 @@ class CourseUseCase: CourseUseCaseProtocol {
             .eraseToAnyPublisher()
     }
     
-    /// 장소 검색 - 상세 화면
-    func executeGetPlaceDetail(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
-        return repository.getPlaceDetailData(placeId: placeId)
-            .mapError { $0 as MoyaError }
-            .eraseToAnyPublisher()
-    }
 }
 

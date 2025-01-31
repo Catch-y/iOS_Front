@@ -29,8 +29,4 @@ class CourseRepository: CourseRepositoryProtocol {
         return provider.getPlaceList(placeSearchRequest: placeSearchRequest)
     }
     
-    /// 장소 검색 - 상세 화면
-    func getPlaceDetailData(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
-        return provider.getPlaceDetail(placeId: placeId)
-    }
 }
