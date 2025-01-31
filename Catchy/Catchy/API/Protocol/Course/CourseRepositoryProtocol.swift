@@ -29,7 +29,7 @@ protocol CourseRepositoryProtocol {
     func deleteCourseData(courseId: Int) -> AnyPublisher<ResponseData<CourseDeleteResponse>, MoyaError>
     
     /// 코스 수정 API
-    func pathCourseEditData(course: CourseEditRequest) -> AnyPublisher<ResponseData<CourseEditResponse>, MoyaError>
+    func patchCourseEditData(course: CourseEditRequest) -> AnyPublisher<ResponseData<CourseEditResponse>, MoyaError>
     
     /// 코스 북마크 API
     func patchCourseBookmarkData(courseId: Int) -> AnyPublisher<ResponseData<CourseBookmarkResponse>, MoyaError>
