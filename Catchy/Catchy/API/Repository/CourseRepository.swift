@@ -64,10 +64,8 @@ class CourseRepository: CourseRepositoryProtocol {
         return provider.getCourseList(courseRequest: courseRequest)
     }
     
-    /// 코스 상세정보 조회 API
-    func getPlaceDetailData(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
-        return provider.getPlaceDetail(placeId: placeId)
+    /// 코스 상세정보 조회 APi
+    func getCourseDetailData(courseId: Int) -> AnyPublisher<ResponseData<CourseDetailResponse>, MoyaError> {
+        return provider.getCourseDetail(courseId: courseId)
     }
-    
-    
 }

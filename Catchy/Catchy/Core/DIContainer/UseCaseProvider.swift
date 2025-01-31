@@ -20,9 +20,10 @@ protocol UseCaseProtocol {
 class UseCaseProvider: UseCaseProtocol {
     var authUseCase: AuthUseCase
     
-    /// [코스 관리] UseCase
+    /// [Course] UseCase
     var courseUseCase: CourseUseCase
     
+    /// [PlaceCourse] UseCase
     var placeCourseUseCase: PlaceCourseUseCase
     
     init() {

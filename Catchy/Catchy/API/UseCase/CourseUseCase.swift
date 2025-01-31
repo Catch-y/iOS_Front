@@ -69,8 +69,8 @@ class CourseUseCase: CourseUseCaseProtocol {
     }
     
     /// 코스 상세정보 조회 API
-    func executeGetPlaceDetail(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
-        return repository.getPlaceDetailData(placeId: placeId)
+    func executeGetCourseDetail(courseId: Int) -> AnyPublisher<ResponseData<CourseDetailResponse>, MoyaError> {
+        return repository.getCourseDetailData(courseId: courseId)
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }
