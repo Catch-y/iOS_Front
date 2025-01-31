@@ -12,6 +12,8 @@ class ReviewReportViewModel: ObservableObject {
     
     @Published var reviewReportData: ReviewReportResponse?
     @Published var isLoading: Bool = false
+    @Published var selectedReasons: [ReviewReportReason] = []
+    @Published var customReasonText: String = ""
     
     let container: DIContainer
     var cancellables = Set<AnyCancellable>()
