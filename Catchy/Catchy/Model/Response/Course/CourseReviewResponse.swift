@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 코스 리뷰 작성 API
 struct CourseReviewResponse: Codable {
     
     /// 리뷰 ID

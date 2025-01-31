@@ -1,5 +1,5 @@
 //
-//  CreateDIYCreateResponse.swift
+//  CourseDIYCreateResponse.swift
 //  Catchy
 //
 //  Created by LEE on 1/31/25.

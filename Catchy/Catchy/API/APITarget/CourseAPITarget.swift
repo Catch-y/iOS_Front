@@ -11,14 +11,53 @@ import Moya
 /// [Course] - 코스 관련 API Target
 enum CourseAPITarget {
     
+    /// 장소 카테고리 선택 API
+    /// HTTP 메소드 : POST
+    /// API Path : /course/{placeId}
+    case postPlaceCategoryRegister(place: PlaceCategoryRegisterRequest)
+    
+    /// 코스 리뷰 작성 API
+    /// HTTP 메소드 : POST
+    /// API Path : /course/{courseId}/review
+    case postCourseReview(course: CourseReviewRequest)
+    
+    /// 코스 생성(DIY) API
+    /// HTTP 메소드 : POST
+    /// API Path : /course/in-person
+    case postCreateCourseDIY(course: CourseDIYCreateRequest)
+    
+    /// 코스 생성(AI) API
+    /// HTTP 메소드 : POST
+    /// API Path : /course/generate-ai
+    case postCreateCourseAI
+    
+    /// 코스 삭제 API
+    /// HTTP 메소드 : DELETE
+    /// API Path : /course/{courseId}
+    case deleteCourse(courseId: Int)
+    
+    /// 코스 수정 API
+    /// HTTP 메소드 : PATCH
+    /// API Path : /course/{courseId}
+    case patchCourseEdit(course: CourseEditRequest)
+    
+    /// 코스 북마크 API
+    /// HTTP 메소드 : PATCH
+    /// API Path : /course/{courseId}/bookmark
+    case patchCourseBookmark(courseId: Int)
+    
+    /// 장소 방문체크 API
+    /// HTTP 메소드 : PATCH
+    /// API Path : /course/visited/{placeId}
+    case patchPlaceVisit(placeId: Int)
+    
     /// 내 코스 조회 API
     /// HTTP 메소드 : GET
     /// API Path : /course/search
     case getCourseList(course: CourseRequest)
     
-    /// 장소 검색 - 지역명 기반
-    /// HTTP 메소드 : GET
-    /// API Path : /course/place/region
+    
+    
     case getPlaceList(place : PlaceSearchRequest)
     
     
@@ -30,8 +69,33 @@ extension CourseAPITarget: APITargetType {
     
     var path: String {
         switch self {
+        case .postPlaceCategoryRegister(let place):
+            return "course/\(place.placeId)"
+            
+        case .postCourseReview(let course):
+            return "course/\(course.courseId)/review"
+            
+        case .postCreateCourseDIY(let course):
+            return "course/in-person"
+            
+        case .postCreateCourseAI:
+            return "course/generate-ai"
+            
+        case .deleteCourse(let courseId):
+            return "course/\(courseId)"
+            
+        case .patchCourseEdit(let course):
+            return "course/\(course.courseId)"
+            
+        case .patchCourseBookmark(let courseId):
+            return "course/\(courseId)"
+            
+        case .patchPlaceVisit(let placeId):
+            return "course/visited/\(placeId)"
+            
         case .getCourseList:
             return "/course/search"
+            
         case .getPlaceList:
             return "/course/place/region"
         }
@@ -39,17 +103,68 @@ extension CourseAPITarget: APITargetType {
     
     var method: Moya.Method {
         switch self {
+        case .postPlaceCategoryRegister:
+            return .post
+            
+        case .postCourseReview:
+            return .post
+            
+        case .postCreateCourseDIY:
+            return .post
+            
+        case .postCreateCourseAI:
+            return .post
+            
+        case .deleteCourse:
+            return .delete
+            
+        case .patchCourseEdit:
+            return .patch
+        
+        case .patchCourseBookmark:
+            return .patch
+            
+        case .patchPlaceVisit:
+            return .patch
+            
         case .getCourseList:
             return .get
+            
         case .getPlaceList:
             return .get
+            
         }
     }
     
     var task: Task {
         switch self {
+        case .postPlaceCategoryRegister(let place):
+            return .requestJSONEncodable(place)
+            
+        case .postCourseReview(let course):
+            return .requestJSONEncodable(course)
+            
+        case .postCreateCourseDIY(let course):
+            return .requestJSONEncodable(course)
+            
+        case .postCreateCourseAI:
+            return .requestPlain
+            
+        case .deleteCourse(let courseId):
+            return .requestJSONEncodable(courseId)
+            
+        case .patchCourseEdit(let course):
+            return .requestJSONEncodable(course)
+            
+        case .patchCourseBookmark(let courseId):
+            return .requestJSONEncodable(courseId)
+            
+        case .patchPlaceVisit(let placeId):
+            return .requestJSONEncodable(placeId)
+            
         case .getCourseList(let course):
             return .requestJSONEncodable(course)
+            
         case .getPlaceList(let place):
             return .requestJSONEncodable(place)
         }
