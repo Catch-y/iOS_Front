@@ -82,39 +82,19 @@ struct ReviewReportView: View {
                 )
             }
             // 직접 입력 텍스트 칸
-            ZStack(alignment: .bottomTrailing) {
-                TextEditor(text: $customReasonText)
-                    .font(.body)
-                    .lineSpacing(6)
-                    .padding(10)
-                    .frame(height: 130)
-                    .background(.g1)
-                    .cornerRadius(20)
-                    .disabled(!selectedReasons.contains(.customInput)) // 직접 입력이 선택되지 않으면 비활성화
-                    .opacity(selectedReasons.contains(.customInput) ? 1.0 : 0.5) // 비활성화 시 시각적 효과 추가
-                    .onChange(of: customReasonText) {
-                        if customReasonText.count > 300 {
-                            customReasonText = String(customReasonText.prefix(300))
-                        }
-                    }
-                
-                countTextLabel()
-                    .padding(.bottom, 16)
-                    .padding(.trailing, 20)
-            }
+            // 기존 TextEditor 코드 변경
+            TextEditor(text: $customReasonText)
+                .customStyleTipsEditor(
+                    text: $customReasonText,
+                    placeholder: "",
+                    maxTextCount: 300, border: .g1
+                )
+                .frame(height: 130)
+                .disabled(!selectedReasons.contains(.customInput)) // 직접 입력이 선택되지 않으면 비활성화
+                .opacity(selectedReasons.contains(.customInput) ? 1.0 : 0.5) // 비활성화 시 시각적 효과 추가
+
             .padding(.horizontal, 16)
         })
-    }
-    
-    private func countTextLabel() -> some View {
-        HStack(spacing: 0) {
-            Text("\(customReasonText.count)")
-                .font(.body3)
-                .foregroundColor(customReasonText.count == 300 ? .pink : .g6) 
-            Text(" / 300")
-                .font(.body3)
-                .foregroundColor(.g4)
-        }
     }
 }
 struct ReviewReportView_Preview: PreviewProvider {
