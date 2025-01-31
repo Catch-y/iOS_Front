@@ -16,6 +16,7 @@ enum CategoryType: String, Codable, CaseIterable {
     case CULTURELIFE = "문화생활"
     case SPORT = "스포츠"
     case REST = "휴식"
+    case EMPTY = ""
     
     /// 소 카테고리 작성
     var subcategories: [String] {
@@ -34,6 +35,8 @@ enum CategoryType: String, Codable, CaseIterable {
             return ["축구", "농구", "야구", "탁구", "배구", "골프", "사격", "양궁"]
         case .REST:
             return ["캠핑", "공원", "테라피", "마사지"]
+        case .EMPTY:
+            return []
         }
     }
     
@@ -53,6 +56,8 @@ enum CategoryType: String, Codable, CaseIterable {
             return Icon.sport.image
         case .REST:
             return Icon.breaks.image
+        case .EMPTY:
+            return Image("")
         }
     }
     
@@ -72,6 +77,8 @@ enum CategoryType: String, Codable, CaseIterable {
             return Icon.sportBackground.image
         case .REST:
             return Icon.restBackground.image
+        case .EMPTY:
+            return Image("")
         }
     }
     
@@ -91,6 +98,8 @@ enum CategoryType: String, Codable, CaseIterable {
             return "다양한 스포츠를 즐기며 활력을 채울 수 있는 장소를 추천드립니다."
         case .REST:
             return "몸과 마음의 힐링을 위한 휴식과 웰니스 공간을 추천드립니다."
+        case .EMPTY:
+            return ""
         }
     }
     
@@ -111,6 +120,8 @@ enum CategoryType: String, Codable, CaseIterable {
             return Color.restaurant
         case .SPORT :
             return Color.sport
+        case .EMPTY :
+            return Color.clear
         }
     }
 }

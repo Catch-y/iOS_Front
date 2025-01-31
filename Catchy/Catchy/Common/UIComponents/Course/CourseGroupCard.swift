@@ -41,6 +41,7 @@ struct CourseGroupCard: View {
                 .fill(Color.white)
                 .s1w()
         }
+        .frame(maxWidth: .infinity, minHeight: 158)
     }
     
     /// 코스 카드의 텍스트 그룹

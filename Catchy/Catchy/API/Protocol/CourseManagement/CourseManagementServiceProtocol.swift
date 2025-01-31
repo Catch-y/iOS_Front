@@ -15,4 +15,11 @@ protocol CourseManagementServiceProtocol {
     
     /// 코스 조회
     func getCourseList(courseRequest: CourseRequest) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError>
+    
+    /// 장소 검색 - 지역명 기반
+    func getPlaceList(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError>
+
+    /// 장소 검색 - 상세 화면
+    func getPlaceDetail(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError>
+    
 }

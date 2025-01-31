@@ -26,4 +26,18 @@ class CourseManagementService: CourseManagementServiceProtocol {
             .eraseToAnyPublisher()
             
     }
+    
+    /// 장소 검색 - 지역명 기반
+    func getPlaceList(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError> {
+        return provider.requestPublisher(.getPlaceList(place: placeSearchRequest))
+            .map(ResponseData<PlaceSearchResponse>.self)
+            .eraseToAnyPublisher()
+    }
+    
+    /// 장소 검색 - 상세 화면
+    func getPlaceDetail(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
+        return provider.requestPublisher(.getPlaceDetail(placeId: placeId))
+            .map(ResponseData<PlaceDetailResponse>.self)
+            .eraseToAnyPublisher()
+    }
 }

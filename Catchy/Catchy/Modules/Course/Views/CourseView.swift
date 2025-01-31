@@ -65,7 +65,6 @@ struct CourseView: View {
                 )
         }
 
-        
     }
 
     /// 네비게이션 바와 세그먼트 그룹
@@ -89,7 +88,6 @@ struct CourseView: View {
                 if let content = viewModel.courseResponse?.content {
                     ForEach(content, id: \.id) { course in
                         CourseGroupCard(course: course)
-                            .frame(maxWidth: .infinity, minHeight: 158)
                             
                     }
                 }
@@ -102,6 +100,7 @@ struct CourseView: View {
         .padding(.bottom, 110)
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
+        .border(.red)
     }
     
     /// 코스가 없을 때 텍스트 뷰
@@ -120,7 +119,7 @@ struct CourseView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct CourseView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(["iPhone 16 Pro Max", "iPhone 11"], id: \.self) { deviceName in
             CourseView(container: DIContainer())

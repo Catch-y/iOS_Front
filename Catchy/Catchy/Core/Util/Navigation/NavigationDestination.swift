@@ -6,7 +6,10 @@
 //
 
 import Foundation
+import SwiftUI
 
-enum NavigationDestination {
+enum NavigationDestination: Hashable {
+    
     case SignUpView(signUpNaviData: SignUpNaviData)
+    case PlaceDetailView(placeDetailResponse: PlaceDetailResponse)
 }
