@@ -13,7 +13,31 @@ import Moya
 /// [Course] UseCaseProtocol
 protocol CourseUseCaseProtocol {
     
-    /// 코스 조회
+    /// 장소 카테고리 선택 API
+    func executePostPlaceCategoryRegister(place: PlaceCategoryRegisterRequest) -> AnyPublisher<ResponseData<PlaceCategoryRegisterResponse>, MoyaError>
+    
+    /// 코스 리뷰 작성 API
+    func executePostCourseReview(course: CourseReviewRequest) -> AnyPublisher<ResponseData<CourseReviewResponse>, MoyaError>
+    
+    /// 코스 생성(DIY) API
+    func executePostCreateCourseDIY(course: CourseDIYCreateRequest) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError>
+    
+    /// 코스 생성(AI) API
+    func executePostCreateCourseAI() -> AnyPublisher<ResponseData<CourseAICreateResponse>, MoyaError>
+    
+    /// 코스 삭제 API
+    func executeDeleteCourse(courseId: Int) -> AnyPublisher<ResponseData<CourseDeleteResponse>, MoyaError>
+    
+    /// 코스 수정 API
+    func executePathCourseEdit(course: CourseEditRequest) -> AnyPublisher<ResponseData<CourseEditResponse>, MoyaError>
+    
+    /// 코스 북마크 API
+    func executePatchCourseBookmark(courseId: Int) -> AnyPublisher<ResponseData<CourseBookmarkResponse>, MoyaError>
+    
+    /// 장소 방문체크 API
+    func executePatchPlaceVisit(placeId: Int) -> AnyPublisher<ResponseData<PlaceVisitResponse>, MoyaError>
+    
+    /// 내 코스 조회 API
     func executeGetCourseList(courseRequest: CourseRequest) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError>
     
     /// 장소 검색 - 지역명 기반
