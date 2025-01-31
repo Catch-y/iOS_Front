@@ -11,7 +11,7 @@ import Moya
 /// [코스 관리] API Target
 enum CourseManagementAPITarget {
     
-    /// 코스 조회
+    /// 내 코스 조회
     /// HTTP 메소드 : GET
     /// API Path : /course/search
     case getCourseList(course: CourseRequest)
@@ -20,7 +20,7 @@ enum CourseManagementAPITarget {
     /// HTTP 메소드 : GET
     /// API Path : /course/place/region
     case getPlaceList(place : PlaceSearchRequest)
-    
+
     /// 장소 검색 - 상세 화면
     /// HTTP 메소드 : GET.
     /// API Path : /course/place/{placeId}
