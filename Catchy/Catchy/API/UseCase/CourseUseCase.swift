@@ -1,5 +1,5 @@
 //
-//  CourseManagementUseCase.swift
+//  CourseUseCase.swift
 //  Catchy
 //
 //  Created by LEE on 1/25/25.
@@ -10,12 +10,12 @@ import Combine
 import CombineMoya
 import Moya
 
-/// [코스 관리] UseCase 객체
-class CourseManagementUseCase: CourseManagementUseCaseProtocol {
+/// [Course] UseCase 객체
+class CourseUseCase: CourseUseCaseProtocol {
     
-    let repository: CourseManagementRepositoryProtocol
+    let repository: CourseRepositoryProtocol
     
-    init(repository: CourseManagementRepositoryProtocol = CourseManamentRepository()) {
+    init(repository: CourseRepositoryProtocol = CourseRepository()) {
         self.repository = repository
     }
     

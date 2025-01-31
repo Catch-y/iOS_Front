@@ -1,5 +1,5 @@
 //
-//  CourseManagementAPITarget.swift
+//  CourseAPITarget.swift
 //  Catchy
 //
 //  Created by LEE on 1/25/25.
@@ -8,8 +8,8 @@
 import Foundation
 import Moya
 
-/// [코스 관리] API Target
-enum CourseManagementAPITarget {
+/// [Course] - 코스 관련 API Target
+enum CourseAPITarget {
     
     /// 내 코스 조회
     /// HTTP 메소드 : GET
@@ -28,7 +28,7 @@ enum CourseManagementAPITarget {
     
 }
 
-extension CourseManagementAPITarget: APITargetType {
+extension CourseAPITarget: APITargetType {
     
     
     var path: String {

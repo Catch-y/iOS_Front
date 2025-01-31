@@ -1,5 +1,5 @@
 //
-//  CourseManamentRepository.swift
+//  CourseRepository.swift
 //  Catchy
 //
 //  Created by LEE on 1/25/25.
@@ -10,12 +10,12 @@ import Combine
 import CombineMoya
 import Moya
 
-/// [코스 관리] Repository 객체
-class CourseManamentRepository: CourseManagementRepositoryProtocol {
+/// [Course] Repository 객체
+class CourseRepository: CourseRepositoryProtocol {
     
-    let provider: CourseManagementServiceProtocol
+    let provider: CourseServiceProtocol
     
-    init(provider: CourseManagementServiceProtocol = CourseManagementService()){
+    init(provider: CourseServiceProtocol = CourseService()){
         self.provider = provider
     }
     

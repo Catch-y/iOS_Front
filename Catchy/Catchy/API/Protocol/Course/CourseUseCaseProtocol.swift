@@ -1,5 +1,5 @@
 //
-//  CourseManagementUseCaseProtocol.swift
+//  CourseUseCaseProtocol.swift
 //  Catchy
 //
 //  Created by LEE on 1/25/25.
@@ -10,8 +10,8 @@ import Combine
 import CombineMoya
 import Moya
 
-/// [코스 관리] UseCaseProtocol
-protocol CourseManagementUseCaseProtocol {
+/// [Course] UseCaseProtocol
+protocol CourseUseCaseProtocol {
     
     /// 코스 조회
     func executeGetCourseList(courseRequest: CourseRequest) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError>
