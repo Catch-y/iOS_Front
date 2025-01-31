@@ -68,12 +68,13 @@ class CourseUseCase: CourseUseCaseProtocol {
             .eraseToAnyPublisher()
     }
     
-    /// 장소 검색 - 지역명 기반
-    func executeGetPlaceList(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError> {
-        return repository.getPlaceListData(placeSearchRequest: placeSearchRequest)
+    /// 코스 상세정보 조회 API
+    func executeGetPlaceDetail(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
+        return repository.getPlaceDetailData(placeId: placeId)
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }
+    
     
 }
 

@@ -40,7 +40,8 @@ protocol CourseUseCaseProtocol {
     /// 내 코스 조회 API
     func executeGetCourseList(courseRequest: CourseRequest) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError>
     
-    /// 장소 검색 - 지역명 기반
-    func executeGetPlaceList(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError>
+    /// 장소 상세 화면 API
+    func executeGetPlaceDetail(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError>
+    
     
 }

@@ -56,11 +56,10 @@ enum CourseAPITarget {
     /// API Path : /course/search
     case getCourseList(course: CourseRequest)
     
-    
-    
-    case getPlaceList(place : PlaceSearchRequest)
-    
-    
+    /// 장소 상세 화면 API
+    /// HTTP 메소드 : GET.
+    /// API Path : /course/place/{placeId}
+    case getPlaceDetail(placeId: Int)
     
 }
 
@@ -96,8 +95,8 @@ extension CourseAPITarget: APITargetType {
         case .getCourseList:
             return "/course/search"
             
-        case .getPlaceList:
-            return "/course/place/region"
+        case .getPlaceDetail(let placeId):
+            return "/course/place/\(placeId)"
         }
     }
     
@@ -129,10 +128,10 @@ extension CourseAPITarget: APITargetType {
             
         case .getCourseList:
             return .get
-            
-        case .getPlaceList:
+    
+        case .getPlaceDetail:
             return .get
-            
+        
         }
     }
     
@@ -164,9 +163,10 @@ extension CourseAPITarget: APITargetType {
             
         case .getCourseList(let course):
             return .requestJSONEncodable(course)
-            
-        case .getPlaceList(let place):
-            return .requestJSONEncodable(place)
+        
+        case .getPlaceDetail:
+            return .requestPlain
+
         }
     }
     
@@ -179,6 +179,192 @@ extension CourseAPITarget: APITargetType {
     var sampleData: Data {
         
         switch self {
+        case .postPlaceCategoryRegister:
+            return """
+            {
+              "isSuccess": true,
+              "code": "COMMON200",
+              "message": "장소 카테고리 등록 성공",
+              "result": {}
+            }
+            """.data(using: .utf8)!
+        case .postCourseReview:
+            return """
+            {
+                "isSuccess": true,
+                "code": "COMMON200",
+                "message": "리뷰 조회 성공",
+                "result": {
+                  "reviewId": 123,
+                  "comment": "음식이 정말 맛있고 분위기도 좋았어요! 다시 방문하고 싶어요.",
+                  "reviewImages": [
+                    {
+                      "reviewImageId": 1,
+                      "imageUrl": "https://example.com/images/review1.jpg"
+                    },
+                    {
+                      "reviewImageId": 2,
+                      "imageUrl": "https://example.com/images/review2.jpg"
+                    }
+                  ],
+                  "visitedDate": "2024-12-25T19:30:00.000Z",
+                  "creatorNickname": "맛집탐험가"
+                }
+            }
+            """.data(using: .utf8)!
+        
+        case .postCreateCourseDIY:
+            return """
+            {
+              "isSuccess": true,
+              "code": "COURSE200",
+              "message": "DIY 코스 생성 성공",
+              "result": {
+                "courseId": 101,
+                "courseImage": "https://example.com/images/course1.jpg",
+                "courseName": "서울 핫플 투어",
+                "courseDescription": "서울의 인기 장소를 방문하는 특별한 여행 코스입니다.",
+                "courseType": "DIY",
+                "rating": 4.8,
+                "reviewCount": 152,
+                "recommendTime": "오전 10시 ~ 오후 6시",
+                "participantsNumber": 4,
+                "placeInfos": [
+                  {
+                    "placeId": 201,
+                    "placeName": "남산 타워",
+                    "placeLatitude": 37.5512,
+                    "placeLongitude": 126.9882,
+                    "isVisited": true
+                  },
+                  {
+                    "placeId": 202,
+                    "placeName": "경복궁",
+                    "placeLatitude": 37.5796,
+                    "placeLongitude": 126.9770,
+                    "isVisited": false
+                  },
+                  {
+                    "placeId": 203,
+                    "placeName": "이태원",
+                    "placeLatitude": 37.5345,
+                    "placeLongitude": 126.9940,
+                    "isVisited": true
+                  }
+                ]
+              }
+            }
+            """.data(using: .utf8)!
+
+        case .postCreateCourseAI:
+            return """
+            {
+              "isSuccess": true,
+              "code": "COMMON200",
+              "message": "코스 정보 조회에 성공했습니다.",
+              "result": {
+                "courseName": "서울 명소 투어",
+                "courseDescription": "서울의 대표적인 명소를 방문하는 코스입니다.",
+                "recommendTime": "오전 9시 ~ 오후 6시",
+                "courseImage": "https://example.com/images/seoul-tour.jpg",
+                "courseRating": 4.7,
+                "placeInfos": [
+                  {
+                    "placeId": 101,
+                    "name": "남산 타워",
+                    "roadAddress": "서울특별시 용산구 남산공원길 105",
+                    "recommendVisitTime": "오후 5시 ~ 오후 9시"
+                  },
+                  {
+                    "placeId": 102,
+                    "name": "광장시장",
+                    "roadAddress": "서울특별시 종로구 창경궁로 88",
+                    "recommendVisitTime": "오전 10시 ~ 오후 3시"
+                  },
+                  {
+                    "placeId": 103,
+                    "name": "한강 공원",
+                    "roadAddress": "서울특별시 영등포구 여의동로 330",
+                    "recommendVisitTime": "오후 2시 ~ 오후 6시"
+                  }
+                ]
+              }
+            }
+            """.data(using: .utf8)!
+            
+        case .deleteCourse:
+            return """
+            {
+              "isSuccess": true,
+              "code": "COMMON200",
+              "message": "코스 삭제 성공했습니다.",
+              "result": {}
+            }
+            """.data(using: .utf8)!
+        case .patchCourseEdit:
+            return """
+            {
+              "isSuccess": true,
+              "code": "COMMON200",
+              "message": "코스 정보를 성공적으로 불러왔습니다.",
+              "result": {
+                "courseId": 1,
+                "courseImage": "https://example.com/images/course1.jpg",
+                "courseName": "서울 대표 관광 코스",
+                "courseDescription": "서울의 유명한 명소들을 둘러볼 수 있는 코스입니다.",
+                "courseType": "AI",
+                "rating": 4.8,
+                "reviewCount": 152,
+                "recommendTime": "오전 10시 ~ 오후 5시",
+                "participantsNumber": 20,
+                "placeInfos": [
+                  {
+                    "placeId": 101,
+                    "placeName": "경복궁",
+                    "placeLatitude": 37.579617,
+                    "placeLongitude": 126.977041,
+                    "isVisited": true
+                  },
+                  {
+                    "placeId": 102,
+                    "placeName": "북촌 한옥마을",
+                    "placeLatitude": 37.582604,
+                    "placeLongitude": 126.983978,
+                    "isVisited": false
+                  },
+                  {
+                    "placeId": 103,
+                    "placeName": "남산 서울타워",
+                    "placeLatitude": 37.551169,
+                    "placeLongitude": 126.988227,
+                    "isVisited": true
+                  }
+                ]
+              }
+            }
+            """.data(using: .utf8)!
+        case .patchCourseBookmark:
+            return """
+            {
+                "isSuccess": true,
+                "code": "COMMON200",
+                "message": "성공했습니다.",
+                "result": {
+                    "memberCourseId": 0,
+                    "bookmarked": true
+                }
+            }
+            """.data(using: .utf8)!
+            
+        case .patchPlaceVisit:
+            return """
+            {
+              "isSuccess": true,
+              "code": "COMMON200",
+              "message": "성공했습니다.",
+              "result": {}
+            }
+            """.data(using: .utf8)!
         case .getCourseList:
             return """
                 {
@@ -354,201 +540,27 @@ extension CourseAPITarget: APITargetType {
 
                 """.data(using: .utf8)!
         
-        case .getPlaceList:
-            return  """
-              {
+        case .getPlaceDetail:
+            return """
+            {
                 "isSuccess": true,
                 "code": "COMMON200",
                 "message": "성공입니다.",
                 "result": {
-                    "placeInfoPreviews": [
-                      {
-                        "placeId": 1,
-                        "placeName": "커피하우스",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "카페",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
-                        "activeTime": "[영업시간] 매일 09:00~22:00",
-                        "rating": 4.3,
-                        "reviewCount": 124
-                      },
-                      {
-                        "placeId": 2,
-                        "placeName": "블랙드롭커피",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로2번길 78",
-                        "activeTime": "[영업시간] 매일 09:00~18:00",
-                        "rating": 3.7,
-                        "reviewCount": 78
-                      },
-                      {
-                        "placeId": 3,
-                        "placeName": "스카이라운지",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "주류",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로 72",
-                        "activeTime": "[영업시간] 19:00~03:00",
-                        "rating": 4.0,
-                        "reviewCount": 45
-                      },
-                      {
-                        "placeId": 4,
-                        "placeName": "피자나라",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "음식점",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로 87-1",
-                        "activeTime": "[영업시간] 11:00~23:00",
-                        "rating": 4.2,
-                        "reviewCount": 56
-                      },
-                      {
-                        "placeId": 5,
-                        "placeName": "미술관 카페",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "문화생활",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로2번길 90",
-                        "activeTime": "[영업시간] 10:00~18:00",
-                        "rating": 3.5,
-                        "reviewCount": 65
-                      },
-                      {
-                        "placeId": 6,
-                        "placeName": "클럽나이트",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "주류",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로 89",
-                        "activeTime": "[영업시간] 22:00~05:00",
-                        "rating": 3.9,
-                        "reviewCount": 210
-                      },
-                      {
-                        "placeId": 7,
-                        "placeName": "도시락 전문점",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로116번길 23",
-                        "activeTime": "[영업시간] 11:00~20:00",
-                        "rating": 4.1,
-                        "reviewCount": 140
-                      },
-                      {
-                        "placeId": 8,
-                        "placeName": "스크린골프",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "스포츠",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로116번길 20",
-                        "activeTime": "[영업시간] 09:00~22:00",
-                        "rating": 4.2,
-                        "reviewCount": 98
-                      },
-                      {
-                        "placeId": 9,
-                        "placeName": "도자기 체험",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "체험",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로 94",
-                        "activeTime": "[영업시간] 10:00~19:00",
-                        "rating": 4.7,
-                        "reviewCount": 176
-                      },
-                      {
-                        "placeId": 10,
-                        "placeName": "힐링 스파",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "휴식",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로 66-46",
-                        "activeTime": "[영업시간] 10:00~20:00",
-                        "rating": 4.3,
-                        "reviewCount": 432
-                      },
-                      {
-                        "placeId": 11,
-                        "placeName": "북카페",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "카페",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로2번길 90",
-                        "activeTime": "[영업시간] 09:00~21:00",
-                        "rating": 4.5,
-                        "reviewCount": 88
-                      },
-                      {
-                        "placeId": 12,
-                        "placeName": "드라마관람",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "문화생활",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로 66",
-                        "activeTime": "[영업시간] 09:00~18:00",
-                        "rating": 4.1,
-                        "reviewCount": 134
-                      },
-                      {
-                        "placeId": 13,
-                        "placeName": "피트니스",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "스포츠",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로2번길 50",
-                        "activeTime": "[영업시간] 06:00~22:00",
-                        "rating": 4.4,
-                        "reviewCount": 76
-                      },
-                      {
-                        "placeId": 14,
-                        "placeName": "이색 체험",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로 70",
-                        "activeTime": "[영업시간] 10:00~17:00",
-                        "rating": 3.8,
-                        "reviewCount": 63
-                      },
-                      {
-                        "placeId": 15,
-                        "placeName": "하이볼 바",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "주류",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로116번길 50",
-                        "activeTime": "[영업시간] 20:00~04:00",
-                        "rating": 3.6,
-                        "reviewCount": 112
-                      },
-                      {
-                        "placeId": 16,
-                        "placeName": "카페 모던",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "카페",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로 90",
-                        "activeTime": "[영업시간] 10:00~22:00",
-                        "rating": 4.6,
-                        "reviewCount": 87
-                      },
-                      {
-                        "placeId": 17,
-                        "placeName": "레스토랑 그라시아",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "음식점",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로116번길 30",
-                        "activeTime": "[영업시간] 11:30~22:00",
-                        "rating": 4.8,
-                        "reviewCount": 92
-                      },
-                      {
-                        "placeId": 18,
-                        "placeName": "야경 맛집",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "문화생활",
-                        "roadAddress": "경기 남양주시 와부읍 덕소로 85",
-                        "activeTime": "[영업시간] 18:00~23:00",
-                        "rating": 4.2,
-                        "reviewCount": 150
-                      }
-                    ],
-                "isLast": false
-                }
-              }
-
-
-    """.data(using: .utf8)!
+                "placeId": 1,
+                "imageUrl": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+                "placeName": "심퍼티쿠시 용산점",
+                "placeDescription": "유러피언 요리를 아시안 스타일로 풀어내는 파인캐주얼 레스토랑",
+                "categoryName": "음식점",
+                "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
+                "activeTime": "[영업시간] 매일 09:00~22:00",
+                "rating": 3,
+                "isVisited": true,
+                "reviewCount": 21,
+                "placeSite": "www.naver.com"
+            }
+        }
+        """.data(using: .utf8)!
             
                         
         }

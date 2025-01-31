@@ -84,11 +84,12 @@ class CourseService: CourseServiceProtocol {
             
     }
     
-    /// 장소 검색 - 지역명 기반
-    func getPlaceList(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError> {
-        return provider.requestPublisher(.getPlaceList(place: placeSearchRequest))
-            .map(ResponseData<PlaceSearchResponse>.self)
+    /// 코스 상세정보 조회 API
+    func getPlaceDetail(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
+        return provider.requestPublisher(.getPlaceDetail(placeId: placeId))
+            .map(ResponseData<PlaceDetailResponse>.self)
             .eraseToAnyPublisher()
     }
+ 
     
 }

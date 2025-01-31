@@ -13,7 +13,7 @@ import Moya
 /// [PlaceCourse] RepositoryProtocol
 protocol PlaceCourseRepositoryProtocol {
     
-    /// 장소 상세 화면 API
-    func getPlaceDetailData(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError>
+    /// 장소 검색 - 지역명 기반
+    func getPlaceListData(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError>
     
 }
