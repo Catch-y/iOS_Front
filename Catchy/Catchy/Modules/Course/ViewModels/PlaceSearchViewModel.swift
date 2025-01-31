@@ -121,13 +121,10 @@ extension PlaceSearchViewModel {
                     print("❌ Get PlaceDetail Failed: \(failure)")
                 }
             },receiveValue: { [weak self] response in
-                print("zz")
                 guard let self = self else { return }
-                print("zzz")
                 if let response = response.result {
                     self.placeDetailResponse = response
                 }
-                print("zzzzz")
             })
             .store(in: &cancellables)
     }
