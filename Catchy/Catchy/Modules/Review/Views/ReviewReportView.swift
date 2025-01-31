@@ -11,8 +11,6 @@ import Kingfisher
 struct ReviewReportView: View {
     
     @StateObject var viewModel: ReviewReportViewModel
-    @State private var selectedReasons: [ReviewReportReason] = [] // 선택된 항목 리스트 관리
-    @State private var customReasonText: String = "" // 직접 입력 텍스트
     
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
@@ -41,7 +39,7 @@ struct ReviewReportView: View {
                         },
                         width: UIScreen.main.bounds.width - 32,
                         height: 60,
-                        onoff: selectedReasons.isEmpty ? .off : .on
+                        onoff: viewModel.selectedReasons.isEmpty ? .off : .on
                     )
                     .padding(.bottom, 46) // 버튼과 화면 하단 간격
                     // 보일 뷰 작성
@@ -69,29 +67,29 @@ struct ReviewReportView: View {
             ForEach(ReviewReportReason.allCases, id: \.self) { reason in
                 ReportItem(
                     reason: reason,
-                    isSelected: selectedReasons.contains(reason), // 선택 여부 확인
+                    isSelected: viewModel.selectedReasons.contains(reason), // 선택 여부 확인
                     onSelect: {
-                        if selectedReasons.contains(reason) {
+                        if viewModel.selectedReasons.contains(reason) {
                             // 이미 선택된 항목이면 선택 해제
-                            selectedReasons.removeAll { $0 == reason }
+                            viewModel.selectedReasons.removeAll { $0 == reason }
                         } else {
                             // 선택되지 않은 항목이면 추가
-                            selectedReasons.append(reason)
+                            viewModel.selectedReasons.append(reason)
                         }
                     }
                 )
             }
             // 직접 입력 텍스트 칸
             // 기존 TextEditor 코드 변경
-            TextEditor(text: $customReasonText)
+            TextEditor(text: $viewModel.customReasonText)
                 .customStyleTipsEditor(
-                    text: $customReasonText,
+                    text: $viewModel.customReasonText,
                     placeholder: "",
                     maxTextCount: 300, border: .g1
                 )
                 .frame(height: 130)
-                .disabled(!selectedReasons.contains(.customInput)) // 직접 입력이 선택되지 않으면 비활성화
-                .opacity(selectedReasons.contains(.customInput) ? 1.0 : 0.5) // 비활성화 시 시각적 효과 추가
+                .disabled(!viewModel.selectedReasons.contains(.customInput)) // 직접 입력이 선택되지 않으면 비활성화
+                .opacity(viewModel.selectedReasons.contains(.customInput) ? 1.0 : 0.5) // 비활성화 시 시각적 효과 추가
 
             .padding(.horizontal, 16)
         })
