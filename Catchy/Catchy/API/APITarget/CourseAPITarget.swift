@@ -20,11 +20,6 @@ enum CourseAPITarget {
     /// HTTP 메소드 : GET
     /// API Path : /course/place/region
     case getPlaceList(place : PlaceSearchRequest)
-
-    /// 장소 검색 - 상세 화면
-    /// HTTP 메소드 : GET.
-    /// API Path : /course/place/{placeId}
-    case getPlaceDetail(placeId: Int)
     
 }
 
@@ -37,8 +32,6 @@ extension CourseAPITarget: APITargetType {
             return "/course/search"
         case .getPlaceList:
             return "/course/place/region"
-        case .getPlaceDetail(let placeId):
-            return "/course/place/\(placeId)"
         }
     }
     
@@ -47,8 +40,6 @@ extension CourseAPITarget: APITargetType {
         case .getCourseList:
             return .get
         case .getPlaceList:
-            return .get
-        case .getPlaceDetail:
             return .get
         }
     }
@@ -59,8 +50,6 @@ extension CourseAPITarget: APITargetType {
             return .requestJSONEncodable(course)
         case .getPlaceList(let place):
             return .requestJSONEncodable(place)
-        case .getPlaceDetail:
-            return .requestPlain
         }
     }
     
@@ -444,27 +433,6 @@ extension CourseAPITarget: APITargetType {
 
     """.data(using: .utf8)!
             
-        case .getPlaceDetail:
-            return """
-            {
-                "isSuccess": true,
-                "code": "COMMON200",
-                "message": "성공입니다.",
-                "result": {
-                "placeId": 1,
-                "imageUrl": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                "placeName": "심퍼티쿠시 용산점",
-                "placeDescription": "유러피언 요리를 아시안 스타일로 풀어내는 파인캐주얼 레스토랑",
-                "categoryName": "음식점",
-                "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
-                "activeTime": "[영업시간] 매일 09:00~22:00",
-                "rating": 3,
-                "isVisited": true,
-                "reviewCount": 21,
-                "placeSite": "www.naver.com"
-            }
-        }
-        """.data(using: .utf8)!
                         
         }
     }
