@@ -19,9 +19,9 @@ class PlaceCourseUseCase: PlaceCourseUseCaseProtocol {
         self.repository = repository
     }
     
-    /// 장소 상세 화면 API
-    func executeGetPlaceDetail(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
-        return repository.getPlaceDetailData(placeId: placeId)
+    /// 장소 검색 - 지역명 기반
+    func executeGetPlaceList(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError> {
+        return repository.getPlaceListData(placeSearchRequest: placeSearchRequest)
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }

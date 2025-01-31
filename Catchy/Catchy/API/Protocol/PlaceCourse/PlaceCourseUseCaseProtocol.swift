@@ -13,6 +13,7 @@ import Moya
 /// [PlaceCourse] UseCaseProtocol
 protocol PlaceCourseUseCaseProtocol {
     
-    /// 장소 상세 화면 API
-    func executeGetPlaceDetail(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError>
+    /// 장소 검색 - 지역명 기반
+    func executeGetPlaceList(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError>
+    
 }

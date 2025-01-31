@@ -64,9 +64,10 @@ class CourseRepository: CourseRepositoryProtocol {
         return provider.getCourseList(courseRequest: courseRequest)
     }
     
-    /// 장소 검색 - 지역명 기반
-    func getPlaceListData(placeSearchRequest: PlaceSearchRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError> {
-        return provider.getPlaceList(placeSearchRequest: placeSearchRequest)
+    /// 코스 상세정보 조회 API
+    func getPlaceDetailData(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
+        return provider.getPlaceDetail(placeId: placeId)
     }
+    
     
 }
