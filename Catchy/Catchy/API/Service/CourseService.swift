@@ -85,11 +85,11 @@ class CourseService: CourseServiceProtocol {
     }
     
     /// 코스 상세정보 조회 API
-    func getPlaceDetail(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
-        return provider.requestPublisher(.getPlaceDetail(placeId: placeId))
-            .map(ResponseData<PlaceDetailResponse>.self)
+    func getCourseDetail(courseId: Int) -> AnyPublisher<ResponseData<CourseDetailResponse>, MoyaError> {
+        return provider.requestPublisher(.getCourseDetail(courseId: courseId))
+            .map(ResponseData<CourseDetailResponse>.self)
             .eraseToAnyPublisher()
     }
- 
+    
     
 }

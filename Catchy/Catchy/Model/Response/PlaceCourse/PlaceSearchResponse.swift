@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 지역명 기반 장소 검색 및 내 위치 기반 장소 검색 APi
 struct PlaceSearchResponse: Codable {
     
     /// 데이터를 담고 있는 배열

@@ -56,11 +56,10 @@ enum CourseAPITarget {
     /// API Path : /course/search
     case getCourseList(course: CourseRequest)
     
-    /// 장소 상세 화면 API
-    /// HTTP 메소드 : GET.
-    /// API Path : /course/place/{placeId}
-    case getPlaceDetail(placeId: Int)
-    
+    /// 코스 상세정보 조회 APi
+    /// HTTP 메소드 : GET
+    /// API Path : /course/detail/{courseId}
+    case getCourseDetail(courseId: Int)
 }
 
 extension CourseAPITarget: APITargetType {
@@ -95,8 +94,8 @@ extension CourseAPITarget: APITargetType {
         case .getCourseList:
             return "/course/search"
             
-        case .getPlaceDetail(let placeId):
-            return "/course/place/\(placeId)"
+        case .getCourseDetail(let courseId):
+            return "/course/detail/\(courseId)"
         }
     }
     
@@ -128,10 +127,9 @@ extension CourseAPITarget: APITargetType {
             
         case .getCourseList:
             return .get
-    
-        case .getPlaceDetail:
-            return .get
         
+        case .getCourseDetail:
+            return .get
         }
     }
     
@@ -164,9 +162,8 @@ extension CourseAPITarget: APITargetType {
         case .getCourseList(let course):
             return .requestJSONEncodable(course)
         
-        case .getPlaceDetail:
-            return .requestPlain
-
+        case .getCourseDetail(let courseId):
+            return .requestJSONEncodable(courseId)
         }
     }
     
@@ -539,30 +536,50 @@ extension CourseAPITarget: APITargetType {
                 }
 
                 """.data(using: .utf8)!
-        
-        case .getPlaceDetail:
+            
+        case .getCourseDetail:
             return """
             {
-                "isSuccess": true,
-                "code": "COMMON200",
-                "message": "성공입니다.",
-                "result": {
-                "placeId": 1,
-                "imageUrl": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                "placeName": "심퍼티쿠시 용산점",
-                "placeDescription": "유러피언 요리를 아시안 스타일로 풀어내는 파인캐주얼 레스토랑",
-                "categoryName": "음식점",
-                "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
-                "activeTime": "[영업시간] 매일 09:00~22:00",
-                "rating": 3,
-                "isVisited": true,
-                "reviewCount": 21,
-                "placeSite": "www.naver.com"
+              "isSuccess": true,
+              "code": "COMMON200",
+              "message": "코스 정보를 성공적으로 조회했습니다.",
+              "result": {
+                "courseId": 10,
+                "courseImage": "https://example.com/images/course10.jpg",
+                "courseName": "제주도 자연 탐방 코스",
+                "courseDescription": "제주도의 아름다운 자연을 감상할 수 있는 코스입니다.",
+                "courseType": "AI",
+                "rating": 4.7,
+                "reviewCount": 85,
+                "recommendTime": "오전 9시 ~ 오후 6시",
+                "participantsNumber": 15,
+                "placeInfos": [
+                  {
+                    "placeId": 201,
+                    "placeName": "성산일출봉",
+                    "placeLatitude": 33.45864,
+                    "placeLongitude": 126.94225,
+                    "isVisited": true
+                  },
+                  {
+                    "placeId": 202,
+                    "placeName": "만장굴",
+                    "placeLatitude": 33.52723,
+                    "placeLongitude": 126.76948,
+                    "isVisited": false
+                  },
+                  {
+                    "placeId": 203,
+                    "placeName": "우도",
+                    "placeLatitude": 33.50830,
+                    "placeLongitude": 126.95163,
+                    "isVisited": true
+                  }
+                ]
+              }
             }
-        }
-        """.data(using: .utf8)!
-            
-                        
+            """.data(using: .utf8)!
+
         }
     }
     

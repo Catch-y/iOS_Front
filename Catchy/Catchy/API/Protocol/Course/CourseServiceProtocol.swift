@@ -40,9 +40,6 @@ protocol CourseServiceProtocol {
     /// 내 코스 조회 API
     func getCourseList(courseRequest: CourseRequest) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError>
     
-    /// 장소 상세 화면 API
-    func getPlaceDetail(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError>
-    
-
-    
+    /// 코스 상세정보 조회 APi
+    func getCourseDetail(courseId: Int) -> AnyPublisher<ResponseData<CourseDetailResponse>, MoyaError>
 }

@@ -40,10 +40,7 @@ protocol CourseRepositoryProtocol {
     /// 내 코스 조회 API
     func getCourseListData(courseRequest: CourseRequest) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError>
     
-    /// 장소 상세 화면 API
-    func getPlaceDetailData(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError>
-    
-    
-
+    /// 코스 상세정보 화면 APi
+    func getCourseDetailData(courseId: Int) -> AnyPublisher<ResponseData<CourseDetailResponse>, MoyaError>
 }
 
