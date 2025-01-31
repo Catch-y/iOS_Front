@@ -5,6 +5,8 @@
 //  Created by 임소은 on 1/28/25.
 //
 
+
+
 import SwiftUI
 
 struct GroupAvatarView: View {
@@ -24,7 +26,7 @@ struct GroupAvatarView: View {
         .padding(.vertical, 23)   // 아바타와 프레임 사이 상하 간격 23
         .background(Color.white) // 배경색 흰색
         .clipShape(RoundedRectangle(cornerRadius: 85)) // 외부 곡선 설정
-        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2) // 그림자
+        .s1w()
     }
 }
 

@@ -20,8 +20,16 @@ class UseCaseProvider: UseCaseProtocol {
     /// [코스 관리] UseCase
     var courseManagementUseCase: CourseManagementUseCase
     
+    
+    ///[투표 멤버 관리] UseCase
+    var votingMemberUseCase: VotingMemberUseCase
+
+    
     init() {
         self.authUseCase = AuthUseCase()
         self.courseManagementUseCase = CourseManagementUseCase()
+        self.votingMemberUseCase = VotingMemberUseCase()
     }
+    
+    
 }

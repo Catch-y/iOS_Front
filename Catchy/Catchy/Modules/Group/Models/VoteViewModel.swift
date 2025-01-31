@@ -8,9 +8,11 @@
 import Combine
 
 class VoteViewModel: ObservableObject {
-    @Published var avatars: [UserAvatarModel] = []
+    @Published var avatars: [UserAvatarModel] = [] // 동일 타입으로 사용
+    private let container: DIContainer
 
-    init() {
+    init(container: DIContainer) {
+        self.container = container
         loadMockData()
     }
 
@@ -23,3 +25,4 @@ class VoteViewModel: ObservableObject {
         ]
     }
 }
+

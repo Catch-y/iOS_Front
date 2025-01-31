@@ -7,19 +7,26 @@
 
 import SwiftUI
 
+
+
 // MARK: - GroupVoteView
 struct GroupVoteView: View {
-    @StateObject private var viewModel = VoteViewModel()
+    @StateObject private var viewModel: VoteViewModel
+
+    init(container: DIContainer) {
+        self._viewModel = StateObject(wrappedValue: VoteViewModel(container: container))
+    }
 
     var body: some View {
         VStack(spacing: 0) {
             GroupNavigation(title: "투표하기") {
-                print("뒤로가기 버튼 클릭") //네비게이션 사용
+                print("뒤로가기 버튼 클릭")
             }
 
-            VStack(alignment: .leading, spacing: 20) {
-                GroupAvatarView(avatars: viewModel.avatars) // GroupAvatarView 사용
-                    .padding(.top, 25) // 네비게이션과의 간격 추가
+            VStack(spacing: 20) {
+                // GroupAvatarView에서 avatars 전달
+                GroupAvatarView(avatars: viewModel.avatars)
+                    .padding(.top, 25)
 
                 emptyState()
                     .padding(.top, 29)
@@ -28,12 +35,12 @@ struct GroupVoteView: View {
                     .padding(.top, 15)
                 Spacer()
             }
-            .padding(.horizontal, 16) // 전체 좌우 여백
-            .background(.bg2) // 전체 배경색 적용
+            .padding(.horizontal, 16)
+            .background(.bg2)
         }
+        .padding(.bottom, 110)
     }
 
-    // MARK: - Empty State
     private func emptyState() -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("아직 생성된 투표가 없어요")
@@ -43,15 +50,13 @@ struct GroupVoteView: View {
                 .font(.Subtitle3)
                 .foregroundStyle(.g6)
         }
-        .frame(maxWidth: .infinity, alignment: .leading) // 왼쪽 정렬
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 16)
     }
 
-    // MARK: - Start Vote Button
     private func startVoteButton() -> some View {
         Button(action: {
             print("투표 시작하기 버튼 클릭")
-            // TODO: - 버튼 기능 구현하기
         }) {
             VStack {
                 Image("voteStartButton")
@@ -60,7 +65,7 @@ struct GroupVoteView: View {
                     .foregroundStyle(.g3)
                     .padding(.top, 8)
             }
-            .frame(maxWidth: .infinity) // 너비를 화면 가득 채움
+            .frame(maxWidth: .infinity)
             .frame(height: 95)
             .padding()
             .background(Color.white)
@@ -71,9 +76,13 @@ struct GroupVoteView: View {
 }
 
 // MARK: - Preview
-struct VoteView_Previews: PreviewProvider {
+struct GroupVoteView_Previews: PreviewProvider {
     static var previews: some View {
-        GroupVoteView()
+        ForEach(["iPhone 16 Pro Max", "iPhone 11"], id: \.self) { deviceName in
+            GroupVoteView(container: DIContainer())
+                .previewDevice(PreviewDevice(rawValue: deviceName))
+                .previewDisplayName(deviceName)
+        }
     }
 }
 

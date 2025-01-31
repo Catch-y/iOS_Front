@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SignUpNaviData: Equatable {
+struct SignUpNaviData: Equatable ,Hashable {
     let accessToken: String
     let authorizationCode: String?
     let email: String
