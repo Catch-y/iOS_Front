@@ -1,5 +1,5 @@
 //
-//  CourseManagementService.swift
+//  CourseService.swift
 //  Catchy
 //
 //  Created by LEE on 1/25/25.
@@ -10,12 +10,12 @@ import Combine
 import CombineMoya
 import Moya
 
-/// [코스 관리] Service 객체
-class CourseManagementService: CourseManagementServiceProtocol {
+/// [Course] Service 객체
+class CourseService: CourseServiceProtocol {
     
-    let provider: MoyaProvider<CourseManagementAPITarget>
+    let provider: MoyaProvider<CourseAPITarget>
     
-    init(provider: MoyaProvider<CourseManagementAPITarget> = APIManager.shared.testProvider(for: CourseManagementAPITarget.self)){
+    init(provider: MoyaProvider<CourseAPITarget> = APIManager.shared.testProvider(for: CourseAPITarget.self)){
         self.provider = provider
     }
     
