@@ -14,7 +14,7 @@ enum VotingMemberAPITarget {
     /// 투표중
     /// HTTP 메소드 : GET
     /// API Path : /vote/{groupId}/votes/{voteId}/members
-    case getVoteMember(voteRequest: VoteRequest)
+    case getVoteMember(vote: VoteRequest)
     
 }
 

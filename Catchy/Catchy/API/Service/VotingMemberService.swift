@@ -21,12 +21,11 @@ class VotingMemberService: VotingMemberServiceProtocol {
         self.provider = provider
     }
     
-    /// 코스 조회
+    /// 투표멤버조회
     func getVoteMember(voteRequest: VoteRequest) -> AnyPublisher<ResponseData<VoteResponse>, MoyaError> {
-        return provider.requestPublisher(.getVoteMember(voteRequest: voteRequest))
+        return provider.requestPublisher(.getVoteMember(vote: voteRequest))
             .map(ResponseData<VoteResponse>.self)
             .eraseToAnyPublisher()
             
     }
 }
-
