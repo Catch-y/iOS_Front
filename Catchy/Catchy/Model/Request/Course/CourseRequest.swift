@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 내 코스 조회 API
 struct CourseRequest: Codable {
     
     /// 코스의 타입

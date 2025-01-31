@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 장소 상세 화면 API
 struct PlaceDetailResponse: Codable, Hashable {
     
     /// 장소 ID

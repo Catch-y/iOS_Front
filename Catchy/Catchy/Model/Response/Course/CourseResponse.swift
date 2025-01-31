@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 내 코스 조회 API
 struct CourseResponse: Codable {
     
     /// 데이터를 담고 있는 배열
