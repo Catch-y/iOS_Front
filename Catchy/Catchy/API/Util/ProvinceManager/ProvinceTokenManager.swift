@@ -16,7 +16,6 @@ class TokenManager {
     var accessTimeout: TimeInterval?
 
     func saveToken(_ token: String, timeout: TimeInterval) {
-        print("✅ Saving Access Token: \(token)")  // ✅ 저장 시점 로그 추가
         self.accessToken = token
         self.accessTimeout = Date().timeIntervalSince1970 + timeout
     }
