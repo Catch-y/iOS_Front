@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct ProvinceResponse: Decodable {
+struct ProvinceResponse: Codable {
     let id: String
     let result: [Province]
 }
 
 /// 시/도 정보를 나타내는 구조체
-struct Province: Decodable {
+struct Province: Codable {
     let cd: String        // 코드 (11, 21, 22 등)
     let addrName: String  // 시/도 이름
     let fullAddr: String  // 전체 주소
