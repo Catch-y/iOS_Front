@@ -6,10 +6,17 @@
 //
 
 import SwiftUI
+import MapKit
+import CoreGraphics
 
 struct PreferencePageView: View {
     
     @StateObject var viewModel: PreferenceViewModel
+    
+    @State var scaleFactor: CGFloat = 1.0
+    @State var selectedRegion: String? = nil
+    @State var selectedRegionCode: String? = nil
+    @State var tappedLocation: (latitude: Double, longitude: Double)? = nil
     
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
@@ -23,6 +30,8 @@ struct PreferencePageView: View {
             pageTwo
         case 2:
             pageThird
+        case 3:
+            pageFourthView
         default:
             Text("11")
         }
@@ -385,6 +394,92 @@ struct PreferencePageView: View {
             }
         })
     }
+    
+    // MARK: - Page 4
+    
+    private var pageFourthView: some View {
+        VStack(alignment: .leading) {
+            
+            CustomNavigation(action: {
+                viewModel.preferenceStep -= 1
+            }, title: nil, rightNaviIcon: nil)
+            
+            Text("마지막으로 관심 지역을\n선택해주세요")
+                .font(.Subtitle1)
+                .lineSpacing(3.3)
+                .foregroundStyle(Color.g7)
+                .padding(.top, 50)
+            
+            GeometryReader { geometry in
+                ZStack {
+                    Color.white.ignoresSafeArea(.all)
+                    
+                    ForEach(viewModel.polygons, id: \.points) { polygon in
+                        if let _ = ProvinceType(rawValue: polygon.regionName) {
+                            PolygonShape(points: polygon.points, scale: polygon.scale * scaleFactor, offset: polygon.offset)
+                                .fill(returnFillColor(for: polygon.regionName))
+                                .frame(width: geometry.size.width, height: geometry.size.height)
+                        }
+                    }
+                    
+                    ForEach(viewModel.polygons, id: \.regionName) { polygon in
+                        let transformedCenter = CGPoint(
+                            x: (polygon.center.x - polygon.offset.x) * polygon.scale * scaleFactor + geometry.size.width / 2,
+                            y: (polygon.center.y - polygon.offset.y) * polygon.scale * scaleFactor + geometry.size.height / 2
+                        )
+                        
+                        Text(polygon.regionName)
+                            .font(.caption_SM)
+                            .foregroundStyle(Color.g7)
+                            .offset(y: adjustTextOffset(for: polygon.regionName))
+                            .position(x: transformedCenter.x, y: transformedCenter.y)
+                    }
+                    
+                }
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onEnded { value in
+                            let location = value.location
+                            
+                            let latLon = viewModel.convertToLatLon(from: location, in: geometry.frame(in: .local))
+                            tappedLocation = latLon
+                            
+                            if let regionInfo = viewModel.getRegionInfo(at: location, in: geometry.frame(in: .local)) {
+                                selectedRegion = regionInfo.name
+                                selectedRegionCode = regionInfo.code
+                                print("✅ 선택한 지역: \(regionInfo.name), 코드: \(regionInfo.code)")
+                            }
+                        }
+                )
+            }
+        }
+        .task {
+            viewModel.loadGeoJSON()
+        }
+        .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+    }
+    
+    
+    private func adjustTextOffset(for regionName: String) -> CGFloat {
+        switch regionName {
+        case "충청남도":
+            return 10
+        case "경기도":
+            return 15
+        case "인천광역시":
+            return 4
+        default:
+            return 0
+        }
+    }
+    
+    func returnFillColor(for provineName: String) -> Color {
+        if let province = ProvinceType(rawValue: provineName) {
+            return ProvinceType.returnFillColor(for: province)
+        } else {
+            return Color.gray.opacity(0.5)
+        }
+    }
 }
 
 extension PreferencePageView {
@@ -408,7 +503,7 @@ extension PreferencePageView {
                 withAnimation {
                     viewModel.isExpand = [0: false, 1: false]
                 }
-
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     withAnimation(.easeInOut(duration: 0.5)) {
                         viewModel.isExpand[index] = true

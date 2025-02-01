@@ -1150,9 +1150,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "42",
+            "CTPRVN_CD": "32",
             "CTP_ENG_NM": "Gangwon-do",
-            "SIG_KOR_NM": "강원"
+            "SIG_KOR_NM": "강원특별자치도"
         }
     }, {
         "type": "Feature",
@@ -1598,9 +1598,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "41",
+            "CTPRVN_CD": "31",
             "CTP_ENG_NM": "Gyeonggi-do",
-            "SIG_KOR_NM": "경기"
+            "SIG_KOR_NM": "경기도"
         }
     }, {
         "type": "Feature",
@@ -2185,9 +2185,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "48",
+            "CTPRVN_CD": "38",
             "CTP_ENG_NM": "Gyeongsangnam-do",
-            "SIG_KOR_NM": "경남"
+            "SIG_KOR_NM": "경상남도"
         }
     }, {
         "type": "Feature",
@@ -2830,9 +2830,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "47",
+            "CTPRVN_CD": "37",
             "CTP_ENG_NM": "Gyeongsangbuk-do",
-            "SIG_KOR_NM": "경북"
+            "SIG_KOR_NM": "경상북도"
         }
     },
     {
@@ -3069,9 +3069,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "27",
+            "CTPRVN_CD": "22",
             "CTP_ENG_NM": "Daegu",
-            "SIG_KOR_NM": "대구"
+            "SIG_KOR_NM": "대구광역시"
         }
     }, {
         "type": "Feature",
@@ -3145,9 +3145,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "30",
+            "CTPRVN_CD": "25",
             "CTP_ENG_NM": "Daejeon",
-            "SIG_KOR_NM": "대전"
+            "SIG_KOR_NM": "대전광역시"
         }
     }, {
         "type": "Feature",
@@ -3471,9 +3471,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "26",
+            "CTPRVN_CD": "21",
             "CTP_ENG_NM": "Busan",
-            "SIG_KOR_NM": "부산"
+            "SIG_KOR_NM": "부산광역시"
         }
     }, {
         "type": "Feature",
@@ -3687,7 +3687,7 @@
         "properties": {
             "CTPRVN_CD": "11",
             "CTP_ENG_NM": "Seoul",
-            "SIG_KOR_NM": "서울"
+            "SIG_KOR_NM": "서울특별시"
         }
     }, {
         "type": "Feature",
@@ -3961,9 +3961,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "36",
+            "CTPRVN_CD": "29",
             "CTP_ENG_NM": "Sejong-si",
-            "SIG_KOR_NM": "세종"
+            "SIG_KOR_NM": "세종특별자치시"
         }
     }, {
         "type": "Feature",
@@ -4041,9 +4041,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "31",
+            "CTPRVN_CD": "26",
             "CTP_ENG_NM": "Ulsan",
-            "SIG_KOR_NM": "울산"
+            "SIG_KOR_NM": "울산광역시"
         }
     }, {
         "type": "Feature",
@@ -4171,9 +4171,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "28",
+            "CTPRVN_CD": "23",
             "CTP_ENG_NM": "Incheon",
-            "SIG_KOR_NM": "인천"
+            "SIG_KOR_NM": "인천광역시"
         }
     }, {
         "type": "Feature",
@@ -6042,9 +6042,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "46",
+            "CTPRVN_CD": "36",
             "CTP_ENG_NM": "Jellanam-do",
-            "SIG_KOR_NM": "전남"
+            "SIG_KOR_NM": "전라남도"
         }
     }, {
         "type": "Feature",
@@ -7135,9 +7135,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "45",
+            "CTPRVN_CD": "35",
             "CTP_ENG_NM": "Jeollabuk-do",
-            "SIG_KOR_NM": "전북"
+            "SIG_KOR_NM": "전북특별자치도"
         }
     }, {
         "type": "Feature",
@@ -7186,9 +7186,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "50",
+            "CTPRVN_CD": "39",
             "CTP_ENG_NM": "Jeju-do",
-            "SIG_KOR_NM": "제주"
+            "SIG_KOR_NM": "제주특별자치도"
         }
     }, {
         "type": "Feature",
@@ -7630,9 +7630,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "44",
+            "CTPRVN_CD": "34",
             "CTP_ENG_NM": "Chungcheongnam-do",
-            "SIG_KOR_NM": "충남"
+            "SIG_KOR_NM": "충청남도"
         }
     }, {
         "type": "Feature",
@@ -8962,9 +8962,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "43",
+            "CTPRVN_CD": "33",
             "CTP_ENG_NM": "Chungcheongbuk-do",
-            "SIG_KOR_NM": "충북"
+            "SIG_KOR_NM": "충청북도"
         }
     },{
         "type": "Feature",
@@ -9089,9 +9089,9 @@
             ]
         },
         "properties": {
-            "CTPRVN_CD": "29",
+            "CTPRVN_CD": "24",
             "CTP_ENG_NM": "Gwangju",
-            "SIG_KOR_NM": "광주"
+            "SIG_KOR_NM": "광주광역시"
         }
     }]
 }
