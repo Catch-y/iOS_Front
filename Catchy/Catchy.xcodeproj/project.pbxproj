@@ -30,24 +30,12 @@
 
 /* Begin PBXFileReference section */
 		48F248682D2EB42C0079E120 /* Catchy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Catchy.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		529FDD722D4D137C00A9B86C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		48056DAA2D34EE970070FDAC /* Exceptions for "Catchy" folder in "Catchy" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 48F248672D2EB42C0079E120 /* Catchy */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		48F2486A2D2EB42C0079E120 /* Catchy */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				48056DAA2D34EE970070FDAC /* Exceptions for "Catchy" folder in "Catchy" target */,
-			);
 			path = Catchy;
 			sourceTree = "<group>";
 		};
@@ -94,6 +82,7 @@
 		48F248692D2EB42C0079E120 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				529FDD722D4D137C00A9B86C /* Info.plist */,
 				48F248682D2EB42C0079E120 /* Catchy.app */,
 			);
 			name = Products;

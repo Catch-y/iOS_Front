@@ -7,18 +7,18 @@
 
 import Foundation
 import Combine
-import Moya
 
 /// [카테고리 별 장소 조회] Repository
 class VoteResultPlaceRepository: VoteResultPlaceRepositoryProtocol {
-    
     private let service: VoteResultPlaceServiceProtocol
     
     init(service: VoteResultPlaceServiceProtocol = VoteResultPlaceService()) {
         self.service = service
     }
     
-    func fetchPlacesByCategory(request: VoteResultPlaceRequest) -> AnyPublisher<ResponseData<VoteResultPlaceResponse>, MoyaError> {
-        return service.getPlacesByCategory(request: request)
+    func getPlacesByCategory(voteResultPlaceRequest: VoteResultPlaceRequest) -> AnyPublisher<ResponseData<VoteResultPlaceResponse>, Error> {
+        return service.getPlacesByCategory(voteResultPlaceRequest: voteResultPlaceRequest)
+            .mapError { $0 as Error }
+            .eraseToAnyPublisher()
     }
 }

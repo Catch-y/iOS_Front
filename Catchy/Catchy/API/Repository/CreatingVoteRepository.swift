@@ -1,4 +1,3 @@
-
 //
 //  CreatingVoteRepository.swift
 //  Catchy
@@ -19,8 +18,8 @@ class CreatingVoteRepository: CreatingVoteRepositoryProtocol {
     }
     
     /// 투표 생성
-    func postCreateVote(request: CreateVoteRequest) -> AnyPublisher<ResponseData<CreateVoteResponse>, Error> {
-        return service.postCreateVote(request: request)
+    func postCreateVote(createVote: CreateVoteRequest) -> AnyPublisher<ResponseData<CreateVoteResponse>, Error> {
+        return service.postCreateVote(createVote: createVote)
             .mapError { error in
                 print("❌ [CreatingVoteRepository] postCreateVote 에러 발생: \(error)")
                 return error
@@ -28,3 +27,4 @@ class CreatingVoteRepository: CreatingVoteRepositoryProtocol {
             .eraseToAnyPublisher()
     }
 }
+

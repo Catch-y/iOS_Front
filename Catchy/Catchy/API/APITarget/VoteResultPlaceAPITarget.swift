@@ -10,7 +10,7 @@ import Moya
 
 /// [카테고리 별 장소 조회] API Target
 enum VoteResultPlaceAPITarget {
-    case getPlacesByCategory(request: VoteResultPlaceRequest)
+    case getPlacesByCategory(voteResultPlaceRequest: VoteResultPlaceRequest)
 }
 
 extension VoteResultPlaceAPITarget: TargetType {
@@ -20,8 +20,8 @@ extension VoteResultPlaceAPITarget: TargetType {
 
     var path: String {
         switch self {
-        case .getPlacesByCategory(let request):
-            return "/vote/\(request.groupId)/categories/\(request.category)/places"
+        case .getPlacesByCategory(let voteResultPlaceRequest):
+            return "/vote/\(voteResultPlaceRequest.groupId)/categories/\(voteResultPlaceRequest.category)/places"
         }
     }
 
@@ -74,3 +74,4 @@ extension VoteResultPlaceAPITarget: TargetType {
         return jsonString.data(using: .utf8)!
     }
 }
+

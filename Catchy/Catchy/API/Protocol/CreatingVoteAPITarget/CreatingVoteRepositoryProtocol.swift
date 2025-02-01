@@ -12,6 +12,6 @@ import Combine
 protocol CreatingVoteRepositoryProtocol {
     
     /// 투표 생성
-    func postCreateVote(request: CreateVoteRequest) -> AnyPublisher<ResponseData<CreateVoteResponse>, Error>
+    func postCreateVote(createVote: CreateVoteRequest) -> AnyPublisher<ResponseData<CreateVoteResponse>, Error>
 }
 
