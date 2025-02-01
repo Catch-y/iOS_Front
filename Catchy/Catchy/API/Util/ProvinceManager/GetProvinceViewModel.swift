@@ -19,6 +19,7 @@ class GetProvinceViewModel: ObservableObject {
         guard let token = TokenManager.shared.accessToken, !token.isEmpty else {
             print("❌ 유효한 토큰 없어요!! 다시 발급 합니다~")
             resetToken()
+            fetchProvinces()
             return
         }
 
@@ -43,6 +44,7 @@ class GetProvinceViewModel: ObservableObject {
         guard let token = TokenManager.shared.accessToken, !token.isEmpty else {
             print("❌ 유효한 토큰 없어요!! 다시 발급 합니다~")
             resetToken()
+            fetchDistricts(of: code)
             return
         }
         
@@ -67,7 +69,6 @@ class GetProvinceViewModel: ObservableObject {
             }
         }, receiveValue: { newToken in
             TokenManager.shared.saveToken(newToken.result.accessToken, timeout: 4 * 60 * 60)
-            self.fetchProvinces()
         }).store(in: &cancellables)
     }
 }
