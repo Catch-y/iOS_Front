@@ -414,13 +414,31 @@ struct PreferencePageView: View {
                 ZStack {
                     Color.white.ignoresSafeArea(.all)
                     
-                    ForEach(viewModel.polygons, id: \.points) { polygon in
-                        if let _ = ProvinceType(rawValue: polygon.regionName) {
-                            PolygonShape(points: polygon.points, scale: polygon.scale * scaleFactor, offset: polygon.offset)
-                                .fill(returnFillColor(for: polygon.regionName))
-                                .frame(width: geometry.size.width, height: geometry.size.height)
-                        }
-                    }
+                    
+                    ForEach(viewModel.polygons.filter { $0.regionName != "광주광역시" }, id: \.points) { polygon in
+                           if let _ = ProvinceType(rawValue: polygon.regionName) {
+                               PolygonShape(
+                                   points: polygon.points,
+                                   scale: polygon.scale * scaleFactor,
+                                   offset: polygon.offset
+                               )
+                               .fill(returnFillColor(for: polygon.regionName))
+                               .frame(width: geometry.size.width, height: geometry.size.height)
+                               .zIndex(1)
+                           }
+                       }
+
+                    
+                       ForEach(viewModel.polygons.filter { $0.regionName == "광주광역시" }, id: \.points) { polygon in
+                           PolygonShape(
+                               points: polygon.points,
+                               scale: polygon.scale * scaleFactor,
+                               offset: polygon.offset
+                           )
+                           .fill(returnFillColor(for: polygon.regionName))
+                           .frame(width: geometry.size.width, height: geometry.size.height)
+                           .zIndex(2)
+                       }
                     
                     ForEach(viewModel.polygons, id: \.regionName) { polygon in
                         let transformedCenter = CGPoint(
@@ -433,6 +451,7 @@ struct PreferencePageView: View {
                             .foregroundStyle(Color.g7)
                             .offset(y: adjustTextOffset(for: polygon.regionName))
                             .position(x: transformedCenter.x, y: transformedCenter.y)
+                            .zIndex(3)
                     }
                     
                 }
