@@ -47,6 +47,7 @@ class PreferenceViewModel: ObservableObject {
     
     //MARK: - 5번째 지도 관리
     @Published var polygons: [(points: [CGPoint], offset: CGPoint, scale: CGFloat, regionName: String, regionCode: String, center: CGPoint)] = []
+    @Published var districtsData: [DistrictResponse]
     
     let referenceLogitude: Double = 127.5
     let referenceLatitude: Double = 36.5

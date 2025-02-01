@@ -13,7 +13,7 @@ class GetProvinceViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     @Published var provinces: [Province] = []
-    @Published var districts: [DistrictResponse] = []
+    @Published var districts: [District] = []
     
     func fetchProvinces() {
         guard let token = TokenManager.shared.accessToken, !token.isEmpty else {
@@ -50,14 +50,14 @@ class GetProvinceViewModel: ObservableObject {
         
         print("🛠️ Sending request with token: \(token)")
         
-        provinceService.requestWithToken(.getDistricts(accessToken: TokenManager.shared.accessToken ?? "", provinceCode: code), responseType: [DistrictResponse].self)
+        provinceService.requestWithToken(.getDistricts(accessToken: TokenManager.shared.accessToken ?? "", provinceCode: code), responseType: DistrictResponse.self)
             .sink(receiveCompletion: { completion in
                 if case .failure(let failure) = completion {
                     print("Error get Districts: \(failure)")
                 }
                 
             }, receiveValue: { [weak self] districts in
-                self?.districts = districts
+                self?.districts = districts.result
             })
             .store(in: &cancellables)
     }
