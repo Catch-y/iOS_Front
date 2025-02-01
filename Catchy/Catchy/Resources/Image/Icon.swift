@@ -66,6 +66,9 @@ enum Icon: String {
     
     //MARK: - MyPage
     case pencil = "pencil"
+    case document = "document"
+    case myPageHeart = "myPageHeart"
+    case myPageReview = "myPageReview"
     //MARK: - Review
     case checkBtnSelected = "checkBtnSelected"
     case checkBtnUnselected = "checkBtnUnselected"

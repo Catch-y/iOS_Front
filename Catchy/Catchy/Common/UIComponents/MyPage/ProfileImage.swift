@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct ProfileImage: View {
     
@@ -22,25 +23,24 @@ struct ProfileImage: View {
     
     var body: some View {
         ZStack(alignment: .bottomTrailing, content: {
-            // 프로필 이미지
-            AsyncImage(url: URL(string: imageURL)) { image in
-                image.resizable()
-            } placeholder: {
-                Image(systemName: "person.circle.fill")
-                    .resizable()
-                    .foregroundColor(.gray)
-            }
-            .frame(width: size, height: size)
-            .clipShape(Circle())
+            
+            KFImage(URL(string: imageURL))
+                .placeholder {
+                    ProgressView()
+                        .controlSize(.large)
+                }
+                .retry(maxCount: 2, interval: .seconds(2))
+                .resizable()
+                .scaledToFill()
+                .frame(width: size, height: size)
+                .clipShape(Circle())
             
             // 수정 버튼
             Button(action: onEdit) {
                 Icon.pencil.image
                     .resizable()
-                    .renderingMode(.template) // ✅ 아이콘 색상 적용 가능하게 변경
-                    .foregroundColor(.black) // ✅ 색상을 검정으로 설정
                     .frame(width: size * 0.3, height: size * 0.3)
-                    .scaledToFit() // ✅ 아이콘이 작을 경우 크기 조절
+                
             }
         })
     }
@@ -49,8 +49,8 @@ struct ProfileImage: View {
 struct ProfileImageView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileImage(
-            imageURL: "https://your-image-url.com/profile.jpg",
-            size: 80,
+            imageURL: "https://static.wanted.co.kr/images/company/21181/dazl35csneuul4f9__1080_790.jpg",
+            size: 104,
             onEdit: {}
         )
         .previewLayout(.sizeThatFits)

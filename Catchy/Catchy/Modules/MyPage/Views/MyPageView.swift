@@ -16,16 +16,60 @@ struct MyPageView: View {
     }
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        VStack{
+            myPageMenuButtons()
+        }
+        
+        
+        
     }
     
-    private var ProfileSectionView : some View {
-        return VStack(spacing: 9){
+    private var ProfileSectionView: some View {
+        HStack {
+            ProfileImage(
+                imageURL: "viewModel.profileImageUrl",
+                size: 80
+            ) {
+                print("프로필 수정 클릭")
+            }
             
+            VStack(alignment: .leading, spacing: 4) {
+                Text("viewModel.nickname")
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundColor(.black)
+                
+                Button(action: {
+                    print("닉네임 수정 클릭")
+                }) {
+                    Text("닉네임 수정")
+                        .font(.system(size: 12, weight: .medium))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(Color(.systemGray5))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+            }
+        }
+    }
+    
+    private func myPageMenuButtons() -> some View {
+        return HStack(spacing: 12, content: {
+            MyPageItem(icon: Icon.document.image, title: "취향 설문") {
+                print("취향 설문 클릭")
+            }
+            
+            MyPageItem(icon: Icon.myPageHeart.image, title: "선호 장소") {
+                print("선호 장소 클릭")
+            }
+            
+            MyPageItem(icon: Icon.myPageReview.image, title: "내 리뷰") {
+                print("내 리뷰 클릭")
+            }
+        })
     }
 }
-}
-
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in

@@ -8,7 +8,7 @@
 import Foundation
 
 /// 사용자 프로필 response
-struct UserProfile: Codable {
+struct ProfileResponse: Codable {
     
     /// 사용자 고유 id
     let id: Int
