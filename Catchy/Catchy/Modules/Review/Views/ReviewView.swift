@@ -33,9 +33,10 @@ struct ReviewView: View {
                         reviewTableSection(content: data.content)
                             .padding(.top, 7)
                     })
-                    .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity)
                 } else {
-                    // 값을 들고 있지 않다면 가이드 보여주기
+                    infoView()
+                        .frame(maxWidth: .infinity)
                 }
             } else {
                 Spacer()
@@ -56,10 +57,26 @@ struct ReviewView: View {
     // MARK: - 리뷰 없을 때, 보일 가이드 뷰
     
     private func infoView() -> some View {
-        return VStack(content: {
-            topReviewInfo(data: .init(totalRating: 0, reviewCount: [], totalCount: 0, content: [], last: true))
+        VStack(spacing: 20) {
             
-        })
+            let defaultReviewCounts = (1...5).map { ScoreCount(score: $0, count: 0) }
+            
+            topReviewInfo(data: .init(totalRating: 0, reviewCount: defaultReviewCounts, totalCount: 0, content: [], last: true))
+                .padding(.bottom, 107)
+            VStack(spacing: 9) {
+                Text("작성된 리뷰가 없습니다.")
+                    .font(.Subtitle2)
+                    .foregroundColor(.g7)
+
+                Text("새로운 리뷰가 작성될 때까지 기다려보세요!")
+                    .font(.Body1_2)
+                    .foregroundColor(.g4)
+            }
+            .multilineTextAlignment(.center)
+            .padding(.top, 16)
+
+            Spacer()
+        }
     }
     // MARK: - 상단 평점 및 리뷰 전체 정보
     

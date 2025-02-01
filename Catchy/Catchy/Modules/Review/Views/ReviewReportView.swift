@@ -42,7 +42,6 @@ struct ReviewReportView: View {
                         onoff: viewModel.selectedReasons.isEmpty ? .off : .on
                     )
                     .padding(.bottom, 46) // 버튼과 화면 하단 간격
-                    // 보일 뷰 작성
                 } else {
                     // 값을 들고 있지 않다면 가이드 보여주기
                 }
