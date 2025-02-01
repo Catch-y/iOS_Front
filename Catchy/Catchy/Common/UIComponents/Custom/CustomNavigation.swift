@@ -13,29 +13,52 @@ struct CustomNavigation: View {
     let title: String?
     var leftNaviIcon: Image? = Icon.leftChevron.image
     var rightNaviIcon: Image? = Icon.close.image
+    let isShadow: Bool
     
     init(
         action: @escaping () -> Void,
         title: String?,
-        rightNaviIcon: Image?
+        rightNaviIcon: Image?,
+        isShadow: Bool = false
     ) {
         self.action = action
         self.title = title
         self.rightNaviIcon = rightNaviIcon
+        self.isShadow = isShadow
     }
     
     init(
         action: @escaping () -> Void,
         title: String?,
-        leftNaviIcon: Image?
+        leftNaviIcon: Image?,
+        isShadow: Bool = false
     ) {
         self.action = action
         self.title = title
         self.leftNaviIcon = leftNaviIcon
+        self.isShadow = isShadow
     }
     
     
     var body: some View {
+        if !isShadow {
+            naviGroup
+                .frame(width: 370)
+        } else {
+            ZStack(alignment: .bottom, content: {
+                Color.white
+                    .s1w()
+                
+                naviGroup
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 24)
+            })
+            .frame(maxWidth: .infinity, maxHeight: 113)
+        }
+        
+    }
+    
+    private var naviGroup: some View {
         HStack(alignment: .center, content: {
             if let leftNaviIcon = leftNaviIcon {
                 makeNaviButton(image: leftNaviIcon)
@@ -47,7 +70,6 @@ struct CustomNavigation: View {
                 makeNaviButton(image: rightNaviIcon)
             }
         })
-        .frame(width: 370)
     }
     
     @ViewBuilder
@@ -58,6 +80,7 @@ struct CustomNavigation: View {
             Text(title)
                 .font(.naviFont)
                 .foregroundStyle(Color.g7)
+                .padding(.leading, 15)
             
             Spacer()
         } else {
@@ -77,6 +100,6 @@ struct CustomNavigation: View {
 
 struct CustomNavigation_Prevview: PreviewProvider {
     static var previews: some View {
-        CustomNavigation(action: {print("hello")}, title: nil, rightNaviIcon: nil)
+        CustomNavigation(action: {print("평점, 리뷰 보기")}, title: "평점, 리뷰 보기", leftNaviIcon: nil, isShadow: true)
     }
 }
