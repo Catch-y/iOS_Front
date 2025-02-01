@@ -15,20 +15,25 @@ struct SelectDistrictBtn: View {
     var body: some View {
         
         Button(action: {
-            isSelectedBtn.toggle()
+            withAnimation {
+                isSelectedBtn.toggle()
+            }
         }, label: {
             HStack(spacing: 10, content: {
                 if isSelectedBtn {
                     Icon.allSelectCheckBtn.image
-                        .fixedSize()
+                        .resizable()
+                        .frame(width: 24.3, height: 24.3)
                 } else {
-                    Icon.allCheckBtn.image
-                        .fixedSize()
+                    Icon.provinceBtn.image
+                        .resizable()
+                        .frame(width: 24.3, height: 24.3)
                 }
                 
                 Text(buttonText)
-                    .font(.Subtitle3)
+                    .font(.inputText)
                     .foregroundStyle(Color.g6)
+                    .multilineTextAlignment(.leading)
             })
         })
     }

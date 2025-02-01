@@ -21,7 +21,11 @@ struct ProvinceTestView: View {
             })
             
             Button(action: {
-                viewModel.fetchDistricts(of: viewModel.provinces[0].cd)
+                viewModel.fetchDistricts(of: viewModel.provinces[0].cd) { result in
+                    if result {
+                        print(result)
+                    }
+                }
             }, label: {
                 Text("get222")
             })

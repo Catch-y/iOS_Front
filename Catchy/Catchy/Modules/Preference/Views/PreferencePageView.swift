@@ -12,6 +12,7 @@ import CoreGraphics
 struct PreferencePageView: View {
     
     @StateObject var viewModel: PreferenceViewModel
+    @StateObject var provinceViewmodel: GetProvinceViewModel = .init()
     
     @State var scaleFactor: CGFloat = 1.0
     @State var selectedRegion: String? = nil
@@ -451,6 +452,8 @@ struct PreferencePageView: View {
                             .foregroundStyle(Color.g7)
                             .offset(y: adjustTextOffset(for: polygon.regionName))
                             .position(x: transformedCenter.x, y: transformedCenter.y)
+                            .alignmentGuide(.leading) { _ in transformedCenter.x }
+                                    .alignmentGuide(.top) { _ in transformedCenter.y }
                             .zIndex(3)
                     }
                     
@@ -466,7 +469,11 @@ struct PreferencePageView: View {
                             if let regionInfo = viewModel.getRegionInfo(at: location, in: geometry.frame(in: .local)) {
                                 selectedRegion = regionInfo.name
                                 selectedRegionCode = regionInfo.code
-                                print("✅ 선택한 지역: \(regionInfo.name), 코드: \(regionInfo.code)")
+                                provinceViewmodel.fetchDistricts(of: regionInfo.code) { result in
+                                    if result {
+                                        viewModel.isDistrictsSheet = true
+                                    }
+                                }
                             }
                         }
                 )
@@ -476,6 +483,11 @@ struct PreferencePageView: View {
             viewModel.loadGeoJSON()
         }
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+        .sheet(isPresented: $viewModel.isDistrictsSheet, content: {
+            PreferenceDistrictsView(viewModel: viewModel, provinceViewmodel: provinceViewmodel)
+                .presentationDetents([.fraction(0.6)])
+                .presentationCornerRadius(30)
+        })
     }
     
     
