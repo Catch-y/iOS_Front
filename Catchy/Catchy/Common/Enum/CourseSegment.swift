@@ -33,4 +33,6 @@ enum CourseSegment: String, CaseIterable, SegmentProtocol {
             return Icon.courseDIY.image
         }
     }
+    
+    
 }

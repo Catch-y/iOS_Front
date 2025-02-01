@@ -17,10 +17,10 @@ struct CategoryCard: View {
     
     var body: some View {
         Text(categoryType.rawValue)
-            .font(.pretend(type: .extraBold, size: 9)) /* 1번째 수정 -> 폰트 스타일 정의해라 */
+            .font(.categoryTag)
             .foregroundStyle(.white)
             .padding(.vertical, 4)
-            .frame(maxWidth: .infinity, minHeight: 14) /* 2번째 수정 -> 프레임 동적으로 */
+            .frame(maxWidth: .infinity, minHeight: 14)
             .background {
                 RoundedRectangle(cornerRadius: 4)
                     .fill(categoryType.setColor())

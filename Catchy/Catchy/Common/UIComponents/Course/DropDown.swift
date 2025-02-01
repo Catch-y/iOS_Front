@@ -87,7 +87,7 @@ struct DropDown: View {
                     Icon.downChevron.image
                         .rotationEffect(.degrees((isDrop ? -180 : 0)))
                 }
-                .frame(width: 140, height: 20, alignment: .leading)
+                .frame(maxWidth: .infinity, minHeight: 20, alignment: .leading)
                 .padding(.vertical, 12.5)
                 .padding(.leading, 25)
                 .padding(.trailing, 15)
@@ -120,7 +120,7 @@ struct DropDown: View {
             id: isUpper ? $viewModel.upperScrollPosition : $viewModel.lowerScrollPosition
         )
         .scrollDisabled(locations.count <= 3)
-        .frame(width: buttonWidth, height: 180)
+        .frame(maxWidth: .infinity, maxHeight: 180)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.g3, lineWidth: 1)
@@ -191,7 +191,7 @@ struct DropDown: View {
                 }
             })
         .padding(.horizontal, 5)
-        .frame(width: buttonWidth, height: itemHeight, alignment: .center)
+        .frame(maxWidth: .infinity, minHeight: itemHeight, alignment: .center)
     }
 
 

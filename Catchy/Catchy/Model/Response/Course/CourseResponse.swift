@@ -60,6 +60,7 @@ struct CourseResponseData: Codable, Identifiable{
         case courseDescription
         case categorise
     }
+    
 }
 
 

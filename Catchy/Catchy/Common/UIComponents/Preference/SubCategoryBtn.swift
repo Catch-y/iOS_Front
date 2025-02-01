@@ -9,22 +9,18 @@ import SwiftUI
 
 struct SubCategoryBtn: View {
     
+    @Binding var isSelected: Bool
     let subCategoryName: String
-    let onSubCategorySelected: (String) -> Void
     
-    @State var isSelected: Bool = false
-    
-    init(subCategoryName: String, onSubCategorySelected: @escaping (String) -> Void) {
+    init(isSelected: Binding<Bool>, subCategoryName: String) {
+        self._isSelected = isSelected
         self.subCategoryName = subCategoryName
-        self.onSubCategorySelected = onSubCategorySelected
     }
     
     var body: some View {
         Button(action: {
             withAnimation(.easeInOut(duration: 0.4)) {
                 isSelected.toggle()
-                
-                onSubCategorySelected(subCategoryName)
             }
         }, label: {
             
@@ -46,8 +42,6 @@ struct SubCategoryBtn: View {
 
 struct SubCategoryBtn_Preview: PreviewProvider {
     static var previews: some View {
-        SubCategoryBtn(subCategoryName: "요리주점") { name in
-            print(name)
-        }
+        SubCategoryBtn(isSelected: .constant(false), subCategoryName: "요리주점")
     }
 }

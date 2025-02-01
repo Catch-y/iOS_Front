@@ -19,12 +19,12 @@ struct CourseView: View {
     var body: some View {
         
         ZStack(alignment: .top) {
-            
-            DropDown(viewModel: viewModel) /*  이 부분 데이터 없으면 안 보이도록 수정 */
-                .zIndex(1)
-            
+            if let data = viewModel.courseResponse, !data.content.isEmpty {
+                DropDown(viewModel: viewModel).zIndex(1)
+            }
             VStack {
                 if !viewModel.isCourseListLoading {
+                    
                     navigationGroup
                     if let data = viewModel.courseResponse {
                         if data.content.isEmpty {
@@ -33,29 +33,38 @@ struct CourseView: View {
                             scrollView
                         }
                     }
-                } else {
+                    
+                } else {    /// 데이터 로딩 중
                     Spacer()
-                    
+                        
                     ProgressView()
-                    
+                        
                     Spacer()
                 }
-                
+                    
             }
-            .zIndex(2)
+            .zIndex(0)
             
             if viewModel.isFloating {
                 Color.black
                     .opacity(0.8)
                     .ignoresSafeArea(.all)
+                    .zIndex(2)
             }
-            AddFloatingButton(isOpen: $viewModel.isFloating)
+            AddFloatingButton(isOpen: $viewModel.isFloating).zIndex(3)
             
         }.task{
-            viewModel.getCourseList(courseRequest: .init(type: .ai, upperLocation: "", lowerLocation: "", lastId: 0))
+            viewModel
+                .getCourseList(
+                    courseRequest: .init(
+                        type: .ai,
+                        upperLocation: "",
+                        lowerLocation: "",
+                        lastId: 0
+                    )
+                )
         }
 
-        
     }
 
     /// 네비게이션 바와 세그먼트 그룹
@@ -79,7 +88,6 @@ struct CourseView: View {
                 if let content = viewModel.courseResponse?.content {
                     ForEach(content, id: \.id) { course in
                         CourseGroupCard(course: course)
-                            .frame(maxWidth: .infinity, minHeight: 158)
                             
                     }
                 }
@@ -92,6 +100,7 @@ struct CourseView: View {
         .padding(.bottom, 110)
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
+        .border(.red)
     }
     
     /// 코스가 없을 때 텍스트 뷰
@@ -110,7 +119,7 @@ struct CourseView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct CourseView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
             CourseView(container: DIContainer())
