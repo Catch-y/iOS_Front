@@ -83,7 +83,7 @@ struct ReviewCard: View {
                             .controlSize(.regular)
                     }.retry(maxCount: 2, interval: .seconds(2))
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: 85, height: 85)
                     .clipShape(.rect(cornerRadius: 15))
             }

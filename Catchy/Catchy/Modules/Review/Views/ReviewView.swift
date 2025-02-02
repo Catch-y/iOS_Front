@@ -25,7 +25,7 @@ struct ReviewView: View {
                 if let data = viewModel.reviewData {
                     CustomNavigation(action: {
                         print("hello")
-                    }, title: "새 그룹 만들기", leftNaviIcon: nil, isShadow: true)
+                    }, title: "평점, 리뷰 보기", leftNaviIcon: nil)
                     
                     ScrollView(.vertical, content: {
                         topReviewInfo(data: data)
@@ -47,7 +47,7 @@ struct ReviewView: View {
                 Spacer()
             }
         })
-        .ignoresSafeArea(.all)
+        //.ignoresSafeArea(.all)
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
         .task {
             viewModel.getReviewData(reviewData: GetReviewRequest(placeId: 12345, page: 2))

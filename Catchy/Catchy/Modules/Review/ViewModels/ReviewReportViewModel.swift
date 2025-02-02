@@ -51,6 +51,7 @@ extension ReviewReportViewModel {
                 guard let self = self else { return }
                 
                 if let response = response.result {
+                    print("🎯 Parsed Response Data: \(response)")
                     self.reviewReportData = response
                 }
             })
