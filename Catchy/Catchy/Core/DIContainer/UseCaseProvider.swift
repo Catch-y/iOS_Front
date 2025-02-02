@@ -15,6 +15,15 @@ protocol UseCaseProtocol {
     
     /// [PlaceCourse] UseCase
     var placeCourseUseCase: PlaceCourseUseCase { get set }
+    
+    /// [Place] Usecase
+    var placeUseCase: PlaceUseCase { get set }
+    
+    /// 리뷰 전체보기
+    var reviewUseCase: ReviewUseCase { get set }
+    
+    /// 리뷰 신고하기
+    var reviewReportUseCase: ReviewReportUseCase { get set }
 }
 
 class UseCaseProvider: UseCaseProtocol {
@@ -26,9 +35,21 @@ class UseCaseProvider: UseCaseProtocol {
     /// [PlaceCourse] UseCase
     var placeCourseUseCase: PlaceCourseUseCase
     
+    /// [Place] Usecase
+    var placeUseCase: PlaceUseCase
+    
+    /// 리뷰 전체보기
+    var reviewUseCase: ReviewUseCase
+    
+    /// 리뷰 신고하기
+    var reviewReportUseCase: ReviewReportUseCase
+    
     init() {
         self.authUseCase = AuthUseCase()
         self.courseUseCase = CourseUseCase()
         self.placeCourseUseCase = PlaceCourseUseCase()
+        self.reviewUseCase = ReviewUseCase()
+        self.reviewReportUseCase = ReviewReportUseCase()
+        self.placeUseCase = PlaceUseCase()
     }
 }
