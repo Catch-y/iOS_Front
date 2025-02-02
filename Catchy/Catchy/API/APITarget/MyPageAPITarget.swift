@@ -65,7 +65,7 @@ extension MyPageAPITarget: APITargetType {
               "message": "요청이 성공했습니다.",
               "result": {
                 "id": 1,
-                "profileImage": "https://i.namu.wiki/i/X93YQGAeHiEm1hB_A-K4VmcmWd5pX02r7DDXWQybf4AToouhB15wfsmcCjqvK5rYoCo9fe3PKL8fRfNHVnepyrupL5KfIP5pN1ryzD298iWlKVDs6vR6v1q-DbuhQKvHQx8AH2NmvVPlWWo7WjV0vw.webp",
+                "profileImage": "https://static.wanted.co.kr/images/company/21181/dazl35csneuul4f9__1080_790.jpg",
                 "nickname": "용콩"
               }
             }
