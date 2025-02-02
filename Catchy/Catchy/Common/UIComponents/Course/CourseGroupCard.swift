@@ -11,9 +11,13 @@ import Kingfisher
 struct CourseGroupCard: View {
     
     var course : CourseResponseData
+    var type: CourseCardType    // 코스용 / 마이페이지용 구분
     
-    init(course: CourseResponseData) {
+    
+    /// 기본값을 코스용으로 하고 마이페이지 필요할 때 타입 추가
+    init(course: CourseResponseData, type: CourseCardType = .course) {
         self.course = course
+        self.type = type
     }
     
     var body: some View {
@@ -26,7 +30,7 @@ struct CourseGroupCard: View {
                             .controlSize(.regular)
                     }.retry(maxCount: 2, interval: .seconds(2))
                     .resizable()
-                    .frame(width: 133, height: 116)
+                    .frame(width: type.imageSize.width, height: type.imageSize.height)
                     .clipShape(RoundedRectangle(cornerRadius: 15)
                 )
             }
@@ -41,7 +45,7 @@ struct CourseGroupCard: View {
                 .fill(Color.white)
                 .s1w()
         }
-        .frame(maxWidth: .infinity, minHeight: 158)
+        .frame(maxWidth: .infinity, minHeight: type.cardHeight)
     }
     
     /// 코스 카드의 텍스트 그룹
@@ -50,7 +54,7 @@ struct CourseGroupCard: View {
             
             /// 코스 이름
             Text(course.courseName.customLineBreak())
-                .font(.Subtitle3_SM)
+                .font(type.titleFont)
                 .foregroundStyle(Color.g7)
                 .padding(.vertical, 2)
                 .lineLimit(2)
@@ -60,6 +64,7 @@ struct CourseGroupCard: View {
                 ForEach(course.categorise, id: \.self) { categoryType in
                     CategoryCard(categoryType: categoryType)
                 }
+                
             })
             
             /// 코스 설명
@@ -67,7 +72,7 @@ struct CourseGroupCard: View {
                 .font(.body3)
                 .foregroundStyle(Color.g5)
                 .frame(height: 36, alignment: .topLeading)
-                .lineLimit(2)
+                .lineLimit(type.descriptionLineLimit)
                 .lineSpacing(2)
         }
         .padding(.vertical, 7)
@@ -76,7 +81,9 @@ struct CourseGroupCard: View {
 
 struct COurseGroupCard_Preview: PreviewProvider {
     static var previews: some View {
-        CourseGroupCard(course: .init(courseId: 0, courseType: .diy, courseImage: "https://i.namu.wiki/i/-UcsURAHAZ80XN7--nJenrc3typ4s4Hi6meDe5cdmvYiqdW7nvGb8mXJHFZXUE1e8_2rkPiEGU6KNl5bfPa_i5MfsS3buN88ZXGVCVajv-ANun91l4of6AlwW7wEtF7-A6w9t4Y9PtPg1pnizVO3fw.webp", courseName: "경복궁", courseDescription: "여기는 경복궁 입니다.", categorise: [.CAFE, .BAR, .SPORT, .RESTAURANT, .REST, .CULTURELIFE]))
+        CourseGroupCard(course: .init(courseId: 0, courseType: .diy, courseImage: "https://i.namu.wiki/i/-UcsURAHAZ80XN7--nJenrc3typ4s4Hi6meDe5cdmvYiqdW7nvGb8mXJHFZXUE1e8_2rkPiEGU6KNl5bfPa_i5MfsS3buN88ZXGVCVajv-ANun91l4of6AlwW7wEtF7-A6w9t4Y9PtPg1pnizVO3fw.webp", courseName: "경복궁", courseDescription: "여기는 경복궁 입니다.", categorise: [.CAFE, .BAR, .SPORT, .RESTAURANT, .REST, .CULTURELIFE])
+        ,type: .myPage)
             .previewLayout(.sizeThatFits)
+        
     }
 }

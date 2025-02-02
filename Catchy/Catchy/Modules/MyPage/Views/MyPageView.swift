@@ -19,10 +19,11 @@ struct MyPageView: View {
     // MARK: - Body
     var body: some View {
         
-        VStack(alignment: .center, spacing: 20, content: {
+        VStack(alignment: .leading, spacing: 20, content: {
             if !viewModel.isLoading {
                 if let data = viewModel.profileResponse {
                     TopSectionView(data: data)
+                    BookmarkedCoursesView()
                     // 보일 뷰 작성
                     //.frame(maxWidth: .infinity)
                 } else {
@@ -44,7 +45,7 @@ struct MyPageView: View {
         }
     }
     
-    /// ✅ 마이페이지 상단 뷰 (설정 버튼 + 프로필 + 메뉴 버튼)
+    ///  마이페이지 상단 뷰 (설정 버튼 + 프로필 + 메뉴 버튼)
     private func TopSectionView(data: ProfileResponse) -> some View {
         return VStack(alignment: .leading, spacing: 20, content: {
             
@@ -62,8 +63,10 @@ struct MyPageView: View {
             myPageMenuButtons()
         })
     }
+    
+    /// 설정 버튼
     private func settingsButton() -> some View {
-        Button(action: {
+        return Button(action: {
             print("설정 버튼 클릭")
         }) {
             Icon.settingIcon.image
@@ -73,6 +76,7 @@ struct MyPageView: View {
         }
     }
     
+    /// 프로필 섹션 뷰 (프로필 이미지 + 닉네임 + 닉네임 수정 버튼)
     private func ProfileSectionView(data: ProfileResponse) -> some View {
         return HStack(spacing: 10, content: {
             ProfileImage(
@@ -104,6 +108,7 @@ struct MyPageView: View {
         })
     }
     
+    /// 마이페이지 버튼
     // TODO: - 버튼 눌렀을 시 액션 추가
     private func myPageMenuButtons() -> some View {
         let menuItems: [(icon: Image, title: String, action: () -> Void)] = [
@@ -118,8 +123,23 @@ struct MyPageView: View {
             }
         })
     }
+    
+    /// 북마크 코스 뷰
+    private func BookmarkedCoursesView() -> some View {
+        return VStack(alignment: .leading, spacing: 10, content: {
+            Text("북마크한 코스")
+                .font(.Subtitle3)
+                .foregroundColor(.g7)
+            
+//            LazyVGrid(columns: columns, spacing: 11) {
+//                ForEach(courses, id: \.courseId) { course in
+//                    CourseGroupCard(course: course)
+//                }
+//            }
+        })
+    }
+    
 }
-
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
