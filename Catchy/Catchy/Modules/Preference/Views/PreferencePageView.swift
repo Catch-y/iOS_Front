@@ -34,7 +34,7 @@ struct PreferencePageView: View {
         case 3:
             pageFourthView
         default:
-            Text("11")
+            EmptyView()
         }
     }
     
@@ -415,7 +415,6 @@ struct PreferencePageView: View {
                 ZStack {
                     Color.white.ignoresSafeArea(.all)
                     
-                    
                     ForEach(viewModel.polygons.filter { $0.regionName != "광주광역시" }, id: \.points) { polygon in
                            if let _ = ProvinceType(rawValue: polygon.regionName) {
                                PolygonShape(
@@ -440,23 +439,12 @@ struct PreferencePageView: View {
                            .frame(width: geometry.size.width, height: geometry.size.height)
                            .zIndex(2)
                        }
-                    
-                    ForEach(viewModel.polygons, id: \.regionName) { polygon in
-                        let transformedCenter = CGPoint(
-                            x: (polygon.center.x - polygon.offset.x) * polygon.scale * scaleFactor + geometry.size.width / 2,
-                            y: (polygon.center.y - polygon.offset.y) * polygon.scale * scaleFactor + geometry.size.height / 2
-                        )
-                        
-                        Text(polygon.regionName)
-                            .font(.caption_SM)
-                            .foregroundStyle(Color.g7)
-                            .offset(y: adjustTextOffset(for: polygon.regionName))
-                            .position(x: transformedCenter.x, y: transformedCenter.y)
-                            .alignmentGuide(.leading) { _ in transformedCenter.x }
-                                    .alignmentGuide(.top) { _ in transformedCenter.y }
-                            .zIndex(3)
+                
+                    ForEach(Array(Set(viewModel.polygons.map { $0.regionName })), id: \.self) { regionName in
+                        if let polygon = viewModel.polygons.first(where: { $0.regionName == regionName }) {
+                            drawRegionName(polygon, geometry: geometry)
+                        }
                     }
-                    
                 }
                 .gesture(
                     DragGesture(minimumDistance: 0)
@@ -481,6 +469,7 @@ struct PreferencePageView: View {
         }
         .task {
             viewModel.loadGeoJSON()
+            print(viewModel.polygons)
         }
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
         .sheet(isPresented: $viewModel.isDistrictsSheet, content: {
@@ -546,6 +535,22 @@ extension PreferencePageView {
                 viewModel.isExpand[index] = false
             }
         }
+    }
+    
+    private func drawRegionName(_ polygon: PolygonData, geometry: GeometryProxy) -> some View {
+        let transformedCenter = CGPoint(
+            x: (polygon.center.x - polygon.offset.x) * polygon.scale * scaleFactor + geometry.size.width / 2,
+            y: (polygon.center.y - polygon.offset.y) * polygon.scale * scaleFactor + geometry.size.height / 2
+        )
+
+        return Text(polygon.regionName)
+            .font(.caption_SM)
+            .foregroundStyle(Color.g7)
+            .offset(y: adjustTextOffset(for: polygon.regionName))
+            .position(x: transformedCenter.x, y: transformedCenter.y)
+            .alignmentGuide(.leading) { _ in transformedCenter.x }
+            .alignmentGuide(.top) { _ in transformedCenter.y }
+            .zIndex(3)
     }
 }
 

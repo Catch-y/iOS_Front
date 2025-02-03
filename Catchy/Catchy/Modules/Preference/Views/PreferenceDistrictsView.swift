@@ -38,6 +38,7 @@ struct PreferenceDistrictsView: View {
             
             MainBtn(text: "홈으로 넘어가기", action: {
                 print("넘어가기")
+                print(viewModel.savedDistricts)
             }, width: 370, height: 60, onoff: viewModel.savedDistricts.isEmpty ? .off : .on)
             .padding(.top, 32)
             

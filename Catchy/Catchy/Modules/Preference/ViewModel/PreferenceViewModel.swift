@@ -18,7 +18,7 @@ class PreferenceViewModel: ObservableObject {
     }
     
     //MARK: - 전체 스텝 관리
-    @Published var preferenceStep: Int = 3
+    @Published var preferenceStep: Int = 0
     
     //MARK: - 1번째, 2번째 스텝 관리
     @Published var pageCount: Int = 0
@@ -46,7 +46,7 @@ class PreferenceViewModel: ObservableObject {
     @Published var isExpand: [Int:Bool] = [0: false, 1: false]
     
     //MARK: - 5번째 지도 관리
-    @Published var polygons: [(points: [CGPoint], offset: CGPoint, scale: CGFloat, regionName: String, regionCode: String, center: CGPoint)] = []
+    @Published var polygons: [PolygonData] = []
     @Published var isDistrictsSheet: Bool = false
     @Published var savedDistricts: [String] = []
     
@@ -58,13 +58,18 @@ class PreferenceViewModel: ObservableObject {
 extension PreferenceViewModel {
     public func loadGeoJSON() {
             guard let filePath = Bundle.main.path(forResource: "Sido", ofType: "geojson") else { return }
+            
             do {
                 let fileURL = URL(fileURLWithPath: filePath)
                 let data = try Data(contentsOf: fileURL)
+                
                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                    let features = json["features"] as? [[String: Any]] {
 
-                    var allPoints: [CGPoint] = []
+                    var uniquePolygons = Set<String>() // 중복 방지를 위한 Set
+                    var allPoints: [CGPoint] = [] // 중심점 계산을 위한 모든 좌표 저장
+                    
+                    polygons.removeAll() // 기존 데이터 초기화
 
                     for feature in features {
                         if let geometry = feature["geometry"] as? [String: Any],
@@ -77,17 +82,41 @@ extension PreferenceViewModel {
 
                             for coordinates in coordinatesArray {
                                 let cgPoints = coordinates.map { convertToCGPoint(latitude: $0[1], longitude: $0[0]) }
-                                allPoints.append(contentsOf: cgPoints)
+                                
+                                allPoints.append(contentsOf: cgPoints) // 중심점 계산을 위한 좌표 추가
 
-                                let center = calculateCentroid(points: cgPoints)
-                                polygons.append((cgPoints, .zero, 1.0, regionName, regionCode, center))
+                                // 중복 검사: 좌표 배열을 문자열로 변환하여 비교
+                                let pointsKey = cgPoints.map { "\($0.x),\($0.y)" }.joined(separator: "|")
+                                if uniquePolygons.insert(pointsKey).inserted {
+                                    let center = calculateCentroid(points: cgPoints)
+                                    polygons.append(PolygonData(
+                                        id: UUID(), // 고유 ID 추가
+                                        points: cgPoints,
+                                        offset: .zero,
+                                        scale: 1.0,
+                                        regionName: regionName,
+                                        regionCode: regionCode,
+                                        center: center
+                                    ))
+                                }
                             }
                         }
                     }
 
+                    // 중심점과 스케일 조정
                     if let offset = calculateCenterOffset(from: allPoints) {
                         let scale = calculateScale(from: allPoints) * 1.0
-                        polygons = polygons.map { ($0.points, offset, scale, $0.regionName, $0.regionCode, $0.center) }
+                        polygons = polygons.map { polygon in
+                            PolygonData(
+                                id: polygon.id,
+                                points: polygon.points,
+                                offset: offset,
+                                scale: scale,
+                                regionName: polygon.regionName,
+                                regionCode: polygon.regionCode,
+                                center: polygon.center
+                            )
+                        }
                     }
                 }
             } catch {
