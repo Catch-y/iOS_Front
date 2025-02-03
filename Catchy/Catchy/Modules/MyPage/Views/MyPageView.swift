@@ -43,6 +43,13 @@ struct MyPageView: View {
         .task {
             viewModel.getProfile()
         }
+        .overlay(
+            Group {
+                if viewModel.isEditingNickname {
+                    NicknameEditView(isPresented: $viewModel.isEditingNickname, container: DIContainer())
+                }
+            }
+        )
     }
     
     ///  마이페이지 상단 뷰 (설정 버튼 + 프로필 + 메뉴 버튼)
@@ -56,7 +63,7 @@ struct MyPageView: View {
                     .padding(.trailing, 12)
             }
             
-            // 프로필 섹션 (프로필 이미지 + 닉네임)
+            // 프로필 섹션 뷰 (프로필 이미지 + 닉네임 + 닉네임 수정 버튼)
             ProfileSectionView(data: data)
             
             // 마이페이지 메뉴 버튼
@@ -92,8 +99,9 @@ struct MyPageView: View {
                 .fontWeight(.bold)
                 .foregroundColor(.black)
                 .padding(.leading, 9)
+            
             Button(action: {
-                print("닉네임 수정 클릭")
+                viewModel.isEditingNickname = true
                 // TODO: - 닉네임 수정 액션
             }) {
                 Text("닉네임 수정")

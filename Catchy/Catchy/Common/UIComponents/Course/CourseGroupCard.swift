@@ -60,7 +60,7 @@ struct CourseGroupCard: View {
                 .lineLimit(2)
             
             /// 카테고리 태그
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: 4), content: {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: type.lazyVGridColumnCount), content: {
                 ForEach(course.categorise, id: \.self) { categoryType in
                     CategoryCard(categoryType: categoryType)
                 }
@@ -71,7 +71,7 @@ struct CourseGroupCard: View {
             Text(course.courseDescription)
                 .font(.body3)
                 .foregroundStyle(Color.g5)
-                .frame(height: 36, alignment: .topLeading)
+                .frame(height: type.descriptionFrameHeight, alignment: .topLeading)
                 .lineLimit(type.descriptionLineLimit)
                 .lineSpacing(2)
         }

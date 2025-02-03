@@ -14,7 +14,7 @@ enum CourseCardType {
     /// 이미지 크기 정의
     var imageSize: (width: CGFloat, height: CGFloat) {
         switch self {
-        case .myPage: return (133, 76)
+        case .myPage: return (133, 100)
         case .course: return (133, 116)
         }
     }
@@ -42,6 +42,22 @@ enum CourseCardType {
         }
     }
     
+    /// LazyVGrid 열 개수
+    var lazyVGridColumnCount: Int {
+        switch self {
+        case .myPage: return 5
+        case .course: return 4
+        }
+    }
+    
+    /// 설명 텍스트 프레임 높이
+    var descriptionFrameHeight: CGFloat {
+        switch self {
+        case .myPage: return 20
+        case .course: return 36
+        }
+    }
+
     /// 설명 텍스트 최대 줄 수
     var descriptionLineLimit: Int {
         switch self {

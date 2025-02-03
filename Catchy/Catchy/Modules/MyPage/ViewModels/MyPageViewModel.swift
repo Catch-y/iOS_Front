@@ -10,6 +10,8 @@ import Combine
 
 class MyPageViewModel: ObservableObject {
     
+    @Published var isEditingNickname: Bool = false  // 닉네임 수정 모달 상태 추가
+    
     let container: DIContainer
     
     var cancellables = Set<AnyCancellable>()
