@@ -34,6 +34,7 @@ enum Icon: String {
     case empyHeart = "empyHeart"
     case location = "location"
     case star = "star"
+    case emptyStar = "emptyStar"
     case time = "time"
     case review = "review"
     case rightChevron = "rightChevron"
@@ -63,12 +64,18 @@ enum Icon: String {
     case retaurantBackground = "retaurantBackground"
     case sportBackground = "sportBackground"
     
+    //MARK: - Review
+    case checkBtnSelected = "checkBtnSelected"
+    case checkBtnUnselected = "checkBtnUnselected"
     
     //MARK: - Perference
     case couple = "couple"
     case family = "family"
     case friends = "friends"
     case solo = "solo"
+    case allCheckBtn = "allCheckBtn"
+    case allSelectCheckBtn = "allSelectCheckBtn"
+    case  provinceBtn = "provinceBtn"
     
     var image: Image {
         return Image(self.rawValue)
