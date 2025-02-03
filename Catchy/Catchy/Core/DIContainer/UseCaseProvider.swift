@@ -10,8 +10,11 @@ import Foundation
 protocol UseCaseProtocol {
     var authUseCase: AuthUseCase { get set }
     
-    /// [코스 관리] UseCase
-    var courseManagementUseCase: CourseManagementUseCase { get set }
+    /// [Course] UseCase
+    var courseUseCase: CourseUseCase { get set }
+    
+    /// [PlaceCourse] UseCase
+    var placeCourseUseCase: PlaceCourseUseCase { get set }
     
     /// [Place] Usecase
     var placeUseCase: PlaceUseCase { get set }
@@ -26,8 +29,20 @@ protocol UseCaseProtocol {
 class UseCaseProvider: UseCaseProtocol {
     var authUseCase: AuthUseCase
     
-    /// [코스 관리] UseCase
-    var courseManagementUseCase: CourseManagementUseCase
+    /// [Course] UseCase
+    var courseUseCase: CourseUseCase
+    
+    /// [PlaceCourse] UseCase
+    var placeCourseUseCase: PlaceCourseUseCase
+    
+    /// [Place] Usecase
+    var placeUseCase: PlaceUseCase
+    
+    /// 리뷰 전체보기
+    var reviewUseCase: ReviewUseCase
+    
+    /// 리뷰 신고하기
+    var reviewReportUseCase: ReviewReportUseCase
     
     /// [Place] Usecase
     var placeUseCase: PlaceUseCase
@@ -40,7 +55,8 @@ class UseCaseProvider: UseCaseProtocol {
     
     init() {
         self.authUseCase = AuthUseCase()
-        self.courseManagementUseCase = CourseManagementUseCase()
+        self.courseUseCase = CourseUseCase()
+        self.placeCourseUseCase = PlaceCourseUseCase()
         self.reviewUseCase = ReviewUseCase()
         self.reviewReportUseCase = ReviewReportUseCase()
         self.placeUseCase = PlaceUseCase()

@@ -84,7 +84,7 @@ extension CourseViewModel {
         
         isCourseListLoading = true
         
-        container.useCaseProvider.courseManagementUseCase
+        container.useCaseProvider.courseUseCase
             .executeGetCourseList(courseRequest: courseRequest)
             .tryMap{ responseData -> ResponseData<CourseResponse> in
                 if !responseData.isSuccess{
@@ -184,7 +184,6 @@ extension CourseViewModel {
         /// ex) 서울특별시, 인천광역시
         let upperLocation = self.upperLocations[index]
         
-        /// 해당 데이터의 cd값.
-        let cd = upperLocation.cd
+       
     }
 }
