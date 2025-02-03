@@ -100,7 +100,6 @@ struct CourseView: View {
         .padding(.bottom, 110)
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
-        .border(.red)
     }
     
     /// 코스가 없을 때 텍스트 뷰
