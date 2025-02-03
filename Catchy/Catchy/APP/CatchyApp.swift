@@ -20,7 +20,7 @@ struct CatchyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            PreferencePageView(container: DIContainer())
+            CourseView(container: DIContainer())
 //            switch appFlowViewModel.appState {
 //            case .onBoarding:
 //                OnboardingView(viewModel: appFlowViewModel)

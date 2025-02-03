@@ -34,11 +34,11 @@ class CourseViewModel: ObservableObject{
     
     /// 코스 도
     /// ex) 서울특별시, 인천광역시
-    @Published var upperLocations: [LocationResponse] = []
+    @Published var upperLocations: [Province] = []
     
     /// 코스 시/군/구
     /// ex) 서울특별시 동작구, 서울특별시 관악구
-    @Published var lowerLocations: [LocationResponse] = []
+    @Published var lowerLocations: [String] = []
     
     /// 선택된 [코스 도]의 인덱스
     @Published var selectedUpperIndex: Int? = nil
@@ -130,7 +130,10 @@ extension CourseViewModel {
     /// - Parameter segment: newValue
     func segmentDidChange(to segment : CourseSegment){
         
-        self.setInitialState()
+        self.isUpperDrop = false
+        self.selectedUpperIndex = nil
+        self.upperScrollPosition = nil
+        self.resetLowerDropState()
         self.segment = segment
     // TODO: - 세그먼트 컨트롤 변경시 API 요청
     }
@@ -146,12 +149,14 @@ extension CourseViewModel {
         self.isUpperDrop = false
         self.selectedUpperIndex = nil
         self.upperScrollPosition = nil
+        self.upperLocations.removeAll()
     }
     
     func resetLowerDropState(){
         self.isLowerDrop = false
         self.selectedLowerIndex = nil
         self.lowerScrollPosition = nil
+        self.lowerLocations.removeAll()
     }
     
     /// 왼쪽 드랍 다운 메뉴의 스크롤 인덱스 값을 설정합니다.
@@ -173,17 +178,4 @@ extension CourseViewModel {
         // self.upperLocations = response
     }
     
-    // TODO: - 도 전체 버튼에서 하나 선택하면, cd 값에 따라 시/군/구 데이터 API 요청
-    // self.selectedUpperIndex에 현재 선택한 이이템의 인덱스.
-    //
-    func requestLowerDropMenuItems(){
-        
-        guard let index = self.selectedUpperIndex else { return }
-        
-        /// 현재 선택한 [도] 모델
-        /// ex) 서울특별시, 인천광역시
-        let upperLocation = self.upperLocations[index]
-        
-       
-    }
 }

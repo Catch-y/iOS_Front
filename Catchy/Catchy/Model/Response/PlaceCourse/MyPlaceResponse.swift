@@ -32,7 +32,7 @@ struct MyPageLikePlaceData: Codable {
     let placeDescription: String
     
     /// 장소 카테고리
-    let categyName: CategoryType
+    let categoryName: CategoryType
     
     /// 장소 주소
     let roadAddress: String
