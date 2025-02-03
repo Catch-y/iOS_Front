@@ -44,16 +44,7 @@ class UseCaseProvider: UseCaseProtocol {
     
     /// 리뷰 신고하기
     var reviewReportUseCase: ReviewReportUseCase
-    
-    /// [Place] Usecase
-    var placeUseCase: PlaceUseCase
-    
-    /// 리뷰 전체보기
-    var reviewUseCase: ReviewUseCase
-    
-    /// 리뷰 신고하기
-    var reviewReportUseCase: ReviewReportUseCase
-    
+        
     init() {
         self.authUseCase = AuthUseCase()
         self.courseUseCase = CourseUseCase()

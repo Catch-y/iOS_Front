@@ -49,11 +49,11 @@ extension PlaceSearchViewModel {
     
     // MARK: - API 호출 함수
     /// 장소 검색 - 지역명 기반
-    func getPlaceList(placeSearchRequest: PlaceSearchRequest) {
+    func getPlaceList(placeSearchRequest: PlaceSearchByRegionRequest) {
         
         isPlaceListLoading = true
         
-        container.useCaseProvider.courseManagementUseCase.executeGetPlaceList(placeSearchRequest: placeSearchRequest)
+        container.useCaseProvider.placeCourseUseCase.executeGetPlaceListByRegion(placeSearchRequest: placeSearchRequest)
             .tryMap {
                 responseData ->
                 ResponseData<PlaceSearchResponse> in
@@ -94,7 +94,7 @@ extension PlaceSearchViewModel {
         
         isPlaceDetailLoading = true
         
-        container.useCaseProvider.courseManagementUseCase.executeGetPlaceDetail(placeId: placeId)
+        container.useCaseProvider.placeCourseUseCase.executeGetPlaceDetail(placeId: placeId)
             .tryMap {
                 responseData ->
                 ResponseData<PlaceDetailResponse> in
