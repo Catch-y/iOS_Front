@@ -35,10 +35,10 @@ struct CourseDetailResponse: Codable {
     let recommendTime: String
     
     /// 코스 방문자 수
-    let participantCount: Int
+    let participantsNumber: Int
     
     /// 장소 데이터 배열
-    let placeInfo: [PlaceInfoDIYData]
+    let placeInfos: [PlaceInfoDIYData]
 }
 
 

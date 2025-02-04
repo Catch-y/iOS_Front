@@ -11,6 +11,8 @@ struct DropDown: View {
     
     @ObservedObject var viewModel: CourseViewModel
     
+    @ObservedObject var provinceViewModel: GetProvinceViewModel
+    
     let buttonHeight: CGFloat = 45
     let buttonWidth: CGFloat = 180
     
@@ -27,6 +29,9 @@ struct DropDown: View {
         }
         .ignoresSafeArea(.all)
         .padding(.top, 138)
+        .task {
+            provinceViewModel.fetchProvinces()
+        }
         
     }
     
@@ -34,10 +39,11 @@ struct DropDown: View {
     private var upperDropMenu: some View {
         ZStack{
             VStack {
-                selectedButton(placeholder: "도 전체", isUpper: true)
+                selectedProvinceButton(placeholder: "도 전체")
                     .padding(.leading, 16)
                 if viewModel.isUpperDrop {
-                    dropDownMenu(isUpper: true)
+                    provinceDropDownMenu()
+                    
                 }
             }
         }
@@ -47,37 +53,36 @@ struct DropDown: View {
     private var lowerDropMenu: some View {
         ZStack{
             VStack {
-                selectedButton(placeholder: "시/군/구 전체", isUpper: false)
+                selectedDistrictButton(placeholder: "시/군/구 전체")
                     .padding(.trailing, 16)
                 if viewModel.isLowerDrop {
-                    dropDownMenu(isUpper: false)
+                    districtDropDownMenu()
                 }
             }.disabled(viewModel.selectedUpperIndex == nil)
         }
         
     }
     
-    /// 기본 버튼
-    /// - Parameters:
-    ///   - text: 아무것도 선택안 했을 때의 문자열
-    ///   - isUpper: 참인 경우 [도 전체] 드랍다운 메뉴, 거짓인 경우 [시/군/구] 드랍다운 메뉴
-    /// - Returns: 버튼 View 반환
-    private func selectedButton(placeholder text: String, isUpper: Bool) -> some View {
+    /// 도 전체 드랍 다운 메뉴 버튼
+    private func selectedProvinceButton(placeholder text: String) -> some View {
         
-        let selectedIndex = isUpper ? viewModel.selectedUpperIndex : viewModel.selectedLowerIndex
-        let isDrop = isUpper ? viewModel.isUpperDrop : viewModel.isLowerDrop
-        let locations = isUpper ? viewModel.upperLocations : viewModel.lowerLocations
+        let selectedIndex = viewModel.selectedUpperIndex
+        let isDrop = viewModel.isUpperDrop
+        
+        let locations = viewModel.upperLocations
         
         return Button(
             action: {
-                isUpper ? viewModel.isUpperDrop
-                    .toggle() : viewModel.isLowerDrop
-                    .toggle()
+                withAnimation(.easeInOut) {
+                    viewModel.isUpperDrop.toggle()
+                    viewModel.isLowerDrop = false
+
+                }
             },
             label: {
                 HStack {
                     Text(
-                        selectedIndex == nil ? text : locations[selectedIndex!].addr_name
+                        selectedIndex == nil ? text : locations[selectedIndex!].addrName
                     )
                     .font(.body2)
                     .foregroundStyle(.g5)
@@ -88,6 +93,7 @@ struct DropDown: View {
                         .rotationEffect(.degrees((isDrop ? -180 : 0)))
                 }
                 .frame(maxWidth: .infinity, minHeight: 20, alignment: .leading)
+                .border(Color.white)
                 .padding(.vertical, 12.5)
                 .padding(.leading, 25)
                 .padding(.trailing, 15)
@@ -101,23 +107,64 @@ struct DropDown: View {
         .buttonStyle(.plain)
     }
     
-    /// 드랍된 메뉴의 스크롤 뷰
-    /// - Parameter isUpper: 참인 경우 [도 전체] 드랍다운 메뉴, 거짓인 경우 [시/군/구] 드랍다운 메뉴
-    /// - Returns: 드랍 다운 메뉴의 스크롤 뷰 반환
-    private func dropDownMenu(isUpper: Bool) -> some View {
+    /// 시/군/구 전체 드랍 다운 메뉴 버튼
+    private func selectedDistrictButton(placeholder text: String) -> some View {
         
-        let locations = isUpper ? viewModel.upperLocations : viewModel.lowerLocations
+        let selectedIndex = viewModel.selectedLowerIndex
+        let isDrop = viewModel.isLowerDrop
+        
+        let locations = viewModel.lowerLocations
+        
+        return Button(
+            action: {
+                withAnimation {
+                    viewModel.isLowerDrop.toggle()
+                    viewModel.isUpperDrop = false
+                }
+            },
+            label: {
+                HStack {
+                    Text(
+                        selectedIndex == nil ? text : locations[selectedIndex!]
+                    )
+                    .font(.body2)
+                    .foregroundStyle(.g5)
+                
+                    Spacer()
+                
+                    Icon.downChevron.image
+                        .rotationEffect(.degrees((isDrop ? -180 : 0)))
+                }
+                .frame(maxWidth: .infinity, minHeight: 20, alignment: .leading)
+                .border(Color.white)
+                .padding(.vertical, 12.5)
+                .padding(.leading, 25)
+                .padding(.trailing, 15)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.clear)
+                        .stroke(Color.g3, lineWidth: 1)
+                )
+            
+            })
+        .buttonStyle(.plain)
+    }
+    
+    /// 도 전체 드랍 다운 메뉴의 스크롤 뷰
+    private func provinceDropDownMenu() -> some View {
+        
+        let locations = viewModel.upperLocations
         
         return ScrollView {
             LazyVStack(spacing: 0) {
                 ForEach(0..<locations.count, id: \.self) { (index: Int) in
-                    dropDownMenuItem(for: index, isUpper: isUpper)
+                    provinceDropDownMenuItem(for: index)
                 }
             }
         }
         .scrollTargetLayout()
         .scrollPosition(
-            id: isUpper ? $viewModel.upperScrollPosition : $viewModel.lowerScrollPosition
+            id: $viewModel.upperScrollPosition
         )
         .scrollDisabled(locations.count <= 3)
         .frame(maxWidth: .infinity, maxHeight: 180)
@@ -129,43 +176,63 @@ struct DropDown: View {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.white)
         )
-        .padding(isUpper ? .leading : .trailing , 16)
+        .padding(.leading, 16)
         .onAppear{
-            isUpper ?
             viewModel.setUpperScrollPosition(by: viewModel.selectedUpperIndex)
-            : viewModel.setLowerScrollPosition(by: viewModel.selectedLowerIndex)
+        }
+    
+    }
+    
+    /// 시/군/구 전체 드랍 다운 메뉴 스크롤 뷰
+    private func districtDropDownMenu() -> some View {
+        
+        let locations = viewModel.lowerLocations
+        
+        return ScrollView {
+            LazyVStack(spacing: 0) {
+                ForEach(0..<locations.count, id: \.self) { (index: Int) in
+                    districtDropDownMenuItem(for: index)
+                }
+            }
+        }
+        .scrollTargetLayout()
+        .scrollPosition(
+            id: $viewModel.lowerScrollPosition
+        )
+        .scrollDisabled(locations.count <= 3)
+        .frame(maxWidth: .infinity, maxHeight: 180)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.g3, lineWidth: 1)
+        )
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white)
+        )
+        .padding(.trailing, 16)
+        .onAppear{
+            viewModel.setLowerScrollPosition(by: viewModel.selectedLowerIndex)
         
         }
     }
     
-     
-
-    /// 각 드랍 메뉴의 아이템
-    /// - Parameters:
-    ///   - index: 아이템의 인덱스
-    ///   - isUpper: 참인 경우 [도 전체] 드랍다운 메뉴, 거짓인 경우 [시/군/구] 드랍다운 메뉴
-    /// - Returns: 드랍 다운 메뉴의 아이템 리스트 뷰를 반환
-    private func dropDownMenuItem(for index: Int, isUpper: Bool) -> some View {
+    /// 도 전체 드랍 다운 메뉴 아이템
+    private func provinceDropDownMenuItem(for index: Int) -> some View {
         
-        let selectedIndex = isUpper ? viewModel.selectedUpperIndex : viewModel.selectedLowerIndex
+        let selectedIndex = viewModel.selectedUpperIndex
         let isSelected = (index == selectedIndex)
-        let locations = isUpper ? viewModel.upperLocations : viewModel.lowerLocations
-        
+        let locations = viewModel.upperLocations
         return Button(
             action: {
-                isUpper ? (viewModel.selectedUpperIndex = index) : (
-                    viewModel.selectedLowerIndex = index
-                )
-                isUpper ? viewModel.isUpperDrop
-                    .toggle() : viewModel.isLowerDrop
-                    .toggle()
-                if isUpper {
-                
-                    viewModel.resetLowerDropState()
-                
-                    viewModel.requestLowerDropMenuItems()
+                viewModel.selectedUpperIndex = index
+                provinceViewModel.fetchDistricts(of: viewModel.upperLocations[index].cd) {
+                    result in
+                    if result {
+                        viewModel.lowerLocations = provinceViewModel.districts
+                    }
                 }
-            
+                viewModel.isUpperDrop.toggle()
+                viewModel.resetLowerDropState()
             },
             label: {
                 ZStack{
@@ -176,7 +243,47 @@ struct DropDown: View {
                             
                     }
                     HStack{
-                        Text(locations[index].addr_name)
+                        Text(locations[index].addrName)
+                            .font(.body2)
+                            .foregroundStyle(isSelected ? .main : .g6)
+                            .padding(.leading, 18)
+                        Spacer()
+                        if isSelected {
+                            Icon.check.image
+                                .fixedSize()
+                                .padding(.trailing, 15)
+                        }
+
+                    }
+                }
+            })
+        .padding(.horizontal, 5)
+        .frame(maxWidth: .infinity, minHeight: itemHeight, alignment: .center)
+        
+    }
+    
+    /// 시/군/구 전체 드랍 다운 메뉴 아이템
+    private func districtDropDownMenuItem(for index: Int) -> some View {
+        
+        let selectedIndex = viewModel.selectedLowerIndex
+        let isSelected = (index == selectedIndex)
+        let locations = viewModel.lowerLocations
+        
+        return Button(
+            action: {
+                viewModel.selectedLowerIndex = index
+                viewModel.isLowerDrop.toggle()
+                
+            },
+            label: {
+                ZStack{
+                    if isSelected {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(.m1)
+                            .frame(height: 34)
+                    }
+                    HStack{
+                        Text(locations[index])
                             .font(.body2)
                             .foregroundStyle(isSelected ? .main : .g6)
                             .padding(.leading, 18)
@@ -193,6 +300,5 @@ struct DropDown: View {
         .padding(.horizontal, 5)
         .frame(maxWidth: .infinity, minHeight: itemHeight, alignment: .center)
     }
-
-
+    
 }

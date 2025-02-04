@@ -12,6 +12,9 @@ struct CourseView: View {
     
     @StateObject var viewModel: CourseViewModel
     
+    /// 드랍 다운 메뉴의 뷰 모델
+    @StateObject var provinceViewModel: GetProvinceViewModel = .init()
+
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
     }
@@ -20,7 +23,7 @@ struct CourseView: View {
         
         ZStack(alignment: .top) {
             if let data = viewModel.courseResponse, !data.content.isEmpty {
-                DropDown(viewModel: viewModel).zIndex(1)
+                DropDown(viewModel: viewModel, provinceViewModel: provinceViewModel).zIndex(1)
             }
             VStack {
                 if !viewModel.isCourseListLoading {
@@ -63,6 +66,9 @@ struct CourseView: View {
                         lastId: 0
                     )
                 )
+        }
+        .onChange(of: provinceViewModel.provinces){ (_ , provinces) in
+            viewModel.upperLocations = provinces
         }
 
     }

@@ -11,7 +11,7 @@ import Foundation
 struct CourseDIYCreateResponse: Codable {
     
     /// 코스의ID
-    let courseID: Int
+    let courseId: Int
     
     /// 코스 이미지
     let courseImage: String
