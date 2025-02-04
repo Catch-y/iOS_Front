@@ -22,60 +22,48 @@ struct ReviewView: View {
         
         VStack(alignment: .center, spacing: 20, content: {
             if !viewModel.isLoading {
+                CustomNavigation(action: {
+                    print("hello")
+                }, title: "평점, 리뷰 보기", leftNaviIcon: nil, isShadow: true)
+                
                 if let data = viewModel.reviewData {
-                    CustomNavigation(action: {
-                        print("hello")
-                    }, title: "평점, 리뷰 보기", leftNaviIcon: nil)
-                    
                     ScrollView(.vertical, content: {
                         topReviewInfo(data: data)
                         
-                        reviewTableSection(content: data.content)
-                            .padding(.top, 7)
+                        if !data.content.isEmpty {
+                            reviewTableSection(content: data.content)
+                                .padding(.top, 7)
+                        } else {
+                            infoView()
+                                .padding(.top, 107)
+                        }
                     })
-                        .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 16)
                 } else {
-                    infoView()
-                        .frame(maxWidth: .infinity)
+                    makeProgressView()
                 }
             } else {
-                Spacer()
-                
-                ProgressView()
-                    .controlSize(.regular)
-                
-                Spacer()
+                makeProgressView()
             }
         })
-        //.ignoresSafeArea(.all)
-        .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+        .ignoresSafeArea(.all)
         .task {
             viewModel.getReviewData(reviewData: GetReviewRequest(placeId: 12345, page: 2))
         }
     }
-
+    
     // MARK: - 리뷰 없을 때, 보일 가이드 뷰
     
     private func infoView() -> some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 9) {
             
-            let defaultReviewCounts = (1...5).map { ScoreCount(score: $0, count: 0) }
+            Text("작성된 리뷰가 없습니다.")
+                .font(.Subtitle2)
+                .foregroundColor(.g7)
             
-            topReviewInfo(data: .init(totalRating: 0, reviewCount: defaultReviewCounts, totalCount: 0, content: [], last: true))
-                .padding(.bottom, 107)
-            VStack(spacing: 9) {
-                Text("작성된 리뷰가 없습니다.")
-                    .font(.Subtitle2)
-                    .foregroundColor(.g7)
-
-                Text("새로운 리뷰가 작성될 때까지 기다려보세요!")
-                    .font(.Body1_2)
-                    .foregroundColor(.g4)
-            }
-            .multilineTextAlignment(.center)
-            .padding(.top, 16)
-
-            Spacer()
+            Text("새로운 리뷰가 작성될 때까지 기다려보세요!")
+                .font(.Body1_2)
+                .foregroundColor(.g4)
         }
     }
     // MARK: - 상단 평점 및 리뷰 전체 정보
@@ -104,7 +92,7 @@ struct ReviewView: View {
             })
             .frame(height: 74)
         })
-
+        
         .padding(.top, 16)
         .padding(.bottom, 32)
         .padding(.leading, 29)
@@ -189,6 +177,17 @@ struct ReviewView: View {
                     .background(.g3)
             }
         })
+    }
+    
+    private func makeProgressView() -> some View {
+        VStack(alignment: .center) {
+            Spacer()
+            
+            ProgressView()
+                .controlSize(.regular)
+            
+            Spacer()
+        }
     }
 }
 
