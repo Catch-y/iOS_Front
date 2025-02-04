@@ -43,7 +43,7 @@ struct CustomNavigation: View {
     var body: some View {
         if !isShadow {
             naviGroup
-                .frame(width: 370)
+                .frame(maxWidth: .infinity)
         } else {
             ZStack(alignment: .bottom, content: {
                 Color.white

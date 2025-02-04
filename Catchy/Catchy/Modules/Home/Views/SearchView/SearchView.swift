@@ -22,6 +22,7 @@ struct SearchView: View {
             CustomNavigation(action: {
                 viewModel.container.navigationRouter.pop()
             }, title: nil, rightNaviIcon: nil)
+            .padding(.horizontal, 16)
             
             if viewModel.searchKeyword.isEmpty {
             Spacer().frame(height: 95)
