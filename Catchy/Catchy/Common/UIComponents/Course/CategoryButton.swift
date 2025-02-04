@@ -9,6 +9,9 @@ import SwiftUI
 
 struct CategoryButton: View {
     
+    let category: CategoryType
+    
+    /// 선택되었는가?
     @Binding var isSelected: Bool
     
     /// 서브 카테고리 타입 문자열
@@ -20,8 +23,8 @@ struct CategoryButton: View {
             isSelected.toggle()
         }, label: {
             Text(text)
-                .padding(.horizontal, 19)
-                .padding(.vertical, 9)
+                .frame(width: 85, height: 33)
+                .lineLimit(1)
                 .font(.body3_SM)
                 .foregroundStyle(isSelected ? .m6 : .g4)
                 .background {
@@ -31,19 +34,8 @@ struct CategoryButton: View {
                 }
                 
         })
+        .padding(.top, 0)
     }
 }
 
-
-
-struct CategoryButton_Preview: PreviewProvider {
-    
-
-    static var previews: some View {
-        
-        
-        CategoryButton(isSelected: .constant(false), text: "애견카페")            .previewLayout(.sizeThatFits)
-
-    }
-}
 
