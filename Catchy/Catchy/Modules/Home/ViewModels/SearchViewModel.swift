@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 class SearchViewModel: ObservableObject {
     
@@ -15,9 +16,11 @@ class SearchViewModel: ObservableObject {
     @Published var searchLoad: Bool = false
     
     let container: DIContainer
+    private var cancellables = Set<AnyCancellable>()
     
     init(container: DIContainer) {
         self.container = container
+        realTimeSearch()
     }
     
     public func saveKeyword(_ keyword: String) {
@@ -31,5 +34,60 @@ class SearchViewModel: ObservableObject {
         }
         
         UserDefaults.standard.set(self.recentWords, forKey: "searchKeyword")
+    }
+    
+    private func realTimeSearch() {
+        $searchKeyword
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            .removeDuplicates()
+            .filter { !$0.isEmpty }
+            .sink { [weak self] keyword in
+                guard let self = self else { return }
+                self.performSearch(for: keyword)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func performSearch(for keyword: String) {
+        
+        searchLoad = true
+        
+        container.useCaseProvider.homeUseCase.executeGetSearch(keyword: keyword)
+            .tryMap { responseData -> ResponseData<SearchPlaceResponse> in
+                if !responseData.isSuccess {
+                    throw APIError.serverError(message: responseData.message, code: responseData.code)
+                }
+                
+                guard let _ = responseData.result else {
+                    throw APIError.emptyResult
+                }
+                print("Get Search Server: \(responseData)")
+                return responseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self = self else { return }
+                
+                searchLoad = false
+                
+                switch completion {
+                case .finished:
+                    print("✅ Search request completed")
+                case .failure(let failure):
+                    print("❌ Search request failed: \(failure)")
+                    searchResult = nil
+                }
+            }, receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                if let response = response.result {
+                    if response.content.isEmpty {
+                        searchResult = nil
+                    } else {
+                        searchResult = response
+                    }
+                }
+                print("🔍 Search results updated: \(String(describing: response.result))")
+            })
+            .store(in: &cancellables)
     }
 }

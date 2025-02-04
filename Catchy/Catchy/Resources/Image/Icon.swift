@@ -38,6 +38,7 @@ enum Icon: String {
     case time = "time"
     case review = "review"
     case rightChevron = "rightChevron"
+    case emptyResult = "emptyResult"
     
     //MARK: - Course
     case courseAI = "courseAI"

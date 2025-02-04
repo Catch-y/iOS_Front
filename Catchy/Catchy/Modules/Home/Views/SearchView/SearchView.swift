@@ -31,10 +31,13 @@ struct SearchView: View {
                     .transition(.opacity)
             }
             
-            CustomTextField(text: $viewModel.searchKeyword, searchTextField: .searchView)
+            CustomTextField(text: $viewModel.searchKeyword, onSubmit: {
+                viewModel.saveKeyword(viewModel.searchKeyword)
+            } , searchTextField: .searchView)
                 .padding(.top, 20)
                 .padding(.horizontal, 16)
                 .animation(.easeInOut(duration: 0.5), value: viewModel.searchKeyword)
+                .submitScope()
             
             if !viewModel.recentWords.isEmpty && viewModel.searchKeyword.isEmpty {
                 recenteKeywords
@@ -45,17 +48,12 @@ struct SearchView: View {
                 if !viewModel.searchKeyword.isEmpty {
                     if let placeResult = viewModel.searchResult {
                         placeLazy(placeResult: placeResult)
+                            .padding(.horizontal, 16)
+                            .padding(.top, 32)
                     } else {
                         if !viewModel.searchLoad {
-                            Text("검색된 데이터가 없습니다!")
-                                .font(.body2)
-                                .foregroundStyle(Color.g5)
-                                .overlay(content: {
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .stroke(Color.g4, lineWidth: 1)
-                                        .frame(width: 370, height: 100)
-                                })
-                                .padding(.top, 60)
+                            emptyView
+                                .padding(.top, 114)
                         }
                     }
                 }
@@ -107,19 +105,36 @@ struct SearchView: View {
     }
     
     private func placeLazy(placeResult: SearchPlaceResponse) -> some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.fixed(336)), count: 1), spacing: 30, content: {
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 30, content: {
             ForEach(Array(placeResult.content.enumerated()), id: \.element.id) { index, result in
                 VStack(spacing: 19, content: {
                     SearchRecommendPlaceCard(data: result)
                     
                     if index < placeResult.content.count - 1 {
                         Divider()
-                            .background(Color.g2)
+                            .foregroundStyle(Color.g2)
                             .frame(height: 1)
                     }
                 })
             }
         })
+    }
+    
+    private var emptyView: some View {
+        VStack(alignment: .center, spacing: 0, content: {
+            Icon.emptyResult.image
+                .fixedSize()
+            
+            Text("검색어와 일치하는 내용이 없어요!")
+                .font(.Subtitle2)
+                .foregroundStyle(Color.g7)
+                .padding(.top, 15)
+            
+            Text("확인 후 다시 검색해주세요.")
+                .font(.Body1_2)
+                .foregroundStyle(Color.g4)
+        })
+        
     }
 }
 
