@@ -21,4 +21,22 @@ class MemberService: MemberServiceProtocol {
             .map(ResponseData<EmptyResponse>.self)
             .eraseToAnyPublisher()
     }
+    
+    func postServeyCategory(categories: [String]) -> AnyPublisher<ResponseData<StepOneResponse>, MoyaError> {
+        return provider.requestPublisher(.postServeyCategory(categories: categories))
+            .map(ResponseData<StepOneResponse>.self)
+            .eraseToAnyPublisher()
+    }
+    
+    func postServeyStyleTime(styleTime: StepThirdRequest) -> AnyPublisher<ResponseData<StepTwoResponse>, MoyaError> {
+        return provider.requestPublisher(.postServeyStyleTime(styleTime: styleTime))
+            .map(ResponseData<StepTwoResponse>.self)
+            .eraseToAnyPublisher()
+    }
+    
+    func postLocation(locations: [StepFourStep]) -> AnyPublisher<ResponseData<StepThirdResponse>, MoyaError> {
+        return provider.requestPublisher(.postLocation(locations: locations))
+            .map(ResponseData<StepThirdResponse>.self)
+            .eraseToAnyPublisher()
+    }
 }

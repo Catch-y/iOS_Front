@@ -10,6 +10,9 @@ import Moya
 
 enum MemeberAPITarget {
     case patchNickname(nickname: String)
+    case postServeyCategory(categories: [String])
+    case postServeyStyleTime(styleTime: StepThirdRequest)
+    case postLocation(locations: [StepFourStep])
 }
 
 extension MemeberAPITarget: APITargetType {
@@ -17,6 +20,12 @@ extension MemeberAPITarget: APITargetType {
         switch self {
         case .patchNickname:
             return "/member/mypage/nickname"
+        case .postServeyCategory:
+            return "/member/survey/category"
+        case .postServeyStyleTime:
+            return "/member/survey/styletime"
+        case .postLocation:
+            return "/member/survey/location"
         }
     }
     
@@ -24,6 +33,8 @@ extension MemeberAPITarget: APITargetType {
         switch self {
         case .patchNickname:
             return .get
+        case .postServeyCategory, .postServeyStyleTime, .postLocation:
+            return .post
         }
     }
     
@@ -31,6 +42,12 @@ extension MemeberAPITarget: APITargetType {
         switch self {
         case .patchNickname(let nickname):
             return .requestJSONEncodable(nickname)
+        case .postServeyCategory(let categories):
+            return .requestJSONEncodable(categories)
+        case .postServeyStyleTime(let styleTime):
+            return .requestJSONEncodable(styleTime)
+        case .postLocation(let locations):
+            return .requestJSONEncodable(locations)
         }
     }
     
