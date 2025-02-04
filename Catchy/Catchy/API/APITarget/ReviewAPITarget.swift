@@ -79,11 +79,11 @@ extension ReviewAPITarget: APITargetType {
                         "reviewImages": [
                             {
                                 "reviewImageId": 1,
-                                "imageUrl": "https://example.com/image1.jpg"
+                                "imageUrl": "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp"
                             },
                             {
                                 "reviewImageId": 2,
-                                "imageUrl": "https://example.com/image2.jpg"
+                                "imageUrl": "https://i.namu.wiki/i/PagwakcE00JZaGpEvXym79-IMvKFBmdqOBlq778J-bvJMwz15lDLleTKc56S2wwcRcaEm3FZZ4EtniRa5bXdeQ.webp"
                             }
                         ],
                         "visitedDate": "2025.01.13",
@@ -96,7 +96,7 @@ extension ReviewAPITarget: APITargetType {
                         "reviewImages": [
                             {
                                 "reviewImageId": 3,
-                                "imageUrl": "https://example.com/image3.jpg"
+                                "imageUrl": "https://i.namu.wiki/i/IhFrc6uiSNlonNFRXzSNrKrhPKrjpmlmsB_SDg3x0PeW_L06BFuF7mOq8AcPDYjonfNpG64cQYsINU8sICeDpg.webp"
                             }
                         ],
                         "visitedDate": "2025.01.12",
@@ -125,11 +125,11 @@ extension ReviewAPITarget: APITargetType {
                         "reviewImages": [
                             {
                                 "reviewImageId": 4,
-                                "imageUrl": "https://example.com/image4.jpg"
+                                "imageUrl": "https://i.namu.wiki/i/abZPxKt_L98I8ttqw56pLHtGiR5pAV4YYmpR3Ny3_n0yvff5IDoKEQFof7EbzJUSZ_-uzR5S7tzTzGQ346Qixw.webp"
                             },
                             {
                                 "reviewImageId": 5,
-                                "imageUrl": "https://example.com/image5.jpg"
+                                "imageUrl": "https://i.namu.wiki/i/XGgP6E-6eOwHuC84pFQpqvTvFAj1VjJQJlOOQV7Ky3MrBzI-IdXGw9r4L1YkCxUv5Uk3rYVWkmWHY8unoh8iSQ.webp"
                             }
                         ],
                         "visitedDate": "2025.01.08",

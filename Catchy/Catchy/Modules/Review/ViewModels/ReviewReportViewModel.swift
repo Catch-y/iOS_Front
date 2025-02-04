@@ -42,15 +42,16 @@ extension ReviewReportViewModel {
                 
                 switch completion {
                 case .finished:
-                    print("✅ Get ReviewReportInfo Server Completed")
+                    print("✅ Post ReviewReportInfo Server Completed")
                 case .failure(let failure):
-                    print("❌ Get ReviewReportInfo Failed: \(failure)")
+                    print("❌ Post ReviewReportInfo Failed: \(failure)")
                 }
                 
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 
                 if let response = response.result {
+                    print("🎯 Parsed Response Data: \(response)")
                     self.reviewReportData = response
                 }
             })
