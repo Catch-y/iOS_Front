@@ -24,6 +24,9 @@ protocol UseCaseProtocol {
     
     /// 리뷰 신고하기
     var reviewReportUseCase: ReviewReportUseCase { get set }
+    
+    /// 유저 관련
+    var memberUseCase: MemberUseCase { get set }
 }
 
 class UseCaseProvider: UseCaseProtocol {
@@ -43,6 +46,11 @@ class UseCaseProvider: UseCaseProtocol {
     
     /// 리뷰 신고하기
     var reviewReportUseCase: ReviewReportUseCase
+    
+    var memberUseCase: MemberUseCase
+    
+    /// 리뷰 신고하기
+    var reviewReportUseCase: ReviewReportUseCase
         
     init() {
         self.authUseCase = AuthUseCase()
@@ -51,5 +59,6 @@ class UseCaseProvider: UseCaseProtocol {
         self.reviewUseCase = ReviewUseCase()
         self.reviewReportUseCase = ReviewReportUseCase()
         self.placeUseCase = PlaceUseCase()
+        self.memberUseCase = MemberUseCase()
     }
 }

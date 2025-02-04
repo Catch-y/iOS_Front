@@ -61,7 +61,6 @@ class LoginViewModel: ObservableObject {
         
     }
     
-    // TODO: - 로그인 후 회원가입 이동 함수 구현
     private func goToSignUpPage(signUpNaviData: SignUpNaviData) {
         container.navigationRouter.push(to: .SignUpView(signUpNaviData: signUpNaviData))
     }
@@ -110,6 +109,7 @@ extension LoginViewModel {
                 if let response = response.result {
                     saveKeychain(socialLoginResponse: response)
                     UserState.shared.setLoginType(.kakao)
+                    appflowViewModel.onLoginSuccess(loginViewModel: self)
                 }
             })
             .store(in: &cancellables)
@@ -154,6 +154,7 @@ extension LoginViewModel {
                 if let response = response.result {
                     saveKeychain(socialLoginResponse: response)
                     UserState.shared.setLoginType(.apple)
+                    appflowViewModel.onLoginSuccess(loginViewModel: self)
                 }
             })
             .store(in: &cancellables)
