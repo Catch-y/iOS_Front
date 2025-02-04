@@ -31,7 +31,6 @@ protocol UseCaseProtocol {
 
 class UseCaseProvider: UseCaseProtocol {
     var authUseCase: AuthUseCase
-    var reviewUseCase: ReviewUseCase
     
     /// [Course] UseCase
     var courseUseCase: CourseUseCase

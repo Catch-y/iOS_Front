@@ -49,6 +49,7 @@ struct SignUpView: View {
         .sheet(isPresented: $viewModel.isImagePickerPresented, content: {
             ImagePicker(imageHandler: viewModel, selectedLimit: 1)
         })
+        .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
         .ignoresSafeArea(.keyboard)
         .onAppear {
             UIApplication.shared.hideKeyboard()
@@ -86,7 +87,6 @@ struct SignUpView: View {
             
             Spacer()
         })
-        .frame(width: 370)
     }
     
     private var inputUserInfoGroup: some View {
@@ -102,7 +102,6 @@ struct SignUpView: View {
                 .foregroundStyle(viewModel.nicknameAvail ? Color.p1 : Color.m6)
                 .padding(.top, 3)
         })
-        .frame(width: 370, height: 172)
     }
     
     private func makeInputUserInfo(_ title: String, _ place: String, _ value: Binding<String>) -> some View {
@@ -131,7 +130,6 @@ extension SignUpView {
             
             Divider()
                 .frame(height: 1)
-                .background(Color.g2)
         })
     }
 }
