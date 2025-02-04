@@ -73,7 +73,7 @@ extension CourseAPITarget: APITargetType {
         case .postCourseReview(let course):
             return "course/\(course.courseId)/review"
             
-        case .postCreateCourseDIY(let course):
+        case .postCreateCourseDIY:
             return "course/in-person"
             
         case .postCreateCourseAI:
