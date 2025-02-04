@@ -48,6 +48,9 @@ class UseCaseProvider: UseCaseProtocol {
     var reviewReportUseCase: ReviewReportUseCase
     
     var memberUseCase: MemberUseCase
+    
+    /// 리뷰 신고하기
+    var reviewReportUseCase: ReviewReportUseCase
         
     init() {
         self.authUseCase = AuthUseCase()
