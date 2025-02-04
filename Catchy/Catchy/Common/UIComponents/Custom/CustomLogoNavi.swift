@@ -53,7 +53,7 @@ struct CustomLogoNavi: View {
 
 struct CustomLogoNavi_Preview: PreviewProvider {
     static var previews: some View {
-        CustomLogoNavi(onlyLogo: false)
+        CustomLogoNavi(onlyLogo: true)
             .previewLayout(.sizeThatFits)
     }
 }

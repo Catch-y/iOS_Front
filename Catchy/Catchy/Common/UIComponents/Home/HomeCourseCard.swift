@@ -18,10 +18,24 @@ struct HomeCourseCard: View {
     
     var body: some View {
         VStack(spacing: 9, content: {
-            courseImage
+            ZStack(alignment: .topLeading, content: {
+                courseImage
+
+                Text(data.courseType.rawValue)
+                    .frame(width: 43, height: 16)
+                    .font(.courseTag)
+                    .foregroundStyle(Color.g7)
+                    .background {
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.g2)
+                    }
+                    .padding(.top, 9)
+                    .padding(.leading, 9)
+            })
             
             courseInfo
         })
+        .frame(minWidth: 311, maxHeight: 208)
         .padding(.top, 8)
         .padding(.horizontal, 7)
         .padding(.bottom, 7)
@@ -35,29 +49,19 @@ struct HomeCourseCard: View {
     // MARK: - CourseInfo
     private var courseInfo: some View {
         VStack(alignment: .leading, spacing: 10, content: {
-            HStack(spacing: 10, content: {
-                Text(data.courseName)
-                    .font(.body1)
-                    .foregroundStyle(Color.g7)
-                    .padding(.leading, 2)
-                
-                Text(data.courseType.rawValue)
-                    .frame(width: 43, height: 16)
-                    .font(.courseTag)
-                    .foregroundStyle(Color.g7)
-                    .background {
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(Color.g2)
-                    }
-            })
+            Text(data.courseName)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.body1)
+                .foregroundStyle(Color.g7)
             
             Text(data.courseDescription)
-                .frame(width: 284, alignment: .top)
+                .frame(maxWidth: .infinity, alignment: .topLeading)
                 .font(.body3)
                 .foregroundStyle(Color.g4)
                 .lineLimit(2)
                 .lineSpacing(3)
         })
+        .padding(.horizontal, 10)
         .padding(.vertical, 10)
     }
     
@@ -71,7 +75,7 @@ struct HomeCourseCard: View {
                 }.retry(maxCount: 2, interval: .seconds(2))
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 311, height: 132)
+                .frame(maxWidth: .infinity, maxHeight: 132)
                 .clipShape(RoundedRectangle(cornerRadius: 15))
         }
     }
@@ -79,7 +83,6 @@ struct HomeCourseCard: View {
 
 struct CourseCard_Preview: PreviewProvider {
     static var previews: some View {
-        HomeCourseCard(data: CourseInfoResponse(courseId: UUID(), id: 1, courseType: .diy, courseImage: "https://i.namu.wiki/i/tFLNGekMqpK-fhVmb0NZk-9eBwj5Z6bN5LSGdOqV6t96kfz135jcbZrOuLb_76rMFLMxCy0EgTjeMauhP5SWPSCQXWD7bFRUJBGSDscQaXKyT20t3Mp3buFiW_92UEu99f58pBnGrAtrSaOaHE9JGw.webp", courseName: "코스 이름 아홉자 정도", courseDescription: "코스에 대한 설명 어쩌구 저쩌구 텍스트 길이 테스트 해볼게요 두줄 정렬 하게 되면 이 정도 간격으로 그리고 최대 길이", categories: [.CAFE, .BAR]))
-            .previewLayout(.sizeThatFits)
+        HomeCourseCard(data: .init(courseId: 223, courseName: "경복궁", courseDescription: "ㅁㄴㅇㅁㅇㄴㅇㅁㄴㅁㄴㅇㅁㄴㅇㅇㅁㅇㅁㅇd", courseImage: "https://i.namu.wiki/i/5oX24wIySIGKLQK-xivKI_-DGXsfLmGLupQcvGVOC-luX4GkZZBZJf3OYC96jlGHFGdqzaNpoRULIPjYsSmI8k-OTB1J-v1ZHxU8ILUO8zMI2AH2nGBqIACorKDlDHFywU58LEvaYrR6Hyq043vBeQ.webp", courseType: .ai))
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct SearchView: View {
     
     @StateObject var viewModel: SearchViewModel
+    @State private var showResults = false
     
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
@@ -25,39 +26,52 @@ struct SearchView: View {
             if viewModel.searchKeyword.isEmpty {
             Spacer().frame(height: 95)
                 topTitle
-                    .padding(.leading, 15)
+                    .padding(.leading, 25)
                     .transition(.opacity)
             }
             
             CustomTextField(text: $viewModel.searchKeyword, searchTextField: .searchView)
                 .padding(.top, 20)
+                .padding(.horizontal, 16)
                 .animation(.easeInOut(duration: 0.5), value: viewModel.searchKeyword)
             
             if !viewModel.recentWords.isEmpty && viewModel.searchKeyword.isEmpty {
                 recenteKeywords
                     .padding(.top, 38)
-                    .padding(.horizontal, 15)
+                    .padding(.horizontal, 25)
             }
-            
-            if !viewModel.searchKeyword.isEmpty {
-                if let placeResult = viewModel.searchResult {
-                    placeLazy(placeResult: placeResult)
-                } else {
-                    if !viewModel.searchLoad {
-                        Text("검색된 데이터가 없습니다!")
-                            .font(.body2)
-                            .foregroundStyle(Color.g5)
-                            .overlay(content: {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color.g4, lineWidth: 1)
-                                    .frame(width: 370, height: 100)
-                            })
-                            .padding(.top, 60)
+            if showResults {
+                if !viewModel.searchKeyword.isEmpty {
+                    if let placeResult = viewModel.searchResult {
+                        placeLazy(placeResult: placeResult)
+                    } else {
+                        if !viewModel.searchLoad {
+                            Text("검색된 데이터가 없습니다!")
+                                .font(.body2)
+                                .foregroundStyle(Color.g5)
+                                .overlay(content: {
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .stroke(Color.g4, lineWidth: 1)
+                                        .frame(width: 370, height: 100)
+                                })
+                                .padding(.top, 60)
+                        }
                     }
                 }
             }
             Spacer()
         })
+        .onAppear {
+            UIApplication.shared.hideKeyboard()
+        }
+        .onChange(of: viewModel.searchKeyword) { newValue, oldValue in
+            showResults = false
+            if !newValue.isEmpty {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                    showResults = true
+                }
+            }
+        }
         .animation(.easeInOut(duration: 0.5), value: viewModel.searchKeyword)
     }
     
@@ -77,7 +91,6 @@ struct SearchView: View {
             
             Spacer()
         }
-        .frame(width: 370)
     }
     
     private var recenteKeywords: some View {
@@ -89,7 +102,7 @@ struct SearchView: View {
                         makeButton(keyword)
                     }
         })
-        .frame(width: 352, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: 120)
     }
     
     private func placeLazy(placeResult: SearchPlaceResponse) -> some View {

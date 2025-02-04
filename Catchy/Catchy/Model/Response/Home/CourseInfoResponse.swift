@@ -8,11 +8,18 @@
 import Foundation
 
 struct CourseInfoResponse: Codable, Identifiable {
-    var courseId = UUID()
-    let id: Int
-    let courseType: CourseType
-    let courseImage: String
+    var id = UUID()
+    var courseId: Int
     let courseName: String
     let courseDescription: String
-    let categories: [CategoryType]
+    let courseImage: String
+    let courseType: CourseType
+    
+    enum CodingKeys: CodingKey {
+        case courseId
+        case courseName
+        case courseDescription
+        case courseImage
+        case courseType
+    }
 }

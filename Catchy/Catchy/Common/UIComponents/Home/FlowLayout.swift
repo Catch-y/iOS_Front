@@ -26,7 +26,7 @@ struct FlowLayout<Content: View>: View {
         var rows: [[String]] = [[]]
 
         for tag in tags {
-            let tagWidth = tag.width(usingFont: .systemFont(ofSize: 14)) + 22
+            let tagWidth = tag.width(usingFont: .systemFont(ofSize: 14)) + 24
             if width + tagWidth > geometry.size.width {
                 width = tagWidth
                 rows.append([tag])
@@ -38,7 +38,7 @@ struct FlowLayout<Content: View>: View {
 
         return VStack(alignment: .leading, spacing: 8) {
             ForEach(rows, id: \.self) { row in
-                HStack(spacing: 8) {
+                HStack(spacing: 10) {
                     ForEach(row, id: \.self) { tag in
                         content(tag)
                     }
