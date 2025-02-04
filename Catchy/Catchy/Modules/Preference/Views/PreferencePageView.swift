@@ -13,6 +13,7 @@ struct PreferencePageView: View {
     
     @StateObject var viewModel: PreferenceViewModel
     @StateObject var provinceViewmodel: GetProvinceViewModel = .init()
+    @EnvironmentObject var appFlowViewModel: AppFlowViewModel
     
     @State var scaleFactor: CGFloat = 1.0
     @State var selectedRegion: String? = nil
