@@ -12,6 +12,7 @@ import Moya
 
 /// 마이페이지 Service
 class MyPageService: MyPageServiceProtocol {
+
     
     let provider: MoyaProvider<MyPageAPITarget>
     
@@ -25,4 +26,11 @@ class MyPageService: MyPageServiceProtocol {
             .map(ResponseData<ProfileResponse>.self)
             .eraseToAnyPublisher()
     }
+    
+    func getBookmarkCourseList(pageSize: Int, lastCourseId: Int? = nil) -> AnyPublisher<ResponseData<CourseResponse>, Moya.MoyaError> {
+        return provider.requestPublisher(.getBookmarkCourseList(pageSize: pageSize, lastCourseId: lastCourseId))
+            .map(ResponseData<CourseResponse>.self)
+            .eraseToAnyPublisher()
+    }
+    
 }

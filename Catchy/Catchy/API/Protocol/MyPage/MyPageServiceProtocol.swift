@@ -13,6 +13,8 @@ import Moya
 /// 마이페이지 ServiceProtocol
 protocol MyPageServiceProtocol {
     
-    /// 프로필 조회 
+    /// 프로필 조회
     func getProfile() -> AnyPublisher<ResponseData<ProfileResponse>, MoyaError>
+    
+    func getBookmarkCourseList(pageSize: Int, lastCourseId: Int?) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError>
 }

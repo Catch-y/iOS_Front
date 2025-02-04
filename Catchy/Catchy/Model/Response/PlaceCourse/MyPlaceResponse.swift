@@ -53,3 +53,8 @@ struct MyPageLikePlaceData: Codable {
     let placeSite: String
     
 }
+extension MyPageLikePlaceData: PlaceDataProtocol {
+    var placeImage: String { imageUrl }  // `imageUrl`을 `placeImage`로 매핑
+        var category: CategoryType { categoryName }  // `categoryName`을 `category`로 매핑
+    
+}

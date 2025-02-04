@@ -15,5 +15,7 @@ protocol MyPageRepositoryProtocol {
     
     /// 프로필 조회
     func getProfileData() -> AnyPublisher<ResponseData<ProfileResponse>, MoyaError>
+    
+    func getBookmarkCourseListData(pageSize: Int, lastCourseId: Int?) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError>
 }
 

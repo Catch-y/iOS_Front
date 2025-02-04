@@ -19,13 +19,11 @@ struct MyPageView: View {
     // MARK: - Body
     var body: some View {
         
-        VStack(alignment: .leading, spacing: 20, content: {
+        VStack(alignment: .leading, spacing: 53, content: {
             if !viewModel.isLoading {
                 if let data = viewModel.profileResponse {
                     TopSectionView(data: data)
                     BookmarkedCoursesView()
-                    // 보일 뷰 작성
-                    //.frame(maxWidth: .infinity)
                 } else {
                     // 값을 들고 있지 않다면 가이드 보여주기
                 }
@@ -38,10 +36,11 @@ struct MyPageView: View {
                 Spacer()
             }
         })
-        .ignoresSafeArea(.all)
+        .background(Color(.g1))
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
         .task {
             viewModel.getProfile()
+            viewModel.getBookmarkCourseList(pageSize: 10, lastCourseId: 1)
         }
         .overlay(
             Group {
@@ -54,7 +53,7 @@ struct MyPageView: View {
     
     ///  마이페이지 상단 뷰 (설정 버튼 + 프로필 + 메뉴 버튼)
     private func TopSectionView(data: ProfileResponse) -> some View {
-        return VStack(alignment: .leading, spacing: 20, content: {
+        return VStack(alignment: .leading, spacing: 6, content: {
             
             // 설정 버튼
             HStack {
@@ -65,6 +64,7 @@ struct MyPageView: View {
             
             // 프로필 섹션 뷰 (프로필 이미지 + 닉네임 + 닉네임 수정 버튼)
             ProfileSectionView(data: data)
+                .padding(.bottom, 31)
             
             // 마이페이지 메뉴 버튼
             myPageMenuButtons()
@@ -110,8 +110,12 @@ struct MyPageView: View {
                     .padding(.horizontal, 10)
                     .padding(.vertical, 16)
                     .frame(width: 84, height: 32)
-                    .background(.g1)
+                    .background(Color.white)
                     .clipShape(RoundedRectangle(cornerRadius: 24))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(.g2, lineWidth: 1)
+                    )
             }
         })
     }
@@ -130,20 +134,28 @@ struct MyPageView: View {
                 MyPageItem(icon: item.icon, title: item.title, onTap: item.action)
             }
         })
+        .frame(maxWidth: .infinity)
     }
     
     /// 북마크 코스 뷰
     private func BookmarkedCoursesView() -> some View {
-        return VStack(alignment: .leading, spacing: 10, content: {
+        
+        
+        return VStack(alignment: .leading, spacing: 15, content: {
             Text("북마크한 코스")
                 .font(.Subtitle3)
-                .foregroundColor(.g7)
+                .foregroundStyle(Color.g7)
             
-//            LazyVGrid(columns: columns, spacing: 11) {
-//                ForEach(courses, id: \.courseId) { course in
-//                    CourseGroupCard(course: course)
-//                }
-//            }
+            ScrollView(.vertical, content: {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 11, content: {
+                    if let content = viewModel.courseResponse?.content {
+                        ForEach(content, id: \.id) { course in
+                            CourseGroupCard(course: course, type: .myPage)
+                        }
+                    }
+                })
+            })
+            
         })
     }
     

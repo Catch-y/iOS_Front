@@ -30,7 +30,7 @@ class PlaceCourseRepository: PlaceCourseRepositoryProtocol {
     }
     
     /// 좋아요한 장소 무한 스크롤 API
-    func getMyPlaceListData(pageSize: Int, lastPlaceId: Int) -> AnyPublisher<ResponseData<MyPlaceResponse>, MoyaError> {
+    func getMyPlaceListData(pageSize: Int, lastPlaceId: Int? = nil) -> AnyPublisher<ResponseData<MyPlaceResponse>, MoyaError> {
         return provider.getMyPlaceList(pageSize: pageSize, lastPlaceId: lastPlaceId)
     }
     

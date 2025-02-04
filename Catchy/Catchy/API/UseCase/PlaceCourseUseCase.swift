@@ -33,7 +33,7 @@ class PlaceCourseUseCase: PlaceCourseUseCaseProtocol {
     }
     
     /// 좋아요한 장소 무한 스크롤 API
-    func executeGetMyPlaceList(pageSize: Int, lastPlaceId: Int) -> AnyPublisher<ResponseData<MyPlaceResponse>, MoyaError> {
+    func executeGetMyPlaceList(pageSize: Int, lastPlaceId: Int? = nil) -> AnyPublisher<ResponseData<MyPlaceResponse>, MoyaError> {
         return repository.getMyPlaceListData(pageSize: pageSize, lastPlaceId: lastPlaceId)
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()

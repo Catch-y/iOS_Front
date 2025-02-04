@@ -32,7 +32,7 @@ struct PlaceDetailResponse: Codable, Hashable {
     let activeTime: String
     
     /// 장소 평점
-    let rating: Float
+    let rating: Double
     
     /// 누군가 방문한 장소인지?
     let isVisited: Bool

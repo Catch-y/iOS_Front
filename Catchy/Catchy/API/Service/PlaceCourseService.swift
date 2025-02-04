@@ -35,7 +35,7 @@ class PlaceCourseService: PlaceCourseServiceProtocol {
     }
     
     /// 좋아요한 장소 무한 스크롤 APi
-    func getMyPlaceList(pageSize: Int, lastPlaceId: Int) -> AnyPublisher<ResponseData<MyPlaceResponse>, MoyaError> {
+    func getMyPlaceList(pageSize: Int, lastPlaceId: Int? = nil) -> AnyPublisher<ResponseData<MyPlaceResponse>, MoyaError> {
         return provider.requestPublisher(.getMyPlace(pageSize: pageSize, lastPlaceId: lastPlaceId))
             .map(ResponseData<MyPlaceResponse>.self)
             .eraseToAnyPublisher()

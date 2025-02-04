@@ -23,4 +23,9 @@ class MyPageRepository: MyPageRepositoryProtocol {
     func getProfileData() -> AnyPublisher<ResponseData<ProfileResponse>, MoyaError> {
         return provider.getProfile()
     }
+    
+    func getBookmarkCourseListData(pageSize: Int, lastCourseId: Int? = nil) -> AnyPublisher<ResponseData<CourseResponse>, Moya.MoyaError> {
+        return provider.getBookmarkCourseList(pageSize: pageSize, lastCourseId: lastCourseId)
+    }
+    
 }
