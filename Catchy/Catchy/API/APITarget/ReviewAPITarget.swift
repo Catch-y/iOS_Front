@@ -47,34 +47,34 @@ extension ReviewAPITarget: APITargetType {
             "code": "COMMON200",
             "message": "성공입니다.",
             "result": {
-                "totalRating": 3.95,
+                "totalRating": 4.12,
                 "reviewCount": [
                     {
                         "score": 1,
-                        "count": 2
+                        "count": 3
                     },
                     {
                         "score": 2,
-                        "count": 22
+                        "count": 10
                     },
                     {
                         "score": 3,
-                        "count": 63
+                        "count": 50
                     },
                     {
                         "score": 4,
-                        "count": 68
+                        "count": 80
                     },
                     {
                         "score": 5,
-                        "count": 101
+                        "count": 120
                     }
                 ],
-                "totalCount": 256,
+                "totalCount": 263,
                 "content": [
                     {
-                        "reviewId": 1,
-                        "comment": "이 장소 정말 멋지네요! 분위기도 좋고 다시 방문하고 싶어요.",
+                        "reviewId": 6,
+                        "comment": "친절한 직원과 깔끔한 시설이 좋았어요!",
                         "rating": 5,
                         "reviewImages": [
                             {
@@ -86,41 +86,41 @@ extension ReviewAPITarget: APITargetType {
                                 "imageUrl": "https://i.namu.wiki/i/PagwakcE00JZaGpEvXym79-IMvKFBmdqOBlq778J-bvJMwz15lDLleTKc56S2wwcRcaEm3FZZ4EtniRa5bXdeQ.webp"
                             }
                         ],
-                        "visitedDate": "2025.01.13",
-                        "creatorNickname": "Traveler101"
+                        "visitedDate": "2025.01.15",
+                        "creatorNickname": "KindGuest"
                     },
                     {
-                        "reviewId": 2,
-                        "comment": "음식은 괜찮았지만 서비스가 조금 아쉬웠어요.",
-                        "rating": 3,
+                        "reviewId": 7,
+                        "comment": "조용하고 아늑한 분위기라 마음에 들었어요.",
+                        "rating": 4,
+                        "reviewImages": [],
+                        "visitedDate": "2025.01.14",
+                        "creatorNickname": "PeaceLover"
+                    },
+                    {
+                        "reviewId": 8,
+                        "comment": "가격 대비 성능이 너무 좋아요! 가성비 최고!",
+                        "rating": 5,
                         "reviewImages": [
                             {
                                 "reviewImageId": 3,
                                 "imageUrl": "https://i.namu.wiki/i/IhFrc6uiSNlonNFRXzSNrKrhPKrjpmlmsB_SDg3x0PeW_L06BFuF7mOq8AcPDYjonfNpG64cQYsINU8sICeDpg.webp"
                             }
                         ],
-                        "visitedDate": "2025.01.12",
-                        "creatorNickname": "FoodieLover"
+                        "visitedDate": "2025.01.13",
+                        "creatorNickname": "BudgetTraveler"
                     },
                     {
-                        "reviewId": 3,
-                        "comment": "가족들과 함께 즐거운 시간을 보냈습니다!",
-                        "rating": 4,
-                        "reviewImages": [],
-                        "visitedDate": "2025.01.10",
-                        "creatorNickname": "FamilyFirst"
-                    },
-                    {
-                        "reviewId": 4,
-                        "comment": "위치는 좋은데 주변 소음이 조금 있었습니다.",
+                        "reviewId": 9,
+                        "comment": "청결 상태가 조금 아쉬웠어요.",
                         "rating": 2,
                         "reviewImages": [],
-                        "visitedDate": "2025.01.09",
-                        "creatorNickname": "QuietSeeker"
+                        "visitedDate": "2025.01.12",
+                        "creatorNickname": "CleanFreak"
                     },
                     {
-                        "reviewId": 5,
-                        "comment": "전반적으로 만족스러운 경험이었습니다. 추천합니다!",
+                        "reviewId": 10,
+                        "comment": "뷰가 정말 멋있어요. 사진 찍기 딱 좋습니다!",
                         "rating": 5,
                         "reviewImages": [
                             {
@@ -132,7 +132,15 @@ extension ReviewAPITarget: APITargetType {
                                 "imageUrl": "https://i.namu.wiki/i/XGgP6E-6eOwHuC84pFQpqvTvFAj1VjJQJlOOQV7Ky3MrBzI-IdXGw9r4L1YkCxUv5Uk3rYVWkmWHY8unoh8iSQ.webp"
                             }
                         ],
-                        "visitedDate": "2025.01.08",
+                        "visitedDate": "2025.01.11",
+                        "creatorNickname": "PhotoLover"
+                    },
+                    {
+                        "reviewId": 11,
+                        "comment": "커피 맛이 별로였어요. 기대보다 실망했습니다.",
+                        "rating": 1,
+                        "reviewImages": [],
+                        "visitedDate": "2025.01.10",
                         "creatorNickname": "HappyCamper"
                     }
                 ],

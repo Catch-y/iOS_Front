@@ -15,4 +15,6 @@ protocol MyPageUseCaseProtocol {
     
     /// 프로필 조회
     func executeGetProfile() -> AnyPublisher<ResponseData<ProfileResponse>, MoyaError>
+    
+    func executeGetBookmarkCourseList(pageSize: Int, lastCourseId: Int?) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError>
 }

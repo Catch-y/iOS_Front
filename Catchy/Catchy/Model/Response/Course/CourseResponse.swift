@@ -41,16 +41,16 @@ struct CourseResponseData: Codable, Identifiable{
     let courseDescription: String
     
     /// 코스 카테고리 (최대 5개)
-    let categorise: [CategoryType]
+    let categories: [CategoryType]
     
-    init(id: UUID = UUID(), courseId: Int, courseType: CourseType, courseImage: String, courseName: String, courseDescription: String, categorise: [CategoryType]) {
+    init(id: UUID = UUID(), courseId: Int, courseType: CourseType, courseImage: String, courseName: String, courseDescription: String, categories: [CategoryType]) {
         self.id = id
         self.courseId = courseId
         self.courseType = courseType
         self.courseImage = courseImage
         self.courseName = courseName
         self.courseDescription = courseDescription
-        self.categorise = categorise
+        self.categories = categories
     }
     
     enum CodingKeys : String, CodingKey {
@@ -59,7 +59,7 @@ struct CourseResponseData: Codable, Identifiable{
         case courseImage
         case courseName
         case courseDescription
-        case categorise
+        case categories
     }
     
 }

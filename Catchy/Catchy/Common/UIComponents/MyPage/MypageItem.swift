@@ -26,9 +26,13 @@ struct MyPageItem: View {
                     .foregroundColor(.g6)
             })
             .frame(width: 112, height: 98)
-            .background(.bg1)
+            .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 20))
         }
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(.g3, lineWidth: 1)
+        )
     }
 }
 

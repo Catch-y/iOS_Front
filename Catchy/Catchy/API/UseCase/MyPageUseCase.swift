@@ -26,6 +26,11 @@ class MyPageUseCase: MyPageUseCaseProtocol {
             .eraseToAnyPublisher()
     }
     
+    func executeGetBookmarkCourseList(pageSize: Int, lastCourseId: Int? = nil) -> AnyPublisher<ResponseData<CourseResponse>, Moya.MoyaError> {
+        return repository.getBookmarkCourseListData(pageSize: pageSize, lastCourseId: lastCourseId)
+            .mapError { $0 as MoyaError }
+            .eraseToAnyPublisher()
+    }
     
 }
 

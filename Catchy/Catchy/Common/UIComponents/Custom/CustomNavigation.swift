@@ -78,9 +78,9 @@ struct CustomNavigation: View {
             Spacer()
             
             Text(title)
-                .font(.naviFont)
+                .font(.Subtitle3_SM)
                 .foregroundStyle(Color.g7)
-                .padding(.leading, 15)
+                .padding(.leading, leftNaviIcon == nil ? 15 : 0)
             
             Spacer()
         } else {
@@ -100,6 +100,6 @@ struct CustomNavigation: View {
 
 struct CustomNavigation_Prevview: PreviewProvider {
     static var previews: some View {
-        CustomNavigation(action: {print("평점, 리뷰 보기")}, title: "평점, 리뷰 보기", leftNaviIcon: nil, isShadow: true)
+        CustomNavigation(action: {print("평점, 리뷰 보기")}, title: "평점, 리뷰 보기", rightNaviIcon: nil, isShadow: true)
     }
 }
