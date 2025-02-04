@@ -110,6 +110,7 @@ extension LoginViewModel {
                 if let response = response.result {
                     saveKeychain(socialLoginResponse: response)
                     UserState.shared.setLoginType(.kakao)
+                    appflowViewModel.onLoginSuccess(loginViewModel: self)
                 }
             })
             .store(in: &cancellables)
@@ -154,6 +155,7 @@ extension LoginViewModel {
                 if let response = response.result {
                     saveKeychain(socialLoginResponse: response)
                     UserState.shared.setLoginType(.apple)
+                    appflowViewModel.onLoginSuccess(loginViewModel: self)
                 }
             })
             .store(in: &cancellables)

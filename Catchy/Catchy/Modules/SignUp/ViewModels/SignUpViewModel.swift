@@ -54,6 +54,17 @@ class SignUpViewModel: ObservableObject, ImageHandling {
         UserState.shared.setUserNickname(response.nickname)
         UserState.shared.setUserEmail(response.email)
     }
+    
+    private func setupNicknameValidation() {
+        $nickname
+            .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
+            .removeDuplicates()
+            .filter { !$0.isEmpty && $0.count <= 9}
+            .sink(receiveValue: { [weak self] nickname in
+                self?.checkNicknameAvailability(nickname: nickname)
+            })
+            .store(in: &cancellables)
+    }
 }
 
 extension SignUpViewModel {
@@ -120,5 +131,9 @@ extension SignUpViewModel {
                 }
             })
             .store(in: &cancellables)
+    }
+    
+    private func checkNicknameAvailability(nickname: String) {
+        
     }
 }
