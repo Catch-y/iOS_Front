@@ -90,11 +90,17 @@ struct SignUpView: View {
     }
     
     private var inputUserInfoGroup: some View {
-        VStack(alignment: .leading, spacing: 44, content: {
+        VStack(alignment: .leading, spacing: 0, content: {
             makeInputUserInfo("이메일", "", .constant(signUpNaviData.email))
                 .disabled(true)
             
             makeInputUserInfo("닉네임", "닉네임 8자까지 입력해주세요.", $viewModel.nickname)
+                .padding(.top, 44)
+            
+            Text(viewModel.nicknameMessage)
+                .font(.courseTag)
+                .foregroundStyle(viewModel.nicknameAvail ? Color.p1 : Color.m6)
+                .padding(.top, 3)
         })
         .frame(width: 370, height: 172)
     }

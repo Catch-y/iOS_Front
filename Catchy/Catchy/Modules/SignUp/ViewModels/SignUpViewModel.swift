@@ -11,6 +11,8 @@ import Combine
 
 class SignUpViewModel: ObservableObject, ImageHandling {
     @Published var nickname: String = ""
+    @Published var nicknameMessage: String = "이미 사용중인 닉네임입니다."
+    @Published var nicknameAvail: Bool = false
     @Published var isLoading: Bool = false
     
     let container: DIContainer
@@ -21,6 +23,7 @@ class SignUpViewModel: ObservableObject, ImageHandling {
     init(container: DIContainer, appFlowViewModel: AppFlowViewModel) {
         self.container = container
         self.appflowViewModel = appFlowViewModel
+        setupNicknameValidation()
     }
     
     // MARK: - ImageProperty
@@ -34,12 +37,10 @@ class SignUpViewModel: ObservableObject, ImageHandling {
         if profileImage.isEmpty {
             return false
         } else {
-            if nickname.isEmpty {
-                return false
-            } else if nickname.count > 9 {
-                return false
-            } else {
+            if nicknameAvail {
                 return true
+            } else {
+                return false
             }
         }
     }
@@ -133,7 +134,38 @@ extension SignUpViewModel {
             .store(in: &cancellables)
     }
     
+    /// 닉네임 중복 체크 함수
+    /// - Parameter nickname: 사용자가 입력한 닉네임
     private func checkNicknameAvailability(nickname: String) {
-        
+        container.useCaseProvider.memberUseCase.executePatchNickname(nickname: nickname)
+            .tryMap { respopnseData -> ResponseData<EmptyResponse> in
+                if !respopnseData.isSuccess && respopnseData.code == "COMMON401" {
+                    throw APIError.serverError(message: respopnseData.message, code: respopnseData.code)
+                }
+                
+                print("User Nickname Check")
+                return respopnseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("✅ User Nickname Check Completed")
+                case .failure(let failure):
+                    print("❌ User Nickname Fialed: \(failure)")
+                }
+            }, receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                print("🔵 ResponseData: \(response)")
+                if response.message == "이미 사용 중인 닉네임입니다." {
+                    nicknameAvail = false
+                    nicknameMessage = response.message
+                } else if response.message == "사용가능한 닉네임입니다." {
+                    nicknameAvail = true
+                    nicknameMessage = response.message
+                }
+                
+            })
+            .store(in: &cancellables)
     }
 }

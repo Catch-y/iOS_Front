@@ -61,7 +61,6 @@ class LoginViewModel: ObservableObject {
         
     }
     
-    // TODO: - 로그인 후 회원가입 이동 함수 구현
     private func goToSignUpPage(signUpNaviData: SignUpNaviData) {
         container.navigationRouter.push(to: .SignUpView(signUpNaviData: signUpNaviData))
     }
