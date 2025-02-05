@@ -20,7 +20,9 @@ struct LikeButton: View {
     
     var body: some View {
         Button(action: {
-            toggleLike()
+            withAnimation {
+                toggleLike()
+            }
         }, label: {
             ZStack(alignment: .center, content: {
                 Circle()
@@ -35,6 +37,7 @@ struct LikeButton: View {
     func toggleLike() {
         data.isLike.toggle()
         action()
+        print(data.isLike)
     }
     
     func heartIcon() -> Image {

@@ -22,14 +22,14 @@ struct RecommendPlaceCard: View {
                 placeLocationInfo
                     .padding(.top, 11)
             })
-            .frame(width: 165, height: 91)
         })
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     private var placeImage: some View {
         ZStack(alignment: .topLeading, content: {
             
-            if let url = URL(string: data.placeImage) {
+            if let url = URL(string: data.placeImageUrl) {
                 KFImage(url)
                     .placeholder {
                         ProgressView()
@@ -42,6 +42,7 @@ struct RecommendPlaceCard: View {
             }
             
             LikeButton(data: $data, action: {
+                //TODO: - Like API 연결
                 print("장소 좋아요 클릭")
             })
             .padding(.leading, 8)
@@ -50,13 +51,12 @@ struct RecommendPlaceCard: View {
     }
     
     private var placeTitleTag: some View {
-        HStack(spacing: 15 ,content: {
+        HStack(spacing: 8, content: {
             Text(data.placeName)
                 .font(.body1)
                 .foregroundStyle(Color.g7)
-                .frame(width: 107, alignment: .leading)
             
-            Text(data.subCategory)
+            Text(data.category)
                 .font(.courseTag)
                 .foregroundStyle(Color.g6)
                 .padding(.vertical, 4)
@@ -66,21 +66,22 @@ struct RecommendPlaceCard: View {
                         .foregroundStyle(Color.g2)
                 }
         })
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     private var placePointInfo: some View {
         HStack(spacing: 8, content: {
-            makeInfoTitle(Icon.star.image, "평점 \(data.starPoint)")
+            makeInfoTitle(Icon.star.image, "평점 \(data.averageRating)")
             
-            makeReview(Icon.review.image, "리뷰 \(data.reviewCnt)개", Icon.rightChevron.image)
+            makeReview(Icon.review.image, "리뷰 \(data.reviewCount)개", Icon.rightChevron.image)
         })
     }
     
     private var placeLocationInfo: some View {
         VStack(alignment: .leading, spacing: 6, content: {
-            makeInfoTitle(Icon.location.image, data.placeLocation)
+            makeInfoTitle(Icon.location.image, data.roadAddress)
             
-            makeInfoTitle(Icon.time.image, data.placeOperTime)
+            makeInfoTitle(Icon.time.image, data.activeTime)
         })
     }
     
@@ -109,5 +110,11 @@ extension RecommendPlaceCard {
             rightImage
                 .fixedSize()
         })
+    }
+}
+
+struct RecommendPlaceCard_Preview: PreviewProvider {
+    static var previews: some View {
+        RecommendPlaceCard(data: .constant(RecommendPlaceResponse(placeId: 0, placeImageUrl: "https://i.namu.wiki/i/Ca6uA8jti6jQfstU5FzeSH6bnn9Ms8uoWBMROytYU606IZ0GLj4d8RWEAQpV3PUP1FjsuemL2y-QlMwp-m1JiQl-ZXmKvkKDfsFNK93VrWiFP9Tv7Yz71eOmMJnBKGHfQEFIfGODpVi3lwxEll8eAw.webp", category: "영화", placeName: "삼퍼티쿠시 용산점", roadAddress: "서울시 동작구", activeTime: "월-금 16:00 - 21:00", reviewCount: 203, averageRating: 4.3, isLike: false)))
     }
 }

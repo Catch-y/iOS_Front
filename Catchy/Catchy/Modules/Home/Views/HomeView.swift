@@ -26,7 +26,6 @@ struct HomeView: View {
                 if let data = viewModel.courseInfoResponse {
                     firstSection(data: data)
                         .padding(.top, 35)
-                        .border(Color.red)
                 }
                 
                 if let data = viewModel.popularCourseResponse {
@@ -34,10 +33,17 @@ struct HomeView: View {
                         .padding(.top, 42)
                 }
                 
+                thirdSection(datas: Binding(get: {
+                    viewModel.recommendPlaceResponse ?? []
+                }, set: {
+                    viewModel.recommendPlaceResponse = $0
+                }))
+                .padding(.top ,42)
+                
                 Spacer()
             })
             .frame(maxHeight: .infinity)
-            .border(Color.red)
+            .padding(.bottom, 110)
         })
         .ignoresSafeArea(.all)
     }
@@ -83,31 +89,65 @@ struct HomeView: View {
             Text(DataFormatter.shared.makeStyledText(for: "이번주 인기코스 TOP 10"))
                 .font(.Subtitle2)
                 .foregroundStyle(Color.g7)
-            GeometryReader { geo in
-                ZStack(alignment: .topLeading, content: {
-                    ScrollView(.horizontal, content: {
-                        HStack(spacing: 15, content: {
-                            ForEach(datas, id: \.id) { data in
-                                PopularCourseCard(data: data)
-                                    .visualEffect { content, geometryProxy in
-                                        MainActor.assumeIsolated {
-                                            content
-                                                .scaleEffect(scale(geometryProxy, scale: 0.1), anchor: .trailing)
-                                                .rotationEffect(rotaion(geometryProxy, rotation: 5))
-                                                .offset(x: minX(geometryProxy))
-                                                .offset(x: excessMinX(geometryProxy, offset: 10))
-                                        }
+            ZStack(alignment: .topLeading, content: {
+                ScrollView(.horizontal, content: {
+                    HStack(spacing: 15, content: {
+                        ForEach(datas, id: \.id) { data in
+                            PopularCourseCard(data: data)
+                                .visualEffect { content, geometryProxy in
+                                    MainActor.assumeIsolated {
+                                        content
+                                            .scaleEffect(scale(geometryProxy, scale: 0.1), anchor: .trailing)
+                                            .rotationEffect(rotaion(geometryProxy, rotation: 5))
+                                            .offset(x: minX(geometryProxy))
+                                            .offset(x: excessMinX(geometryProxy, offset: 10))
                                     }
-                                    .zIndex(datas.zIndex(data))
-                            }
-                        })
-                        .padding(.vertical, 15)
-                        .padding(.horizontal, 15)
+                                }
+                                .zIndex(datas.zIndex(data))
+                        }
                     })
-                    .scrollTargetBehavior(.paging)
-                    .frame(height: 280)
+                    .padding(.vertical, 15)
+                    .padding(.horizontal, 15)
                 })
-            }
+                .scrollTargetBehavior(.paging)
+                .frame(height: 280)
+            })
+        })
+        .padding(.horizontal, 16)
+    }
+    
+    private func thirdSection(datas: Binding<[RecommendPlaceResponse]>) -> some View {
+        VStack(alignment: .leading, spacing: 25, content: {
+            HStack(content: {
+                Text(DataFormatter.shared.makeStyledText(for: "\(UserState.shared.getUserNickname())님과 비슷한 취향을 \n가진 사람들이 좋아하는 장소예요"))
+                    .lineLimit(2)
+                    .lineSpacing(2.5)
+                
+                Spacer()
+                
+                Button(action: {
+                    
+                }, label: {
+                    HStack(spacing: 8) {
+                        Text("자세히 보기")
+                            .font(.body3)
+                            .foregroundStyle(Color.g4)
+
+                        Icon.rightChevron.image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 4, height: 7)
+                    }
+                })
+                
+            })
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 18, content: {
+                ForEach(datas, id: \.id) { data in
+                    RecommendPlaceCard(data: data)
+                }
+            })
+            .padding(.top, 20)
         })
         .padding(.horizontal, 16)
     }
