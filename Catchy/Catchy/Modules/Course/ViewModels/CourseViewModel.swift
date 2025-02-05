@@ -64,12 +64,17 @@ class CourseViewModel: ObservableObject{
     
     
     // MARK: - FLoating Button Properties
-    
     /// 플로팅 버튼 상태
     @Published var isFloating: Bool = false
     
-    // MARK: - Init
+    /// 탭 된 플로팅 버튼 
+    @Published var selectedFloatingSegment: CourseSegment?
     
+    // MARK: - 화면 전환
+    /// AI 코스 생성 버튼이 눌렸을 때, 화면이 나타났는가?
+    @Published var isPresented: Bool = false
+    
+    // MARK: - Init
     init(container: DIContainer) {
         self.container = container
     }

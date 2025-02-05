@@ -67,9 +67,9 @@ extension AILoadingViewModel {
             .sink(receiveCompletion: {
                 [weak self] completion in
                 guard let self = self else { return }
-                
+                print(self.isLoading)
                 self.isLoading = false
-                
+                print(self.isLoading)
                 switch completion {
                 case .finished:
                     print("✅ Post CreateAICourse Server Completed")

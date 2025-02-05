@@ -11,7 +11,9 @@ import SwiftUI
 struct AILoadingView: View {
     
     @StateObject var viewModel: AILoadingViewModel
-
+    
+    @Environment(\.dismiss) var dismiss
+    
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
     }
@@ -43,9 +45,12 @@ struct AILoadingView: View {
         .task {
             viewModel.postCreateCourseAI()
         }
-        .onChange(of: viewModel.isLoading) { (oldValue, newValue) in
-            print(oldValue)
-            print(newValue)
+        .onChange(of: viewModel.isLoading) { (_, isLoading) in
+            
+            // TODO: - Dismiss 구현
+            if !isLoading {
+                dismiss()
+            }
         }
     }
     
@@ -155,7 +160,7 @@ struct AILoadingView: View {
             .frame(width: screenWidth * 0.07)
             .offset(
                 x: xOffset,
-                y: yOffset + (isFloating ? -8 : 0)
+                y: yOffset + (isFloating ? -5 : 0)
             )
             .opacity(isShowing ? 1 : 0)
     }
