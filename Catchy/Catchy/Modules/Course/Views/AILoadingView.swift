@@ -10,8 +10,8 @@ import SwiftUI
 /// AI 생성 버튼 탭 시 나타나는 뷰
 struct AILoadingView: View {
     
-    @StateObject var viewModel: AICourseCreateViewModel
-        
+    @StateObject var viewModel: AILoadingViewModel
+
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
     }
@@ -34,55 +34,18 @@ struct AILoadingView: View {
                     
                     
                 }.onAppear {
-                    withAnimation(.easeIn(duration: viewModel.duration).delay(0)) {
-                        viewModel.showRedPin = true
-                    }
-                    withAnimation(.easeIn(duration: viewModel.duration).delay(viewModel.duration)) {
-                        viewModel.showYellowPin = true
-                    }
-                    withAnimation(.easeIn(duration: viewModel.duration).delay(viewModel.duration * 2)) {
-                        viewModel.showPurplePin = true
-                    }
-                    withAnimation(.easeIn(duration: viewModel.duration).delay(viewModel.duration * 3)) {
-                        viewModel.showBluePin = true
-                    }
-                    
-                    withAnimation(
-                        Animation
-                            .easeInOut(duration: viewModel.duration)
-                            .repeatForever(autoreverses: true)
-                            .delay(0)
-                    ) { viewModel.floatingRedPin = true}
-                    withAnimation(
-                        Animation
-                            .easeInOut(duration: viewModel.duration)
-                            .repeatForever(autoreverses: true)
-                            .delay(viewModel.duration)
-                    ) { viewModel.floatingYellowPin = true }
-                    withAnimation(
-                        Animation
-                            .easeInOut(duration: viewModel.duration)
-                            .repeatForever(autoreverses: true)
-                            .delay(viewModel.duration * 2)
-                    ) { viewModel.floatingPurplePin = true }
-                    withAnimation(
-                        Animation
-                            .easeInOut(duration: viewModel.duration)
-                            .repeatForever(autoreverses: true)
-                            .delay(viewModel.duration * 3)
-                    ) { viewModel.floatingBluePin = true }
-                    
-                    // TODO: - 다음 화면으로 넘어가는 로직 구현.
-                    DispatchQueue.main.async {
-                        if !viewModel.isLoading {
-                            
-                        }
-                    }
-                    
+                    animatePinSequence()
                 }
                 
             }
         
+        }
+        .task {
+            viewModel.postCreateCourseAI()
+        }
+        .onChange(of: viewModel.isLoading) { (oldValue, newValue) in
+            print(oldValue)
+            print(newValue)
         }
     }
     
@@ -156,6 +119,25 @@ struct AILoadingView: View {
             }
     }
     
+    /// 그라데이션 뷰
+    private var gradient: some View {
+        
+        /// #FF517D
+        let startColor = Color(red:255/255, green: 81/255, blue: 125/255).opacity(
+            0.1
+        )
+        
+        return LinearGradient(
+            gradient: Gradient(
+                colors: [.white, startColor, .white]
+            ),
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .frame(maxWidth: .infinity)
+        .padding(.bottom, 200)
+    }
+    
     
     /// 핀 이미지를 만듭니다.
     /// - Parameters:
@@ -178,16 +160,81 @@ struct AILoadingView: View {
             .opacity(isShowing ? 1 : 0)
     }
     
-    /// 그라데이션
-    private var gradient: some View {
+    /// 핀 나타나는 애니메이션
+    private func animatePinSequence() {
         
-        /// #FF517D
-        let startColor = Color(red:255/255, green: 81/255, blue: 125/255).opacity(0.1)
+        let duration = viewModel.duration
         
-        return LinearGradient(gradient: Gradient(colors: [.white, startColor, .white]),
-                       startPoint: .top, endPoint: .bottom)
-        .frame(maxWidth: .infinity)
-        .padding(.bottom, 200)
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            viewModel.showRedPin = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration * 2) {
+            viewModel.showYellowPin = true
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration * 3) {
+            viewModel.showPurplePin = true
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration * 4) {
+            viewModel.showBluePin = true
+        }
+
+        animateFloatingPins()
+    }
+
+    /// 핀 플로팅 애니메이션
+    private func animateFloatingPins() {
+
+        let duration = viewModel.duration
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            withAnimation(
+                Animation.easeInOut(duration: duration).repeatForever(autoreverses: true)
+            ) { viewModel.floatingRedPin = true }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration * 2) {
+            withAnimation(
+                Animation.easeInOut(duration: duration).repeatForever(autoreverses: true)
+            ) { viewModel.floatingYellowPin = true }
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration * 3) {
+            withAnimation(
+                Animation.easeInOut(duration: duration).repeatForever(autoreverses: true)
+            ) { viewModel.floatingPurplePin = true }
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration * 4) {
+            withAnimation(
+                Animation.easeInOut(duration: duration).repeatForever(autoreverses: true)
+            ) { viewModel.floatingBluePin = true }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration * 5) {
+            resetAnimations()
+            animatePinSequence()
+        }
+    }
+    
+    /// 애니메이션을 재시작하기전 호출
+    /// 애니메이션 관련 변수를 초기화
+    private func resetAnimations() {
+        
+        let duration = viewModel.duration
+        
+        withAnimation(.smooth(duration: duration * 0.7)) {
+            viewModel.showRedPin = false
+            viewModel.showBluePin = false
+            viewModel.showPurplePin = false
+            viewModel.showYellowPin = false
+        }
+        
+        viewModel.floatingRedPin = false
+        viewModel.floatingBluePin = false
+        viewModel.floatingPurplePin = false
+        viewModel.floatingYellowPin = false
     }
     
 }

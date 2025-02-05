@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 import CombineMoya
 
-class AICourseCreateViewModel: ObservableObject {
+class AILoadingViewModel: ObservableObject {
     
     let container: DIContainer
     
@@ -18,7 +18,7 @@ class AICourseCreateViewModel: ObservableObject {
     
     // MARK: - AI 코스 생성 로딩화면 Properties
     /// 애니메이션 시간
-    let duration: TimeInterval = 0.75
+    let duration: TimeInterval = 1
 
     @Published var showRedPin = false
     @Published var showYellowPin = false
@@ -44,7 +44,7 @@ class AICourseCreateViewModel: ObservableObject {
 }
 
 
-extension AICourseCreateViewModel {
+extension AILoadingViewModel {
     
     // MARK: - API 요청 함수
     /// 코스 생성(AI) API
@@ -86,5 +86,7 @@ extension AICourseCreateViewModel {
             }
             ).store(in: &cancellables)
     }
+    
+    // MARK: - API 요청 없는 함수
                   
 }
