@@ -57,7 +57,7 @@ struct CourseGroupCard: View {
             
             /// 카테고리 태그
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: 4), content: {
-                ForEach(course.categorise, id: \.self) { categoryType in
+                ForEach(course.categories, id: \.self) { categoryType in
                     CategoryCard(categoryType: categoryType)
                 }
             })

@@ -11,12 +11,12 @@ import SwiftUI
 class DataFormatter {
     static let shared = DataFormatter()
     
-    func makeStyledText(for text: String) -> AttributedString {
+    func makeStyledText(for text: String, with font: Font = .Subtitle2) -> AttributedString {
         var attributedString = AttributedString(text)
         
         if let nicknameRange = attributedString.range(of: UserState.shared.getUserNickname()) {
             attributedString[nicknameRange].foregroundColor = Color.main
-            attributedString[nicknameRange].font = .Subtitle2
+            attributedString[nicknameRange].font = font
         }
         
         if let keywordRange = attributedString.range(of: "취향을 저격") {
@@ -33,6 +33,13 @@ class DataFormatter {
             attributedString[keywordRange].foregroundColor = Color.main
             attributedString[keywordRange].font = .Subtitle2
         }
+        
+        if let keywordRange = attributedString.range(of: "딱 맞는 코스") {
+            attributedString[keywordRange].foregroundColor = Color.main
+            attributedString[keywordRange].font = .Subtitle1
+        }
+
+    
         
         return attributedString
     }
