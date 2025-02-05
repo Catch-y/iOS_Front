@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 
 class PlaceSearchViewModel: ObservableObject {
-    
+        
     let container: DIContainer
     
     var cancellables = Set<AnyCancellable>()
@@ -90,7 +90,7 @@ extension PlaceSearchViewModel {
     }
     
     /// 장소 검색 - 상세 화면
-    func getPlaceDetail(placeId: Int) async {
+    func getPlaceDetail(placeId: Int) {
         
         isPlaceDetailLoading = true
         
@@ -112,7 +112,7 @@ extension PlaceSearchViewModel {
                 [weak self] completion in
                 guard let self = self else { return }
 
-                isPlaceDetailLoading = true
+                isPlaceDetailLoading = false
                 
                 switch completion {
                 case .finished:

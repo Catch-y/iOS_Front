@@ -38,6 +38,12 @@ struct PlaceView: View {
                 }
                 
             }
+            .navigationDestination(
+                for: NavigationDestination.self
+            ) { destination in
+                NavigationRoutingView(destination: destination)
+                    .environmentObject(container)
+            }
             .task {
                 viewModel
                     .getPlaceList(
@@ -47,13 +53,8 @@ struct PlaceView: View {
                         )
                     )
             }
-            
-        }.navigationDestination(
-            for: NavigationDestination.self
-        ) { destination in
-            NavigationRoutingView(destination: destination)
-                .environmentObject(container)
         }
+            
     }
     
     /// 스크롤 뷰
@@ -72,25 +73,7 @@ struct PlaceView: View {
                         index,
                         place in
                         VStack(spacing: 0) {
-                            PlaceCard(place: place).onTapGesture{
-                                Task{
-                                    await viewModel
-                                        .getPlaceDetail(
-                                            placeId: place.placeId
-                                        )
-                                        
-                                    if let placeData = viewModel.placeDetailResponse {
-                                            
-                                        container.navigationRouter.push(
-                                            to: .PlaceDetailView(
-                                                placeDetailResponse: placeData
-                                            )
-                                        )
-                                    }
-                                }
-                                    
-                            }
-                                
+                            PlaceCard(place: place)
                             if index < content.count - 1 {
                                 Divider()
                                     .padding(.vertical, 20)

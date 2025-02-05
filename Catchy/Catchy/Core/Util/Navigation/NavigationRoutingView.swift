@@ -18,10 +18,6 @@ struct NavigationRoutingView: View {
         switch destination {
         case .SignUpView(let signUpNaviData):
             SignUpView(container: container, appFlowViewModel: appFlowViewModel, signUpNaviData: signUpNaviData)
-            
-        case .PlaceDetailView(let placeDetailResponse):
-            PlaceDetailView(place: placeDetailResponse)
-                .environmentObject(container)
         }
     }
 }
