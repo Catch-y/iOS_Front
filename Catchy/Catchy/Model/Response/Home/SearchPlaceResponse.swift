@@ -14,11 +14,24 @@ struct SearchPlaceResponse: Codable, Hashable {
 struct SearchPlaceData: Codable, Identifiable, Hashable {
     var id = UUID()
     var placeId: Int
-    var placeImage: String
     var searchedPlaceName: String
     var searchedPlaceCategory: CategoryType
+    var placeName: String
+    var placeImageUrl: String
     var roadAddress: String
     var activeTime: String
     var reviewCount: Int
     var averageRating: Double
+    
+    enum CodingKeys: CodingKey {
+        case placeId
+        case searchedPlaceName
+        case searchedPlaceCategory
+        case placeName
+        case placeImageUrl
+        case roadAddress
+        case activeTime
+        case reviewCount
+        case averageRating
+    }
 }

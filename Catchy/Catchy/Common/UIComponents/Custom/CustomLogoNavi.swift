@@ -44,6 +44,7 @@ struct CustomLogoNavi: View {
                 Spacer()
                 
                 CustomTextField(text: .constant(""), searchTextField: .homeView)
+                    .disabled(true)
             }
         })
         .frame(height: 32)

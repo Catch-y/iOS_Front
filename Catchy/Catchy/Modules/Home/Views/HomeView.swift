@@ -12,6 +12,8 @@ struct HomeView: View {
     @EnvironmentObject var container: DIContainer
     @StateObject var viewModel: HomeViewModel
     
+    @State var isRotationEnabled: Bool = false
+    
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
     }
@@ -20,10 +22,28 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 0, content: {
             CustomLogoNavi(onlyLogo: false)
             
-            firstSection
-                .padding(.top, 35)
-            
-            Spacer()
+            ScrollView(.vertical, content: {
+                if let data = viewModel.courseInfoResponse {
+                    firstSection(data: data)
+                        .padding(.top, 35)
+                }
+                
+                if let data = viewModel.popularCourseResponse {
+                    seconSection(datas: data)
+                        .padding(.top, 42)
+                }
+                
+                thirdSection(datas: Binding(get: {
+                    viewModel.recommendPlaceResponse ?? []
+                }, set: {
+                    viewModel.recommendPlaceResponse = $0
+                }))
+                .padding(.top ,42)
+                
+                Spacer()
+            })
+            .frame(maxHeight: .infinity)
+            .padding(.bottom, 110)
         })
         .ignoresSafeArea(.all)
     }
@@ -36,35 +56,102 @@ struct HomeView: View {
             .lineSpacing(3)
     }
     
-    private var firstSection: some View {
+    private func firstSection(data: [CourseInfoResponse]) -> some View {
         VStack(alignment: .leading, spacing: 20, content: {
             topTitle
             
-            firstScrollView
+            firstScrollView(data: data)
         })
         .padding(.horizontal, 16)
     }
     
-    private var firstScrollView: some View {
+    private func firstScrollView(data: [CourseInfoResponse]) -> some View {
         GeometryReader { geometry in
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, content: {
                     HStack(alignment: .top, spacing: 0, content: {
-                        if let results = viewModel.courseInfoResponse {
-                            ForEach(results, id: \.id) { data in
-                                courseCardView(geometry: geometry, data: data)
-                            }
+                        ForEach(data, id: \.id) { data in
+                            courseCardView(geometry: geometry, data: data)
                         }
                     })
+                    .scrollTargetLayout()
                     .padding(.trailing, (geometry.size.width - 320) / 2)
                 })
+                .scrollTargetBehavior(.viewAligned)
             }
             .scrollIndicators(.hidden)
-            .task {
-                print("hello")
-            }
         }
+        .frame(minHeight: 240)
     }
+    
+    private func seconSection(datas: [PopularCourseResponse]) -> some View {
+        VStack(alignment: .leading, spacing: 20, content: {
+            Text(DataFormatter.shared.makeStyledText(for: "이번주 인기코스 TOP 10"))
+                .font(.Subtitle2)
+                .foregroundStyle(Color.g7)
+            ZStack(alignment: .topLeading, content: {
+                ScrollView(.horizontal, content: {
+                    HStack(spacing: 15, content: {
+                        ForEach(datas, id: \.id) { data in
+                            PopularCourseCard(data: data)
+                                .visualEffect { content, geometryProxy in
+                                    MainActor.assumeIsolated {
+                                        content
+                                            .scaleEffect(scale(geometryProxy, scale: 0.1), anchor: .trailing)
+                                            .rotationEffect(rotaion(geometryProxy, rotation: 5))
+                                            .offset(x: minX(geometryProxy))
+                                            .offset(x: excessMinX(geometryProxy, offset: 10))
+                                    }
+                                }
+                                .zIndex(datas.zIndex(data))
+                        }
+                    })
+                    .padding(.vertical, 15)
+                    .padding(.horizontal, 15)
+                })
+                .scrollTargetBehavior(.paging)
+                .frame(height: 280)
+            })
+        })
+        .padding(.horizontal, 16)
+    }
+    
+    private func thirdSection(datas: Binding<[RecommendPlaceResponse]>) -> some View {
+        VStack(alignment: .leading, spacing: 25, content: {
+            HStack(content: {
+                Text(DataFormatter.shared.makeStyledText(for: "\(UserState.shared.getUserNickname())님과 비슷한 취향을 \n가진 사람들이 좋아하는 장소예요"))
+                    .lineLimit(2)
+                    .lineSpacing(2.5)
+                
+                Spacer()
+                
+                Button(action: {
+                    
+                }, label: {
+                    HStack(spacing: 8) {
+                        Text("자세히 보기")
+                            .font(.body3)
+                            .foregroundStyle(Color.g4)
+
+                        Icon.rightChevron.image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 4, height: 7)
+                    }
+                })
+                
+            })
+            
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 18, content: {
+                ForEach(datas, id: \.id) { data in
+                    RecommendPlaceCard(data: data)
+                }
+            })
+            .padding(.top, 20)
+        })
+        .padding(.horizontal, 16)
+    }
+    
 }
 
 extension HomeView {
@@ -89,6 +176,36 @@ extension HomeView {
                 .animation(.bouncy, value: scaleValue(geometry: geometry, itemGeometry: item))
         }
         .frame(minWidth: geometry.size.width - 32, maxHeight: 245)
+    }
+    
+    private func progress(_ proxy: GeometryProxy, limit: CGFloat = 2) -> CGFloat {
+        let maxX = proxy.frame(in: .scrollView(axis: .horizontal)).maxX
+        let width = proxy.bounds(of: .scrollView(axis: .horizontal))?.width ?? 0
+        let progress = (maxX / width) - 1.0
+        let cappedProgress = min(progress, limit)
+        
+        return cappedProgress
+    }
+    
+    private func scale(_ proxy: GeometryProxy, scale: CGFloat = 0.1) -> CGFloat {
+        let progress = progress(proxy)
+        
+        return 1 - (progress * scale)
+    }
+    
+    func excessMinX(_ proxy: GeometryProxy, offset: CGFloat = 10) -> CGFloat {
+        let progress = progress(proxy)
+        return progress * offset
+    }
+    
+    func rotaion(_ proxy: GeometryProxy, rotation: CGFloat = 5) -> Angle {
+        let progress = progress(proxy)
+        return .init(degrees: progress * rotation)
+    }
+    
+    func minX(_ proxy: GeometryProxy) -> CGFloat {
+        let minX = proxy.frame(in: .scrollView(axis: .horizontal)).minX
+        return minX < 0 ? 0 : -minX
     }
 }
 

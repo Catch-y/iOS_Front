@@ -17,6 +17,27 @@ enum CategoryType: String, Codable, CaseIterable {
     case SPORT = "스포츠"
     case REST = "휴식"
     
+    private static let mapping: [String: CategoryType] = [
+        "CAFE": .CAFE,
+        "BAR": .BAR,
+        "RESTAURANT": .RESTAURANT,
+        "EXPERIENCE": .EXPERIENCE,
+        "CULTURELIFE": .CULTURELIFE,
+        "SPORT": .SPORT,
+        "REST": .REST
+    ]
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        
+        if let category = CategoryType.mapping[rawValue] {
+            self = category
+        } else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "영어 -> 한글 전환 불가 : \(rawValue)")
+        }
+    }
+    
     /// 소 카테고리 작성
     var subcategories: [String] {
         switch self {
