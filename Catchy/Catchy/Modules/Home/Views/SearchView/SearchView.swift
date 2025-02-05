@@ -105,19 +105,20 @@ struct SearchView: View {
     }
     
     private func placeLazy(placeResult: SearchPlaceResponse) -> some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 30, content: {
-            ForEach(Array(placeResult.content.enumerated()), id: \.element.id) { index, result in
-                VStack(spacing: 19, content: {
-                    SearchRecommendPlaceCard(data: result)
-                    
-                    if index < placeResult.content.count - 1 {
-                        Divider()
-                            .foregroundStyle(Color.g2)
-                            .frame(height: 1)
-                    }
-                })
-            }
-        })
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 30, content: {
+                ForEach(Array(placeResult.content.enumerated()), id: \.element.id) { index, result in
+                    VStack(spacing: 19, content: {
+                        SearchRecommendPlaceCard(data: result)
+                        
+                        if index < placeResult.content.count - 1 {
+                            Divider()
+                                .foregroundStyle(Color.g2)
+                                .frame(height: 1)
+                        }
+                    })
+                }
+            })
+
     }
     
     private var emptyView: some View {

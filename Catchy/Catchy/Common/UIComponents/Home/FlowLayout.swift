@@ -12,7 +12,6 @@ struct FlowLayout<Content: View>: View {
     let tags: [String]
     let content: (String) -> Content
 
-    @State private var totalWidth: CGFloat = 0
 
     var body: some View {
         GeometryReader { geometry in
@@ -26,7 +25,7 @@ struct FlowLayout<Content: View>: View {
         var rows: [[String]] = [[]]
 
         for tag in tags {
-            let tagWidth = tag.width(usingFont: .systemFont(ofSize: 14)) + 24
+            let tagWidth = tag.width(usingFont: .systemFont(ofSize: 14)) + 16
             if width + tagWidth > geometry.size.width {
                 width = tagWidth
                 rows.append([tag])
