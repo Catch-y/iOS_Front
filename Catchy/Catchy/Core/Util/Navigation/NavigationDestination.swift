@@ -10,6 +10,6 @@ import SwiftUI
 
 enum NavigationDestination: Hashable {
     
-    case SignUpView(signUpNaviData: SignUpNaviData)
-    
+    case signUpView(signUpNaviData: SignUpNaviData)
+    case searchView
 }

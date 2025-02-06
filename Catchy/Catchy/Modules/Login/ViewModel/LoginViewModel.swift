@@ -62,7 +62,7 @@ class LoginViewModel: ObservableObject {
     }
     
     private func goToSignUpPage(signUpNaviData: SignUpNaviData) {
-        container.navigationRouter.push(to: .SignUpView(signUpNaviData: signUpNaviData))
+        container.navigationRouter.push(to: .signUpView(signUpNaviData: signUpNaviData))
     }
     
     private func saveKeychain(socialLoginResponse: SocialLoginResponse) {

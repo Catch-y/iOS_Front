@@ -19,33 +19,39 @@ struct HomeView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0, content: {
-            CustomLogoNavi(onlyLogo: false)
-            
-            ScrollView(.vertical, content: {
-                if let data = viewModel.courseInfoResponse {
-                    firstSection(data: data)
-                        .padding(.top, 35)
-                }
+        NavigationStack(path: $container.navigationRouter.destination) {
+            VStack(alignment: .leading, spacing: 0, content: {
+                CustomLogoNavi(onlyLogo: false)
                 
-                if let data = viewModel.popularCourseResponse {
-                    seconSection(datas: data)
-                        .padding(.top, 42)
-                }
-                
-                thirdSection(datas: Binding(get: {
-                    viewModel.recommendPlaceResponse ?? []
-                }, set: {
-                    viewModel.recommendPlaceResponse = $0
-                }))
-                .padding(.top ,42)
-                
-                Spacer()
+                ScrollView(.vertical, content: {
+                    if let data = viewModel.courseInfoResponse {
+                        firstSection(data: data)
+                            .padding(.top, 35)
+                    }
+                    
+                    if let data = viewModel.popularCourseResponse {
+                        seconSection(datas: data)
+                            .padding(.top, 42)
+                    }
+                    
+                    thirdSection(datas: Binding(get: {
+                        viewModel.recommendPlaceResponse ?? []
+                    }, set: {
+                        viewModel.recommendPlaceResponse = $0
+                    }))
+                    .padding(.top ,42)
+                    
+                    Spacer()
+                })
+                .frame(maxHeight: .infinity)
+                .padding(.bottom, 110)
             })
-            .frame(maxHeight: .infinity)
-            .padding(.bottom, 110)
-        })
-        .ignoresSafeArea(.all)
+            .ignoresSafeArea(.all)
+            .navigationDestination(for: NavigationDestination.self, destination: { destination in
+                NavigationRoutingView(destination: destination)
+                    .environmentObject(container)
+            })
+        }
     }
     
     private var topTitle: some View {
