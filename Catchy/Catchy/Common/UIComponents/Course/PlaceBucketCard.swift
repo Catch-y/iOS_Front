@@ -10,11 +10,17 @@ import Kingfisher
 
 struct PlaceBucketCard: View {
     
+    /// 애니메이션 변수
+    @State private var isRemoved = false
+    
     /// 장소 상세정보 모델
-    let placeDetailResponse: PlaceDetailResponse
+    var placeDetailResponse: PlaceDetailResponse
+    
+    /// 현재 장소의 인덱스
+    let index: Int
     
     /// X 버튼 탭시 실행
-    var closeButtonTap: ((PlaceDetailResponse) -> Void)?
+    var closeButtonTap: ((Int) -> Void)
     
     var body: some View {
         
@@ -39,18 +45,13 @@ struct PlaceBucketCard: View {
                 
             /// 텍스트 그룹
             textGroup
-                
+            
+            Spacer()
+            
             /// X 버튼
-            Button(action: {
-                closeButtonTap?(placeDetailResponse)
-            }, label: {
-                Icon.close.image
-                    .resizable()
-                    .frame(width: 12, height: 12)
-            })
-            .padding(.top, -6)
-                
+            closeButton
         }
+        
         .padding(.bottom, 20)
         .padding(.top, 26)
         .padding(.trailing, 17)
@@ -62,9 +63,9 @@ struct PlaceBucketCard: View {
         }
         .frame(height: 168)
         .frame(maxWidth: .infinity)
-        
-        
-        
+        .offset(x: isRemoved ? 1000 : 0)
+        .animation(.easeInOut(duration: 0.5), value: isRemoved)
+
     }
     
     /// 텍스트 그룹
@@ -80,12 +81,14 @@ struct PlaceBucketCard: View {
                     .font(.Subtitle3_SM)
                     .foregroundStyle(.g7)
                     .lineLimit(1)
-                
+        
+
             }
+
             
             /// 장소 주소
             PlaceAddressText(addressText: placeDetailResponse.roadAddress)
-            
+                
             /// 장소 영업시간
             PlaceTimeText(timeText: placeDetailResponse.activeTime)
             
@@ -111,39 +114,36 @@ struct PlaceBucketCard: View {
                 .fill(Color.white)
                 .stroke(.main)
             
-            Text("1")
+            Text(String(index + 1))
                 .foregroundStyle(.main)
                 .font(.body1)
             
         }
         .frame(width: 16, height: 40)
-    }
-}
 
-struct PlaceBucketCard_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(
-            ["iPhone 16 Pro Max", "iPhone 11 Pro", "iPhone 12 mini"],
-            id: \.self
-        ) { deviceName in
-            PlaceBucketCard(
-                placeDetailResponse: .init(
-                    placeId: 1,
-                    imageUrl: "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                    placeName: "심퍼티쿠시 용산점",
-                    placeDescription: "유러피언 요리를 아시안 스타일로 풀어내는 파인캐주얼 레스토랑",
-                    categoryName: .CULTURELIFE,
-                    roadAddress: "경기 남양주시 외부읍 덕소로 2번길 84",
-                    activeTime: "[영업시간] 매일 09:00~22:00",
-                    rating: 3,
-                    isVisited: true,
-                    reviewCount: 21,
-                    placeSite: "www.naver.com"
-                )
-            )
-            .previewLayout(.sizeThatFits)
-            .previewDisplayName(deviceName)
-        }
+    }
+    
+    /// X 버튼
+    private var closeButton: some View {
+        
+        Button(action: {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                isRemoved = true
+            }
+        
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                withAnimation(.bouncy(extraBounce: 0.03)) {
+                    closeButtonTap(index)
+
+                }
+            }
+            
+        }, label: {
+            Icon.close.image
+                .resizable()
+                .frame(width: 12, height: 12)
+        })
+        .padding(.top, -6)
     }
 }
 
