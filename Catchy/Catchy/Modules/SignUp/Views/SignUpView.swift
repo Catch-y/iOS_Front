@@ -97,10 +97,10 @@ struct SignUpView: View {
             makeInputUserInfo("닉네임", "닉네임 8자까지 입력해주세요.", $viewModel.nickname)
                 .padding(.top, 44)
             
-            Text(viewModel.nicknameMessage)
-                .font(.courseTag)
-                .foregroundStyle(viewModel.nicknameAvail ? Color.p1 : Color.m6)
-                .padding(.top, 3)
+            if let nicknameAvail = viewModel.nicknameAvail {
+                makeCheckNameLabel(nicknameAvail: nicknameAvail)
+            }
+            
         })
     }
     
@@ -131,6 +131,27 @@ extension SignUpView {
             Divider()
                 .frame(height: 1)
         })
+    }
+    
+    private func makeCheckNameLabel(nicknameAvail: Bool) -> some View {
+        Label(title: {
+            Text(viewModel.nicknameMessage)
+                .font(.courseTag)
+                .foregroundStyle(nicknameAvail ? Color.p1 : Color.m6)
+                .padding(.top, 3)
+        }, icon: {
+            returnCheckBox(nicknameAvail: nicknameAvail)
+                .fixedSize()
+        })
+    }
+    
+    
+    private func returnCheckBox(nicknameAvail: Bool) -> Image{
+        if nicknameAvail {
+            Icon.checkName.image
+        } else {
+            Icon.notCheckName.image
+        }
     }
 }
 

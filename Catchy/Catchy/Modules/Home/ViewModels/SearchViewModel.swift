@@ -14,6 +14,7 @@ class SearchViewModel: ObservableObject {
     @Published var searchKeyword: String = ""
     @Published var searchResult: SearchPlaceResponse?
     @Published var searchLoad: Bool = false
+    @Published var showResult: Bool = false
     
     let container: DIContainer
     private var cancellables = Set<AnyCancellable>()
@@ -43,6 +44,7 @@ class SearchViewModel: ObservableObject {
             .filter { !$0.isEmpty }
             .sink { [weak self] keyword in
                 guard let self = self else { return }
+                print("🔄 realTimeSearch triggered: \(keyword)") // ✅ 확인
                 self.performSearch(for: keyword)
             }
             .store(in: &cancellables)
@@ -69,6 +71,7 @@ class SearchViewModel: ObservableObject {
                 guard let self = self else { return }
                 
                 searchLoad = false
+                showResult = true
                 
                 switch completion {
                 case .finished:

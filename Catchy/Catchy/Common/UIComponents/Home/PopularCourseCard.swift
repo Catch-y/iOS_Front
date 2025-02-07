@@ -26,7 +26,7 @@ struct PopularCourseCard: View {
                     }.retry(maxCount: 2, interval: .seconds(2))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 365, height: 261)
+                    .frame(width: 360, height: 261)
                     .overlay {
                         LinearGradient(
                             stops: [
