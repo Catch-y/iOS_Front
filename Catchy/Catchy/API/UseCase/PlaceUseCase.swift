@@ -28,5 +28,10 @@ class PlaceUseCase: PlaceUseCaseProtocol {
         return repository.patchPlaceLikedData(placeId: placeId)
     }
     
+    /// 장소 방문 날짜 리스트 조회 API
+    func executeGetPlaceVisitedDates(placeId: Int) -> AnyPublisher<ResponseData<PlaceVisitedDateResponse>, MoyaError> {
+        return repository.getPlaceVisitedDatesData(placeId: placeId)
+    }
+    
     
 }

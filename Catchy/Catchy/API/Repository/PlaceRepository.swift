@@ -28,4 +28,8 @@ class PlaceRepository: PlaceRepositoryProtocol {
         return service.patchPlaceLiked(placeId: placeId)
     }
     
+    /// 장소 방문 날짜 리스트 조회 API
+    func getPlaceVisitedDatesData(placeId: Int) -> AnyPublisher<ResponseData<PlaceVisitedDateResponse>, MoyaError> {
+        return service.getPlaceVisitedDates(placeId: placeId)
+    }
 }

@@ -31,4 +31,11 @@ class PlaceService: PlaceServiceProtocol {
             .map(ResponseData<PlaceLikedResponse>.self)
             .eraseToAnyPublisher()
     }
+    
+    /// 장소 방문 날짜 리스트 조회 API
+    func getPlaceVisitedDates(placeId: Int) -> AnyPublisher<ResponseData<PlaceVisitedDateResponse>, MoyaError> {
+        return provider.requestPublisher(.getVisitedDateList(placeId: placeId))
+            .map(ResponseData<PlaceVisitedDateResponse>.self)
+            .eraseToAnyPublisher()
+    }
 }
