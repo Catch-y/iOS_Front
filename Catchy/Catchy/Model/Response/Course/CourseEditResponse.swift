@@ -24,7 +24,7 @@ struct CourseEditResponse: Codable {
     let courseDescription: String
     
     /// 코스 타입
-    let courseType: CategoryType
+    let courseType: String
     
     /// 코스 평점
     let rating: Double
@@ -37,6 +37,8 @@ struct CourseEditResponse: Codable {
     
     /// 코스 방문자 수
     let participantsNumber: Int
+    
+    var isBookMarked: Bool
     
     /// 코스 장소 데이터 리스트
     let placeInfos: [PlaceInfoData]
@@ -56,6 +58,8 @@ struct PlaceInfoData: Codable {
     
     /// 장소 경도
     let placeLongitude: Double
+    
+    let isVisited: Bool
 }
 
     

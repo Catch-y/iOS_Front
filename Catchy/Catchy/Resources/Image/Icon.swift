@@ -49,6 +49,8 @@ enum Icon: String {
     case check = "check"
     case smileSearch = "smileSearch"
     case domain = "domain"
+    case bookmark = "bookmark"
+    case bookMarkTrue = "bookMarkTrue"
     
     //MARK: - Category
     case breaks = "breaks"
@@ -78,7 +80,7 @@ enum Icon: String {
     case solo = "solo"
     case allCheckBtn = "allCheckBtn"
     case allSelectCheckBtn = "allSelectCheckBtn"
-    case  provinceBtn = "provinceBtn"
+    case provinceBtn = "provinceBtn"
     
     var image: Image {
         return Image(self.rawValue)
