@@ -21,6 +21,11 @@ enum MyPageAPITarget {
     /// HTTP 메소드 : GET
     /// API Path : /mypage/bookmark
     case getBookmarkCourseList(pageSize: Int, lastCourseId: Int? = nil)
+    
+    /// 내 리뷰 조회 API
+    /// HTTP 메소드 : GET
+    /// API Path : /mypage/reviews
+    case getMyReviews(review: MyReviewRequest)
 }
 
 extension MyPageAPITarget: APITargetType {
@@ -36,6 +41,10 @@ extension MyPageAPITarget: APITargetType {
         /// 북마크된 코스 무한 스크롤 API
         case .getBookmarkCourseList:
             return "/mypage/bookmark"
+        
+        /// 내 리뷰 조회 API
+        case .getMyReviews:
+            return "/mypage/reviews"
         }
     }
     
@@ -49,17 +58,21 @@ extension MyPageAPITarget: APITargetType {
         /// 북마크된 코스 무한 스크롤 API
         case .getBookmarkCourseList:
             return .get
+            
+        /// 내 리뷰 조회 API
+        case .getMyReviews:
+            return .get
         }
     }
     
     var task: Task {
         switch self {
             
-            /// 프로필 조회 API
+        /// 프로필 조회 API
         case .getProfile:
             return .requestPlain
             
-            /// 북마크된 코스 무한 스크롤 API
+        /// 북마크된 코스 무한 스크롤 API
         case .getBookmarkCourseList(let pageSize, let lastCourseId):
             var parameters: [String: Any] = ["pageSize": pageSize]
 
@@ -68,7 +81,19 @@ extension MyPageAPITarget: APITargetType {
             }
 
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
+        
+        /// 내 리뷰 조회 API
+        case .getMyReviews(let review):
+            var parameters: [String: Any] = [
+                "pageSize": review.pageSize,
+                "reviewType": review.reviewType
+            ]
+            if let lastReviewId = review.lastReviewId {
+                parameters["lastReviewId"] = lastReviewId
+            }
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
         }
+
     }
     
     var headers: [String : String]? {
@@ -201,6 +226,111 @@ extension MyPageAPITarget: APITargetType {
             """
             return json.data(using: .utf8)!
 
+        case .getMyReviews:
+            let json = """
+            {
+              "isSuccess": true,
+              "code": "COMMON200",
+              "message": "성공입니다.",
+              "result": {
+                "reviewType": "COURSE",
+                "reviewCount": 6,
+                "content": [
+                  {
+                    "reviewId": 1,
+                    "name": "스타벅스 강남점",
+                    "comment": "커피가 맛있고 분위기가 좋았어요.",
+                    "reviewImages": [
+                      {
+                        "reviewImageId": 1,
+                        "imageUrl": "https://i.namu.wiki/i/BaiHuuQCGG9rfOHBoQEgvcxYkjkYPzPCjJoJA-gsg2f-BX3D-PJE2wbI4ndb8KIP_-DowBPa86WTTkSth3r3_Q.webp"
+                      }
+                    ],
+                    "rating": 5,
+                    "visitedDate": "2025-02-01"
+                  },
+                  {
+                    "reviewId": 2,
+                    "name": "이디야 홍대점",
+                    "comment": "공간이 넓어서 공부하기 좋아요.",
+                    "reviewImages": [],
+                    "rating": 4,
+                    "visitedDate": "2025-01-25"
+                  },
+                  {
+                    "reviewId": 3,
+                    "name": "투썸플레이스 신촌점",
+                    "comment": "디저트가 정말 맛있고 커피도 좋았어요!",
+                    "reviewImages": [
+                      {
+                        "reviewImageId": 2,
+                        "imageUrl": "https://i.namu.wiki/i/ZnQNck9wQthTWIbxMhTmP4VZ0tAWTHtZ1yw2ibfyNro6VHfyJ1othKi43D0YUZWs4biv84nbU8Q6V3whvI-NeQ.webp"
+                      },
+                      {
+                        "reviewImageId": 3,
+                        "imageUrl": "https://i.namu.wiki/i/cBYgI4eW55VuQRpia9qaJZAw0W1PzVnrCI2x76t_z5BzSEch6Nyylw27FkJ0IJxCy8N8jGIWJwLjY9ntW3-tEg.webp"
+                      },
+                      {
+                        "reviewImageId": 4,
+                        "imageUrl": "https://i.namu.wiki/i/cBYgI4eW55VuQRpia9qaJZAw0W1PzVnrCI2x76t_z5BzSEch6Nyylw27FkJ0IJxCy8N8jGIWJwLjY9ntW3-tEg.webp"
+                      },
+                      {
+                        "reviewImageId": 5,
+                        "imageUrl": "https://i.namu.wiki/i/cBYgI4eW55VuQRpia9qaJZAw0W1PzVnrCI2x76t_z5BzSEch6Nyylw27FkJ0IJxCy8N8jGIWJwLjY9ntW3-tEg.webp"
+                      },
+                      {
+                        "reviewImageId": 12,
+                        "imageUrl": "https://i.namu.wiki/i/cBYgI4eW55VuQRpia9qaJZAw0W1PzVnrCI2x76t_z5BzSEch6Nyylw27FkJ0IJxCy8N8jGIWJwLjY9ntW3-tEg.webp"
+                      }                        
+                    ],
+                    "rating": 5,
+                    "visitedDate": "2025-01-20"
+                  },
+                  {
+                    "reviewId": 4,
+                    "name": "할리스커피 건대점",
+                    "comment": "조용하고 좌석이 많아서 편했어요.",
+                    "reviewImages": [],
+                    "rating": 3,
+                    "visitedDate": "2025-01-18"
+                  },
+                  {
+                    "reviewId": 5,
+                    "name": "폴 바셋 여의도점",
+                    "comment": "커피가 진하고 맛있어요. 인테리어도 좋습니다.",
+                    "reviewImages": [
+                      {
+                        "reviewImageId": 4,
+                        "imageUrl": "https://i.namu.wiki/i/fbGYilZ5x0mbpsAZx-5HW0lzv8cmemc7MeW8w9R7DCXT8tXT5XrdxzTUPv0rgRvRQbpzohcVjTE0tZFo28iPow.webp"
+                      }
+                    ],
+                    "rating": 4,
+                    "visitedDate": "2025-01-15"
+                  },
+                  {
+                    "reviewId": 6,
+                    "name": "탐앤탐스 서울대입구점",
+                    "comment": "브라우니가 정말 맛있어요. 또 방문하고 싶습니다.",
+                    "reviewImages": [
+                      {
+                        "reviewImageId": 5,
+                        "imageUrl": "https://i.namu.wiki/i/e1SYV7mNPmWJ_7glULUwzjQKakofQIzay4bxE3o0hQPMHYWJ_mhM-oOigdsdn_ANLXD5CPmFpNfwrEFNqUIYhg.svg"
+                      },
+                      {
+                        "reviewImageId": 6,
+                        "imageUrl": "https://i.namu.wiki/i/ApmCe1wGlZ4TxBoQ141SJZMrMTbnaCDRXkncjwl-2h8a3-nWecUBT0N_A4XdFuOJgMP0jgsrrAq088K57t1Hpw.svg"
+                      }
+                    ],
+                    "rating": 5,
+                    "visitedDate": "2025-01-10"
+                  }
+                ],
+                "last": true
+              }
+            }
+
+            """
+            return json.data(using: .utf8)!
         }
     }
 }

@@ -12,7 +12,7 @@ import Moya
 
 /// [코스 관리] UseCase 객체
 class MyPageUseCase: MyPageUseCaseProtocol {
-
+    
     let repository: MyPageRepositoryProtocol
     
     init(repository: MyPageRepositoryProtocol = MyPageRepository()) {
@@ -26,11 +26,18 @@ class MyPageUseCase: MyPageUseCaseProtocol {
             .eraseToAnyPublisher()
     }
     
+    /// 북마크된 코스 무한 스크롤 API
     func executeGetBookmarkCourseList(pageSize: Int, lastCourseId: Int? = nil) -> AnyPublisher<ResponseData<CourseResponse>, Moya.MoyaError> {
         return repository.getBookmarkCourseListData(pageSize: pageSize, lastCourseId: lastCourseId)
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }
     
+    /// 내 리뷰 조회 API
+    func executeGetMyReviews(review: MyReviewRequest) -> AnyPublisher<ResponseData<MyReviewResponse>, Moya.MoyaError> {
+        return repository.getMyReviewsData(review: review)
+            .mapError { $0 as MoyaError }
+            .eraseToAnyPublisher()
+    }
 }
 

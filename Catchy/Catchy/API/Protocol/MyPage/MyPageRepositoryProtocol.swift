@@ -16,6 +16,10 @@ protocol MyPageRepositoryProtocol {
     /// 프로필 조회
     func getProfileData() -> AnyPublisher<ResponseData<ProfileResponse>, MoyaError>
     
+    /// 북마크된 코스 무한 스크롤 API
     func getBookmarkCourseListData(pageSize: Int, lastCourseId: Int?) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError>
+    
+    /// 북마크된 코스 무한 스크롤 API
+    func getMyReviewsData(review: MyReviewRequest) -> AnyPublisher<ResponseData<MyReviewResponse>, MoyaError>
 }
 
