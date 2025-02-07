@@ -20,6 +20,11 @@ enum PlaceAPITarget {
     /// HTTP 메소드 : PATCH
     /// API Path : /place/{placeId}/like
     case patchPlaceLiked(placeId: Int)
+    
+    /// 장소 방문 날짜 리스트 조회 API
+    /// HTTP 메소드 : GET
+    /// API Path: /place/{placeId}/visit
+    case getVisitedDateList(placeId: Int)
 }
 
 extension PlaceAPITarget: APITargetType {
@@ -29,6 +34,8 @@ extension PlaceAPITarget: APITargetType {
             return "/place/\(request.placeId)/review"
         case .patchPlaceLiked(let placeId):
             return "/place/\(placeId)/like"
+        case .getVisitedDateList(let placeId):
+            return "/place/\(placeId)/visit"
         }
     }
     
@@ -38,6 +45,8 @@ extension PlaceAPITarget: APITargetType {
             return .post
         case .patchPlaceLiked:
             return .patch
+        case .getVisitedDateList:
+            return .get
         }
     }
     
@@ -46,6 +55,8 @@ extension PlaceAPITarget: APITargetType {
         case .postPlaceReviewSubmission(let request):
             return .requestJSONEncodable(request)
         case .patchPlaceLiked:
+            return .requestPlain
+        case .getVisitedDateList:
             return .requestPlain
         }
     }
@@ -83,7 +94,24 @@ extension PlaceAPITarget: APITargetType {
             }
             """
             return json.data(using: .utf8)!
+            
+        case .getVisitedDateList:
+            
+            return """
+              "isSuccess": true,
+              "code": "string",
+              "message": "string",
+              "result": {
+                "visitedDate": [
+                  "2025-02-05",
+                  "2025-02-06",
+                  "2025-02-07"
+                ]
+              }
+            """.data(using: .utf8)!
         }
+        
+
     }
 
 }
