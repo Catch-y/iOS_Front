@@ -17,5 +17,8 @@ protocol PlaceUseCaseProtocol {
     
     /// 장소 좋아요 API
     func executePatchPlaceLiked(placeId: Int) -> AnyPublisher<ResponseData<PlaceLikedResponse>, MoyaError>
+    
+    /// 장소 방문 날짜 리스트 조회 API
+    func executeGetPlaceVisitedDates(placeId: Int) -> AnyPublisher<ResponseData<PlaceVisitedDateResponse>, MoyaError>
 }
 
