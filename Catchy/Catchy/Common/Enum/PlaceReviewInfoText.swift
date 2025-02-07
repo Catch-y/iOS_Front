@@ -1,5 +1,5 @@
 //
-//  ReviewInfoTextType.swift
+//  PlaceReviewInfoText.swift
 //  Catchy
 //
 //  Created by LEE on 2/7/25.
@@ -7,16 +7,16 @@
 
 import Foundation
 
-/// 보라색 텍스트 enum
-/// 장소 리뷰, 평점 뷰에서 사용
-enum ReviewInfoTextType: CaseIterable {
+
+/// 장소 리뷰, 평점 뷰의 텍스트 에디터에서 사용
+enum PlaceReviewInfoText: CaseIterable {
     
     case one
     case two
     case three
     case four
     
-    
+    /// 보라색 텍스트
     var infoText: String {
         switch self {
         case .one:

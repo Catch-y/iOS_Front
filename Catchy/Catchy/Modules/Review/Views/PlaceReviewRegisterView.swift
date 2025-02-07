@@ -1,5 +1,5 @@
 //
-//  ReviewRegisterView.swift
+//  PlaceReviewRegisterView.swift
 //  Catchy
 //
 //  Created by LEE on 2/7/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ReviewRegisterView: View {
+struct PlaceReviewRegisterView: View {
     
     @StateObject var viewModel: ReviewRegisterViewModel
     
@@ -18,7 +18,7 @@ struct ReviewRegisterView: View {
     @Binding var placeId: Int
 
     /// 보라색 안내 문구
-    let infoText: String = ReviewInfoTextType.randomText
+    let infoText: String = PlaceReviewInfoText.randomText
 
     
     init(container: DIContainer, placeId: Binding<Int>) {
@@ -161,7 +161,7 @@ struct ReviewRegisterView: View {
                             viewModel.comment = newValue
                         }
                     ),
-                    placeholder: ReviewInfoTextType.placeholder,
+                    placeholder: PlaceReviewInfoText.placeholder,
                     maxTextCount: 300,
                     border: .clear,
                     backColor: .g1
@@ -250,7 +250,7 @@ struct ReviewRegisterView: View {
     
 }
 
-extension ReviewRegisterView {
+extension PlaceReviewRegisterView {
     
     /// 리뷰를 등록할 수 있는가
     private var canRegisterReview: Bool {
@@ -261,13 +261,13 @@ extension ReviewRegisterView {
     }
 }
 
-struct ReviewRegisterView_Previews: PreviewProvider {
+struct PlaceReviewRegisterView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(
             ["iPhone 16 Pro Max", "iPhone 11", "iPhone 12 mini"],
             id: \.self
         ) { deviceName in
-            ReviewRegisterView(container: DIContainer(), placeId: .constant(1))
+            PlaceReviewRegisterView(container: DIContainer(), placeId: .constant(1))
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
         }
