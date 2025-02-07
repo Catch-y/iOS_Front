@@ -17,6 +17,16 @@ class ReviewRegisterViewModel: ObservableObject {
     var cancellables = Set<AnyCancellable>()
     
     // MARK: - 평점, 리뷰 남기기 Properties
+    
+    /// 드랍 다운 메뉴 열려있는가?
+    @Published var isDrop: Bool = false
+    
+    /// 현재 선택된 드랍 다운 메뉴 인덱스
+    @Published var selectedIndex: Int?
+    
+    /// 현재 선택된 드랍 다운 메뉴 위치
+    @Published var scrollPosition: Int?
+    
     /// 리뷰 평점
     @Published var rating: Int?
     
@@ -32,6 +42,9 @@ class ReviewRegisterViewModel: ObservableObject {
     /// 리뷰 등록 응답
     @Published var reviewSubmissionResponse: PlaceReviewSubmissionResponse?
     
+    /// 장소 방문 날짜 로딩 중인가?
+    @Published var isDateLoading: Bool = true
+    
     /// 리뷰 등록 완료 되었는가
     @Published var isRegiestered: Bool = false
     
@@ -43,7 +56,6 @@ class ReviewRegisterViewModel: ObservableObject {
     init(container: DIContainer) {
         self.container = container
     }
-    
     
     
 }
@@ -72,6 +84,8 @@ extension ReviewRegisterViewModel {
                 [weak self] completion in
                 guard let self = self else { return }
                     
+                self.isDateLoading = false
+                
                 switch completion {
                 case .finished:
                     print("✅ Get PlaceVisitedDateList Server Completed")
@@ -127,5 +141,12 @@ extension ReviewRegisterViewModel {
                 
             })
             .store(in: &cancellables)
+    }
+    
+    // MARK: - API 요청이 없는 메소드
+    /// 드랍 다운 메뉴의 스크롤 인덱스 값을 설정합니다.
+    /// - Parameter index: 스크롤 뷰의 인덱스
+    func setScrollPosition(by index: Int?){
+        self.scrollPosition = index
     }
 }
