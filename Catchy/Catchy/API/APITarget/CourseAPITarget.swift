@@ -86,7 +86,7 @@ extension CourseAPITarget: APITargetType {
             return "course/\(course.courseId)"
             
         case .patchCourseBookmark(let courseId):
-            return "course/\(courseId)"
+            return "course/\(courseId)/bookmark"
             
         case .patchPlaceVisit(let placeId):
             return "course/visited/\(placeId)"

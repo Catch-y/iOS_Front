@@ -1,5 +1,5 @@
 //
-//  ReviewRegisterView.swift
+//  ReviewRegisterViewModel.swift
 //  Catchy
 //
 //  Created by LEE on 2/7/25.
@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 import CombineMoya
 
-class ReviewRegisterViewModel: ObservableObject {
+class ReviewRegisterViewModel: ObservableObject, ImageHandling {
     
     let container: DIContainer
 
@@ -46,15 +46,48 @@ class ReviewRegisterViewModel: ObservableObject {
     @Published var isDateLoading: Bool = true
     
     /// 리뷰 등록 완료 되었는가
-    @Published var isRegiestered: Bool = false
+    @Published var hasRegister: Bool = false
     
-    // TODO: - 이미지 post 처리
-    @Published var images: [String]?
+    /// 이미지 피커뷰가 나왔는기
+    @Published var isImagePickerPresented: Bool = false
+    
+    /// 업로드된 이미지
+    @Published var uploadedImages: [UIImage] = [] {
+        
+        didSet {
+            selectedImageCount = uploadedImages.count
+        }
+    }
     
     
+    /// 현재 선택된 이미지 수
+    @Published var selectedImageCount = 0
     
     init(container: DIContainer) {
         self.container = container
+    }
+    
+    
+}
+
+extension ReviewRegisterViewModel {
+    
+    func addImage(_ images: UIImage) {
+        uploadedImages.append(images)
+        print("add완료")
+    }
+    
+    func getImages() -> [UIImage] {
+        return uploadedImages
+    }
+    
+    func removeImage(at index: Int) {
+        uploadedImages.remove(at: index)
+    }
+    
+    func showImagePicker() {
+        
+        self.isImagePickerPresented.toggle()
     }
     
     
@@ -104,10 +137,10 @@ extension ReviewRegisterViewModel {
     }
     
     /// 장소 평점/리뷰 달기 API
-    func postPlaceReviewSubmission(request: PlaceReviewSubmissionRequest){
+    func postPlaceReviewSubmission(request: PlaceReviewSubmissionRequest, reviewImages: [UIImage]){
         
         container.useCaseProvider.placeUseCase
-            .executePostPlaceReviewSubmission(request: request)
+            .executePostPlaceReviewSubmission(request: request, reviewImages: reviewImages)
             .tryMap{ responseData -> ResponseData<PlaceReviewSubmissionResponse> in
                 if !responseData.isSuccess{
                     throw APIError
@@ -124,13 +157,13 @@ extension ReviewRegisterViewModel {
                 [weak self] completion in
                 guard let self = self else { return }
                     
-                self.isRegiestered = true
+                self.hasRegister = true
                 
                 switch completion {
                 case .finished:
-                    print("✅ Get PlaceVisitedDateList Server Completed")
+                    print("✅ Post PlaceReviewRegister Server Completed")
                 case .failure(let failure):
-                    print("❌ Get PlaceVisitedDateList Failed: \(failure)")
+                    print("❌ Post PlaceReviewRegister Failed: \(failure)")
                 }
             },receiveValue: { [weak self] response in
                 guard let self = self else { return }
@@ -149,4 +182,5 @@ extension ReviewRegisterViewModel {
     func setScrollPosition(by index: Int?){
         self.scrollPosition = index
     }
+    
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 /// 장소 방문 날짜 리스트 조회 API
-struct PlaceVisitedDateResponse: Codable{
+struct PlaceVisitedDateResponse: Codable {
     
     /// 방문 날짜 리스트
     let visitedDate: [String]

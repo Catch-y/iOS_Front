@@ -9,6 +9,7 @@ import Foundation
 import Moya
 import Combine
 import CombineMoya
+import SwiftUI
 
 class PlaceService: PlaceServiceProtocol {
     
@@ -19,8 +20,8 @@ class PlaceService: PlaceServiceProtocol {
     }
     
     /// 장소 평점/리뷰 달기 API
-    func postPlaceReviewSubmission(request: PlaceReviewSubmissionRequest) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, Moya.MoyaError> {
-        return provider.requestPublisher(.postPlaceReviewSubmission(request: request))
+    func postPlaceReviewSubmission(request: PlaceReviewSubmissionRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, Moya.MoyaError> {
+        return provider.requestPublisher(.postPlaceReviewSubmission(request: request, reviewImages: reviewImages))
             .map(ResponseData<PlaceReviewSubmissionResponse>.self)
             .eraseToAnyPublisher()
     }

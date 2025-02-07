@@ -32,7 +32,7 @@ struct DateDropDown: View {
     }
     
     
-    
+    /// 드랍 다운 메뉴 버튼
     private func selectedButton(placeholder text: String) -> some View {
         
         let selectedIndex = viewModel.selectedIndex
@@ -74,6 +74,7 @@ struct DateDropDown: View {
         .buttonStyle(.plain)
     }
     
+    /// 드랍 다운 메뉴 스크롤 뷰
     private func dropDownMenu() -> some View {
         
         let visitedDates = viewModel.visitedDateListResponse?.visitedDate ?? []
@@ -106,6 +107,7 @@ struct DateDropDown: View {
     
     }
     
+    /// 스크롤 뷰의 아이템
     private func dropDownMenuItem(for index: Int) -> some View {
         
         let selectedIndex = viewModel.selectedIndex
@@ -116,6 +118,7 @@ struct DateDropDown: View {
             action: {
                 viewModel.selectedIndex = index
                 viewModel.isDrop.toggle()
+                viewModel.visitedDate = visitedDates[index]
             },
             label: {
                 ZStack{
@@ -141,6 +144,7 @@ struct DateDropDown: View {
                 }
             })
         .padding(.horizontal, 5)
+        .padding(.top, 10)
         .frame(maxWidth: .infinity, minHeight: itemHeight, alignment: .center)
         
     }

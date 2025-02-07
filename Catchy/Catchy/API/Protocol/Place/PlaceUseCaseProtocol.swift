@@ -9,11 +9,12 @@ import Foundation
 import Combine
 import CombineMoya
 import Moya
+import SwiftUI
 
 protocol PlaceUseCaseProtocol {
     
     /// 장소 평점/리뷰 달기 API
-    func executePostPlaceReviewSubmission(request: PlaceReviewSubmissionRequest) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, MoyaError>
+    func executePostPlaceReviewSubmission(request: PlaceReviewSubmissionRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, MoyaError>
     
     /// 장소 좋아요 API
     func executePatchPlaceLiked(placeId: Int) -> AnyPublisher<ResponseData<PlaceLikedResponse>, MoyaError>

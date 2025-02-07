@@ -7,6 +7,7 @@
 
 import Foundation
 import Moya
+import SwiftUI
 
 /// 장소 관련 API
 enum PlaceAPITarget {
@@ -14,7 +15,7 @@ enum PlaceAPITarget {
     /// 장소 평점/리뷰 달기 API
     /// HTTP 메소드 : POST
     /// API Path : /place/{placeId}/review
-    case postPlaceReviewSubmission(request: PlaceReviewSubmissionRequest)
+    case postPlaceReviewSubmission(request: PlaceReviewSubmissionRequest, reviewImages: [UIImage])
     
     /// 장소 좋아요 API
     /// HTTP 메소드 : PATCH
@@ -30,7 +31,7 @@ enum PlaceAPITarget {
 extension PlaceAPITarget: APITargetType {
     var path: String {
         switch self {
-        case .postPlaceReviewSubmission(let request):
+        case .postPlaceReviewSubmission(let request, _ ):
             return "/place/\(request.placeId)/review"
         case .patchPlaceLiked(let placeId):
             return "/place/\(placeId)/like"
@@ -52,18 +53,26 @@ extension PlaceAPITarget: APITargetType {
     
     var task: Task {
         switch self {
-        case .postPlaceReviewSubmission(let request):
-            return .requestJSONEncodable(request)
+        case .postPlaceReviewSubmission(_, let images):
+            let formData = encodeReviewData(reviewImages: images)
+            return .uploadMultipart(formData)
+            
         case .patchPlaceLiked:
             return .requestPlain
+            
         case .getVisitedDateList:
             return .requestPlain
         }
     }
     
     var headers: [String : String]? {
-        let header = ["Content-Type": "application/json"]
-        return header
+        switch self {
+        case .postPlaceReviewSubmission:
+            return ["Content-Type": "multipart/form-data"]
+        default :
+            return ["Content-Type": "application/json"]
+        }
+    
     }
     
     var sampleData: Data {
@@ -71,17 +80,22 @@ extension PlaceAPITarget: APITargetType {
         case .postPlaceReviewSubmission:
             let json = """
             {
-                "reviewId": 123,
-                "rating": 5,
-                "comment": "이 장소 정말 좋네요!",
+              "isSuccess": true,
+              "code": "string",
+              "message": "string",
+              "result": {
+                "reviewId": 0,
+                "comment": "string",
+                "rating": 0,
                 "reviewImages": [
-                    {
-                        "reviewImageId": 101,
-                        "imageUrl": "https://example.com/image1.jpg"
-                    }
+                  {
+                    "reviewImageId": 0,
+                    "imageUrl": "string"
+                  }
                 ],
-                "visitedDate": "2025-02-01T03:58:05.299Z",
-                "creatorNickname": "JohnDoe"
+                "visitedDate": "2025-02-07",
+                "creatorNickname": "string"
+              }
             }
             """
             return json.data(using: .utf8)!
@@ -98,16 +112,22 @@ extension PlaceAPITarget: APITargetType {
         case .getVisitedDateList:
             
             return """
+            {
               "isSuccess": true,
               "code": "string",
               "message": "string",
               "result": {
                 "visitedDate": [
+                  "2025-02-01",
+                  "2025-02-02",
+                  "2025-02-03",
+                  "2025-02-04",
                   "2025-02-05",
                   "2025-02-06",
                   "2025-02-07"
                 ]
               }
+            }
             """.data(using: .utf8)!
         }
         
@@ -116,3 +136,22 @@ extension PlaceAPITarget: APITargetType {
 
 }
 
+extension PlaceAPITarget {
+    
+    private func encodeReviewData(reviewImages: [UIImage]) -> [MultipartFormData] {
+        
+        var formData: [MultipartFormData] = []
+        
+        for (index, reviewImage) in reviewImages.enumerated() {
+            
+            if let image = reviewImage.jpegData(compressionQuality: 0.8) {
+
+                let multipartData = MultipartFormData(provider: .data(image), name: "images", fileName: "images\(index).jpg", mimeType: "images/jpeg")
+                formData.append(multipartData)
+            }
+        }
+        
+        
+        return formData
+    }
+}
