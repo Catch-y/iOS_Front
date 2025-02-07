@@ -135,7 +135,7 @@ struct HomeView: View {
                 Spacer()
                 
                 Button(action: {
-                    
+                    container.navigationRouter.push(to: .similarView)
                 }, label: {
                     HStack(spacing: 8) {
                         Text("자세히 보기")

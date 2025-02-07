@@ -21,6 +21,8 @@ enum Icon: String {
     
     //MARK: - SignUp
     case signupProfile = "signupProfile"
+    case notCheckName = "notCheckName"
+    case checkName = "checkName"
     
     //MARK: - ETC
     case leftChevron = "leftChevron"

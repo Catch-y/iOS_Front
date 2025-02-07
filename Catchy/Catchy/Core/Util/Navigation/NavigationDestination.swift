@@ -12,4 +12,5 @@ enum NavigationDestination: Hashable {
     
     case signUpView(signUpNaviData: SignUpNaviData)
     case searchView
+    case similarView
 }
