@@ -18,26 +18,39 @@ struct CourseDetailView: View {
     }
     
     var body: some View {
-        VStack(content: {
-            CustomNavigation(action: {
-                container.navigationRouter.pop()
-            }, title: "코스 정보", rightNaviIcon: nil, isShadow: true)
-            
-            ScrollView(.vertical, content: {
+        ZStack {
+            VStack(content: {
+                CustomNavigation(action: {
+                    container.navigationRouter.pop()
+                }, title: "코스 정보", rightNaviIcon: nil, isShadow: true)
                 
-                if let data = viewModel.courseEditResponse {
-                    topContents(data: data)
-                        .padding(.top, 13)
-                }
-                
-                bottomGroup
-                    .padding(.top, 14)
+                ScrollView(.vertical, content: {
+                    
+                    if let data = viewModel.courseEditResponse {
+                        topContents(data: data)
+                            .padding(.top, 13)
+                    }
+                    
+                    bottomGroup
+                        .padding(.top, 14)
+                })
+                .scrollIndicators(.hidden)
             })
-            .scrollIndicators(.hidden)
-        })
-        .background(Color.bg1)
-        .ignoresSafeArea(.all)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.bg1)
+            .ignoresSafeArea(.all)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            if viewModel.showAlert {
+                Color.black.opacity(0.5)
+                    .ignoresSafeArea(.all)
+                
+                CustomAlert(isShowAlert: $viewModel.showAlert)
+                    .padding(.horizontal, 16)
+                    .animation(.easeInOut, value: viewModel.showAlert)
+                    .transition(.move(edge: .bottom))
+                
+            }
+        }
     }
     
     private func topContents(data: CourseEditResponse) -> some View {
@@ -173,7 +186,9 @@ struct CourseDetailView: View {
                 Spacer()
                 
                 Button(action: {
-                    viewModel.showAlert.toggle()
+                    withAnimation {
+                        viewModel.showAlert.toggle()
+                    }
                 }, label: {
                     Icon.warningIntro.image
                         .resizable()
