@@ -176,7 +176,8 @@ struct CourseDetailView: View {
                     viewModel.showAlert.toggle()
                 }, label: {
                     Icon.warningIntro.image
-                        .fixedSize()
+                        .resizable()
+                        .frame(width: 18, height: 18)
                 })
                 
             })
