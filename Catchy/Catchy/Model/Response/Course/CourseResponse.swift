@@ -50,7 +50,7 @@ struct CourseResponseData: Codable, Identifiable{
         self.courseImage = courseImage
         self.courseName = courseName
         self.courseDescription = courseDescription
-        self.categories = categorise
+        self.categories = categories
     }
     
     enum CodingKeys : String, CodingKey {
