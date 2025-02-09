@@ -72,7 +72,20 @@ enum Icon: String {
     case allCheckBtn = "allCheckBtn"
     case allSelectCheckBtn = "allSelectCheckBtn"
     
+    //MARK: - VoteCategory
+    case voteBreaks = "voteBreaks"
+    case voteCafe = "voteCafe"
+    case voteCultureLife = "voteCultureLife"
+    case voteExperience = "voteExperience"
+    case voteRestaurant = "voteRestaurant"
+    case voteSport = "voteSport"
+    case voteBar = "voteBar"
+
+
+    
     var image: Image {
         return Image(self.rawValue)
     }
 }
+
+
