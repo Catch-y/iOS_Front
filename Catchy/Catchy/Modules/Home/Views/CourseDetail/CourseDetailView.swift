@@ -18,21 +18,39 @@ struct CourseDetailView: View {
     }
     
     var body: some View {
-        VStack(content: {
-            CustomNavigation(action: {
-                container.navigationRouter.pop()
-            }, title: "코스 정보", rightNaviIcon: nil, isShadow: true)
+        ZStack {
+            VStack(content: {
+                CustomNavigation(action: {
+                    container.navigationRouter.pop()
+                }, title: "코스 정보", rightNaviIcon: nil, isShadow: true)
+                
+                ScrollView(.vertical, content: {
+                    
+                    if let data = viewModel.courseEditResponse {
+                        topContents(data: data)
+                            .padding(.top, 13)
+                    }
+                    
+                    bottomGroup
+                        .padding(.top, 14)
+                })
+                .scrollIndicators(.hidden)
+            })
+            .background(Color.bg1)
+            .ignoresSafeArea(.all)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             
-            if let data = viewModel.courseEditResponse {
-                topContents(data: data)
-                    .padding(.top, 13)
+            if viewModel.showAlert {
+                Color.black.opacity(0.5)
+                    .ignoresSafeArea(.all)
+                
+                CustomAlert(isShowAlert: $viewModel.showAlert)
+                    .padding(.horizontal, 16)
+                    .animation(.easeInOut, value: viewModel.showAlert)
+                    .transition(.move(edge: .bottom))
+                
             }
-            
-            Spacer()
-        })
-        .background(Color.bg1)
-        .ignoresSafeArea(.all)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
     }
     
     private func topContents(data: CourseEditResponse) -> some View {
@@ -45,7 +63,10 @@ struct CourseDetailView: View {
         })
         .padding(.vertical, 28)
         .padding(.horizontal, 16)
+        .background(Color.white)
     }
+    
+    // MARK: - TopView
     
     @ViewBuilder
     private func courseImage(data: CourseEditResponse) -> some View {
@@ -92,17 +113,23 @@ struct CourseDetailView: View {
             .padding(.leading, 5)
             
             Text(data.courseDescription)
+                .frame(maxWidth: 360, alignment: .leading)
                 .font(.body2)
                 .foregroundStyle(Color.g4)
                 .lineLimit(2)
                 .lineSpacing(2.0)
-                .padding(.top, 7)
+                .padding(.top, 10)
                 .padding(.leading, 5)
             
-            HStack(content: {
+            HStack(spacing: 26, content: {
                 makeStarPoint(Icon.star.image, "\(data.rating)")
                 
-                makeReview(Icon.review.image, "리뷰 \(data.reviewCount)개", Icon.rightChevron.image)
+                Button(action: {
+                    //TODO: - 리뷰 네비게이션 연결
+                }, label: {
+                    makeReview(Icon.review.image, "리뷰 \(data.reviewCount)개", Icon.rightChevron.image)
+                })
+                
             })
             .padding(.top, 17)
             .padding(.leading, 5)
@@ -115,12 +142,60 @@ struct CourseDetailView: View {
             
             HStack(content: {
                 makeCourseInfoTag("추천 시간대", data.recommendTime)
-
+                
                 makeCourseInfoTag("코스 참여자 수", "\(data.participantsNumber)명")
             })
             .padding(.top, 11)
             .padding(.leading, 5)
             
+        })
+    }
+    
+    // MARK: - BottomView
+    
+    private var bottomGroup: some View {
+        VStack(content: {
+            bottomInfo
+                .padding(.top, 22)
+                .padding(.leading, 20)
+                .padding(.trailing, 13)
+            
+            Rectangle()
+                .fill(Color.white)
+                .stroke(Color.black, style: .init(lineWidth: 0.5))
+                .overlay(content: {
+                    Text("지도 들어갈 위치입니다")
+                })
+                .frame(height: 281)
+                .ignoresSafeArea()
+        })
+        .background(Color.white)
+    }
+    
+    private var bottomInfo: some View {
+        VStack(alignment: .leading, content: {
+            Text("코스 경로")
+                .font(.Subtitle2)
+                .foregroundStyle(Color.g7)
+            
+            HStack(content: {
+                Text("지도를 클릭하여 길을 찾고 장소 정보를 확인해보세요!")
+                    .font(.body3)
+                    .foregroundStyle(Color.g4)
+                
+                Spacer()
+                
+                Button(action: {
+                    withAnimation {
+                        viewModel.showAlert.toggle()
+                    }
+                }, label: {
+                    Icon.warningIntro.image
+                        .resizable()
+                        .frame(width: 18, height: 18)
+                })
+                
+            })
         })
     }
 }
