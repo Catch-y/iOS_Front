@@ -12,7 +12,7 @@ import Combine
 class SignUpViewModel: ObservableObject, ImageHandling {
     @Published var nickname: String = ""
     @Published var nicknameMessage: String = "이미 사용중인 닉네임입니다."
-    @Published var nicknameAvail: Bool = false
+    @Published var nicknameAvail: Bool?
     @Published var isLoading: Bool = false
     
     let container: DIContainer
@@ -37,7 +37,7 @@ class SignUpViewModel: ObservableObject, ImageHandling {
         if profileImage.isEmpty {
             return false
         } else {
-            if nicknameAvail {
+            if nicknameAvail ?? false {
                 return true
             } else {
                 return false

@@ -19,16 +19,4 @@ struct PlaceReviewSubmissionRequest: Codable {
     /// 리뷰 내용
     let comment: String
     
-    // 리뷰 이미지 목록
-    let reviewImages: [ReviewImageRequest]
-}
-
-/// 리뷰 이미지 정보
-struct ReviewImageRequest: Codable {
-    
-    /// 이미지 ID
-    let reviewImageId: Int
-    
-    /// 이미지 URL
-    let imageUrl: String
 }

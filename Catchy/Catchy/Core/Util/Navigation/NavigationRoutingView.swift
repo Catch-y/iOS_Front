@@ -16,8 +16,14 @@ struct NavigationRoutingView: View {
     
     var body: some View {
         switch destination {
-        case .SignUpView(let signUpNaviData):
+        case .signUpView(let signUpNaviData):
             SignUpView(container: container, appFlowViewModel: appFlowViewModel, signUpNaviData: signUpNaviData)
+                .environmentObject(container)
+        case .searchView:
+            SearchView(container: container)
+        case .similarView:
+            SimilarPlaces(container: container)
+                .environmentObject(container)
         }
     }
 }

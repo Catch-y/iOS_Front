@@ -10,7 +10,6 @@ import SwiftUI
 struct SearchView: View {
     
     @StateObject var viewModel: SearchViewModel
-    @State private var showResults = false
     
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
@@ -44,7 +43,8 @@ struct SearchView: View {
                     .padding(.top, 38)
                     .padding(.horizontal, 25)
             }
-            if showResults {
+            
+            if viewModel.showResult {
                 if !viewModel.searchKeyword.isEmpty {
                     if let placeResult = viewModel.searchResult {
                         placeLazy(placeResult: placeResult)
@@ -64,14 +64,12 @@ struct SearchView: View {
             UIApplication.shared.hideKeyboard()
         }
         .onChange(of: viewModel.searchKeyword) { newValue, oldValue in
-            showResults = false
-            if !newValue.isEmpty {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                    showResults = true
-                }
+            if newValue.isEmpty {
+                viewModel.showResult = false
             }
         }
         .animation(.easeInOut(duration: 0.5), value: viewModel.searchKeyword)
+        .navigationBarBackButtonHidden(true)
     }
     
     
@@ -142,7 +140,7 @@ struct SearchView: View {
 extension SearchView {
     func makeButton(_ text: String) -> some View {
         Button(action: {
-            print(text)
+            viewModel.searchKeyword = text
         }, label: {
             Text(text)
                 .font(.caption1)

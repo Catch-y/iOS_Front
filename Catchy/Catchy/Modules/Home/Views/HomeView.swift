@@ -19,33 +19,39 @@ struct HomeView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0, content: {
-            CustomLogoNavi(onlyLogo: false)
-            
-            ScrollView(.vertical, content: {
-                if let data = viewModel.courseInfoResponse {
-                    firstSection(data: data)
-                        .padding(.top, 35)
-                }
+        NavigationStack(path: $container.navigationRouter.destination) {
+            VStack(alignment: .leading, spacing: 0, content: {
+                CustomLogoNavi(onlyLogo: false)
                 
-                if let data = viewModel.popularCourseResponse {
-                    seconSection(datas: data)
-                        .padding(.top, 42)
-                }
-                
-                thirdSection(datas: Binding(get: {
-                    viewModel.recommendPlaceResponse ?? []
-                }, set: {
-                    viewModel.recommendPlaceResponse = $0
-                }))
-                .padding(.top ,42)
-                
-                Spacer()
+                ScrollView(.vertical, content: {
+                    if let data = viewModel.courseInfoResponse {
+                        firstSection(data: data)
+                            .padding(.top, 35)
+                    }
+                    
+                    if let data = viewModel.popularCourseResponse {
+                        seconSection(datas: data)
+                            .padding(.top, 42)
+                    }
+                    
+                    thirdSection(datas: Binding(get: {
+                        viewModel.recommendPlaceResponse ?? []
+                    }, set: {
+                        viewModel.recommendPlaceResponse = $0
+                    }))
+                    .padding(.top ,42)
+                    
+                    Spacer()
+                })
+                .frame(maxHeight: .infinity)
+                .padding(.bottom, 110)
             })
-            .frame(maxHeight: .infinity)
-            .padding(.bottom, 110)
-        })
-        .ignoresSafeArea(.all)
+            .ignoresSafeArea(.all)
+            .navigationDestination(for: NavigationDestination.self, destination: { destination in
+                NavigationRoutingView(destination: destination)
+                    .environmentObject(container)
+            })
+        }
     }
     
     private var topTitle: some View {
@@ -75,7 +81,7 @@ struct HomeView: View {
                         }
                     })
                     .scrollTargetLayout()
-                    .padding(.trailing, (geometry.size.width - 320) / 2)
+                    .padding(.trailing, 30)
                 })
                 .scrollTargetBehavior(.viewAligned)
             }
@@ -85,35 +91,38 @@ struct HomeView: View {
     }
     
     private func seconSection(datas: [PopularCourseResponse]) -> some View {
-        VStack(alignment: .leading, spacing: 20, content: {
-            Text(DataFormatter.shared.makeStyledText(for: "이번주 인기코스 TOP 10"))
-                .font(.Subtitle2)
-                .foregroundStyle(Color.g7)
-            ZStack(alignment: .topLeading, content: {
-                ScrollView(.horizontal, content: {
-                    HStack(spacing: 15, content: {
-                        ForEach(datas, id: \.id) { data in
-                            PopularCourseCard(data: data)
-                                .visualEffect { content, geometryProxy in
-                                    MainActor.assumeIsolated {
-                                        content
-                                            .scaleEffect(scale(geometryProxy, scale: 0.1), anchor: .trailing)
-                                            .rotationEffect(rotaion(geometryProxy, rotation: 5))
-                                            .offset(x: minX(geometryProxy))
-                                            .offset(x: excessMinX(geometryProxy, offset: 10))
+            VStack(alignment: .leading, spacing: 10, content: {
+                Text(DataFormatter.shared.makeStyledText(for: "이번주 인기코스 TOP 10"))
+                    .font(.Subtitle2)
+                    .foregroundStyle(Color.g7)
+                ZStack(alignment: .topLeading, content: {
+                    ScrollView(.horizontal, content: {
+                        HStack(spacing: 70, content: {
+                            ForEach(datas, id: \.id) { data in
+                                PopularCourseCard(data: data)
+                                    .visualEffect { content, geometryProxy in
+                                        MainActor.assumeIsolated {
+                                            content
+                                                .scaleEffect(scale(geometryProxy, scale: 0.1), anchor: .trailing)
+                                                .rotationEffect(rotaion(geometryProxy, rotation: 2))
+                                                .offset(x: minX(geometryProxy))
+                                                .offset(x: excessMinX(geometryProxy, offset: 8))
+                                        }
                                     }
-                                }
-                                .zIndex(datas.zIndex(data))
-                        }
+                                    .zIndex(datas.zIndex(data))
+                                
+                            }
+                        })
+                        .scrollTargetLayout()
+                        .padding(.vertical, 15)
+                        .padding(.leading, 60)
+                        .padding(.trailing, 10)
                     })
-                    .padding(.vertical, 15)
-                    .padding(.horizontal, 15)
+                    .scrollTargetBehavior(.viewAligned)
+                    .scrollIndicators(.hidden)
                 })
-                .scrollTargetBehavior(.paging)
-                .frame(height: 280)
             })
-        })
-        .padding(.horizontal, 16)
+            .padding(.horizontal, 16)
     }
     
     private func thirdSection(datas: Binding<[RecommendPlaceResponse]>) -> some View {
@@ -126,7 +135,7 @@ struct HomeView: View {
                 Spacer()
                 
                 Button(action: {
-                    
+                    container.navigationRouter.push(to: .similarView)
                 }, label: {
                     HStack(spacing: 8) {
                         Text("자세히 보기")
@@ -181,7 +190,7 @@ extension HomeView {
     private func progress(_ proxy: GeometryProxy, limit: CGFloat = 2) -> CGFloat {
         let maxX = proxy.frame(in: .scrollView(axis: .horizontal)).maxX
         let width = proxy.bounds(of: .scrollView(axis: .horizontal))?.width ?? 0
-        let progress = (maxX / width) - 1.0
+        let progress = (maxX / width) - 1
         let cappedProgress = min(progress, limit)
         
         return cappedProgress
