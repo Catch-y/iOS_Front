@@ -51,10 +51,25 @@ struct CustomTextEditor: ViewModifier {
         self.backgroundColor = backgroundColor
     }
     
+    init(text: Binding<String>,
+         placeholder: String,
+         maxTextCount: Int,
+         strokeColor: Color,
+         backgroundColor: Color
+    ) {
+        self._text = text
+        self.placeholder = placeholder
+        self.maxTextCount = maxTextCount
+        self.strokeColor = strokeColor
+        self.backgroundColor = backgroundColor
+    }
+    
+    
     func body(content: Content) -> some View {
         content
             .padding(.vertical, 10)
-            .padding(.horizontal, 10)
+            .padding(.horizontal, 16)
+            .padding(.bottom, 20)
             .background(alignment: .topLeading, content: {
                 if text.isEmpty {
                     Text(placeholder)
@@ -62,7 +77,7 @@ struct CustomTextEditor: ViewModifier {
                         .padding(.vertical, 20)
                         .padding(.horizontal, 20)
                         .font(.body2)
-                        .foregroundStyle(.g4)
+                        .foregroundStyle(.g3)
                 }
             })
             .textInputAutocapitalization(.none)
@@ -82,7 +97,7 @@ struct CustomTextEditor: ViewModifier {
                         .foregroundColor(.g4)
                 }
                 .padding(.trailing, 15)
-                .padding(.bottom, 10)
+                .padding(.bottom, 18)
                 .onChange(of: text) { newValue, oldValue in
                     if newValue.count > maxTextCount {
                         text = String(newValue.prefix(maxTextCount))
@@ -108,6 +123,10 @@ extension TextEditor {
     
     func customStyleTipsEditor(text: Binding<String>, placeholder: String, maxTextCount: Int, backColor: Color) -> some View {
         self.modifier(CustomTextEditor(text: text, placeholder: placeholder, maxTextCount: maxTextCount, backgroundColor: backColor))
+    }
+    
+    func customStyleTipsEditor(text: Binding<String>, placeholder: String, maxTextCount: Int, border: Color = .clear, backColor: Color) -> some View {
+        self.modifier(CustomTextEditor(text: text, placeholder: placeholder, maxTextCount: maxTextCount, strokeColor: border, backgroundColor: backColor))
     }
 }
 

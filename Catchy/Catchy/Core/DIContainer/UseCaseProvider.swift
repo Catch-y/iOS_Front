@@ -27,6 +27,8 @@ protocol UseCaseProtocol {
     
     /// 유저 관련
     var memberUseCase: MemberUseCase { get set }
+    
+    var homeUseCase: HomeUseCase { get set }
 }
 
 class UseCaseProvider: UseCaseProtocol {
@@ -48,6 +50,8 @@ class UseCaseProvider: UseCaseProtocol {
     var reviewReportUseCase: ReviewReportUseCase
     
     var memberUseCase: MemberUseCase
+    
+    var homeUseCase: HomeUseCase
         
     init() {
         self.authUseCase = AuthUseCase()
@@ -57,5 +61,6 @@ class UseCaseProvider: UseCaseProtocol {
         self.reviewReportUseCase = ReviewReportUseCase()
         self.placeUseCase = PlaceUseCase()
         self.memberUseCase = MemberUseCase()
+        self.homeUseCase = HomeUseCase()
     }
 }

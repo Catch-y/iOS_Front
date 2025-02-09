@@ -40,12 +40,12 @@ struct CourseView: View {
                     
                 } else {    /// 데이터 로딩 중
                     Spacer()
-                        
+                    
                     ProgressView()
-                        
+                    
                     Spacer()
                 }
-                    
+                
             }
             .zIndex(0)
             
@@ -65,20 +65,12 @@ struct CourseView: View {
                 
             
         }.task{
-            viewModel
-                .getCourseList(
-                    courseRequest: .init(
-                        type: .ai,
-                        upperLocation: "",
-                        lowerLocation: "",
-                        lastId: 0
-                    )
-                )
+            viewModel.getCourseList()
         }
         .onChange(of: provinceViewModel.provinces){ (_ , provinces) in
             viewModel.upperLocations = provinces
         }
-        /// AI, DIY 코스 생성 버튼 탭 시 호출
+
         .fullScreenCover(isPresented: $viewModel.isPresented) {
             
             if let segment = viewModel.selectedFloatingSegment {
@@ -90,6 +82,20 @@ struct CourseView: View {
                 }
             }
             
+        }
+        
+        /// 도 변경시 내 코스 조회 API
+        .onChange(of: viewModel.selectedUpperIndex) { (_, _) in
+            viewModel.getCourseList()
+        }
+        /// 시/군/구 변경시 내 코스 조회 API
+        .onChange(of: viewModel.selectedLowerIndex) { (_, lowerIndex) in
+            guard let index = lowerIndex else { return }
+            viewModel.getCourseList()
+        }
+        /// 세그먼트 변경시  내 코스 조회 API
+        .onChange(of: viewModel.segment) { (_, _) in
+            viewModel.getCourseList()
         }
 
     }
@@ -127,6 +133,10 @@ struct CourseView: View {
         .padding(.bottom, 110)
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
+        /// 리프레시 시 내 코스 조회 API
+        .refreshable {
+            viewModel.getCourseList()
+        }
     }
     
     /// 코스가 없을 때 텍스트 뷰

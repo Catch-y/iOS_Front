@@ -86,7 +86,7 @@ extension CourseAPITarget: APITargetType {
             return "course/\(course.courseId)"
             
         case .patchCourseBookmark(let courseId):
-            return "course/\(courseId)"
+            return "course/\(courseId)/bookmark"
             
         case .patchPlaceVisit(let placeId):
             return "course/visited/\(placeId)"
@@ -376,7 +376,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course1.jpg",
                         "courseName": "맛집 탐방 코스",
                         "courseDescription": "지역의 인기 맛집을 탐방하는 코스입니다.",
-                        "categories": ["휴식", "카페"]
+                        "categories": ["REST", "CAFE"]
                       },
                       {
                         "courseId": 2,
@@ -384,7 +384,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course2.jpg",
                         "courseName": "문화 체험 여행",
                         "courseDescription": "다양한 문화와 예술을 체험할 수 있는 코스입니다.",
-                        "categories": ["문화생활", "체험"]
+                        "categories": ["CULTURELIFE", "EXPERIENCE"]
                       },
                       {
                         "courseId": 3,
@@ -392,7 +392,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course3.jpg",
                         "courseName": "웰니스 힐링 코스",
                         "courseDescription": "휴식과 재충전을 위한 웰니스 코스입니다.",
-                        "categories": ["휴식", "스포츠"]
+                        "categories": ["REST", "SPORT"]
                       },
                       {
                         "courseId": 4,
@@ -400,7 +400,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course4.jpg",
                         "courseName": "카페 투어",
                         "courseDescription": "트렌디한 카페를 방문하는 투어입니다.",
-                        "categories": ["카페"]
+                        "categories": ["CAFE"]
                       },
                       {
                         "courseId": 5,
@@ -408,7 +408,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course5.jpg",
                         "courseName": "밤 문화 탐방",
                         "courseDescription": "도시의 활기찬 밤 문화를 체험할 수 있는 코스입니다.",
-                        "categories": ["주류", "체험", "카페", "음식점"]
+                        "categories": ["BAR", "EXPERIENCE", "CAFE", "RESTAURANT"]
                       },
                       {
                         "courseId": 6,
@@ -416,7 +416,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course6.jpg",
                         "courseName": "스포츠 어드벤처",
                         "courseDescription": "스포츠와 모험을 좋아하는 사람들을 위한 코스입니다.",
-                        "categories": ["스포츠", "체험", "주류", "카페", "음식점"]
+                        "categories": ["SPORT", "EXPERIENCE", "BAR", "CAFE", "RESTAURANT"]
                       },
                       {
                         "courseId": 7,
@@ -424,7 +424,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course7.jpg",
                         "courseName": "미식 여행",
                         "courseDescription": "다양한 음식을 맛볼 수 있는 여행 코스입니다.",
-                        "categories": ["음식점", "카페", "주류"]
+                        "categories": ["RESTAURANT", "CAFE", "BAR"]
                       },
                       {
                         "courseId": 8,
@@ -432,7 +432,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course8.jpg",
                         "courseName": "도시 탐험",
                         "courseDescription": "도시의 숨겨진 명소를 탐험하는 코스입니다.",
-                        "categories": ["문화생활", "카페"]
+                        "categories": ["CULTURELIFE", "CAFE"]
                       },
                       {
                         "courseId": 9,
@@ -440,7 +440,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course9.jpg",
                         "courseName": "힐링 스팟",
                         "courseDescription": "휴식을 취하며 재충전할 수 있는 코스입니다.",
-                        "categories": ["휴식"]
+                        "categories": ["REST"]
                       },
                       {
                         "courseId": 10,
@@ -448,7 +448,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course10.jpg",
                         "courseName": "창의 워크숍",
                         "courseDescription": "창의력을 키울 수 있는 워크숍 코스입니다.",
-                        "categories": ["체험", "문화생활"]
+                        "categories": ["EXPERIENCE", "CULTURELIFE"]
                       },
                       {
                         "courseId": 11,
@@ -456,7 +456,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course11.jpg",
                         "courseName": "지역 맛집 투어",
                         "courseDescription": "현지의 대표 맛집을 방문하는 코스입니다.",
-                        "categories": ["음식점"]
+                        "categories": ["RESTAURANT"]
                       },
                       {
                         "courseId": 12,
@@ -464,7 +464,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course12.jpg",
                         "courseName": "스포츠 데이",
                         "courseDescription": "스포츠 활동을 즐길 수 있는 하루 코스입니다.",
-                        "categories": ["스포츠"]
+                        "categories": ["SPORT"]
                       },
                       {
                         "courseId": 13,
@@ -472,7 +472,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course13.jpg",
                         "courseName": "문화 여행",
                         "courseDescription": "지역의 문화유산을 체험할 수 있는 여행입니다.",
-                        "categories": ["문화생활"]
+                        "categories": ["CULTURELIFE"]
                       },
                       {
                         "courseId": 14,
@@ -480,7 +480,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course14.jpg",
                         "courseName": "바 호핑 투어",
                         "courseDescription": "도시 최고의 바를 탐방하는 코스입니다.",
-                        "categories": ["주류"]
+                        "categories": ["BAR"]
                       },
                       {
                         "courseId": 15,
@@ -488,7 +488,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course15.jpg",
                         "courseName": "자연 속 휴식",
                         "courseDescription": "자연에서 힐링할 수 있는 코스입니다.",
-                        "categories": ["휴식", "체험"]
+                        "categories": ["REST", "EXPERIENCE"]
                       },
                       {
                         "courseId": 16,
@@ -496,7 +496,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course16.jpg",
                         "courseName": "예술과 문화",
                         "courseDescription": "갤러리와 문화 공간을 탐방하는 코스입니다.",
-                        "categories": ["문화생활", "카페"]
+                        "categories": ["CULTURELIFE", "CAFE"]
                       },
                       {
                         "courseId": 17,
@@ -504,7 +504,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course17.jpg",
                         "courseName": "피트니스 캠프",
                         "courseDescription": "건강과 운동을 위한 코스입니다.",
-                        "categories": ["스포츠"]
+                        "categories": ["SPORT"]
                       },
                       {
                         "courseId": 18,
@@ -512,7 +512,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course18.jpg",
                         "courseName": "고급 레스토랑 투어",
                         "courseDescription": "최고급 음식을 경험할 수 있는 코스입니다.",
-                        "categories": ["음식점", "주류"]
+                        "categories": ["RESTAURANT", "BAR"]
                       },
                       {
                         "courseId": 19,
@@ -520,7 +520,7 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course19.jpg",
                         "courseName": "도시 명소 투어",
                         "courseDescription": "도시의 주요 명소를 방문하는 코스입니다.",
-                        "categories": ["문화생활", "음식점"]
+                        "categories": ["CULTURELIFE", "RESTAURANT"]
                       },
                       {
                         "courseId": 20,
@@ -528,10 +528,10 @@ extension CourseAPITarget: APITargetType {
                         "courseImage": "https://example.com/images/course20.jpg",
                         "courseName": "웰니스 탈출",
                         "courseDescription": "스파와 웰니스를 즐길 수 있는 코스입니다.",
-                        "categories": ["휴식"]
+                        "categories": ["REST"]
                       }
                     ],
-                    "isLast": true
+                    "isLast": false
                   }
                 }
 

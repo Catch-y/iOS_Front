@@ -43,7 +43,7 @@ struct CourseResponseData: Codable, Identifiable{
     /// 코스 카테고리 (최대 5개)
     let categories: [CategoryType]
     
-    init(id: UUID = UUID(), courseId: Int, courseType: CourseType, courseImage: String, courseName: String, courseDescription: String, categorise: [CategoryType]) {
+    init(id: UUID = UUID(), courseId: Int, courseType: CourseType, courseImage: String, courseName: String, courseDescription: String, categories: [CategoryType]) {
         self.id = id
         self.courseId = courseId
         self.courseType = courseType

@@ -13,25 +13,55 @@ struct SearchRecommendPlaceCard: View {
     let data: SearchPlaceData
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack(spacing: 17, content: {
+            placeImage
+            
+            VStack(alignment: .leading, content: {
+                placeNameInfo
+                
+                placeLocationInfo
+                    .padding(.top, 12)
+                
+                placePointInfo
+                    .padding(.top, 13)
+                
+            })
+        })
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     @ViewBuilder
     private var placeImage: some View {
-        if let url = URL(string: data.placeImage) {
+        if let url = URL(string: data.placeImageUrl) {
             KFImage(url)
                 .placeholder {
                     ProgressView()
                         .controlSize(.regular)
                 }.retry(maxCount: 2, interval: .seconds(2))
                 .resizable()
+                .aspectRatio(contentMode: .fill)
                 .frame(width: 133, height: 116)
                 .clipShape(.rect(cornerRadius: 15))
         }
     }
     
+    private var placeNameInfo: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 8, content: {
+            Text(data.placeName)
+                .font(.Subtitle3)
+                .foregroundStyle(Color.g7)
+                .lineLimit(1)
+                .layoutPriority(1)
+            
+            CategoryCard(categoryType: data.searchedPlaceCategory)
+                .frame(minWidth: 50, maxWidth: 100)
+                .fixedSize()
+
+        })
+    }
+    
     private var placeLocationInfo: some View {
-        VStack(alignment: .center, spacing: 6, content: {
+        VStack(alignment: .leading, spacing: 6, content: {
             makeInfoTitle(Icon.location.image, data.roadAddress)
             
             makeInfoTitle(Icon.time.image, data.activeTime)

@@ -9,4 +9,8 @@ import Foundation
 
 protocol SegmentProtocol: Hashable {
     var segmentTitle: String { get }
+    
+    var bucketViewNavigationTitle: String { get }
+    
+    var bucketViewMainBtnTitle: String { get }
 }
