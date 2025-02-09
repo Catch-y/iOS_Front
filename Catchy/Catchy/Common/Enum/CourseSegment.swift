@@ -34,5 +34,14 @@ enum CourseSegment: String, CaseIterable, SegmentProtocol {
         }
     }
     
+    var courseType: CourseType {
+        switch self {
+        case .diy:
+            return CourseType.diy
+        case .ai:
+            return CourseType.ai
+        }
+    }
+    
     
 }

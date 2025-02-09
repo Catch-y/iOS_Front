@@ -24,6 +24,9 @@ class CourseViewModel: ObservableObject{
     /// 코스 리스트가 로딩 중?
     @Published var isCourseListLoading: Bool = false
     
+    /// 요청한 미지막 코스 ID
+    var lastId = 0
+    
     // MARK: - Segment Control Properties
     
     /// 코스 타입
@@ -80,9 +83,18 @@ extension CourseViewModel {
     
     // MARK: - API 호출 함수
     /// 코스 조회
-    func getCourseList(courseRequest: CourseRequest){
+    func getCourseList(){
         
+        if let isLast = courseResponse?.isLast, isLast {
+            return
+        }
         isCourseListLoading = true
+        
+        let province = selectedUpperIndex == nil ? "" : upperLocations[selectedUpperIndex!].addrName
+        let district = province == "" || selectedLowerIndex == nil ? "" : lowerLocations[selectedLowerIndex!]
+        
+        print("province : \(province), district: \(district), lastId: \(lastId)")
+        let courseRequest: CourseRequest = .init(type: segment.courseType, upperLocation: province, lowerLocation: district, lastId: lastId)
         
         container.useCaseProvider.courseUseCase
             .executeGetCourseList(courseRequest: courseRequest)
@@ -114,6 +126,7 @@ extension CourseViewModel {
                 
                 if let response = response.result{
                     self.courseResponse = response
+                    self.lastId = response.content.count > 0 ? response.content.last!.courseId : lastId
                 }
                 
             })
@@ -135,7 +148,8 @@ extension CourseViewModel {
         self.upperScrollPosition = nil
         self.resetLowerDropState()
         self.segment = segment
-    // TODO: - 세그먼트 컨트롤 변경시 API 요청
+        self.lastId = 0
+      
     }
     
     /// 모든 상태를 처음 화면의 상태와 동일하게 합니다.
