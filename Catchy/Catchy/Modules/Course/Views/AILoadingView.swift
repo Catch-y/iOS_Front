@@ -22,35 +22,36 @@ struct AILoadingView: View {
         
         GeometryReader { geometry in
             
-            /// 화면의 가로 크기
-            let width = geometry.size.width
-        
-            VStack(spacing: 120) {
-                infoText
-                
-                ZStack(alignment: .top) {
+            /// 로딩 중이라면?
+            if viewModel.isLoading {
+                /// 화면의 가로 크기
+                let width = geometry.size.width
+            
+                VStack(spacing: 120) {
+                    infoText
                     
-                    gradient
-                                
-                    loadingView(with: width)
+                    ZStack(alignment: .top) {
+                        
+                        gradient
+                                    
+                        loadingView(with: width)
+                        
+                        
+                    }.onAppear {
+                        animatePinSequence()
+                    }
                     
-                    
-                }.onAppear {
-                    animatePinSequence()
                 }
+            /// 로딩 끝?
+            } else {
                 
+                // TODO: - Dismiss 구현
             }
+            
         
         }
         .task {
             viewModel.postCreateCourseAI()
-        }
-        .onChange(of: viewModel.isLoading) { (_, isLoading) in
-            
-            // TODO: - Dismiss 구현
-            if !isLoading {
-                dismiss()
-            }
         }
     }
     
