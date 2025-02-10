@@ -7,12 +7,14 @@
 
 import SwiftUI
 
+/// 드랍 다운 메뉴
 struct DropDown: View {
     
     @ObservedObject var viewModel: CourseViewModel
     
     @ObservedObject var provinceViewModel: GetProvinceViewModel
     
+    // MARK: - 드랍다운 메뉴 Properties
     let buttonHeight: CGFloat = 45
     let buttonWidth: CGFloat = 180
     
