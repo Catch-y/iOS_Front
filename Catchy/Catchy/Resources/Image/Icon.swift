@@ -80,6 +80,8 @@ enum Icon: String {
     case voteRestaurant = "voteRestaurant"
     case voteSport = "voteSport"
     case voteBar = "voteBar"
+    
+    case circleHeart = "circleHeart"
 
 
     

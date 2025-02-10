@@ -19,8 +19,8 @@ enum VoteInProgressAPITarget {
 extension VoteInProgressAPITarget: APITargetType {
     var path: String {
         switch self {
-        case .getVoteInProgress(let voteId):
-            return "/vote/\(voteId)"
+        case .getVoteInProgress:
+            return "/vote/{voteId}"
         }
     }
     

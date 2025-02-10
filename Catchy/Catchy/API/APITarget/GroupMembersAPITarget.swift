@@ -19,8 +19,8 @@ enum GroupMembersAPITarget {
 extension GroupMembersAPITarget: APITargetType {
     var path: String {
         switch self {
-        case .getGroupMembers(let request):
-            return "/group/\(request.groupId)/members"
+        case .getGroupMembers:
+            return "/group/{groupId}/members"
         }
     }
     

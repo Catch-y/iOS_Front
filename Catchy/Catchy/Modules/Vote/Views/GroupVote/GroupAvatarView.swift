@@ -22,7 +22,7 @@ struct GroupAvatarView: View {
                 HStack(spacing: 12) {
                     ForEach(viewModel.avatars) { avatar in
                         VStack {
-                            if avatar.imageName.starts(with: "http") {  // ✅ URL 이미지 (서버)
+                            if avatar.imageName.starts(with: "http") {  //  URL 이미지 (서버)
                                 KFImage(URL(string: avatar.imageName))
                                     .placeholder {
                                         Circle()
@@ -32,7 +32,7 @@ struct GroupAvatarView: View {
                                     .scaledToFit()
                                     .frame(width: 63, height: 63)
                                     .clipShape(RoundedRectangle(cornerRadius: 20))
-                            } else {  // ✅ 로컬 에셋 이미지 (샘플 데이터)
+                            } else {  //  로컬 에셋 이미지 (샘플 데이터)
                                 Image(avatar.imageName)
                                     .resizable()
                                     .scaledToFit()

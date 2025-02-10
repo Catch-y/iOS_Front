@@ -20,8 +20,9 @@ enum VoteResultCategoryAPITarget {
 extension VoteResultCategoryAPITarget: APITargetType {
     var path: String {
         switch self {
-        case .getVoteResultCategory(let groupId, let voteId):
-            return "/vote/\(groupId)/votes/\(voteId)/results"
+            
+        case .getVoteResultCategory:
+            return "/vote/{groupId}/votes/{voteId}/results"
         }
     }
     

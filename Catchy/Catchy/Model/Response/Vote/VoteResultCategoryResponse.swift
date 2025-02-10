@@ -16,3 +16,4 @@ struct CategoryResultData: Codable {
     let category: String
     let count: Int
 }
+

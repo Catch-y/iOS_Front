@@ -32,10 +32,10 @@ extension CategoryVoteAPITarget: TargetType {
     // API 경로 설정
     var path: String {
         switch self {
-        case .getCategories(let voteId):
-            return "/vote/\(voteId)/category"  // 경로 설정
-        case .saveCategories(let groupID, _):
-            return "/groups/\(groupID)/categories"  // 저장 API 경로
+        case .getCategories:
+            return "/vote/{voteId}/category"  // 경로 설정
+        case .saveCategories:
+            return " /groups/{groupID}/categories"  // 저장 API 경로
         }
     }
     

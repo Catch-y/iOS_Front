@@ -20,8 +20,8 @@ extension VoteResultPlaceAPITarget: TargetType {
 
     var path: String {
         switch self {
-        case .getPlacesByCategory(let request):
-            return "/vote/\(request.groupId)/categories/\(request.category)/places"
+        case .getPlacesByCategory:
+            return "/vote/{groupId}/categories/{category}/places"
         }
     }
 
@@ -46,30 +46,26 @@ extension VoteResultPlaceAPITarget: TargetType {
     var sampleData: Data {
         let jsonString = """
         {
-            "isSuccess": true,
-            "code": "SUCCESS",
-            "message": "요청 성공",
-            "result": {
-                "groupLocation": "Seoul",
-                "places": [
-                    {
-                        "placeId": 1,
-                        "placeName": "Cafe A",
-                        "roadAddress": "123 Main St",
-                        "rating": 4.5,
-                        "reviewCount": 10,
-                        "imageUrl": "avatar1",
-                        "votedMembers": [
-                            {
-                                "memberId": 1,
-                                "nickname": "User1",
-                                "profileImage": "avatar1"
-                            }
-                        ]
-                    }
-                ]
-            }
+            "groupLocation": "Seoul",
+            "places": [
+                {
+                    "placeId": 1,
+                    "placeName": "스타벅스 용산아이파크점",
+                    "roadAddress": "서울 용산구 한강대로 23길 55",
+                    "rating": 4.3,
+                    "reviewCount": 203,
+                    "imageUrl": "starbucksImage",
+                    "votedMembers": [
+                        {
+                            "memberId": 1,
+                            "nickname": "User1",
+                            "profileImage": "avatar1"
+                        }
+                    ]
+                }
+            ]
         }
+
         """
         return jsonString.data(using: .utf8)!
     }
