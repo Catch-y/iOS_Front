@@ -49,6 +49,13 @@ enum Icon: String {
     case check = "check"
     case smileSearch = "smileSearch"
     case domain = "domain"
+
+    case loading = "loading"
+    case red_pin = "red_pin"
+    case blue_pin = "blue_pin"
+    case yellow_pin = "yellow_pin"
+    case purple_pin = "purple_pin"
+
     case bookmark = "bookmark"
     case bookMarkTrue = "bookMarkTrue"
     case warningIntro = "warningIntro"

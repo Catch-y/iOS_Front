@@ -10,6 +10,7 @@ import FloatingButton
 
 struct CourseView: View {
     
+    /// 코스 뷰 모델
     @StateObject var viewModel: CourseViewModel
     
     /// 드랍 다운 메뉴의 뷰 모델
@@ -54,13 +55,32 @@ struct CourseView: View {
                     .ignoresSafeArea(.all)
                     .zIndex(2)
             }
-            AddFloatingButton(isOpen: $viewModel.isFloating).zIndex(3)
+            AddFloatingButton(isOpen: $viewModel.isFloating, onSubButtonTap: {
+                segment in
+                viewModel.selectedFloatingSegment = segment
+                viewModel.isPresented.toggle()
+                viewModel.isFloating.toggle()
+            })
+                .zIndex(3)
+                
             
         }.task{
             viewModel.getCourseList()
         }
         .onChange(of: provinceViewModel.provinces){ (_ , provinces) in
             viewModel.upperLocations = provinces
+        }
+        .fullScreenCover(isPresented: $viewModel.isPresented) {
+            
+            if let segment = viewModel.selectedFloatingSegment {
+                switch segment {
+                case .ai:
+                    AILoadingView(container: viewModel.container)
+                case .diy:
+                    EmptyView()
+                }
+            }
+            
         }
         .onChange(of: viewModel.selectedUpperIndex) { (_, _) in
             viewModel.getCourseList()
@@ -73,7 +93,6 @@ struct CourseView: View {
         .onChange(of: viewModel.segment) { (_, _) in
             viewModel.getCourseList()
         }
-        
 
     }
 
