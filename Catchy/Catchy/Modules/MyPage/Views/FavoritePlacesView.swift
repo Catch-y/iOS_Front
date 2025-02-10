@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 사용자가 좋아요한 장소를 보여주는 뷰
 struct FavoritePlacesView: View {
     
     @StateObject var viewModel: FavoritePlacesViewModel
@@ -16,6 +17,7 @@ struct FavoritePlacesView: View {
     }
     
     // MARK: - Body
+    
     var body: some View {
         
         VStack(alignment: .center, spacing: 20, content: {
@@ -37,26 +39,16 @@ struct FavoritePlacesView: View {
                     } else {
                         CustomEmptyStateView(label: "좋아요 하신 장소가 없어요!", subLabel: "마음에 드는 장소를 담아주세요.")
                             .padding(.top, 231)
+                        Spacer()
                     }
                 } else {
-                    makeProgressView()
+                    LoadingView()
                 }
             }
         })
         .ignoresSafeArea(.all)
         .task {
             viewModel.getMyPlaceList(pageSize: 10, lastPlaceId: 1)
-        }
-    }
-    
-    private func makeProgressView() -> some View {
-        VStack(alignment: .center) {
-            Spacer()
-            
-            ProgressView()
-                .controlSize(.regular)
-            
-            Spacer()
         }
     }
 }

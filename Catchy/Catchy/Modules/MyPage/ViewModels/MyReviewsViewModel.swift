@@ -28,6 +28,7 @@ class MyReviewsViewModel: ObservableObject {
 extension MyReviewsViewModel {
     func getMyReviews(review: MyReviewRequest){
         isLoading = true
+        myReviewsData = nil  /// 기존 데이터 초기화 (새 요청을 위해)
         
         container.useCaseProvider.myPageUseCase.executeGetMyReviews(review: review)
             .tryMap { responseData -> ResponseData<MyReviewResponse> in

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 사용자가 작성한 리뷰 목록을 보여주는 화면
 struct MyReviewsView: View {
     
     @StateObject var viewModel: MyReviewsViewModel
@@ -29,15 +30,12 @@ struct MyReviewsView: View {
                     contentSection(data: data)
                         .padding(.horizontal, 16)
                 } else {
-                    // 값을 들고 있지 않다면 가이드 보여주기
+                    CustomEmptyStateView(label: "작성하신 리뷰가 없습니다.", subLabel: "내가 방문한 장소에 대한 리뷰를 적어주세요!")
+                        .padding(.top, 231)
+                    Spacer()
                 }
             } else {
-                Spacer()
-                
-                ProgressView()
-                    .controlSize(.regular)
-                
-                Spacer()
+                LoadingView()
             }
         })
         .ignoresSafeArea()
@@ -47,15 +45,18 @@ struct MyReviewsView: View {
         }
     }
     
-    /// 세그먼트 UI 함수
+    // MARK: - 세그먼트 UI
+    
+    /// 리뷰 유형 선택을 위한 세그먼트 뷰
+    /// - Returns: 코스 리뷰 / 장소 리뷰 선택 UI
     private func segmentSection() -> some View {
         ZStack(alignment: .leading) {
-            /// 전체 배경 Capsule (테두리)
+            /* 전체 배경 Capsule (테두리) */
             RoundedRectangle(cornerRadius: 21.5)
                 .stroke(Color.g3, lineWidth: 1)
                 .frame(width: 287, height: 40)
             
-            /// 선택된 항목만 둥근 사각형 배경 표시
+            /* 선택된 항목만 둥근 사각형 배경 표시 */
             HStack {
                 if viewModel.selectedSegment == .place {
                     Spacer()
@@ -73,7 +74,7 @@ struct MyReviewsView: View {
             }
             .frame(width: 287, height: 40)
             
-            /// 세그먼트 버튼들
+            /* 세그먼트 버튼들 */
             HStack(spacing: 0) {
                 ForEach(ReviewSegment.allCases, id: \.self) { segment in
                     Button {
@@ -91,14 +92,22 @@ struct MyReviewsView: View {
             .frame(width: 287, height: 40)
         }
     }
-
+    
+    // MARK: - 리뷰 콘텐츠
+    
+    /// 리뷰 콘텐츠들을 표시하는 섹션
+    /// - Parameter data: 사용자의 리뷰 목록을 포함하는 MyReviewResponse 객체
+    /// - Returns: 리뷰 개수 및 리뷰 리스트 뷰
     private func contentSection(data: MyReviewResponse) -> some View {
         VStack(alignment: .leading, spacing: 22, content: {
-            reviewCountSection(count: data.reviewCount)    // "작성한 리뷰 개수" 표시
-            reviewTableSection(content: data.content)  // 리뷰 목록 표시
+            reviewCountSection(count: data.reviewCount)
+            reviewTableSection(content: data.content)
         })
     }
     
+    /// 작성한 리뷰 개수를 표시하는 섹션
+    /// - Parameter count: 작성한 리뷰 개수
+    /// - Returns: 리뷰 개수를 표시하는 뷰
     private func reviewCountSection(count: Int) -> some View {
             return HStack(spacing: 9, content: {
                 Text("작성한 리뷰")
@@ -110,15 +119,19 @@ struct MyReviewsView: View {
         })
     }
     
+    /// 리뷰 리스트를 표시하는 섹션
+    /// - Parameter content: 사용자의 리뷰 데이터 리스트를 포함하는 ReviewData 객체 (코스 or 장소)
+    /// - Returns: 리뷰 리스트를 포함하는 스크롤 뷰
     private func reviewTableSection(content: [ReviewDataProtocol]) -> some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: 8) {  // 🔹 LazyVStack으로 성능 최적화
+            LazyVStack(alignment: .leading, spacing: 8) {
                 ForEach(content, id: \.reviewId) { review in
                     ReviewCard(data: review, cardType: .myReview, reviewType: .course)
+                        .padding(.bottom, 40)
                     if review.reviewId != content.last?.reviewId {
                         Divider()
                             .background(Color.g3)
-                            .padding(.vertical, 40)
+                            .padding(.bottom, 40)
                     }
                 }
             }

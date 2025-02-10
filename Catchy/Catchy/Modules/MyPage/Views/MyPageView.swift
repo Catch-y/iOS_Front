@@ -8,6 +8,7 @@
 import SwiftUI
 import Kingfisher
 
+/// 마이페이지 뷰
 struct MyPageView: View {
     
     @StateObject var viewModel: MyPageViewModel
@@ -17,23 +18,23 @@ struct MyPageView: View {
     }
     
     // MARK: - Body
+
     var body: some View {
         
         VStack(alignment: .leading, spacing: 53, content: {
-            if !viewModel.isLoading {
+            if !viewModel.isProfileLoading && !viewModel.isBookmarkedCourseLoading {
                 if let data = viewModel.profileResponse {
                     TopSectionView(data: data)
-                    BookmarkedCoursesView()
+                    BookmarkedCoursesView(content: viewModel.courseResponse?.content)
                 } else {
-                    // 값을 들고 있지 않다면 가이드 보여주기
+                    Spacer()
+                    CustomEmptyStateView(label: "프로필 정보를 찾을 수 없습니다.", subLabel: "")
+                        .frame(maxWidth: .infinity)
+                    Spacer()
+                    
                 }
             } else {
-                Spacer()
-                
-                ProgressView()
-                    .controlSize(.regular)
-                
-                Spacer()
+                LoadingView()
             }
         })
         .background(Color(.g1))
@@ -51,27 +52,28 @@ struct MyPageView: View {
         )
     }
     
-    ///  마이페이지 상단 뷰 (설정 버튼 + 프로필 + 메뉴 버튼)
+    // MARK: - 마이페이지 상단 섹션 함수
+    
+    /// 마이페이지 상단 섹션을 구성하는 뷰
+    /// - Parameter data: 사용자 프로필 정보를 포함하는 `ProfileResponse` 객체
+    /// - Returns: 설정 버튼, 프로픽 섹션 및 마이페이지 메뉴 버튼을 포함하는 뷰
     private func TopSectionView(data: ProfileResponse) -> some View {
         return VStack(alignment: .leading, spacing: 6, content: {
+
+            settingsButton()
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.trailing, 12)
             
-            // 설정 버튼
-            HStack {
-                Spacer()
-                settingsButton()
-                    .padding(.trailing, 12)
-            }
-            
-            // 프로필 섹션 뷰 (프로필 이미지 + 닉네임 + 닉네임 수정 버튼)
             ProfileSectionView(data: data)
                 .padding(.bottom, 31)
             
-            // 마이페이지 메뉴 버튼
             myPageMenuButtons()
         })
     }
     
+    
     /// 설정 버튼
+    /// - Returns: 설정 버튼 뷰
     private func settingsButton() -> some View {
         return Button(action: {
             print("설정 버튼 클릭")
@@ -83,16 +85,18 @@ struct MyPageView: View {
         }
     }
     
-    /// 프로필 섹션 뷰 (프로필 이미지 + 닉네임 + 닉네임 수정 버튼)
+    /// 프로필 섹션
+    /// - Parameter data: 사용자 프로필 정보를 포함하는 `ProfileResponse` 객체
+    /// - Returns: 프로필 이미지, 닉네임 및 닉네임 수정 버튼을 포함하는 뷰
     private func ProfileSectionView(data: ProfileResponse) -> some View {
         return HStack(spacing: 10, content: {
             ProfileImage(
                 imageURL: viewModel.profileResponse?.profileImage ?? "",
                 size: 104
             ) {
+                // TODO: - 프로필 수정 액션
                 print("프로필 수정 클릭")
             }
-            
             
             Text(viewModel.profileResponse?.nickname ?? "")
                 .font(.title3)
@@ -120,8 +124,9 @@ struct MyPageView: View {
         })
     }
     
-    /// 마이페이지 버튼
-    // TODO: - 버튼 눌렀을 시 액션 추가
+    /// 마이페이지 메뉴 버튼
+    /// - Returns: 마이페이지 메뉴 아이템을 포함한 뷰
+    // TODO: - 버튼 눌렀을 시 액션 추가, enum으로 관리
     private func myPageMenuButtons() -> some View {
         let menuItems: [(icon: Image, title: String, action: () -> Void)] = [
             (Icon.document.image, "취향 설문", { print("취향 설문 클릭") }),
@@ -129,16 +134,21 @@ struct MyPageView: View {
             (Icon.myPageReview.image, "내 리뷰", { print("내 리뷰 클릭") })
         ]
         
-        return HStack(spacing: 17, content: {
+        return HStack(spacing: 17) {
             ForEach(menuItems, id: \.title) { item in
                 MyPageItem(icon: item.icon, title: item.title, onTap: item.action)
             }
-        })
+        }
         .frame(maxWidth: .infinity)
+        
     }
     
-    /// 북마크 코스 뷰
-    private func BookmarkedCoursesView() -> some View {
+    // MARK: - 북마크 코스 섹션
+    
+    /// 북마크한 코스 목록
+    /// - Parameter content: 사용자가 북마크한 코스 데이터
+    /// - Returns: 북마크한 코스 목록을 포함한 뷰, 데이터가 없으면 가이드뷰
+    private func BookmarkedCoursesView(content: [CourseResponseData]?) -> some View {
         
         
         return VStack(alignment: .leading, spacing: 15, content: {
@@ -146,20 +156,25 @@ struct MyPageView: View {
                 .font(.Subtitle3)
                 .foregroundStyle(Color.g7)
             
-            ScrollView(.vertical, content: {
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 11, content: {
-                    if let content = viewModel.courseResponse?.content {
+            if let content = content, !content.isEmpty {
+                ScrollView(.vertical, content: {
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 11, content: {
                         ForEach(content, id: \.id) { course in
                             CourseGroupCard(course: course, type: .myPage)
                         }
-                    }
+                    })
                 })
-            })
-            
+            } else {
+                CustomEmptyStateView(label: "북마크한 코스가 없습니다.", subLabel: "관심 있는 코스를 저장해 보세요!")
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 50)
+                Spacer()
+            }
         })
     }
     
 }
+
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in

@@ -10,7 +10,6 @@ import Combine
 
 class MyPageViewModel: ObservableObject {
     
-    @Published var isEditingNickname: Bool = false  // 닉네임 수정 모달 상태 추가
     
     let container: DIContainer
     
@@ -20,10 +19,18 @@ class MyPageViewModel: ObservableObject {
     
     /// 마이페이지 프로필 조회 response
     @Published var profileResponse: ProfileResponse?
+    
+    /// 북마크한 코스 조회 response
     @Published var courseResponse: CourseResponse?
     
     /// 마이페이지 프로필 조회 response 로딩 중?
-    @Published var isLoading: Bool = false
+    @Published var isProfileLoading: Bool = false
+    
+    /// 북마크한 코스 조회 response 로딩 중?
+    @Published var isBookmarkedCourseLoading: Bool = false
+    
+    /// 닉네임 수정 모달 상태 추가
+    @Published var isEditingNickname: Bool = false
     
     // MARK: - Init
     
@@ -38,7 +45,7 @@ extension MyPageViewModel {
     /// 마이페이지 프로필 조회
     func getProfile(){
         
-        isLoading = true
+        isProfileLoading = true
         
         container.useCaseProvider.myPageUseCase
             .executeGetProfile()
@@ -57,7 +64,7 @@ extension MyPageViewModel {
             .sink(receiveCompletion: {
                 [weak self] completion in
                 guard let self = self else { return }
-                self.isLoading = false
+                self.isProfileLoading = false
                 
                 switch completion {
                 case .finished:
@@ -80,7 +87,7 @@ extension MyPageViewModel {
     /// 북마크한 코스 무한 스크롤
     func getBookmarkCourseList(pageSize: Int, lastCourseId: Int? = nil)
     {
-        isLoading = true
+        isBookmarkedCourseLoading = true
         
         container.useCaseProvider.myPageUseCase
             .executeGetBookmarkCourseList(pageSize: pageSize, lastCourseId: lastCourseId)
@@ -99,7 +106,7 @@ extension MyPageViewModel {
             .sink(receiveCompletion: {
                 [weak self] completion in
                 guard let self = self else { return }
-                self.isLoading = false
+                self.isBookmarkedCourseLoading = false
                 
                 switch completion {
                 case .finished:

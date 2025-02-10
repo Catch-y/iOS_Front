@@ -25,7 +25,7 @@ struct MyPageItem: View {
                     .font(.body2)
                     .foregroundColor(.g6)
             })
-            .frame(width: 112, height: 98)
+            .frame(maxWidth: .infinity, minHeight: 98)
             .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 20))
         }

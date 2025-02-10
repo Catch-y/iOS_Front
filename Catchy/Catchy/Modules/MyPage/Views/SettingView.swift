@@ -24,39 +24,13 @@ struct SettingView: View {
             }, title: "환경 설정", rightNaviIcon: nil, isShadow: true)
             .padding(.bottom, 8)
             
-            settingSection(
-                title: "프로필 설정",
-                items: [
-                    ("로그아웃", { print("로그아웃 클릭") }),
-                    ("회원 탈퇴", { print("회원 탈퇴 클릭") })
-                ]
-            )
-            
-            Rectangle()
-                .frame(width: .infinity, height: 8)
-                .foregroundStyle(Color.bg2)
-            
-            settingSection(
-                title: "약관 및 개인정보 처리 동의",
-                items: [
-                    ("이용자 약관", { print("이용자 약관 클릭") }),
-                    ("개인정보 처리방침", { print("개인정보 처리방침 클릭") }),
-                    ("개인정보 방침 동의 및 철회", { print("개인정보 방침 동의 및 철회 클릭") })
-                ]
-            )
-            
-            Rectangle()
-                .frame(width: .infinity, height: 8)
-                .foregroundStyle(Color.bg2)
-            
-            settingSection(
-                title: "고객 지원",
-                items: [
-                    ("자주 묻는 질문", { print("자주 묻는 질문 클릭") }),
-                    ("제안/의견 보내기", { print("제안/의견 보내기 클릭") }),
-                    ("버전 정보", { print("버전 정보 클릭") })
-                ]
-            )
+            ForEach(SettingCategory.allCases, id: \.self) { category in
+                settingSection(category: category)
+                
+                if category != SettingCategory.allCases.last {
+                    sectionDivider()
+                }
+            }
             
             Spacer()
             
@@ -65,6 +39,35 @@ struct SettingView: View {
         
     }
     
+    
+    /// 설정 카테고리 색션
+    /// - Parameter category: enum 대 카테고리 정보
+    /// - Returns: 설정 카테고리 색션
+    private func settingSection(category: SettingCategory) -> some View {
+        return VStack(alignment: .leading, spacing: 12, content: {
+            Text(category.title)
+                .font(.Subtitle3_SM)
+                .foregroundStyle(Color.g7)
+                .padding(.bottom, 15)
+            
+            ForEach(category.items.indices, id: \.self) { index in
+                settingItem(title: category.items[index].title, action: category.items[index].action)
+                
+                /// 마지막 아이템이 아닐 경우 Divider 추가
+                if index != category.items.indices.last {
+                    Divider()
+                }
+            }
+        })
+        .padding(.horizontal, 16)
+        .background(Color.white)
+    }
+    
+    /// 설정 항목 버튼 생성
+    /// - Parameters:
+    ///   - title: 버튼 제목
+    ///   - action: 버튼 클릭 시 실행 액션
+    /// - Returns: 설정 항목 버튼
     private func settingItem(title: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack {
@@ -76,26 +79,15 @@ struct SettingView: View {
         }
         .background(Color.white)
     }
+
     
-    private func settingSection(title: String, items: [(String, () -> Void)]) -> some View {
-        return VStack(alignment: .leading, spacing: 12, content: {
-            Text(title)
-                .font(.Subtitle3_SM)
-                .foregroundStyle(Color.g7)
-                .padding(.bottom, 15)
-            
-            
-            ForEach(items.indices, id: \.self) { index in
-                settingItem(title: items[index].0, action: items[index].1)
-                
-                if index != items.indices.last {
-                    Divider()
-                }
-            }
-        })
-        .padding(.horizontal, 16)
-        .background(Color.white)
-        
+    /// 구분선 섹션
+    /// - Returns: 구분선 역할을 하는 회색 배경
+    private func sectionDivider() -> some View {
+        Rectangle()
+            .frame(height: 8)
+            .foregroundStyle(Color.bg2)
+            .frame(maxWidth: .infinity)
     }
 }
 
