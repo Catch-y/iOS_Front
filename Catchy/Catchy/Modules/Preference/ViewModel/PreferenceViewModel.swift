@@ -66,10 +66,10 @@ extension PreferenceViewModel {
                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                    let features = json["features"] as? [[String: Any]] {
 
-                    var uniquePolygons = Set<String>() // 중복 방지를 위한 Set
-                    var allPoints: [CGPoint] = [] // 중심점 계산을 위한 모든 좌표 저장
+                    var uniquePolygons = Set<String>()
+                    var allPoints: [CGPoint] = []
                     
-                    polygons.removeAll() // 기존 데이터 초기화
+                    polygons.removeAll()
 
                     for feature in features {
                         if let geometry = feature["geometry"] as? [String: Any],
