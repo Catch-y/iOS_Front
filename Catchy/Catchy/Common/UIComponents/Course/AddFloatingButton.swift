@@ -13,6 +13,9 @@ struct AddFloatingButton : View {
     
     @Binding var isOpen: Bool
     
+    /// 서브 버튼 탭 시 호출
+    var onSubButtonTap: (CourseSegment) -> Void
+
     var body: some View {
         VStack {
             Spacer()
@@ -93,14 +96,9 @@ struct AddFloatingButton : View {
         return CourseSegment.allCases.map { segment in
             makeSubButton(course: segment)
                 .onTapGesture {
-                    print(segment)
+                    onSubButtonTap(segment)
                 }
         }
     }
 }
 
-struct MainFloatingButton_Preview: PreviewProvider {
-    static var previews: some View {
-        AddFloatingButton(isOpen: .constant(true))
-    }
-}
