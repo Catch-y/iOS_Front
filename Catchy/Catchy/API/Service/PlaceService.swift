@@ -20,8 +20,8 @@ class PlaceService: PlaceServiceProtocol {
     }
     
     /// 장소 평점/리뷰 달기 API
-    func postPlaceReviewSubmission(request: PlaceReviewSubmissionRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, Moya.MoyaError> {
-        return provider.requestPublisher(.postPlaceReviewSubmission(request: request, reviewImages: reviewImages))
+    func postPlaceReviewSubmission(placeId: Int, request: PlaceReviewSubmissionRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, Moya.MoyaError> {
+        return provider.requestPublisher(.postPlaceReviewSubmission(placeId: placeId, request: request, reviewImages: reviewImages))
             .map(ResponseData<PlaceReviewSubmissionResponse>.self)
             .eraseToAnyPublisher()
     }
