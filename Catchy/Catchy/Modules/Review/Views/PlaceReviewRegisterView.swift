@@ -197,36 +197,28 @@ struct PlaceReviewRegisterView: View {
                 .padding(.horizontal, 16)
             
             ScrollView(.horizontal) {
-                HStack(spacing: 0) {
-                    
-                    if viewModel.selectedImageCount < 5 {
-                        EmptyReviewPhoto(count: $viewModel.selectedImageCount)
-                            .onTapGesture {
-                                
-                                viewModel.showImagePicker()
-                            }
-                            .frame(width: 125, height: 125)
-                    }
+                HStack(spacing: 12) {
                     
                     ForEach(Array(viewModel.getImages().enumerated()), id: \.element.self) { (
                         index,
                         image
                     ) in
-                        ZStack(alignment: .topLeading) {
+                        ZStack(alignment: .topTrailing) {
                             Image(uiImage: image)
-//                                .resizable()
-                                .frame(width: 113, height: 113)
+                                .resizable()
+                                .frame(width: 110, height: 110)
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
                                 
                             Icon.close.image
-                                .frame(width: 18, height: 18)
+                                .resizable()
+                                .frame(width: 14, height: 14)
                                 .background(
                                     Circle()
-                                        .fill(Color.white.opacity(0.6))
+                                        .fill(Color.white)
                                     .frame(width: 22, height: 22)
                                 )
                                 .foregroundStyle(.g7)
-                                .offset(x: -5, y: -5)
+                                .offset(x: -6, y: 7)
                                 .onTapGesture {
                                     withAnimation {
                                         viewModel.removeImage(at: index)
@@ -234,13 +226,22 @@ struct PlaceReviewRegisterView: View {
                                 }
                             
                         }
-                        .frame(width: 125, height: 125)
+                        .frame(width: 110, height: 110)
                         
+                    }
+                    
+                    if viewModel.selectedImageCount < 5 {
+                        EmptyReviewPhoto(count: $viewModel.selectedImageCount)
+                            .onTapGesture {
+                                
+                                viewModel.showImagePicker()
+                            }
+                            .frame(width: 110, height: 110)
                     }
                 }
             }
             .scrollIndicators(.hidden)
-            .padding(.horizontal, 10)
+            .padding(.horizontal, 16)
 
         }
         .padding(.top, 3)
