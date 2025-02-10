@@ -44,4 +44,9 @@ class AppFlowViewModel: ObservableObject {
     public func onSignupSuccess() {
         appState = .preferrenceSurvey
     }
+    
+    /// 회원가입 성공 후 탭뷰 전환
+    public func changeTabView() {
+        appState = .tabView
+    }
 }

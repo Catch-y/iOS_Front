@@ -9,8 +9,8 @@ import Foundation
 import Moya
 
 enum MemeberAPITarget {
-    case patchNickname(nickname: String)
-    case postServeyCategory(categories: [String])
+    case patchNickname(nickname: String) /* 닉네임 변경 */
+    case postServeyCategory(categories: [String]) /* 취향 설문 카테고리 저장 */
     case postServeyStyleTime(styleTime: StepThirdRequest)
     case postLocation(locations: [StepFourStep])
 }

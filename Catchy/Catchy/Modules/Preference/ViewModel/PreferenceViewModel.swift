@@ -8,23 +8,27 @@
 import Foundation
 import CoreGraphics
 import MapKit
+import Combine
 
 class PreferenceViewModel: ObservableObject {
     
     let container: DIContainer
+    private var cancellalbes = Set<AnyCancellable>()
     
     init(container: DIContainer) {
         self.container = container
     }
     
+    @Published var isLoading: Bool = false
+    
     //MARK: - 전체 스텝 관리
-    @Published var preferenceStep: Int = 0
+    @Published var preferenceStep: Int = 3
     
     //MARK: - 1번째, 2번째 스텝 관리
     @Published var pageCount: Int = 0
     
     /* Request 저장 */
-    @Published var bigCategoryBtn: [CategoryType] = [.BAR, .CAFE]
+    @Published var bigCategoryBtn: [CategoryType] = []
     @Published var smallCategoryBtn: [CategoryType: [String]] = [:]
     
     func getSmallCategory(category: CategoryType) -> [String] {
@@ -32,14 +36,9 @@ class PreferenceViewModel: ObservableObject {
     }
     
     //MARK: - 3번째, 4번째 스텝 관리
-    /// RequestData
-    @Published var stepThirdData: StepThirdRequest?
-    
     @Published var selectedCompanion: [CompanionType] = []
-    @Published var selectedWeekDay: [ActiveDate] = []
-    @Published var startTime: String = ""
-    @Published var endTime: String = ""
     
+    @Published var selectedWeekDay: [ActiveDate] = []
     @Published var leftSelectedTime: Date? = nil
     @Published var rightSelectedTime: Date? = nil
     
@@ -48,7 +47,11 @@ class PreferenceViewModel: ObservableObject {
     //MARK: - 5번째 지도 관리
     @Published var polygons: [PolygonData] = []
     @Published var isDistrictsSheet: Bool = false
-    @Published var savedDistricts: [String] = []
+    @Published var regionDistricts: [String: [String]] = [:]
+    @Published var selectedRegion: String? = nil
+    @Published var selectedRegionCode: String? = nil
+    @Published var savedDistricts: [StepFourStep] = []
+    
     
     let referenceLogitude: Double = 127.5
     let referenceLatitude: Double = 36.5
@@ -56,74 +59,79 @@ class PreferenceViewModel: ObservableObject {
 }
 
 extension PreferenceViewModel {
+    /// 시/도 데아터 조회 함수
     public func loadGeoJSON() {
-            guard let filePath = Bundle.main.path(forResource: "Sido", ofType: "geojson") else { return }
+        guard let filePath = Bundle.main.path(forResource: "Sido", ofType: "geojson") else { return }
+        
+        do {
+            let fileURL = URL(fileURLWithPath: filePath)
+            let data = try Data(contentsOf: fileURL)
             
-            do {
-                let fileURL = URL(fileURLWithPath: filePath)
-                let data = try Data(contentsOf: fileURL)
+            if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+               let features = json["features"] as? [[String: Any]] {
                 
-                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                   let features = json["features"] as? [[String: Any]] {
-
-                    var uniquePolygons = Set<String>() // 중복 방지를 위한 Set
-                    var allPoints: [CGPoint] = [] // 중심점 계산을 위한 모든 좌표 저장
-                    
-                    polygons.removeAll() // 기존 데이터 초기화
-
-                    for feature in features {
-                        if let geometry = feature["geometry"] as? [String: Any],
-                           let type = geometry["type"] as? String,
-                           type == "Polygon",
-                           let coordinatesArray = geometry["coordinates"] as? [[[Double]]],
-                           let properties = feature["properties"] as? [String: Any],
-                           let regionName = properties["SIG_KOR_NM"] as? String,
-                           let regionCode = properties["CTPRVN_CD"] as? String {
-
-                            for coordinates in coordinatesArray {
-                                let cgPoints = coordinates.map { convertToCGPoint(latitude: $0[1], longitude: $0[0]) }
-                                
-                                allPoints.append(contentsOf: cgPoints) // 중심점 계산을 위한 좌표 추가
-
-                                // 중복 검사: 좌표 배열을 문자열로 변환하여 비교
-                                let pointsKey = cgPoints.map { "\($0.x),\($0.y)" }.joined(separator: "|")
-                                if uniquePolygons.insert(pointsKey).inserted {
-                                    let center = calculateCentroid(points: cgPoints)
-                                    polygons.append(PolygonData(
-                                        id: UUID(), // 고유 ID 추가
-                                        points: cgPoints,
-                                        offset: .zero,
-                                        scale: 1.0,
-                                        regionName: regionName,
-                                        regionCode: regionCode,
-                                        center: center
-                                    ))
-                                }
+                var uniquePolygons = Set<String>()
+                var allPoints: [CGPoint] = []
+                
+                polygons.removeAll()
+                
+                for feature in features {
+                    if let geometry = feature["geometry"] as? [String: Any],
+                       let type = geometry["type"] as? String,
+                       type == "Polygon",
+                       let coordinatesArray = geometry["coordinates"] as? [[[Double]]],
+                       let properties = feature["properties"] as? [String: Any],
+                       let regionName = properties["SIG_KOR_NM"] as? String,
+                       let regionCode = properties["CTPRVN_CD"] as? String {
+                        
+                        for coordinates in coordinatesArray {
+                            let cgPoints = coordinates.map { convertToCGPoint(latitude: $0[1], longitude: $0[0]) }
+                            
+                            allPoints.append(contentsOf: cgPoints) // 중심점 계산을 위한 좌표 추가
+                            
+                            // 중복 검사: 좌표 배열을 문자열로 변환하여 비교
+                            let pointsKey = cgPoints.map { "\($0.x),\($0.y)" }.joined(separator: "|")
+                            if uniquePolygons.insert(pointsKey).inserted {
+                                let center = calculateCentroid(points: cgPoints)
+                                polygons.append(PolygonData(
+                                    id: UUID(), // 고유 ID 추가
+                                    points: cgPoints,
+                                    offset: .zero,
+                                    scale: 1.0,
+                                    regionName: regionName,
+                                    regionCode: regionCode,
+                                    center: center
+                                ))
                             }
                         }
                     }
-
-                    // 중심점과 스케일 조정
-                    if let offset = calculateCenterOffset(from: allPoints) {
-                        let scale = calculateScale(from: allPoints) * 1.0
-                        polygons = polygons.map { polygon in
-                            PolygonData(
-                                id: polygon.id,
-                                points: polygon.points,
-                                offset: offset,
-                                scale: scale,
-                                regionName: polygon.regionName,
-                                regionCode: polygon.regionCode,
-                                center: polygon.center
-                            )
-                        }
+                }
+                
+                if let offset = calculateCenterOffset(from: allPoints) {
+                    let scale = calculateScale(from: allPoints) * 1.0
+                    polygons = polygons.map { polygon in
+                        PolygonData(
+                            id: polygon.id,
+                            points: polygon.points,
+                            offset: offset,
+                            scale: scale,
+                            regionName: polygon.regionName,
+                            regionCode: polygon.regionCode,
+                            center: polygon.center
+                        )
                     }
                 }
-            } catch {
-                print("GeoJSON 파일 로딩 오류: \(error)")
             }
+        } catch {
+            print("GeoJSON 파일 로딩 오류: \(error)")
         }
+    }
     
+    /// 위도 경도 값 x y 좌표 값 전환
+    /// - Parameters:
+    ///   - latitude: 위도 값
+    ///   - longitude: 경도 값
+    /// - Returns: CGPoint로 반환
     private func convertToCGPoint(latitude: Double, longitude: Double) -> CGPoint {
         let x = longitude
         let y = -latitude
@@ -132,24 +140,24 @@ extension PreferenceViewModel {
     
     
     private func calculateCentroid(points: [CGPoint]) -> CGPoint {
-           var area: CGFloat = 0.0
-           var centroidX: CGFloat = 0.0
-           var centroidY: CGFloat = 0.0
-
-           for i in 0..<points.count {
-               let j = (i + 1) % points.count
-               let temp = points[i].x * points[j].y - points[j].x * points[i].y
-               area += temp
-               centroidX += (points[i].x + points[j].x) * temp
-               centroidY += (points[i].y + points[j].y) * temp
-           }
-
-           area *= 0.5
-           centroidX /= (6.0 * area)
-           centroidY /= (6.0 * area)
-
-           return CGPoint(x: centroidX, y: centroidY)
-       }
+        var area: CGFloat = 0.0
+        var centroidX: CGFloat = 0.0
+        var centroidY: CGFloat = 0.0
+        
+        for i in 0..<points.count {
+            let j = (i + 1) % points.count
+            let temp = points[i].x * points[j].y - points[j].x * points[i].y
+            area += temp
+            centroidX += (points[i].x + points[j].x) * temp
+            centroidY += (points[i].y + points[j].y) * temp
+        }
+        
+        area *= 0.5
+        centroidX /= (6.0 * area)
+        centroidY /= (6.0 * area)
+        
+        return CGPoint(x: centroidX, y: centroidY)
+    }
     
     private func calculateCenterOffset(from points: [CGPoint]) -> CGPoint? {
         guard !points.isEmpty else { return nil }
@@ -184,23 +192,131 @@ extension PreferenceViewModel {
     }
     
     func getRegionInfo(at location: CGPoint, in rect: CGRect) -> (name: String, code: String)? {
-            for polygon in polygons {
-                let transformedPoints = polygon.points.map {
-                    CGPoint(
-                        x: ($0.x - polygon.offset.x) * polygon.scale + rect.midX,
-                        y: ($0.y - polygon.offset.y) * polygon.scale + rect.midY
-                    )
-                }
-                let path = CGMutablePath()
-                path.addLines(between: transformedPoints)
-                path.closeSubpath()
-
-                if path.contains(location) {
-                    return (polygon.regionName, polygon.regionCode)
-                }
+        for polygon in polygons {
+            let transformedPoints = polygon.points.map {
+                CGPoint(
+                    x: ($0.x - polygon.offset.x) * polygon.scale + rect.midX,
+                    y: ($0.y - polygon.offset.y) * polygon.scale + rect.midY
+                )
             }
-            return nil
+            let path = CGMutablePath()
+            path.addLines(between: transformedPoints)
+            path.closeSubpath()
+            
+            if path.contains(location) {
+                return (polygon.regionName, polygon.regionCode)
+            }
         }
+        return nil
+    }
+}
+
+extension PreferenceViewModel {
     
+    /// 취향 1,2 단계 데이터 전송
+    func postSurveyCategory() {
+        
+        let selectedCategories = smallCategoryBtn.values.flatMap { $0 }
+        
+        container.useCaseProvider.memberUseCase.executePostServeyCategory(categories: selectedCategories)
+            .tryMap { responseData -> ResponseData<StepOneResponse> in
+                if !responseData.isSuccess {
+                    throw APIError.serverError(message: responseData.message, code: responseData.code)
+                }
+                
+                guard let _ = responseData.result else {
+                    throw APIError.emptyResult
+                }
+                
+                print("✅ 취향 1,2 단계 데이터 전송: \(responseData)")
+                return responseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: {completion in
+                switch completion {
+                case .finished:
+                    print("✅ 모든 취향 데이터 전송 완료")
+                    self.postSurveyStyleTime()
+                case .failure(let error):
+                    print("❌ 모든 취향 데이터 전송 API 호출 실패: \(error)")
+                }
+            }, receiveValue: { _ in })
+            .store(in: &cancellalbes)
+    }
     
+    /// 취향 3, 4 단계 데이터 전송
+    func postSurveyStyleTime() {
+        
+        guard let leftTime = leftSelectedTime,
+              let rightTime = rightSelectedTime else {
+            print("❌ 시작 시간 또는 종료 시간이 설정되지 않음")
+            return
+        }
+        
+        let activeTimes = selectedWeekDay.map { day in
+            ActiveDateDTO(dayOfWeek: day, startTime: DataFormatter.shared.timeString(from: leftTime), endTime: DataFormatter.shared.timeString(from: rightTime))
+        }
+        
+        container.useCaseProvider.memberUseCase.executePostServeyStyleTime(styleTime: .init(styleNames: selectedCompanion, activeTimes: activeTimes))
+            .tryMap { responseData -> ResponseData<StepTwoResponse> in
+                if !responseData.isSuccess {
+                    throw APIError.serverError(message: responseData.message, code: responseData.code)
+                }
+                
+                guard let _ = responseData.result else {
+                    throw APIError.emptyResult
+                }
+                
+                print("✅ 취향 3 4단계 데이터 전송: \(responseData)")
+                return responseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("✅ 모든 시간, 같이할 사람 전송 완료")
+                    self.postLocation()
+                case .failure(let error):
+                    print("❌ 모든 시간, 같이할 사람 전송 실패: \(error)")
+                }
+            }, receiveValue: { _ in })
+            .store(in: &cancellalbes)
+    }
+    
+    /// 취향 5단계 데이터 전송
+    func postLocation() {
+        guard !savedDistricts.isEmpty else {
+            print("선택된 지역이 없습니다.")
+            return
+        }
+        
+        let location = savedDistricts.map { location in
+            StepFourStep(upperLocation: location.upperLocation, lowerLocation: location.lowerLocation)
+        }
+        
+        container.useCaseProvider.memberUseCase.executePostLocation(locations: location)
+            .tryMap { responseData -> ResponseData<StepThirdResponse> in
+                if !responseData.isSuccess {
+                    throw APIError.serverError(message: responseData.message, code: responseData.code)
+                }
+                
+                guard let _ = responseData.result else {
+                    throw APIError.emptyResult
+                }
+                
+                print("✅ 취향 5단계 데이터 전송: \(responseData)")
+                return responseData
+                
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("✅ 지역 전송 완료")
+                case .failure(let failure):
+                    print("❌ 지역 전송 실패 \(failure)")
+                }
+            }, receiveValue: { _ in })
+            .store(in: &cancellalbes)
+    }
 }
