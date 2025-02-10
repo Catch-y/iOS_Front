@@ -1,21 +1,21 @@
 //
-//  PlaceDetailView.swift
+//  PlaceVisitingView.swift
 //  Catchy
 //
-//  Created by LEE on 1/28/25.
+//  Created by LEE on 2/10/25.
 //
 
 import SwiftUI
-import Kingfisher
 
-/// 장소 검색 - > 장소 상세 정보
-struct PlaceDetailView: View {
+/// 코스 상세 정보 -> 장소 방문 뷰
+struct PlaceVisitingView: View {
     
-    @EnvironmentObject var container: DIContainer
-        
-    @ObservedObject var viewModel: PlaceSearchViewModel
+    @ObservedObject var viewModel: PlaceVisitingViewModel
+    
+    @Binding var placeId: Int
     
     var body: some View {
+        
         VStack {
             if let place = viewModel.placeDetailResponse {
                 
@@ -42,13 +42,11 @@ struct PlaceDetailView: View {
         }
         .task {
             
-            if let placeId = viewModel.placeDetailResponse?.placeId {
-                viewModel.getPlaceDetail(placeId: placeId)
-            }
         }
         .navigationBarBackButtonHidden()
-
     }
-    
 }
 
+//#Preview {
+//    PlaceVisitingView()
+//}
