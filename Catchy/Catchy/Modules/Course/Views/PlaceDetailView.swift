@@ -17,31 +17,41 @@ struct PlaceDetailView: View {
     
     let place: PlaceDetailResponse
     
+    @ObservedObject var viewModel: PlaceSearchViewModel
+    
     var body: some View {
         VStack {
-            PlaceInfoSection(place: place)
-            
-            
-            Spacer()
-            
-            /// 방문하지 않은 경우.
-            /// 해당 장소에 대한 카테고리를 선택해야함.
-            if !place.isVisited{
+            if let place = viewModel.placeDetailResponse {
                 
-                // TODO: - 장소 카테고리 선택 API 구현
-                MainBtn(text: "코스에 담기", action: {
+                PlaceInfoSection(place: place)
+                
+                Spacer()
+                
+                if !place.isVisited {
                     
-                }, width: 370, height: 55, onoff: .custom)
-                
-            
-                
-            } else {    /// 방문한 경우
-                
-                // TODO: - 장소를 넣는 API 구현
-                
+                    MainBtn(text: "코스에 담기", action: {
+                        
+                    }, width: 370, height: 55, onoff: .on)
+                    
+                } else {
+                    
+                    MainBtn(text: "이 장소의 카테고리 선택하기", action: {
+                        
+                    }, width: 370, height: 55, onoff: .custom)
+                }
+            } else {
+                ProgressView()
             }
             
-        }.navigationBarBackButtonHidden()
+        }
+        .task {
+            
+            if let placeId = viewModel.placeDetailResponse?.placeId {
+                viewModel.getPlaceDetail(placeId: placeId)
+            }
+        }
+        .navigationBarBackButtonHidden()
+
     }
     
 }

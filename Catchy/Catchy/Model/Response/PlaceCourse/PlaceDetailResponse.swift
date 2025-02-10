@@ -8,7 +8,9 @@
 import Foundation
 
 /// 장소 상세 화면 API
-struct PlaceDetailResponse: Codable, Hashable {
+struct PlaceDetailResponse: Codable, Identifiable {
+    
+    var id = UUID()
     
     /// 장소 ID
     let placeId: Int
@@ -42,5 +44,19 @@ struct PlaceDetailResponse: Codable, Hashable {
     
     /// 장소의 도메인 주소
     let placeSite: String
+    
+    enum CodingKeys: CodingKey {
+        case placeId
+        case imageUrl
+        case placeName
+        case placeDescription
+        case categoryName
+        case roadAddress
+        case activeTime
+        case rating
+        case isVisited
+        case reviewCount
+        case placeSite
+    }
     
 }

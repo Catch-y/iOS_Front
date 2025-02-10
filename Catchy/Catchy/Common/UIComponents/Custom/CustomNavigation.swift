@@ -81,7 +81,7 @@ struct CustomNavigation: View {
                 .font(.Subtitle3_SM)
                 .foregroundStyle(Color.g7)
                 .padding(.leading, leftNaviIcon == nil ? 15 : 0)
-            
+ 
             Spacer()
         } else {
             Spacer()
@@ -95,6 +95,12 @@ struct CustomNavigation: View {
             image
             .fixedSize()
         })
+    }
+    
+    private func makeTitle(_ title: String) -> some View {
+        Text(title)
+            .font(.naviFont)
+            .foregroundStyle(Color.g7)
     }
 }
 

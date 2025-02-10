@@ -16,8 +16,6 @@ struct PreferencePageView: View {
     @EnvironmentObject var appFlowViewModel: AppFlowViewModel
     
     @State var scaleFactor: CGFloat = 1.0
-    @State var selectedRegion: String? = nil
-    @State var selectedRegionCode: String? = nil
     @State var tappedLocation: (latitude: Double, longitude: Double)? = nil
     
     init(container: DIContainer) {
@@ -74,8 +72,10 @@ struct PreferencePageView: View {
                 Spacer()
                 
                 MainBtn(text: "다음", action: {
-                    withAnimation(.easeInOut(duration: 0.5)) {
-                        viewModel.preferenceStep += 1
+                    if !viewModel.bigCategoryBtn.isEmpty {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            viewModel.preferenceStep += 1
+                        }
                     }
                 }, width: 366, height: 60, onoff: (viewModel.bigCategoryBtn.isEmpty ? .off : .on))
                 .disabled(viewModel.bigCategoryBtn.isEmpty)
@@ -122,9 +122,9 @@ struct PreferencePageView: View {
                                     Spacer()
                                     
                                     MainBtn(text: "다음", action: {
-                                        withAnimation(.easeIn(duration: 0.5)) {
-                                            viewModel.preferenceStep += 1
-                                        }
+                                            withAnimation(.easeIn(duration: 0.5)) {
+                                                viewModel.preferenceStep += 1
+                                            }
                                     }, width: 366, height: 60, onoff: (viewModel.smallCategoryBtn[viewModel.bigCategoryBtn.last!] ?? []).isEmpty ? .off : .on)
                                     .disabled((viewModel.smallCategoryBtn[viewModel.bigCategoryBtn.last!] ?? []).isEmpty)
                                     
@@ -254,7 +254,9 @@ struct PreferencePageView: View {
                     pageThirdActiveTime
                         .padding(.top, 56)
                     
-                    makeMainButton(false)
+                    makeMainButton(
+                        !(viewModel.selectedCompanion.isEmpty || viewModel.selectedWeekDay.isEmpty || viewModel.leftSelectedTime == nil || viewModel.rightSelectedTime == nil)
+                    )
                         .padding(.top, viewModel.isExpand.values.contains(true) ? 15 : 98)
                 }
             })
@@ -456,10 +458,11 @@ struct PreferencePageView: View {
                             tappedLocation = latLon
                             
                             if let regionInfo = viewModel.getRegionInfo(at: location, in: geometry.frame(in: .local)) {
-                                selectedRegion = regionInfo.name
-                                selectedRegionCode = regionInfo.code
+                                viewModel.selectedRegion = regionInfo.name
+                                viewModel.selectedRegionCode = regionInfo.code
                                 provinceViewmodel.fetchDistricts(of: regionInfo.code) { result in
                                     if result {
+                                        viewModel.regionDistricts[regionInfo.name] = provinceViewmodel.districts
                                         viewModel.isDistrictsSheet = true
                                     }
                                 }
@@ -510,8 +513,8 @@ extension PreferencePageView {
             withAnimation(.easeInOut(duration: 0.5)) {
                 viewModel.preferenceStep += 1
             }
-        }, width:  366, height: 60, onoff: (conditional ? .off : .on))
-        .disabled(conditional)
+        }, width:  366, height: 60, onoff: (conditional ? .on : .off))
+        .disabled(!conditional)
     }
     
     private func togglePicker(index: Int, newValue: Bool) {

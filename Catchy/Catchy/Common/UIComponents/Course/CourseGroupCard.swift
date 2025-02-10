@@ -60,6 +60,7 @@ struct CourseGroupCard: View {
                 .lineLimit(2)
             
             /// 카테고리 태그
+
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: type.lazyVGridColumnCount), content: {
                 ForEach(course.categories, id: \.self) { categoryType in
                     CategoryCard(categoryType: categoryType)
@@ -87,3 +88,4 @@ struct COurseGroupCard_Preview: PreviewProvider {
         
     }
 }
+

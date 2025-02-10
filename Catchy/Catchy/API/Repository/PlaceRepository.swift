@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import CombineMoya
 import Moya
+import SwiftUI
 
 class PlaceRepository: PlaceRepositoryProtocol {
 
@@ -19,8 +20,8 @@ class PlaceRepository: PlaceRepositoryProtocol {
     }
     
     /// 장소 평점/리뷰 달기 API
-    func postPlaceReviewSubmissionData(request: PlaceReviewSubmissionRequest) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, Moya.MoyaError> {
-        return service.postPlaceReviewSubmission(request: request)
+    func postPlaceReviewSubmissionData(request: PlaceReviewSubmissionRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, Moya.MoyaError> {
+        return service.postPlaceReviewSubmission(request: request, reviewImages: reviewImages)
     }
     
     /// 장소 좋아요 API
@@ -28,4 +29,8 @@ class PlaceRepository: PlaceRepositoryProtocol {
         return service.patchPlaceLiked(placeId: placeId)
     }
     
+    /// 장소 방문 날짜 리스트 조회 API
+    func getPlaceVisitedDatesData(placeId: Int) -> AnyPublisher<ResponseData<PlaceVisitedDateResponse>, MoyaError> {
+        return service.getPlaceVisitedDates(placeId: placeId)
+    }
 }

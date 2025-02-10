@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CustomLogoNavi: View {
     
-    @EnvironmentObject var cotainer: DIContainer
+    @EnvironmentObject var container: DIContainer
     
     let onlyLogo: Bool
     
@@ -44,6 +44,10 @@ struct CustomLogoNavi: View {
                 Spacer()
                 
                 CustomTextField(text: .constant(""), searchTextField: .homeView)
+                    .disabled(true)
+                    .onTapGesture {
+                        container.navigationRouter.push(to: .searchView)
+                    }
             }
         })
         .frame(height: 32)
