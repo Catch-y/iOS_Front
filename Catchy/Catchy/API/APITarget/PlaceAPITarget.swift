@@ -80,31 +80,37 @@ extension PlaceAPITarget: APITargetType {
         case .postPlaceReviewSubmission:
             let json = """
             {
-              "isSuccess": true,
-              "code": "string",
-              "message": "string",
-              "result": {
-                "reviewId": 0,
-                "comment": "string",
-                "rating": 0,
-                "reviewImages": [
-                  {
-                    "reviewImageId": 0,
-                    "imageUrl": "string"
-                  }
-                ],
-                "visitedDate": "2025-02-07",
-                "creatorNickname": "string"
-              }
+                "isSuccess": true,
+                "code": "SUCCESS",
+                "message": "요청이 성공했습니다.",
+                "result": {
+                    "reviewId": 123,
+                    "rating": 5,
+                    "comment": "이 장소 정말 좋네요!",
+                    "reviewImages": [
+                        {
+                            "reviewImageId": 101,
+                            "imageUrl": "https://example.com/image1.jpg"
+                        }
+                    ],
+                    "visitedDate": "2025-02-01T03:58:05.299Z",
+                    "creatorNickname": "JohnDoe"
+                }
             }
             """
+            
             return json.data(using: .utf8)!
 
         case .patchPlaceLiked:
             let json = """
             {
-                "placeVisitId": 10,
-                "liked": true
+                "isSuccess": true,
+                "code": "SUCCESS",
+                "message": "요청이 성공했습니다.",
+                "result": {
+                    "placeVisitId": 10,
+                    "liked": true
+                    }
             }
             """
             return json.data(using: .utf8)!

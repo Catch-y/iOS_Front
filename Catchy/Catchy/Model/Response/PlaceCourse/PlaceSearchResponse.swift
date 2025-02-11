@@ -42,12 +42,12 @@ struct PlaceSearchResponseData: Codable, Identifiable{
     let activeTime: String
     
     /// 장소 평점
-    let rating: Float
+    let rating: Double
     
     /// 장소 리뷰 개수
     let reviewCount: Int
     
-    init(id: UUID = UUID(), placeId: Int, placeName: String, placeImage: String, category: CategoryType, roadAddress: String, activeTime: String, rating: Float, reviewCount: Int) {
+    init(id: UUID = UUID(), placeId: Int, placeName: String, placeImage: String, category: CategoryType, roadAddress: String, activeTime: String, rating: Double, reviewCount: Int) {
         self.id = id
         self.placeId = placeId
         self.placeName = placeName
@@ -70,4 +70,7 @@ struct PlaceSearchResponseData: Codable, Identifiable{
         case reviewCount
     }
     
+}
+
+extension PlaceSearchResponseData: PlaceDataProtocol {
 }

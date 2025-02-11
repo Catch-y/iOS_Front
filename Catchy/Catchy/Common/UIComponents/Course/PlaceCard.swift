@@ -10,10 +10,9 @@ import Kingfisher
 
 struct PlaceCard: View {
     
-    /// 장소 데이터
-    var place : PlaceSearchResponseData
+    var place : PlaceDataProtocol
     
-    init(place: PlaceSearchResponseData){
+    init(place: PlaceDataProtocol){
         self.place = place
     }
     
@@ -46,12 +45,13 @@ struct PlaceCard: View {
                     .font(.Subtitle3_SM)
                     .foregroundStyle(.g7)
                     .lineLimit(1)
-                
-                Spacer()
+                    .padding(.trailing, 8)
                 
                 CategoryCard(categoryType: place.category)
-                    .frame(width: 60)
+                    .frame(width: 37.1)
                     .padding(.trailing, 19)
+                
+                Spacer()
             }
             
             PlaceAddressText(addressText: place.roadAddress)

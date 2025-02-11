@@ -12,7 +12,7 @@ struct PlaceRatingText: View {
     
     let rating: String
     
-    init(rating: Float) {
+    init(rating: Double) {
         let roundedValue = round(rating * 10) / 10
         self.rating = String(format: "%.1f", roundedValue)
     }

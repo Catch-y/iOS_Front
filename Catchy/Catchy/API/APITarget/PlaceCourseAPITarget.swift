@@ -25,7 +25,7 @@ enum PlaceCourseAPITarget {
     /// 좋아요한 장소 무한 스크롤 API
     /// HTTP 메소드 : GET
     /// API Path : /course/place/mypage/like
-    case getMyPlace(pageSize: Int, lastPlaceId: Int)
+    case getMyPlace(pageSize: Int, lastPlaceId: Int? = nil)
     
     
     /// 내 위치 기반 장소 검색 API
@@ -47,7 +47,7 @@ extension PlaceCourseAPITarget: APITargetType {
             
         case .getMyPlace:
             return "/course/place/mypage/like"
-        
+            
         case .getPlaceSearchByCurrent:
             return "/course/place/current"
         }
@@ -78,14 +78,17 @@ extension PlaceCourseAPITarget: APITargetType {
         case .getPlaceDetail:
             return .requestPlain
             
-        case .getMyPlace(let pageSize, let lastPlaceId):
-            return .requestParameters(
-                parameters: [
-                    "pageSize" : pageSize,
-                    "lastPlaceId" : lastPlaceId
-                ],
-                encoding: URLEncoding.default
-            )
+            /// 좋아요한 장소 무한 스크롤 API
+        case .getMyPlace(let pageSize, let lastCourseId):
+            var parameters: [String: Any] = ["pageSize": pageSize]
+            
+            if let lastCourseId = lastCourseId { // lastCourseId가 nil이면 추가 안 함
+                parameters["lastCourseId"] = lastCourseId
+            }
+            
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
+            
+            
             
         case .getPlaceSearchByCurrent(let place):
             return .requestJSONEncodable(place)
@@ -291,10 +294,10 @@ extension PlaceCourseAPITarget: APITargetType {
                 "isLast": false
                 }
               }
-
-
+    
+    
     """.data(using: .utf8)!
-       
+            
         case .getPlaceDetail:
             return """
             {
@@ -316,7 +319,7 @@ extension PlaceCourseAPITarget: APITargetType {
             }
         }
         """.data(using: .utf8)!
-        
+            
         case .getMyPlace:
             return """
             {
@@ -327,10 +330,10 @@ extension PlaceCourseAPITarget: APITargetType {
                 "content": [
                   {
                     "placeId": 101,
-                    "imageUrl": "https://example.com/images/place101.jpg",
+                    "imageUrl": "https://i.namu.wiki/i/DK-BcaE6wDCM-N9UJbeQTn0SD9eWgsX9YKWK827rqjbrzDz0-CxW-JFOCiAsUL3CBZ4zE0UDR-p4sLaYPiUjww.webp",
                     "placeName": "남산서울타워",
                     "placeDescription": "서울의 야경을 감상할 수 있는 대표적인 관광 명소입니다.",
-                    "categoryName": "관광지",
+                    "categoryName": "휴식",
                     "roadAddress": "서울특별시 용산구 남산공원길 105",
                     "activeTime": "매일 10:00 ~ 23:00",
                     "rating": 4.5,
@@ -340,10 +343,10 @@ extension PlaceCourseAPITarget: APITargetType {
                   },
                   {
                     "placeId": 102,
-                    "imageUrl": "https://example.com/images/place102.jpg",
-                    "placeName": "광화문 광장",
+                    "imageUrl": "https://i.namu.wiki/i/hIBbbdByyQmvWd8l6SLuJJS9aCfLJWXl_jSBk3jnodgry6lJV20NM7hAdnlky4324Z89W56IalWypBH3DAMXxg.webp",
+                    "placeName": "광화문",
                     "placeDescription": "역사와 문화가 공존하는 서울 도심의 랜드마크입니다.",
-                    "categoryName": "문화재",
+                    "categoryName": "체험",
                     "roadAddress": "서울특별시 종로구 세종대로 172",
                     "activeTime": "상시 개방",
                     "rating": 4.3,
@@ -353,10 +356,10 @@ extension PlaceCourseAPITarget: APITargetType {
                   },
                   {
                     "placeId": 103,
-                    "imageUrl": "https://example.com/images/place103.jpg",
+                    "imageUrl": "https://i.namu.wiki/i/DB7YlTG5uIWKPoX8U2gAfK_2GkfSVVPie1n5iidgByR5yYKGbZGNHiUXsfLjpOzHLtksxcBeMXGxjIhe5TdmDA.webp",
                     "placeName": "북촌 한옥마을",
                     "placeDescription": "조선 시대 전통 한옥을 볼 수 있는 아름다운 마을입니다.",
-                    "categoryName": "문화체험",
+                    "categoryName": "체험",
                     "roadAddress": "서울특별시 종로구 계동길 37",
                     "activeTime": "매일 09:00 ~ 18:00",
                     "rating": 4.7,
@@ -368,7 +371,7 @@ extension PlaceCourseAPITarget: APITargetType {
                 "last": true
               }
             }
-
+            
             """.data(using: .utf8)!
             
         case .getPlaceSearchByCurrent:
@@ -563,8 +566,8 @@ extension PlaceCourseAPITarget: APITargetType {
                 "isLast": false
                 }
               }
-
-
+    
+    
     """.data(using: .utf8)!
         }
     }

@@ -77,14 +77,11 @@ struct CustomNavigation: View {
         if let title = title {
             Spacer()
             
-            if leftNaviIcon == nil {
-                makeTitle(title)
-                    .padding(.leading, 5)
-            } else {
-                makeTitle(title)
-                    .padding(.trailing, 5)
-            }
-            
+            Text(title)
+                .font(.Subtitle3_SM)
+                .foregroundStyle(Color.g7)
+                .padding(.leading, leftNaviIcon == nil ? 15 : 0)
+ 
             Spacer()
         } else {
             Spacer()
@@ -109,6 +106,6 @@ struct CustomNavigation: View {
 
 struct CustomNavigation_Prevview: PreviewProvider {
     static var previews: some View {
-        CustomNavigation(action: {print("평점, 리뷰 보기")}, title: "평점, 리뷰 남기기", rightNaviIcon: nil, isShadow: true)
+        CustomNavigation(action: {print("평점, 리뷰 보기")}, title: "평점, 리뷰 보기", rightNaviIcon: nil, isShadow: true)
     }
 }

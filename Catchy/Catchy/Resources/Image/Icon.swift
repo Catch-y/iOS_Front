@@ -77,6 +77,12 @@ enum Icon: String {
     case retaurantBackground = "retaurantBackground"
     case sportBackground = "sportBackground"
     
+    //MARK: - MyPage
+    case pencil = "pencil"
+    case document = "document"
+    case myPageHeart = "myPageHeart"
+    case myPageReview = "myPageReview"
+    case settingIcon = "settingIcon"
     //MARK: - Review
     case checkBtnSelected = "checkBtnSelected"
     case checkBtnUnselected = "checkBtnUnselected"

@@ -20,7 +20,7 @@ protocol PlaceCourseServiceProtocol {
     func getPlaceListByRegion(placeSearchRequest: PlaceSearchByRegionRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError>
     
     /// 좋아요한 장소 무한 스크롤 API
-    func getMyPlaceList(pageSize: Int, lastPlaceId: Int) -> AnyPublisher<ResponseData<MyPlaceResponse>, MoyaError>
+    func getMyPlaceList(pageSize: Int, lastPlaceId: Int?) -> AnyPublisher<ResponseData<MyPlaceResponse>, MoyaError>
     
     /// 내 위치 기반 장소 검색 API
     func getPlaceListByCurrent(placeSearchRequest: PlaceSearchByCurrentRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError>
