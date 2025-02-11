@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// 장소 운영시간 텍스트
+/// 장소 운영시간 텍스트
 struct PlaceTimeText: View {
     let timeText: String
     

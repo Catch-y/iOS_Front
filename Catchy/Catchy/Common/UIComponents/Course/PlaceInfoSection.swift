@@ -10,6 +10,7 @@ import Kingfisher
 
 struct PlaceInfoSection: View {
     
+    /// 장소 상세 정보 데이터
     var place: PlaceDetailResponse
     
     init(place: PlaceDetailResponse) {
@@ -36,10 +37,10 @@ struct PlaceInfoSection: View {
     }
     
     
+    /// 장소 상세 화면 텍스트 그룹
     private var placeTextGroup: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                /// 장소 이름
                 Text(place.placeName)
                     .font(.Subtitle3)
                     .foregroundStyle(.g7)
@@ -48,13 +49,11 @@ struct PlaceInfoSection: View {
                 
                 Spacer()
                 
-                /// 장소 카테고리
                 CategoryCard(categoryType: place.categoryName)
                     .frame(width: 60)
             }
             .padding(.bottom, 2)
             
-            /// 장소 설명
             Text(place.placeDescription)
                 .font(.body3)
                 .foregroundStyle(.g4)
@@ -62,10 +61,8 @@ struct PlaceInfoSection: View {
 
             HStack(spacing: 12) {
                 
-                /// 장소 평점
                 PlaceRatingText(rating: place.rating)
                 
-                /// 장소 리뷰
                 placeReviewButton(reviewCount: place.reviewCount)
             }
             .padding(.top, 14)
@@ -74,15 +71,12 @@ struct PlaceInfoSection: View {
                 .padding(.vertical, 20)
                 .foregroundStyle(.g2)
             
-            /// 장소 주소
             PlaceAddressText(addressText: place.roadAddress)
                 .padding(.bottom, 4)
             
-            /// 장소 운영 시간
             PlaceTimeText(timeText: place.activeTime)
                 .padding(.bottom, 4)
             
-            /// 장소 도메인 주소
             PlaceDomainButton(domain: place.placeSite).padding(.leading, 1)
         }
         .padding(.horizontal, 11)

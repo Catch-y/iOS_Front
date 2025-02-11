@@ -9,8 +9,7 @@ import SwiftUI
 
 struct DateDropDown: View {
     
-    
-    @ObservedObject var viewModel: ReviewRegisterViewModel
+    @ObservedObject var viewModel: PlaceReviewRegisterViewModel
     
     let buttonHeight: CGFloat = 45
     let buttonWidth: CGFloat = 180

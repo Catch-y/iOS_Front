@@ -14,7 +14,7 @@ import SwiftUI
 protocol PlaceRepositoryProtocol {
     
     /// 장소 평점/리뷰 달기 API
-    func postPlaceReviewSubmissionData(request: PlaceReviewSubmissionRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, MoyaError>
+    func postPlaceReviewSubmissionData(placeId: Int, request: PlaceReviewSubmissionRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, MoyaError>
     
     /// 장소 좋아요 API
     func patchPlaceLikedData(placeId: Int) -> AnyPublisher<ResponseData<PlaceLikedResponse>, MoyaError>

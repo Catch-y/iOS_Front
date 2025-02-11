@@ -9,10 +9,7 @@ import SwiftUI
 
 struct PlaceReviewRegisterView: View {
     
-    @StateObject var viewModel: ReviewRegisterViewModel
-    
-    /// 스크롤 뷰 하단으로 이동
-    @Namespace var bottomID
+    @StateObject var viewModel: PlaceReviewRegisterViewModel
     
     /// 리뷰 작성할 장소의 ID
     @Binding var placeId: Int
@@ -27,62 +24,12 @@ struct PlaceReviewRegisterView: View {
     }
     
     var body: some View {
-        
-        VStack(alignment: .leading, spacing: 35) {
+    
+        VStack(alignment: .leading, spacing: 0) {
             
             navigationGroup
             
-            ScrollViewReader{ proxy in
-                ScrollView {
-                    
-                    ZStack(alignment: .topLeading) {
-                        
-                        /// 날짜 관련 섹션
-                        /// 레이블 + 드랍다운
-                        dateGroup
-                            .zIndex(1)
-                        
-                        /// 코멘트 관련 섹션
-                        /// 레이블 + 별 + 코멘트
-                        commentGroup
-                            .zIndex(0)
-                    }
-                    .padding(.bottom, 30)
-                    
-                    /// 사진 관련 섹션
-                    /// 레이블 + 사진 목록
-                    photoGroup
-                        .padding(.bottom, 60)
-                    
-                    // TODO: - 리뷰 등록 성공 시 화면 전환 구현
-                    MainBtn(
-                        text: "리뷰 남기기",
-                        action: {
-                            viewModel.postPlaceReviewSubmission(
-                                request: .init(
-                                    placeId: placeId,
-                                    rating: viewModel.rating!,
-                                    comment: viewModel.comment!
-                                ),
-                                reviewImages: viewModel.getImages()
-                            )
-                        },
-                        width: 400,
-                        height: 60,
-                        onoff: canRegisterReview ? .on : .off
-                    )
-                    .id(bottomID)
-                    .onChange(of: canRegisterReview) { (_, _) in
-                        if canRegisterReview {
-                            withAnimation {
-                                proxy.scrollTo(bottomID, anchor: .bottom)
-                            }
-                        }
-                    }
-                    
-                }
-            }
-            
+            scrollView
         }
         .task {
             viewModel.getPlaceVisitedDateList(placeId: placeId)
@@ -93,12 +40,12 @@ struct PlaceReviewRegisterView: View {
                 selectedLimit: 5 - viewModel.selectedImageCount
             )
         }
-
-        
-
+        .onAppear {
+            UIApplication.shared.hideKeyboard()
+        }
     }
     
-    
+    /// 네비게이션 바
     private var navigationGroup: some View {
         CustomNavigation(
             action: {
@@ -113,6 +60,41 @@ struct PlaceReviewRegisterView: View {
         .frame(height: 50)
         
     }
+    
+    /// 스크롤 뷰
+    private var scrollView: some View {
+            ScrollView {
+                ZStack(alignment: .topLeading) {
+                    
+                    dateGroup
+                        .zIndex(1)
+                    
+                    commentGroup
+                        .zIndex(0)
+                }
+                .padding(.bottom, 30)
+                
+
+                photoGroup
+                    .padding(.bottom, 60)
+                
+                // TODO: - 리뷰 등록 성공 시 화면 전환 구현
+                MainBtn(
+                    text: "리뷰 남기기",
+                    action: {
+                        viewModel.postPlaceReviewSubmission(placeId: placeId)
+                    },
+                    width: 370,
+                    height: 60,
+                    onoff: canRegisterReview ? .on : .off
+                )
+                
+            }
+            .frame(maxHeight: .infinity)
+            .ignoresSafeArea(.keyboard)
+
+    }
+    
     /// 날짜 관련 그룹
     private var dateGroup: some View {
         
@@ -125,6 +107,7 @@ struct PlaceReviewRegisterView: View {
             DateDropDown(viewModel: self.viewModel)
                 .frame(width: 180)
         }
+        .padding(.top, 35)
 
     }
     
@@ -141,7 +124,6 @@ struct PlaceReviewRegisterView: View {
             
             ZStack(alignment: .bottomLeading){
                 
-                /// 텍스트 에디터
                 TextEditor(
                     text: .init(
                         get: {
@@ -168,7 +150,6 @@ struct PlaceReviewRegisterView: View {
                 )
                 .frame(height: 320)
                 
-                /// 보라색 안내 문구
                 Text(infoText)
                     .font(.body3)
                     .foregroundStyle(.sub)
@@ -181,7 +162,7 @@ struct PlaceReviewRegisterView: View {
             
 
         }
-        .padding(.top, 130)
+        .padding(.top, 166)
         .padding(.horizontal, 16)
     }
     
@@ -213,10 +194,41 @@ struct PlaceReviewRegisterView: View {
             Text("추억이 담긴 사진을 함께 올려주세요!")
                 .font(.body3_SM)
                 .foregroundStyle(.g7)
+                .padding(.horizontal, 16)
             
-            /// 업로드 사진 스크롤 뷰
             ScrollView(.horizontal) {
-                HStack(spacing: 10) {
+                HStack(spacing: 12) {
+                    
+                    ForEach(Array(viewModel.getImages().enumerated()), id: \.element.self) { (
+                        index,
+                        image
+                    ) in
+                        ZStack(alignment: .topTrailing) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .frame(width: 110, height: 110)
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                                
+                            Icon.close.image
+                                .resizable()
+                                .frame(width: 14, height: 14)
+                                .background(
+                                    Circle()
+                                        .fill(Color.white)
+                                    .frame(width: 22, height: 22)
+                                )
+                                .foregroundStyle(.g7)
+                                .offset(x: -6, y: 7)
+                                .onTapGesture {
+                                    withAnimation {
+                                        viewModel.removeImage(at: index)
+                                    }
+                                }
+                            
+                        }
+                        .frame(width: 110, height: 110)
+                        
+                    }
                     
                     if viewModel.selectedImageCount < 5 {
                         EmptyReviewPhoto(count: $viewModel.selectedImageCount)
@@ -224,27 +236,14 @@ struct PlaceReviewRegisterView: View {
                                 
                                 viewModel.showImagePicker()
                             }
-                    }
-                    
-                    ForEach(Array(viewModel.getImages().enumerated()), id: \.element.self) { (
-                        index,
-                        image
-                    ) in
-                        Image(uiImage: image)
-                            .resizable()
-                            .frame(width: 113, height: 113)
-                            .clipShape(RoundedRectangle(cornerRadius: 15))
-                            .onTapGesture {
-                                withAnimation {
-                                    viewModel.removeImage(at: index)
-                                }
-                            }
+                            .frame(width: 110, height: 110)
                     }
                 }
             }
             .scrollIndicators(.hidden)
+            .padding(.horizontal, 16)
+
         }
-        .padding(.horizontal, 16)
         .padding(.top, 3)
     }
     

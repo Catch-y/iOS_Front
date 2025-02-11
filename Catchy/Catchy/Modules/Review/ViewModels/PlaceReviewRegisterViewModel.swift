@@ -1,5 +1,5 @@
 //
-//  ReviewRegisterViewModel.swift
+//  PlaceReviewRegisterViewModel.swift
 //  Catchy
 //
 //  Created by LEE on 2/7/25.
@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 import CombineMoya
 
-class ReviewRegisterViewModel: ObservableObject, ImageHandling {
+class PlaceReviewRegisterViewModel: ObservableObject, ImageHandling {
     
     let container: DIContainer
 
@@ -63,6 +63,7 @@ class ReviewRegisterViewModel: ObservableObject, ImageHandling {
     /// 현재 선택된 이미지 수
     @Published var selectedImageCount = 0
     
+    
     init(container: DIContainer) {
         self.container = container
     }
@@ -70,11 +71,11 @@ class ReviewRegisterViewModel: ObservableObject, ImageHandling {
     
 }
 
-extension ReviewRegisterViewModel {
+extension PlaceReviewRegisterViewModel {
     
     func addImage(_ images: UIImage) {
         uploadedImages.append(images)
-        print("add완료")
+
     }
     
     func getImages() -> [UIImage] {
@@ -82,7 +83,9 @@ extension ReviewRegisterViewModel {
     }
     
     func removeImage(at index: Int) {
-        uploadedImages.remove(at: index)
+        if index < uploadedImages.count {
+            uploadedImages.remove(at: index)
+        }
     }
     
     func showImagePicker() {
@@ -93,7 +96,7 @@ extension ReviewRegisterViewModel {
     
 }
 
-extension ReviewRegisterViewModel {
+extension PlaceReviewRegisterViewModel {
     
     // MARK: - API 요청이 있는 메소드
     /// 장소 방문 날짜 리스트 조회 API
@@ -137,10 +140,17 @@ extension ReviewRegisterViewModel {
     }
     
     /// 장소 평점/리뷰 달기 API
-    func postPlaceReviewSubmission(request: PlaceReviewSubmissionRequest, reviewImages: [UIImage]){
+    func postPlaceReviewSubmission(placeId: Int){
+        
+        let request = PlaceReviewSubmissionRequest(
+            rating: rating!,
+            comment: comment!,
+            visitedDate: visitedDate!
+        )
+        
         
         container.useCaseProvider.placeUseCase
-            .executePostPlaceReviewSubmission(request: request, reviewImages: reviewImages)
+            .executePostPlaceReviewSubmission(placeId: placeId, request: request, reviewImages: self.getImages())
             .tryMap{ responseData -> ResponseData<PlaceReviewSubmissionResponse> in
                 if !responseData.isSuccess{
                     throw APIError
@@ -170,6 +180,7 @@ extension ReviewRegisterViewModel {
                 
                 if let response = response.result{
                     self.reviewSubmissionResponse = response
+                    print(response)
                 }
                 
             })

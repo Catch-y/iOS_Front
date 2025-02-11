@@ -20,8 +20,8 @@ class PlaceUseCase: PlaceUseCaseProtocol {
     }
     
     /// 장소 평점/리뷰 달기 API
-    func executePostPlaceReviewSubmission(request: PlaceReviewSubmissionRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, Moya.MoyaError> {
-        return repository.postPlaceReviewSubmissionData(request: request, reviewImages: reviewImages)
+    func executePostPlaceReviewSubmission(placeId: Int, request: PlaceReviewSubmissionRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, Moya.MoyaError> {
+        return repository.postPlaceReviewSubmissionData(placeId: placeId, request: request, reviewImages: reviewImages)
     }
     
     /// 장소 좋아요 API

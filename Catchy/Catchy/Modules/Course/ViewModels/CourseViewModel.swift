@@ -164,6 +164,7 @@ extension CourseViewModel {
         self.isFloating = false
     }
     
+    /// 도 전체 드랍 다운 메뉴 상태 초기화
     func resetUpperDropState(){
         self.isUpperDrop = false
         self.selectedUpperIndex = nil
@@ -171,6 +172,7 @@ extension CourseViewModel {
         self.upperLocations.removeAll()
     }
     
+    /// 시/군/구 전체 드랍 다운 메뉴 상태 초기화
     func resetLowerDropState(){
         self.isLowerDrop = false
         self.selectedLowerIndex = nil
@@ -190,11 +192,5 @@ extension CourseViewModel {
         self.lowerScrollPosition = index
     }
     
-    // TODO: - 도 전체 버튼의 들어갈 값 요청
-    func requestUpperDropMenuItems(){
-        
-        // let response =
-        // self.upperLocations = response
-    }
     
 }
