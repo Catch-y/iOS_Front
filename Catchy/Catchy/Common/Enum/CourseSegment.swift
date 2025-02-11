@@ -43,6 +43,7 @@ enum CourseSegment: String, CaseIterable, SegmentProtocol {
         }
     }
     
+    /// 세그먼트 별 플로팅 버튼 텍스트 리턴
     func floatingReturnText() -> String {
         switch self {
         case .diy:
@@ -52,6 +53,7 @@ enum CourseSegment: String, CaseIterable, SegmentProtocol {
         }
     }
     
+    /// 세그먼트 별 이미지 리턴
     func floatingReturnIcon() -> Image {
         switch self {
         case .diy:
@@ -61,6 +63,7 @@ enum CourseSegment: String, CaseIterable, SegmentProtocol {
         }
     }
     
+    /// 세그먼트 -> 코스타입
     var courseType: CourseType {
         switch self {
         case .diy:

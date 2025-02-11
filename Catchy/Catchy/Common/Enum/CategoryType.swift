@@ -58,6 +58,7 @@ enum CategoryType: String, Codable, CaseIterable {
         }
     }
     
+    /// 카테고리 별 이미지 리턴
     func reeturnIcon() -> Image {
         switch self {
         case .CAFE:
@@ -77,6 +78,7 @@ enum CategoryType: String, Codable, CaseIterable {
         }
     }
     
+    /// 카테고리 별 배경 이미지 리턴
     func returnBackground() -> Image {
         switch self {
         case .CAFE:
@@ -96,6 +98,7 @@ enum CategoryType: String, Codable, CaseIterable {
         }
     }
     
+    /// 카테고리 별 텍스트 리턴
     func retrunCategoryDescrip() -> String {
         switch self {
         case .CAFE:
@@ -115,7 +118,7 @@ enum CategoryType: String, Codable, CaseIterable {
         }
     }
     
-    
+    /// 카테고리 별 배경색 리턴
     func setColor() -> Color {
         switch self {
         case .BAR:

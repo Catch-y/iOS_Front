@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// 장소 리뷰 버튼 
+/// 장소 리뷰 버튼
 struct placeReviewButton: View {
     
     let reviewCount: Int

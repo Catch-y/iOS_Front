@@ -21,7 +21,6 @@ struct CategoryRegisterView: View {
             CustomNavigation(
                 action: {
                     // TODO: - 화면 닫기
-                    print("화면 닫기")
                 },
                 title: "카테고리 선택",
                 leftNaviIcon: nil,

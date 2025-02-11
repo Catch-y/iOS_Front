@@ -15,7 +15,7 @@ enum PlaceAPITarget {
     /// 장소 평점/리뷰 달기 API
     /// HTTP 메소드 : POST
     /// API Path : /place/{placeId}/review
-    case postPlaceReviewSubmission(request: PlaceReviewSubmissionRequest, reviewImages: [UIImage])
+    case postPlaceReviewSubmission(placeId: Int, request: PlaceReviewSubmissionRequest, reviewImages: [UIImage])
     
     /// 장소 좋아요 API
     /// HTTP 메소드 : PATCH
@@ -31,8 +31,8 @@ enum PlaceAPITarget {
 extension PlaceAPITarget: APITargetType {
     var path: String {
         switch self {
-        case .postPlaceReviewSubmission(let request, _ ):
-            return "/place/\(request.placeId)/review"
+        case .postPlaceReviewSubmission(let placeId, _ , _ ):
+            return "/place/\(placeId)/review"
         case .patchPlaceLiked(let placeId):
             return "/place/\(placeId)/like"
         case .getVisitedDateList(let placeId):
@@ -53,8 +53,8 @@ extension PlaceAPITarget: APITargetType {
     
     var task: Task {
         switch self {
-        case .postPlaceReviewSubmission(_, let images):
-            let formData = encodeReviewData(reviewImages: images)
+        case .postPlaceReviewSubmission( _, let request, let images):
+            let formData = encodeReviewData(reviewRequest: request, reviewImages: images)
             return .uploadMultipart(formData)
             
         case .patchPlaceLiked:
@@ -144,9 +144,22 @@ extension PlaceAPITarget: APITargetType {
 
 extension PlaceAPITarget {
     
-    private func encodeReviewData(reviewImages: [UIImage]) -> [MultipartFormData] {
+    private func encodeReviewData(reviewRequest: PlaceReviewSubmissionRequest, reviewImages: [UIImage]) -> [MultipartFormData] {
         
         var formData: [MultipartFormData] = []
+        
+        if let ratingData = String(reviewRequest.rating).data(using: .utf8),
+           let commentData = String(reviewRequest.comment).data(using: .utf8),
+           let visitedDate = String(reviewRequest.visitedDate).data(using:. utf8)
+        {
+            let ratingFormData = MultipartFormData(provider: .data(ratingData), name: "rating")
+            let commentFormData = MultipartFormData(provider: .data(commentData), name: "comment")
+            let visitedDateFormData = MultipartFormData(provider: .data(visitedDate), name: "visitedDate")
+            
+            formData.append(ratingFormData)
+            formData.append(commentFormData)
+            formData.append(visitedDateFormData)
+        }
         
         for (index, reviewImage) in reviewImages.enumerated() {
             
