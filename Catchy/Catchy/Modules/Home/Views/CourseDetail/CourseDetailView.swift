@@ -26,7 +26,7 @@ struct CourseDetailView: View {
                 
                 ScrollView(.vertical, content: {
                     
-                    if let data = viewModel.courseEditResponse {
+                    if let data = viewModel.courseDetailResponse {
                         topContents(data: data)
                             .padding(.top, 13)
                     }
@@ -51,9 +51,13 @@ struct CourseDetailView: View {
                 
             }
         }
+        .navigationBarBackButtonHidden(true)
+        .task {
+            viewModel.getCourseDetail()
+        }
     }
     
-    private func topContents(data: CourseEditResponse) -> some View {
+    private func topContents(data: CourseDetailResponse) -> some View {
         VStack(alignment: .leading, content: {
             
             courseImage(data: data)
@@ -69,7 +73,7 @@ struct CourseDetailView: View {
     // MARK: - TopView
     
     @ViewBuilder
-    private func courseImage(data: CourseEditResponse) -> some View {
+    private func courseImage(data: CourseDetailResponse) -> some View {
         if let imageUrl = URL(string: data.courseImage) {
             KFImage(imageUrl)
                 .placeholder {
@@ -92,7 +96,7 @@ struct CourseDetailView: View {
         }
     }
     
-    private func makeCourseInfo(data: CourseEditResponse) -> some View {
+    private func makeCourseInfo(data: CourseDetailResponse) -> some View {
         return VStack(alignment: .leading, spacing: 0, content: {
             HStack(content: {
                 Text(data.courseName)

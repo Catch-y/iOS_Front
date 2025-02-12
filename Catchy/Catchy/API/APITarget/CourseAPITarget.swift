@@ -162,8 +162,8 @@ extension CourseAPITarget: APITargetType {
         case .getCourseList(let course):
             return .requestJSONEncodable(course)
         
-        case .getCourseDetail(let courseId):
-            return .requestJSONEncodable(courseId)
+        case .getCourseDetail:
+            return .requestPlain
         }
     }
     
@@ -545,7 +545,7 @@ extension CourseAPITarget: APITargetType {
               "message": "코스 정보를 성공적으로 조회했습니다.",
               "result": {
                 "courseId": 10,
-                "courseImage": "https://example.com/images/course10.jpg",
+                "courseImage": "https://cdn.crowdpic.net/detail-thumb/thumb_d_4F0E66105FB31A154FAE4194CA7AC1A5.jpg",
                 "courseName": "제주도 자연 탐방 코스",
                 "courseDescription": "제주도의 아름다운 자연을 감상할 수 있는 코스입니다.",
                 "courseType": "AI",
@@ -553,6 +553,7 @@ extension CourseAPITarget: APITargetType {
                 "reviewCount": 85,
                 "recommendTime": "오전 9시 ~ 오후 6시",
                 "participantsNumber": 15,
+                "isBookMarked": false,
                 "placeInfos": [
                   {
                     "placeId": 201,

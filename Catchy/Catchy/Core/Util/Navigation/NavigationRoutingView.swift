@@ -24,6 +24,8 @@ struct NavigationRoutingView: View {
         case .similarView:
             SimilarPlaces(container: container)
                 .environmentObject(container)
+        case .courseDetailView(let courseId) :
+            CourseDetailView(container: container, courseId: courseId)
         }
     }
 }

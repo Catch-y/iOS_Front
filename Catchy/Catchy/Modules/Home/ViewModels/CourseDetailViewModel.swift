@@ -6,18 +6,68 @@
 //
 
 import Foundation
+import Combine
+import CombineMoya
 
 class CourseDetailViewModel: ObservableObject {
     
-    @Published var courseEditResponse: CourseEditResponse? = .init(courseId: 1, courseImage: "https://i.namu.wiki/i/Ca6uA8jti6jQfstU5FzeSH6bnn9Ms8uoWBMROytYU606IZ0GLj4d8RWEAQpV3PUP1FjsuemL2y-QlMwp-m1JiQl-ZXmKvkKDfsFNK93VrWiFP9Tv7Yz71eOmMJnBKGHfQEFIfGODpVi3lwxEll8eAw.webp", courseName: "경복궁", courseDescription: "코스 설명은 두 줄정도로 정리 길이 테스트, 두 줄로 정렬하면 이 정도 간격으로 최대 길이는 이 정도로 ?", courseType: "AI", rating: 4.3, reviewCount: 203, recommendTime: "15:00 - 20:00", participantsNumber: 25, isBookMarked: true, placeInfos: [.init(placeId: 0, placeName: "11", placeLatitude: 1.1, placeLongitude: 1.1, isVisited: false)])
+    @Published var courseDetailResponse: CourseDetailResponse?
     
     @Published var showAlert: Bool = false
     
+    @Published var isLoading: Bool = true
+    
+    var cancellables = Set<AnyCancellable>()
+
     let courseId: Int
     let container: DIContainer
     
     init(container: DIContainer, courseId: Int) {
         self.container = container
         self.courseId = courseId
+    }
+    
+}
+
+
+extension CourseDetailViewModel {
+    
+    func getCourseDetail(){
+        
+        container.useCaseProvider.courseUseCase
+            .executeGetCourseDetail(courseId: courseId)
+            .tryMap{ responseData -> ResponseData<CourseDetailResponse> in
+                if !responseData.isSuccess{
+                    throw APIError
+                        .serverError(
+                            message: responseData.message,
+                            code: responseData.code
+                        )
+                }
+                
+                return responseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: {
+                [weak self] completion in
+                guard let self = self else { return }
+                
+                self.isLoading = false
+                
+                switch completion {
+                case .finished:
+                    print("✅ Get CourseDetail Server Completed")
+                case .failure(let failure):
+                    print("❌ Get CourseDetail Failed: \(failure)")
+                }
+            },receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                
+                if let response = response.result{
+                    self.courseDetailResponse = response
+                }
+                
+            })
+            .store(in: &cancellables)
     }
 }

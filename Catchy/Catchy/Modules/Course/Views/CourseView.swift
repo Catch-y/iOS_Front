@@ -10,6 +10,8 @@ import FloatingButton
 
 struct CourseView: View {
     
+    @EnvironmentObject var container: DIContainer
+    
     /// 코스 뷰 모델
     @StateObject var viewModel: CourseViewModel
     
@@ -33,59 +35,66 @@ struct CourseView: View {
     }
     
     var body: some View {
-        
-        ZStack(alignment: .top) {
-            if let data = viewModel.courseResponse, !data.content.isEmpty {
-                DropDown(viewModel: viewModel, provinceViewModel: provinceViewModel).zIndex(1)
-                    .padding(.top, 50)
-            }
-            VStack {
-                if !viewModel.isCourseListLoading {
-                    
-                    navigationGroup
-                    if let data = viewModel.courseResponse {
-                        if data.content.isEmpty {
-                            infoView
-                        } else {
-                            scrollView
+        NavigationStack(path: $container.navigationRouter.destination) {
+            
+            ZStack(alignment: .top) {
+                if let data = viewModel.courseResponse, !data.content.isEmpty {
+                    DropDown(viewModel: viewModel, provinceViewModel: provinceViewModel).zIndex(1)
+                        .padding(.top, 50)
+                }
+                VStack {
+                    if !viewModel.isCourseListLoading {
+                        
+                        navigationGroup
+                        if let data = viewModel.courseResponse {
+                            if data.content.isEmpty {
+                                infoView
+                            } else {
+                                scrollView
+                            }
                         }
+                        
+                    } else {
+                        Spacer()
+                        
+                        ProgressView()
+                        
+                        Spacer()
                     }
                     
-                } else {
-                    Spacer()
-                    
-                    ProgressView()
-                    
-                    Spacer()
                 }
+                .zIndex(0)
                 
-            }
-            .zIndex(0)
-            
+                    
                 
-            
-        }.task{
-            viewModel.getCourseList()
-        }
-        .onChange(of: provinceViewModel.provinces){ (_ , provinces) in
-            viewModel.upperLocations = provinces
-        }
-        .fullScreenCover(isPresented: $isAIPresented) {
-            
-            AILoadingView(container: viewModel.container)
-
-        }
-        .onChange(of: viewModel.selectedUpperIndex) { (_, _) in
-            viewModel.getCourseList()
-        }
-        .onChange(of: viewModel.selectedLowerIndex) { (_, lowerIndex) in
-            if lowerIndex != nil {
+            }.task{
                 viewModel.getCourseList()
             }
-        }
-        .onChange(of: viewModel.segment) { (_, _) in
-            viewModel.getCourseList()
-        }
+            .onChange(of: provinceViewModel.provinces){ (_ , provinces) in
+                viewModel.upperLocations = provinces
+            }
+            .fullScreenCover(isPresented: $isAIPresented) {
+                
+                AILoadingView(container: viewModel.container)
+
+            }
+            .onChange(of: viewModel.selectedUpperIndex) { (_, _) in
+                viewModel.getCourseList()
+            }
+            .onChange(of: viewModel.selectedLowerIndex) { (_, lowerIndex) in
+                if lowerIndex != nil {
+                    viewModel.getCourseList()
+                }
+            }
+            .onChange(of: viewModel.segment) { (_, _) in
+                viewModel.getCourseList()
+            }
+            
+        }.navigationDestination(for: NavigationDestination.self, destination: { destination in
+            NavigationRoutingView(destination: destination)
+                .environmentObject(container)
+        })
+        
 
     }
 
@@ -108,8 +117,9 @@ struct CourseView: View {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 18, content: {
                 if let content = viewModel.courseResponse?.content {
                     ForEach(content, id: \.id) { course in
-                        CourseGroupCard(course: course)
-                            
+                        CourseGroupCard(course: course).onTapGesture {
+                            container.navigationRouter.push(to: .courseDetailView(courseId: course.courseId))
+                        }
                     }
                 }
             })
