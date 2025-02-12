@@ -12,7 +12,7 @@ struct SearchPlaceResponse: Codable, Hashable {
     var isLast: Bool
 }
 
-struct SearchPlaceData: Codable, Identifiable, Hashable {
+struct SearchPlaceData: Codable, Identifiable, Hashable, Likeable {
     var id = UUID()
     var placeId: Int
     var placeName: String
