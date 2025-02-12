@@ -12,7 +12,6 @@ struct AILoadingView: View {
     
     @StateObject var viewModel: AILoadingViewModel
     
-    @Environment(\.dismiss) var dismiss
     
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
@@ -23,7 +22,7 @@ struct AILoadingView: View {
         GeometryReader { geometry in
             
             /// 로딩 중이라면?
-            if viewModel.isLoading {
+            if !viewModel.isLoading {
                 /// 화면의 가로 크기
                 let width = geometry.size.width
             
@@ -33,9 +32,8 @@ struct AILoadingView: View {
                     ZStack(alignment: .top) {
                         
                         gradient
-                                    
+                            
                         loadingView(with: width)
-                        
                         
                     }.onAppear {
                         animatePinSequence()
@@ -244,18 +242,3 @@ struct AILoadingView: View {
     }
     
 }
-
-struct AILoadingView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(
-            ["iPhone 16 Pro Max", "iPhone 11", "iPhone 12 mini"],
-            id: \.self
-        ) { deviceName in
-            AILoadingView(container: DIContainer())
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-        }
-    }
-}
-
-

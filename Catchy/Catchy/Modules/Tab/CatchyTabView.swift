@@ -12,6 +12,15 @@ struct CatchyTabView: View {
     @State private var selectedTab: TabCase = .home
     @State private var opacity = 0.0
     
+    /// 플로팅 버튼이 눌린 상태
+    @State private var isFloating: Bool = false
+    
+    /// AI 생성화면 나온 상태
+    @State private var isAIPresented: Bool = false
+    
+    /// DIY 생성화면 나온 상태
+    @State private var isDIYPresented: Bool = false
+    
     @EnvironmentObject var container: DIContainer
     @EnvironmentObject var appFlowViewModel: AppFlowViewModel
     
@@ -23,8 +32,17 @@ struct CatchyTabView: View {
                     case .home:
                         HomeView(container: container)
                     case .course:
-                        Text("11")
-                            .backgroundStyle(Color.red)
+                        CourseView(container: container, isFloating: $isFloating, isAIPresented: $isAIPresented, isDIYPresented: $isDIYPresented)
+                        AddFloatingButton(isOpen: $isFloating, onSubButtonTap: {
+                            segment in
+                            switch segment {
+                            case .ai:
+                                isAIPresented.toggle()
+                            case .diy:
+                                isDIYPresented.toggle()
+                            }
+                        })
+                            .zIndex(3)
                     case .group:
                         Text("11")
                     case .myPage:
@@ -32,6 +50,13 @@ struct CatchyTabView: View {
                     }
                     
                     CustomTab(selectedTab: $selectedTab)
+                    
+                    if isFloating {
+                        Color.black.opacity(0.8)
+                            .ignoresSafeArea(.all)
+                    }
+
+                    
                     
                 })
                 .navigationDestination(for: NavigationDestination.self) { destination in
@@ -47,8 +72,14 @@ struct CatchyTabView: View {
     }
 }
 
-#Preview {
-    CatchyTabView()
-        .environmentObject(DIContainer())
-        .environmentObject(AppFlowViewModel())
+struct CatchyTabView_Previews: PreviewProvider {
+    static var previews: some View {
+        ForEach(["iPhone 16 Pro", "iPhone 11", "iPhone 12 mini"], id: \.self) { deviceName in
+            CatchyTabView()
+                .environmentObject(DIContainer())
+                .environmentObject(AppFlowViewModel())
+                .previewDevice(PreviewDevice(rawValue: deviceName))
+                .previewDisplayName(deviceName)
+        }
+    }
 }

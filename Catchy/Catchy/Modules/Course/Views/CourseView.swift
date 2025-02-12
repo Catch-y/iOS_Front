@@ -13,11 +13,23 @@ struct CourseView: View {
     /// 코스 뷰 모델
     @StateObject var viewModel: CourseViewModel
     
+    /// 플로팅 버튼이 눌린 상태
+    @Binding var isFloating: Bool
+    
+    /// AI 생성 플로팅 버튼이 눌린 상태
+    @Binding var isAIPresented: Bool
+    
+    /// DIY 생성 플로팅 버튼이 눌린 상태
+    @Binding var isDIYPresented: Bool
+    
     /// 드랍 다운 메뉴의 뷰 모델
     @StateObject var provinceViewModel: GetProvinceViewModel = .init()
 
-    init(container: DIContainer) {
+    init(container: DIContainer, isFloating: Binding<Bool>, isAIPresented: Binding<Bool>, isDIYPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
+        self._isFloating = isFloating
+        self._isAIPresented = isAIPresented
+        self._isDIYPresented = isDIYPresented
     }
     
     var body: some View {
@@ -25,6 +37,7 @@ struct CourseView: View {
         ZStack(alignment: .top) {
             if let data = viewModel.courseResponse, !data.content.isEmpty {
                 DropDown(viewModel: viewModel, provinceViewModel: provinceViewModel).zIndex(1)
+                    .padding(.top, 50)
             }
             VStack {
                 if !viewModel.isCourseListLoading {
@@ -49,19 +62,6 @@ struct CourseView: View {
             }
             .zIndex(0)
             
-            if viewModel.isFloating {
-                Color.black
-                    .opacity(0.8)
-                    .ignoresSafeArea(.all)
-                    .zIndex(2)
-            }
-            AddFloatingButton(isOpen: $viewModel.isFloating, onSubButtonTap: {
-                segment in
-                viewModel.selectedFloatingSegment = segment
-                viewModel.isPresented.toggle()
-                viewModel.isFloating.toggle()
-            })
-                .zIndex(3)
                 
             
         }.task{
@@ -70,17 +70,10 @@ struct CourseView: View {
         .onChange(of: provinceViewModel.provinces){ (_ , provinces) in
             viewModel.upperLocations = provinces
         }
-        .fullScreenCover(isPresented: $viewModel.isPresented) {
+        .fullScreenCover(isPresented: $isAIPresented) {
             
-            if let segment = viewModel.selectedFloatingSegment {
-                switch segment {
-                case .ai:
-                    AILoadingView(container: viewModel.container)
-                case .diy:
-                    EmptyView()
-                }
-            }
-            
+            AILoadingView(container: viewModel.container)
+
         }
         .onChange(of: viewModel.selectedUpperIndex) { (_, _) in
             viewModel.getCourseList()
@@ -107,7 +100,6 @@ struct CourseView: View {
                 })
         }
         .ignoresSafeArea(edges: .top)
-        .frame(height: 130)
     }
     
     /// 스크롤 뷰 
@@ -125,8 +117,8 @@ struct CourseView: View {
             .padding(.horizontal, 16)
             .padding(.top, 10)
         })
-        .padding(.top, 70)
-        .padding(.bottom, 110)
+        .padding(.top, 50)
+        .padding(.bottom, 130)
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
         .refreshable {
@@ -150,13 +142,4 @@ struct CourseView: View {
     }
 }
 
-struct CourseView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
-            CourseView(container: DIContainer())
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-        }
-    }
-}
 
