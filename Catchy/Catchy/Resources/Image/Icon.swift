@@ -51,6 +51,10 @@ enum Icon: String {
     case domain = "domain"
     case bookmark = "bookmark"
     case bookMarkTrue = "bookMarkTrue"
+    case visitCheck = "visitCheck"
+    case visitStamp = "visitStamp"
+    case emptyStamp = "emptyStamp"
+    case colorReview = "colorReview"
     
     //MARK: - Category
     case breaks = "breaks"

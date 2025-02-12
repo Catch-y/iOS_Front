@@ -21,14 +21,23 @@ struct PlaceVisitingView: View {
 
     var body: some View {
         
-        VStack {
+        VStack(alignment: .leading, spacing: 16) {
             if let place = viewModel.placeDetailResponse {
                 
                 PlaceInfoSection(place: place)
                 
+                HStack(spacing: 10) {
+                    visitCheckbtn
+                    reviewBtn
+                }
                 
-                
-                MainBtn(text: "길 찾기", action: {}, width: 370, height: 55, onoff: .on)
+                MainBtn(
+                    text: "길 찾기",
+                    action: {
+                    },
+                    width: 370,
+                    height: 55,
+                    onoff: .on)
                 
             } else {
                 ProgressView()
@@ -39,6 +48,64 @@ struct PlaceVisitingView: View {
             viewModel.getPlaceDetail(placeId: placeId)
         }
         .navigationBarBackButtonHidden()
+    }
+    
+    private var visitCheckbtn: some View {
+        
+        Button(action: {print("터치")}, label: {
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 16.5)
+                    .fill(.white)
+                    .stroke(.main)
+                    .frame(width: 108, height: 36)
+                
+                HStack(spacing: 7) {
+                        
+                    Icon.visitCheck.image
+                        
+                    Text("방문 체크")
+                        .foregroundStyle(.main)
+                        .font(.body3)
+                        .padding(.trailing, 15)
+                            
+                        
+                }
+            }
+            
+                    
+
+        
+        })
+            
+    }
+    
+    private var reviewBtn: some View {
+        
+        Button(action: {print("터치")},
+               label: {
+            ZStack {
+                RoundedRectangle(cornerRadius: 16.5)
+                    .fill(.white)
+                    .stroke(.main)
+                    .frame(width: 108, height: 36)
+                
+                HStack(spacing: 7) {
+                        
+                    Icon.colorReview.image
+                        
+                    Text("리뷰 남기기")
+                        .foregroundStyle(.main)
+                        .font(.body3)
+                            
+                }
+            }
+        }
+        )
+    }
+    
+    private var stamp: some View {
+        Button(action: <#T##() -> Void#>, label: <#T##() -> View#>)
     }
 }
 
