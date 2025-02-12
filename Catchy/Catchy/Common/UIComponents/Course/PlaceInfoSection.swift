@@ -12,8 +12,12 @@ struct PlaceInfoSection: View {
     
     var place: PlaceDetailResponse
     
-    init(place: PlaceDetailResponse) {
+    /// 북마크 할 수 있는가?
+    let canBookmark: Bool
+    
+    init(place: PlaceDetailResponse, canBookmark: Bool = false) {
         self.place = place
+        self.canBookmark = canBookmark
     }
     
     var body: some View{
@@ -35,26 +39,39 @@ struct PlaceInfoSection: View {
         .safeAreaPadding(.horizontal, 16)
     }
     
-    
+    /// 장소 텍스트 그룹
     private var placeTextGroup: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                /// 장소 이름
+            HStack(spacing: 10) {
                 Text(place.placeName)
                     .font(.Subtitle3)
                     .foregroundStyle(.g7)
                     .lineLimit(1)
-                    .padding(.bottom, 6)
+                
+                
+                CategoryCard(categoryType: place.categoryName)
+                    .frame(width: 60)
                 
                 Spacer()
                 
-                /// 장소 카테고리
-                CategoryCard(categoryType: place.categoryName)
-                    .frame(width: 60)
+                // TODO: - 북마크 Swagger 수정 후 작성
+                if canBookmark {
+                    Button(action: { }, label: {
+                        
+                        Icon.empyHeart.image
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                    })
+                }
+                
+                
+        
+                
+                
+                
             }
-            .padding(.bottom, 2)
+            .padding(.bottom, 8)
             
-            /// 장소 설명
             Text(place.placeDescription)
                 .font(.body3)
                 .foregroundStyle(.g4)
@@ -62,10 +79,8 @@ struct PlaceInfoSection: View {
 
             HStack(spacing: 12) {
                 
-                /// 장소 평점
                 PlaceRatingText(rating: place.rating)
                 
-                /// 장소 리뷰
                 placeReviewButton(reviewCount: place.reviewCount)
             }
             .padding(.top, 14)
@@ -74,20 +89,24 @@ struct PlaceInfoSection: View {
                 .padding(.vertical, 20)
                 .foregroundStyle(.g2)
             
-            /// 장소 주소
             PlaceAddressText(addressText: place.roadAddress)
                 .padding(.bottom, 4)
             
-            /// 장소 운영 시간
             PlaceTimeText(timeText: place.activeTime)
                 .padding(.bottom, 4)
             
-            /// 장소 도메인 주소
-            PlaceDomainButton(domain: place.placeSite).padding(.leading, 1)
+            Link(destination: URL(string: place.placeSite )!) {
+                PlaceDomainButton(domain: place.placeSite).padding(.leading, 1)
+            }
+            
         }
         .padding(.horizontal, 11)
         
         
     }
     
+}
+
+#Preview {
+    PlaceInfoSection(place: .init(placeId: 1, imageUrl: "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg", placeName: "중앙대학교", placeDescription: "넓고 큰 중앙대학교", categoryName: .BAR, roadAddress: "도로명 주소 ㅇㅇ", activeTime: "dsds~dsds", rating: 4.2, isVisited: false, reviewCount: 53, placeSite: "www.naver.com"))
 }

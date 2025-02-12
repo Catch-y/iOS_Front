@@ -10,10 +10,15 @@ import SwiftUI
 /// 코스 상세 정보 -> 장소 방문 뷰
 struct PlaceVisitingView: View {
     
-    @ObservedObject var viewModel: PlaceVisitingViewModel
+    @StateObject var viewModel: PlaceVisitingViewModel
     
     @Binding var placeId: Int
-    
+        
+    init(container: DIContainer, placeId: Binding<Int>) {
+        self._viewModel = StateObject(wrappedValue: .init(container: container))
+        self._placeId = placeId
+    }
+
     var body: some View {
         
         VStack {
@@ -21,32 +26,34 @@ struct PlaceVisitingView: View {
                 
                 PlaceInfoSection(place: place)
                 
-                Spacer()
                 
-                if !place.isVisited {
-                    
-                    MainBtn(text: "코스에 담기", action: {
-                        
-                    }, width: 370, height: 55, onoff: .on)
-                    
-                } else {
-                    
-                    MainBtn(text: "이 장소의 카테고리 선택하기", action: {
-                        
-                    }, width: 370, height: 55, onoff: .custom)
-                }
+                
+                MainBtn(text: "길 찾기", action: {}, width: 370, height: 55, onoff: .on)
+                
             } else {
                 ProgressView()
             }
             
         }
         .task {
-            
+            viewModel.getPlaceDetail(placeId: placeId)
         }
         .navigationBarBackButtonHidden()
     }
 }
 
-//#Preview {
-//    PlaceVisitingView()
-//}
+struct PlaceVisitingView_Previews: PreviewProvider {
+    static var previews: some View {
+        ForEach(
+            ["iPhone 16 Pro Max", "iPhone 11"],
+            id: \.self
+        ) { deviceName in
+            PlaceVisitingView(container: DIContainer(), placeId: .constant(1))
+                .previewDevice(PreviewDevice(rawValue: deviceName))
+                .previewDisplayName(deviceName)
+                .environmentObject(DIContainer())
+        }
+    }
+}
+
+
