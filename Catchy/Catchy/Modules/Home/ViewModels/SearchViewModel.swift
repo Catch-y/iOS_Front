@@ -63,6 +63,7 @@ class SearchViewModel: ObservableObject {
                 guard let _ = responseData.result else {
                     throw APIError.emptyResult
                 }
+                
                 print("Get Search Server: \(responseData)")
                 return responseData
             }

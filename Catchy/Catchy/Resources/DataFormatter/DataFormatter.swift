@@ -44,6 +44,11 @@ class DataFormatter {
             attributedString[keywordRange].font = .Subtitle3_SM
         }
         
+        if let keywordRange = attributedString.range(of: "좋아요") {
+            attributedString[keywordRange].foregroundColor = Color.main
+            attributedString[keywordRange].font = .Subtitle2
+        }
+        
         return attributedString
     }
     

@@ -15,7 +15,7 @@ enum Icon: String {
     case home = "home"
     case course = "course"
     case group = "group"
-    case myPage = "myPage"
+    case mypage = "mypage"
     
     //MARK: - Onboarding
     case logo = "logo"

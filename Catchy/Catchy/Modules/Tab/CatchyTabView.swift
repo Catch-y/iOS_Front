@@ -27,7 +27,7 @@ struct CatchyTabView: View {
                             .backgroundStyle(Color.red)
                     case .group:
                         Text("11")
-                    case .myPage:
+                    case .mypage:
                         Text("11")
                     }
                     

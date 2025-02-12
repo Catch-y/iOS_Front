@@ -11,7 +11,7 @@ enum TabCase: String, CaseIterable {
     case home = "home"
     case course = "course"
     case group = "group"
-    case myPage = "myPage"
+    case mypage = "mypage"
     
     func toKorean() -> String {
         switch self {
@@ -21,7 +21,7 @@ enum TabCase: String, CaseIterable {
             return "진단"
         case .group:
             return "그룹"
-        case .myPage:
+        case .mypage:
             return "마이페이지"
         }
     }

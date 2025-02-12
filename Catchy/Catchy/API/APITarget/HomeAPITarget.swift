@@ -64,10 +64,10 @@ extension HomeAPITarget: APITargetType {
                 "code": "200",
                 "message": "응답 메세지",
                 "result": {
-                    "content": [
+                    "placeInfoPreviews": [
                         {
                             "placeId": 1,
-                            "searchedPlaceName": "SearchPlace",
+                            "placeName": "SearchPlace",
                             "searchedPlaceCategory": "CAFE",
                             "placeName": "SearchPlace1",
                             "placeImageUrl": "https://i.namu.wiki/i/gBVNMaAFN4xZCQhVVwRheOqrEQcM1WmsM6b6rOeFdOoEuE3nBXZM-7FcVpQXv6GmYj9Je6hbDZNVMWZfqoz9WpVuQ_bQns548g7GMtWDRO_qD_pG2uu5l9ePWpPuOfC92XWX0HMZn2CvOvoZ6p9TyggWZ1At2NLuwE9Fy6pPUbI.webp",
@@ -200,7 +200,8 @@ extension HomeAPITarget: APITargetType {
               "isSuccess": true,
               "code": "200",
               "message": "추천 장소 목록 조회 성공",
-              "result": [
+              "result": {
+                "content": [
                 {
                   "placeId": 1,
                   "placeName": "한강공원",
@@ -247,7 +248,7 @@ extension HomeAPITarget: APITargetType {
                 },
                 {
                   "placeId": 5,
-                  "placeName": "https://think-note.com/wp-content/uploads/2024/06/starbucks_1-930x620.jpeg",
+                  "placeName": "용산 맛있는 술집",
                   "placeImage": "https://example.com/images/itaewon.jpg",
                   "category": "바 & 펍",
                   "roadAddress": "서울특별시 용산구 이태원로",
@@ -355,7 +356,9 @@ extension HomeAPITarget: APITargetType {
                   "reviewCount": 380,
                   "liked": true
                 }
-              ]
+              ],
+            "isLast": true
+                }
             }
             """
 

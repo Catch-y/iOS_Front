@@ -47,6 +47,7 @@ struct CustomLogoNavi: View {
                     .disabled(true)
                     .onTapGesture {
                         container.navigationRouter.push(to: .searchView)
+                        print("hello")
                     }
             }
         })
@@ -57,7 +58,7 @@ struct CustomLogoNavi: View {
 
 struct CustomLogoNavi_Preview: PreviewProvider {
     static var previews: some View {
-        CustomLogoNavi(onlyLogo: true)
+        CustomLogoNavi(onlyLogo: false)
             .previewLayout(.sizeThatFits)
     }
 }

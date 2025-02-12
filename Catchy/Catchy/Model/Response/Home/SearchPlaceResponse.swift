@@ -23,4 +23,16 @@ struct SearchPlaceData: Codable, Identifiable, Hashable, Likeable {
     var rating: Double
     var reviewCount: Int
     var liked: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case placeId
+        case placeName
+        case placeImage
+        case category
+        case roadAddress
+        case activeTime
+        case rating
+        case reviewCount
+        case liked
+    }
 }
