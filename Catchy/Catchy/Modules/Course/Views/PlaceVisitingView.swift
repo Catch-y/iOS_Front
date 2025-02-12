@@ -25,9 +25,11 @@ struct PlaceVisitingView: View {
             if let place = viewModel.placeDetailResponse {
 
                 PlaceInfoSection(place: place)
-
                 buttonGroup
 
+                
+                buttonGroup
+                
                 MainBtn(
                     text: "길 찾기",
                     action: {
@@ -49,13 +51,13 @@ struct PlaceVisitingView: View {
 
     /// 방문 체크 버튼 + 리뷰 버튼 + 방문 스탬프
     private var buttonGroup: some View {
-
+        
         HStack(spacing: 10) {
-
+            
             visitCheckbtn
-
+            
             reviewBtn
-
+            
             stamp
             Spacer()
         }
@@ -63,6 +65,7 @@ struct PlaceVisitingView: View {
         .padding(.bottom, 30)
     }
 
+    
     /// 방문 체크 버튼
     private var visitCheckbtn: some View {
 
@@ -88,12 +91,11 @@ struct PlaceVisitingView: View {
             }
 
 
-
-
         })
 
     }
 
+    
     /// 리뷰 남기기 버튼
     private var reviewBtn: some View {
 
@@ -118,6 +120,7 @@ struct PlaceVisitingView: View {
         }
         )
     }
+
 
     /// 스탬프
     private var stamp: some View {
