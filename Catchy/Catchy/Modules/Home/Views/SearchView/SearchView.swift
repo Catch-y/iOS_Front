@@ -36,7 +36,6 @@ struct SearchView: View {
                 .padding(.top, 20)
                 .padding(.horizontal, 16)
                 .animation(.easeInOut(duration: 0.5), value: viewModel.searchKeyword)
-                .submitScope()
             
             if !viewModel.recentWords.isEmpty && viewModel.searchKeyword.isEmpty {
                 recenteKeywords
