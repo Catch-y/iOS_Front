@@ -31,7 +31,7 @@ struct CourseGroupCard: View {
                     .resizable()
                     .frame(width: type.imageSize.width, height: type.imageSize.height)
                     .clipShape(RoundedRectangle(cornerRadius: 15)
-                )
+                    )
             }
             courseTextGroup
         }
@@ -57,11 +57,10 @@ struct CourseGroupCard: View {
                 .lineLimit(2)
             
             /// 카테고리 태그
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: type.lazyVGridColumnCount), content: 
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: type.lazyVGridColumnCount), content: {
                 ForEach(course.categories, id: \.self) { categoryType in
                     CategoryCard(categoryType: categoryType)
                 }
-                
             })
             
             Text(course.courseDescription)
@@ -75,11 +74,11 @@ struct CourseGroupCard: View {
     }
 }
 
-struct COurseGroupCard_Preview: PreviewProvider {
+struct CourseGroupCard_Preview: PreviewProvider {
     static var previews: some View {
         CourseGroupCard(course: .init(courseId: 0, courseType: .diy, courseImage: "https://i.namu.wiki/i/-UcsURAHAZ80XN7--nJenrc3typ4s4Hi6meDe5cdmvYiqdW7nvGb8mXJHFZXUE1e8_2rkPiEGU6KNl5bfPa_i5MfsS3buN88ZXGVCVajv-ANun91l4of6AlwW7wEtF7-A6w9t4Y9PtPg1pnizVO3fw.webp", courseName: "경복궁", courseDescription: "여기는 경복궁 입니다.", categories: [.CAFE, .BAR, .SPORT, .RESTAURANT, .REST, .CULTURELIFE])
-        ,type: .myPage)
-            .previewLayout(.sizeThatFits)
+                        ,type: .myPage)
+        .previewLayout(.sizeThatFits)
         
     }
 }
