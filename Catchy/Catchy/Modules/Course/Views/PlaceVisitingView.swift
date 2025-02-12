@@ -21,15 +21,12 @@ struct PlaceVisitingView: View {
 
     var body: some View {
         
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(spacing: 16) {
             if let place = viewModel.placeDetailResponse {
                 
                 PlaceInfoSection(place: place)
                 
-                HStack(spacing: 10) {
-                    visitCheckbtn
-                    reviewBtn
-                }
+                buttonGroup
                 
                 MainBtn(
                     text: "길 찾기",
@@ -50,6 +47,23 @@ struct PlaceVisitingView: View {
         .navigationBarBackButtonHidden()
     }
     
+    /// 방문 체크 버튼 + 리뷰 버튼 + 방문 스탬프
+    private var buttonGroup: some View {
+        
+        HStack(spacing: 10) {
+            
+            visitCheckbtn
+            
+            reviewBtn
+            
+            stamp
+            Spacer()
+        }
+        .padding(.horizontal, 22)
+        .padding(.bottom, 30)
+    }
+    
+    /// 방문 체크 버튼
     private var visitCheckbtn: some View {
         
         Button(action: {print("터치")}, label: {
@@ -80,6 +94,7 @@ struct PlaceVisitingView: View {
             
     }
     
+    /// 리뷰 남기기 버튼
     private var reviewBtn: some View {
         
         Button(action: {print("터치")},
@@ -104,8 +119,12 @@ struct PlaceVisitingView: View {
         )
     }
     
+    /// 스탬프
     private var stamp: some View {
-        Button(action: <#T##() -> Void#>, label: <#T##() -> View#>)
+        
+        Button(action: { print("gd") }, label: {
+            Icon.emptyStamp.image
+        })
     }
 }
 
