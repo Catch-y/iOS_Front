@@ -20,4 +20,15 @@ class HomeRepository: HomeRepositoryProtocol {
         return service.getSearch(keyword: keyword)
     }
     
+    func getHomePersonalCoursesData() -> AnyPublisher<ResponseData<[CourseInfoResponse]>, MoyaError> {
+        return service.getHomePersonalCourses()
+    }
+    
+    func getHomeCourseTopTenData() -> AnyPublisher<ResponseData<[PopularCourseResponse]>, MoyaError> {
+        return service.getHomeCourseTopTen()
+    }
+    
+    func getRecommendPlacesData(userLocation: UserLocation, page: Int) -> AnyPublisher<ResponseData<RecommendPlaceResponse>, MoyaError> {
+        return service.getRecommendPlaces(userLocation: userLocation, page: page)
+    }
 }

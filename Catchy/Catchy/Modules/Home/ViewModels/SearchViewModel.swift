@@ -83,7 +83,7 @@ class SearchViewModel: ObservableObject {
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 if let response = response.result {
-                    if response.content.isEmpty {
+                    if response.placeInfoPreviews.isEmpty {
                         searchResult = nil
                     } else {
                         searchResult = response

@@ -7,27 +7,19 @@
 
 import Foundation
 
-struct RecommendPlaceResponse: Codable, Identifiable {
-    let id = UUID()
+struct RecommendPlaceResponse: Codable {
+    let content: [RecommendPlaceResponseData]
+}
+
+struct RecommendPlaceResponseData: Codable, Identifiable, Likeable {
+    var id = UUID()
     let placeId: Int
-    let placeImageUrl: String
-    let category: String
     let placeName: String
+    let placeImage: String
+    let category: String
     let roadAddress: String
-    let activeTime: String
+    let activeTime: String?
+    let rating: Double
     let reviewCount: Int
-    let averageRating: Double
-    var isLike: Bool
-    
-    enum CodingKeys: CodingKey {
-        case placeId
-        case placeImageUrl
-        case category
-        case placeName
-        case roadAddress
-        case activeTime
-        case reviewCount
-        case averageRating
-        case isLike
-    }
+    var liked: Bool
 }

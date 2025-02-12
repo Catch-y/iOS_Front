@@ -11,6 +11,12 @@ import SwiftUI
 
 enum Icon: String {
     
+    //MARK: - Tab
+    case home = "home"
+    case course = "course"
+    case group = "group"
+    case myPage = "myPage"
+    
     //MARK: - Onboarding
     case logo = "logo"
     

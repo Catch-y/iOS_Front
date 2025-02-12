@@ -10,7 +10,7 @@ import KakaoSDKCommon
 
 @main
 struct CatchyApp: App {
-    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var appFlowViewModel: AppFlowViewModel = .init()
     @StateObject var container: DIContainer = .init()
     
