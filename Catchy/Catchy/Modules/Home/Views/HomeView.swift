@@ -125,7 +125,7 @@ struct HomeView: View {
             .padding(.horizontal, 16)
     }
     
-    private func thirdSection(datas: Binding<[RecommendPlaceResponse]>) -> some View {
+    private func thirdSection(datas: Binding<[RecommendPlaceResponseData]>) -> some View {
         VStack(alignment: .leading, spacing: 25, content: {
             HStack(content: {
                 Text(DataFormatter.shared.makeStyledText(for: "\(UserState.shared.getUserNickname())님과 비슷한 취향을 \n가진 사람들이 좋아하는 장소예요"))

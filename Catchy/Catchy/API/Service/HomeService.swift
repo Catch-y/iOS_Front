@@ -21,4 +21,22 @@ class HomeService: HomeServiceProtocol {
             .map(ResponseData<SearchPlaceResponse>.self)
             .eraseToAnyPublisher()
     }
+    
+    func getHomePersonalCourses() -> AnyPublisher<ResponseData<[CourseInfoResponse]>, MoyaError> {
+        return provider.requestPublisher(.getHomePersonalCourses)
+            .map(ResponseData<[CourseInfoResponse]>.self)
+            .eraseToAnyPublisher()
+    }
+    
+    func getHomeCourseTopTen() -> AnyPublisher<ResponseData<[PopularCourseResponse]>, MoyaError> {
+        return provider.requestPublisher(.getHomeCourseTopTen)
+            .map(ResponseData<[PopularCourseResponse]>.self)
+            .eraseToAnyPublisher()
+    }
+    
+    func getRecommendPlaces(userLocation: UserLocation, page: Int) -> AnyPublisher<ResponseData<RecommendPlaceResponse>, MoyaError> {
+        return provider.requestPublisher(.getRecommendPlaces(userLocation: userLocation, page: page))
+            .map(ResponseData<RecommendPlaceResponse>.self)
+            .eraseToAnyPublisher()
+    }
 }

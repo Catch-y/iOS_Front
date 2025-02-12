@@ -8,30 +8,19 @@
 import Foundation
 
 struct SearchPlaceResponse: Codable, Hashable {
-    var content: [SearchPlaceData]
+    var placeInfoPreviews: [SearchPlaceData]
+    var isLast: Bool
 }
 
 struct SearchPlaceData: Codable, Identifiable, Hashable {
     var id = UUID()
     var placeId: Int
-    var searchedPlaceName: String
-    var searchedPlaceCategory: CategoryType
     var placeName: String
-    var placeImageUrl: String
+    var placeImage: String
+    var category: CategoryType
     var roadAddress: String
-    var activeTime: String
+    var activeTime: String?
+    var rating: Double
     var reviewCount: Int
-    var averageRating: Double
-    
-    enum CodingKeys: CodingKey {
-        case placeId
-        case searchedPlaceName
-        case searchedPlaceCategory
-        case placeName
-        case placeImageUrl
-        case roadAddress
-        case activeTime
-        case reviewCount
-        case averageRating
-    }
+    var liked: Bool
 }

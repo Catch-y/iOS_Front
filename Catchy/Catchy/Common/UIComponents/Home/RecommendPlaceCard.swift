@@ -10,7 +10,7 @@ import Kingfisher
 
 struct RecommendPlaceCard: View {
     
-    @Binding var data: RecommendPlaceResponse
+    @Binding var data: RecommendPlaceResponseData
     
     var body: some View {
         HStack(spacing: 14, content: {
@@ -29,7 +29,7 @@ struct RecommendPlaceCard: View {
     private var placeImage: some View {
         ZStack(alignment: .topLeading, content: {
             
-            if let url = URL(string: data.placeImageUrl) {
+            if let url = URL(string: data.placeImage) {
                 KFImage(url)
                     .placeholder {
                         ProgressView()
@@ -71,7 +71,7 @@ struct RecommendPlaceCard: View {
     
     private var placePointInfo: some View {
         HStack(spacing: 8, content: {
-            makeInfoTitle(Icon.star.image, "평점 \(data.averageRating)")
+            makeInfoTitle(Icon.star.image, "평점 \(data.rating)")
             
             makeReview(Icon.review.image, "리뷰 \(data.reviewCount)개", Icon.rightChevron.image)
         })
@@ -81,7 +81,9 @@ struct RecommendPlaceCard: View {
         VStack(alignment: .leading, spacing: 6, content: {
             makeInfoTitle(Icon.location.image, data.roadAddress)
             
-            makeInfoTitle(Icon.time.image, data.activeTime)
+            if let activeTime = data.activeTime, !activeTime.isEmpty {
+                makeInfoTitle(Icon.time.image, activeTime)
+            }
         })
     }
     
@@ -110,11 +112,5 @@ extension RecommendPlaceCard {
             rightImage
                 .fixedSize()
         })
-    }
-}
-
-struct RecommendPlaceCard_Preview: PreviewProvider {
-    static var previews: some View {
-        RecommendPlaceCard(data: .constant(RecommendPlaceResponse(placeId: 0, placeImageUrl: "https://i.namu.wiki/i/Ca6uA8jti6jQfstU5FzeSH6bnn9Ms8uoWBMROytYU606IZ0GLj4d8RWEAQpV3PUP1FjsuemL2y-QlMwp-m1JiQl-ZXmKvkKDfsFNK93VrWiFP9Tv7Yz71eOmMJnBKGHfQEFIfGODpVi3lwxEll8eAw.webp", category: "영화", placeName: "삼퍼티쿠시 용산점", roadAddress: "서울시 동작구", activeTime: "월-금 16:00 - 21:00", reviewCount: 203, averageRating: 4.3, isLike: false)))
     }
 }

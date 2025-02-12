@@ -11,8 +11,8 @@ import Moya
 enum MemeberAPITarget {
     case patchNickname(nickname: String) /* 닉네임 변경 */
     case postServeyCategory(categories: [String]) /* 취향 설문 카테고리 저장 */
-    case postServeyStyleTime(styleTime: StepThirdRequest)
-    case postLocation(locations: [StepFourStep])
+    case postServeyStyleTime(styleTime: StepThirdRequest) /* 취향 설문 스타일 저장 */
+    case postLocation(locations: [StepFourStep]) /* 취향 위치 저장 */
 }
 
 extension MemeberAPITarget: APITargetType {

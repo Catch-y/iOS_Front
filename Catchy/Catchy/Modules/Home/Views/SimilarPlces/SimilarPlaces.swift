@@ -39,7 +39,7 @@ struct SimilarPlaces: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    private func makeContents(datas: Binding<[RecommendPlaceResponse]>) -> some View {
+    private func makeContents(datas: Binding<[RecommendPlaceResponseData]>) -> some View {
         ScrollView(.vertical, content: {
             VStack(alignment: .leading, spacing: 35, content: {
                 Text(DataFormatter.shared.makeStyledText(for: "\(UserState.shared.getUserNickname())님과 비슷한 취향을 \n가진 사람들이 좋아하는 장소예요"))

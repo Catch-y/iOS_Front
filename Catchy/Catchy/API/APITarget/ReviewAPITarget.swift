@@ -9,7 +9,7 @@ import Foundation
 import Moya
 
 enum ReviewAPITarget {
-    case getReviewInfo(placeId: Int, page: Int)
+    case getReviewInfo(placeId: Int, page: Int) /* 코스 리뷰 전체 보기 */
 }
 
 extension ReviewAPITarget: APITargetType {

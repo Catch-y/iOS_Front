@@ -11,7 +11,7 @@ class HomeViewModel: ObservableObject {
     
     @Published var courseInfoResponse: [CourseInfoResponse]? /* 찻 번째 섹션 */
     @Published var popularCourseResponse: [PopularCourseResponse]? /* 두 번째 섹션 */
-    @Published var recommendPlaceResponse: [RecommendPlaceResponse]? /* 세 번째 섹션 */
+    @Published var recommendPlaceResponse: [RecommendPlaceResponseData]? /* 세 번째 섹션 */
 
     
     @Published var popularCourseIndex: Int = 1

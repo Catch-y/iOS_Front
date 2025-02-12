@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct LikeButton: View {
+struct LikeButton<T: Likeable>: View {
     
-    @Binding var data: RecommendPlaceResponse
+    @Binding var data: T
     let action: () -> Void
     
-    init(data: Binding<RecommendPlaceResponse>,
+    init(data: Binding<T>,
          action: @escaping () -> Void) {
         self._data = data
         self.action = action
@@ -35,13 +35,13 @@ struct LikeButton: View {
     }
     
     func toggleLike() {
-        data.isLike.toggle()
+        data.liked.toggle()
         action()
-        print(data.isLike)
+        print(data.liked)
     }
     
     func heartIcon() -> Image {
-        if data.isLike {
+        if data.liked {
             return Icon.heart.image
         } else {
             return Icon.empyHeart.image
