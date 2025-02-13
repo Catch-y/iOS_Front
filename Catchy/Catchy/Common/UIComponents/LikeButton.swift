@@ -10,12 +10,20 @@ import SwiftUI
 struct LikeButton<T: Likeable>: View {
     
     @Binding var data: T
+    
     let action: () -> Void
     
+    /// 장소 상세 화면인 경우
+    /// Circle 필요 없음
+    let forPlace: Bool
+    
     init(data: Binding<T>,
-         action: @escaping () -> Void) {
+         action: @escaping () -> Void,
+         forPlace: Bool = false
+    ) {
         self._data = data
         self.action = action
+        self.forPlace = forPlace
     }
     
     var body: some View {
@@ -25,10 +33,19 @@ struct LikeButton<T: Likeable>: View {
             }
         }, label: {
             ZStack(alignment: .center, content: {
-                Circle()
-                    .fill(Color.white)
-                    .frame(width: 20, height: 20)
-                heartIcon()
+                if !forPlace {
+                    Circle()
+                        .fill(Color.white)
+                        .frame(width: 20, height: 20)
+                    heartIcon()
+                    
+                } else {
+                    heartIcon()
+                        .resizable()
+                        .frame(width: 17, height: 17)
+                }
+                
+               
             })
             .s1w()
         })

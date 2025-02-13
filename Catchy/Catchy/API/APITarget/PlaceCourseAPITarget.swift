@@ -129,7 +129,6 @@ extension PlaceCourseAPITarget: APITargetType {
                         "rating": 3.7,
                         "reviewCount": 78,
                         "liked": true
-
                       },
                       {
                         "placeId": 3,
@@ -141,7 +140,6 @@ extension PlaceCourseAPITarget: APITargetType {
                         "rating": 4.0,
                         "reviewCount": 45,
                         "liked": true
-                        
                       },
                       {
                         "placeId": 4,
@@ -153,7 +151,6 @@ extension PlaceCourseAPITarget: APITargetType {
                         "rating": 4.2,
                         "reviewCount": 56,
                         "liked": true
-
                       },
                       {
                         "placeId": 5,
@@ -165,7 +162,6 @@ extension PlaceCourseAPITarget: APITargetType {
                         "rating": 3.5,
                         "reviewCount": 65,
                         "liked": true
-
                       },
                       {
                         "placeId": 6,
@@ -177,7 +173,6 @@ extension PlaceCourseAPITarget: APITargetType {
                         "rating": 3.9,
                         "reviewCount": 210,
                         "liked": true
-
                       },
                       {
                         "placeId": 7,
@@ -189,7 +184,6 @@ extension PlaceCourseAPITarget: APITargetType {
                         "rating": 4.1,
                         "reviewCount": 140,
                         "liked": true
-
                       },
                       {
                         "placeId": 8,
@@ -201,7 +195,6 @@ extension PlaceCourseAPITarget: APITargetType {
                         "rating": 4.2,
                         "reviewCount": 98,
                         "liked": true
-
                       },
                       {
                         "placeId": 9,
@@ -329,19 +322,20 @@ extension PlaceCourseAPITarget: APITargetType {
                 "code": "COMMON200",
                 "message": "성공입니다.",
                 "result": {
-                "placeId": 1,
-                "imageUrl": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                "placeName": "심퍼티쿠시 용산점",
-                "placeDescription": "유러피언 요리를 아시안 스타일로 풀어내는 파인캐주얼 레스토랑",
-                "categoryName": "음식점",
-                "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
-                "activeTime": "[영업시간] 매일 09:00~22:00",
-                "rating": 3,
-                "isVisited": true,
-                "reviewCount": 21,
-                "placeSite": "www.naver.com"
+                    "placeId": 1,
+                    "imageUrl": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+                    "placeName": "심퍼티쿠시 용산점",
+                    "placeDescription": "유러피언 요리를 아시안 스타일로 풀어내는 파인캐주얼 레스토랑",
+                    "categoryName": "CAFE",
+                    "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
+                    "activeTime": "[영업시간] 매일 09:00~22:00",
+                    "rating": 3,
+                    "isVisited": true,
+                    "reviewCount": 21,
+                    "placeSite": "www.naver.com",
+                    "liked": false
+                }
             }
-        }
         """.data(using: .utf8)!
             
         case .getMyPlace:

@@ -11,10 +11,15 @@ import Kingfisher
 struct PlaceInfoSection: View {
     
     /// 장소 상세 정보 데이터
-    var place: PlaceDetailResponse
+    @Binding var place: PlaceDetailResponse
     
-    init(place: PlaceDetailResponse) {
-        self.place = place
+    /// 좋아요 누를 때 액션
+    /// nil인 경우 좋아요 못 누름
+    let action: (() -> Void)?
+    
+    init(place: Binding<PlaceDetailResponse>, action: (() -> Void)? = nil) {
+        self._place = place
+        self.action = action
     }
     
     var body: some View{
@@ -40,19 +45,24 @@ struct PlaceInfoSection: View {
     /// 장소 상세 화면 텍스트 그룹
     private var placeTextGroup: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack {
+            HStack(spacing: 10) {
                 Text(place.placeName)
                     .font(.Subtitle3)
                     .foregroundStyle(.g7)
                     .lineLimit(1)
-                    .padding(.bottom, 6)
-                
-                Spacer()
                 
                 CategoryCard(categoryType: place.categoryName)
                     .frame(width: 60)
+                
+                Spacer()
+                
+                if action != nil {
+                    LikeButton(data: $place, action: action!, forPlace: true)
+                    
+                }
+                
             }
-            .padding(.bottom, 2)
+            .padding(.bottom, 8)
             
             Text(place.placeDescription)
                 .font(.body3)

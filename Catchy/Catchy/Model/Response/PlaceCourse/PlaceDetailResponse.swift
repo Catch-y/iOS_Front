@@ -8,7 +8,7 @@
 import Foundation
 
 /// 장소 상세 화면 API
-struct PlaceDetailResponse: Codable, Identifiable {
+struct PlaceDetailResponse: Codable, Identifiable, Likeable {
     
     var id = UUID()
     
@@ -45,6 +45,9 @@ struct PlaceDetailResponse: Codable, Identifiable {
     /// 장소의 도메인 주소
     let placeSite: String
     
+    /// 장소 좋아요
+    var liked: Bool
+    
     enum CodingKeys: CodingKey {
         case placeId
         case imageUrl
@@ -57,6 +60,8 @@ struct PlaceDetailResponse: Codable, Identifiable {
         case isVisited
         case reviewCount
         case placeSite
+        case liked
     }
     
 }
+

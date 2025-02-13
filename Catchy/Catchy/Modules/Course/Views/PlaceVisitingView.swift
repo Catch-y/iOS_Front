@@ -12,31 +12,37 @@ struct PlaceVisitingView: View {
 
     @StateObject var viewModel: PlaceVisitingViewModel
 
-    @Binding var placeId: Int
+    /// 해당 뷰의 장소 ID
+    let placeId: Int
 
-    init(container: DIContainer, placeId: Binding<Int>) {
+    init(container: DIContainer, placeId: Int) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
-        self._placeId = placeId
+        self.placeId = placeId
     }
 
     var body: some View {
 
         VStack(spacing: 16) {
             if let place = viewModel.placeDetailResponse {
+                PlaceInfoSection(place: Binding(
+                    get: { place },
+                    set: { viewModel.placeDetailResponse = $0 }
+                ), action: {
+                    viewModel.patchPlaceLike()
+                })
 
-                PlaceInfoSection(place: place)
-                buttonGroup
-
-                
                 buttonGroup
                 
                 MainBtn(
                     text: "길 찾기",
                     action: {
                     },
-                    width: 370,
+                    width: 400,
                     height: 55,
-                    onoff: .on)
+                    onoff: .on
+                )
+                .safeAreaPadding(.horizontal, 16)
+                
 
             } else {
                 ProgressView()
@@ -137,7 +143,7 @@ struct PlaceVisitingView_Previews: PreviewProvider {
             ["iPhone 16 Pro Max", "iPhone 11"],
             id: \.self
         ) { deviceName in
-            PlaceVisitingView(container: DIContainer(), placeId: .constant(1))
+            PlaceVisitingView(container: DIContainer(), placeId: 1)
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
                 .environmentObject(DIContainer())

@@ -22,7 +22,6 @@ class PlaceVisitingViewModel: ObservableObject {
         self.container = container
     }
 
-
 }
 
 extension PlaceVisitingViewModel {
@@ -36,7 +35,8 @@ extension PlaceVisitingViewModel {
                 ResponseData<PlaceDetailResponse> in
                 if !responseData.isSuccess {
                     throw APIError
-                        .serverError(message: responseData.message,
+                        .serverError(
+                            message: responseData.message,
                             code: responseData.code
                         )
                 }
@@ -58,6 +58,44 @@ extension PlaceVisitingViewModel {
                 guard let self = self else { return }
                 if let response = response.result {
                     self.placeDetailResponse = response
+                }
+            })
+            .store(in: &cancellables)
+    }
+    
+    /// 장소 좋아요 API
+    func patchPlaceLike() {
+        
+        guard let placeId = placeDetailResponse?.placeId else { return }
+
+        container.useCaseProvider.placeUseCase.executePatchPlaceLiked(placeId: placeId)
+            .tryMap {responseData ->
+                ResponseData<PlaceLikedResponse> in
+                if !responseData.isSuccess {
+                    throw APIError
+                        .serverError(
+                            message: responseData.message,
+                            code: responseData.code
+                        )
+                }
+                
+                return responseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: {
+                [weak self] completion in
+                guard let self = self else { return }
+
+                switch completion {
+                case .finished:
+                    print("✅ Patch PlaceLiked Server Completed")
+                case .failure(let failure):
+                    print("❌ Patch PlaceLiked Failed: \(failure)")
+                }
+            },receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                if let response = response.result {
+                    self.placeDetailResponse?.liked = response.liked
                 }
             })
             .store(in: &cancellables)
