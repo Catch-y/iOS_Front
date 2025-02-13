@@ -70,7 +70,7 @@ struct PlaceCard: View {
 
 }
 
-#Preview{
-    PlaceCard(place: PlaceSearchResponseData(placeId: 1, placeName: "심퍼티쿠시 용산점", placeImage: "https://static.wanted.co.kr/images/company/21181/dazl35csneuul4f9__1080_790.jpg", category: .RESTAURANT , roadAddress: "서울시 용산구 한강대로52길 17-3 1F", activeTime: "월-금 · 16:00 - 21:00", rating: 4.3, reviewCount: 203)
-    )
-}
+//#Preview{
+//    PlaceCard(place: PlaceSearchResponseData(placeId: 1, placeName: "심퍼티쿠시 용산점", placeImage: "https://static.wanted.co.kr/images/company/21181/dazl35csneuul4f9__1080_790.jpg", category: .RESTAURANT , roadAddress: "서울시 용산구 한강대로52길 17-3 1F", activeTime: "월-금 · 16:00 - 21:00", rating: 4.3, reviewCount: 203)
+//    )
+//}

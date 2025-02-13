@@ -14,92 +14,83 @@ struct CourseView: View {
     
     /// 코스 뷰 모델
     @StateObject var viewModel: CourseViewModel
-    
-    /// 플로팅 버튼이 눌린 상태
-    @Binding var isFloating: Bool
-    
-    /// AI 생성 플로팅 버튼이 눌린 상태
-    @Binding var isAIPresented: Bool
-    
-    /// DIY 생성 플로팅 버튼이 눌린 상태
-    @Binding var isDIYPresented: Bool
-    
+        
     /// 드랍 다운 메뉴의 뷰 모델
     @StateObject var provinceViewModel: GetProvinceViewModel = .init()
-
-    init(container: DIContainer, isFloating: Binding<Bool>, isAIPresented: Binding<Bool>, isDIYPresented: Binding<Bool>) {
+    
+    /// AI 코스 생성로딩 화면 상태
+    @Binding var isAILoadingPresented: Bool
+    
+    /// AI 코스 생성결과 화면 상태
+    @Binding var isAISheetPresented: Bool
+    
+    init(container: DIContainer, isAILoadingPresented: Binding<Bool>, isAISheetPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
-        self._isFloating = isFloating
-        self._isAIPresented = isAIPresented
-        self._isDIYPresented = isDIYPresented
+        self._isAISheetPresented = isAISheetPresented
+        self._isAILoadingPresented = isAILoadingPresented
     }
     
     var body: some View {
-            ZStack(alignment: .top) {
+        ZStack(alignment: .top) {
+            
+            DropDown(viewModel: viewModel, provinceViewModel: provinceViewModel).zIndex(1)
+                .padding(.top, 50)
+            
+            VStack {
+                navigationGroup
                 
-                DropDown(viewModel: viewModel, provinceViewModel: provinceViewModel).zIndex(1)
-                    .padding(.top, 50)
-                
-                VStack {
-                    navigationGroup
-
-                    if !viewModel.isCourseListLoading {
-                        
-                        if viewModel.courseList.isEmpty {
-                            infoView
-                        } else {
-                            scrollView
-                        }
-                        
+                if !viewModel.isCourseListLoading {
+                    
+                    if viewModel.courseList.isEmpty {
+                        infoView
                     } else {
-
-                        Spacer()
-                        
-                        ProgressView()
-                        
-                        Spacer()
+                        scrollView
                     }
                     
+                } else {
+                    
+                    Spacer()
+                    
+                    ProgressView()
+                    
+                    Spacer()
                 }
-                .zIndex(0)
                 
-            }.task{
-                viewModel.getCourseList()
             }
-            .onChange(of: provinceViewModel.provinces){ (_ , provinces) in
-                viewModel.upperLocations = provinces
+            .zIndex(0)
+        }.task{
+            viewModel.getCourseList()
+        }
+        .onChange(of: provinceViewModel.provinces){ (_ , provinces) in
+            viewModel.upperLocations = provinces
+        }
+        .onChange(of: viewModel.selectedUpperIndex) { (_, _) in
+            viewModel.resetAndFetchCourseList()
+        }
+        .onChange(of: viewModel.selectedLowerIndex) { (_, lowerIndex) in
+            if lowerIndex != nil {
+                viewModel.resetAndFetchCourseList()
             }
-            .fullScreenCover(isPresented: $isAIPresented) {
+        }
+        .onChange(of: viewModel.segment) { (_, _) in
+            viewModel.resetAndFetchCourseList()
+        }
+        .onChange(of: viewModel.isAICourseLoadingFinish) { (_, finished) in
+            if finished {
+                isAILoadingPresented.toggle()
+                isAISheetPresented.toggle()
+                viewModel.isAICourseLoadingFinish.toggle()
+            }
+        }
+        .fullScreenCover(isPresented: $isAILoadingPresented) {
+            AILoadingView(viewModel: viewModel)
+        }
+        .sheet(isPresented: $isAISheetPresented) {
+            AIPlaceListView(courseAIResponse: viewModel.courseAIResponse, container: container, isAISheetPresented: $isAISheetPresented)
+        }
 
-                AILoadingView(container: viewModel.container)
-            }
-            .onChange(of: viewModel.selectedUpperIndex) { (_, _) in
-                viewModel.isCourseListLoading = true
-                viewModel.lastId = nil
-                viewModel.courseList.removeAll()
-                viewModel.isLast = false
-                viewModel.getCourseList()
-            }
-            .onChange(of: viewModel.selectedLowerIndex) { (_, lowerIndex) in
-                if lowerIndex != nil {
-                    viewModel.isCourseListLoading = true
-                    viewModel.lastId = nil
-                    viewModel.courseList.removeAll()
-                    viewModel.isLast = false
-                    viewModel.getCourseList()
-                }
-            }
-            .onChange(of: viewModel.segment) { (_, _) in
-                viewModel.isCourseListLoading = true
-                viewModel.lastId = nil
-                viewModel.courseList.removeAll()
-                viewModel.isLast = false
-                viewModel.getCourseList()
-            }
-
-    
     }
-
+        
     /// 네비게이션 바와 세그먼트 그룹
     private var navigationGroup : some View {
         VStack(alignment: .center) {

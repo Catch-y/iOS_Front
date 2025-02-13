@@ -15,11 +15,15 @@ struct CatchyTabView: View {
     /// 플로팅 버튼이 눌린 상태
     @State private var isFloating: Bool = false
     
-    /// AI 생성화면 나온 상태
-    @State private var isAIPresented: Bool = false
+    /// AI 코스 생성 로딩화면 나온 상태
+    @State private var isAILoadingPresented: Bool = false
     
-    /// DIY 생성화면 나온 상태
+    /// AI 코스 생성 결과화면이 나온 상태
+    @State private var isAISheetPresented: Bool = false
+
+    /// DIY 코스 생성화면 나온 상태
     @State private var isDIYPresented: Bool = false
+    
     
     @EnvironmentObject var container: DIContainer
     @EnvironmentObject var appFlowViewModel: AppFlowViewModel
@@ -32,14 +36,16 @@ struct CatchyTabView: View {
                     case .home:
                         HomeView(container: container)
                     case .course:
-                        CourseView(container: container, isFloating: $isFloating, isAIPresented: $isAIPresented, isDIYPresented: $isDIYPresented)
+                        CourseView(container: container, isAILoadingPresented: $isAILoadingPresented, isAISheetPresented: $isAISheetPresented)
                         AddFloatingButton(isOpen: $isFloating, onSubButtonTap: {
                             segment in
                             switch segment {
                             case .ai:
-                                isAIPresented.toggle()
+                                isAILoadingPresented.toggle()
+                                isFloating.toggle()
                             case .diy:
                                 isDIYPresented.toggle()
+                                isFloating.toggle()
                             }
                         })
                             .zIndex(3)

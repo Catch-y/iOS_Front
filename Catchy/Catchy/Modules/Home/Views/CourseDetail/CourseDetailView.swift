@@ -271,3 +271,4 @@ struct CourseDetailView_Preview: PreviewProvider {
         CourseDetailView(container: DIContainer(), courseId: 1)
     }
 }
+

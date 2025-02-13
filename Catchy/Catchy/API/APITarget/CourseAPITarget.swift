@@ -261,30 +261,63 @@ extension CourseAPITarget: APITargetType {
               "code": "COMMON200",
               "message": "코스 정보 조회에 성공했습니다.",
               "result": {
+                "courseId": 0,
                 "courseName": "서울 명소 투어",
                 "courseDescription": "서울의 대표적인 명소를 방문하는 코스입니다.",
                 "recommendTime": "오전 9시 ~ 오후 6시",
                 "courseImage": "https://example.com/images/seoul-tour.jpg",
                 "courseRating": 4.7,
                 "placeInfos": [
-                  {
-                    "placeId": 101,
-                    "name": "남산 타워",
-                    "roadAddress": "서울특별시 용산구 남산공원길 105",
-                    "recommendVisitTime": "오후 5시 ~ 오후 9시"
-                  },
-                  {
-                    "placeId": 102,
-                    "name": "광장시장",
-                    "roadAddress": "서울특별시 종로구 창경궁로 88",
-                    "recommendVisitTime": "오전 10시 ~ 오후 3시"
-                  },
-                  {
-                    "placeId": 103,
-                    "name": "한강 공원",
-                    "roadAddress": "서울특별시 영등포구 여의동로 330",
-                    "recommendVisitTime": "오후 2시 ~ 오후 6시"
-                  }
+                      {
+                        "placeId": 1,
+                        "placeName": "커피하우스",
+                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+                        "category": "CAFE",
+                        "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
+                        "activeTime": "[영업시간] 매일 09:00~22:00",
+                        "rating": 4.3,
+                        "reviewCount": 124
+                      },
+                      {
+                        "placeId": 2,
+                        "placeName": "블랙드롭커피",
+                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+                        "category": "CAFE",
+                        "roadAddress": "경기 남양주시 와부읍 덕소로2번길 78",
+                        "activeTime": "[영업시간] 매일 09:00~18:00",
+                        "rating": 3.7,
+                        "reviewCount": 78
+                      },
+                      {
+                        "placeId": 3,
+                        "placeName": "스카이라운지",
+                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+                        "category": "BAR",
+                        "roadAddress": "경기 남양주시 와부읍 덕소로 72",
+                        "activeTime": "[영업시간] 19:00~03:00",
+                        "rating": 4.0,
+                        "reviewCount": 45
+                      },
+                      {
+                        "placeId": 4,
+                        "placeName": "피자나라",
+                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+                        "category": "RESTAURANT",
+                        "roadAddress": "경기 남양주시 와부읍 덕소로 87-1",
+                        "activeTime": "[영업시간] 11:00~23:00",
+                        "rating": 4.2,
+                        "reviewCount": 56
+                      },
+                      {
+                        "placeId": 5,
+                        "placeName": "미술관 카페",
+                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
+                        "category": "CULTURELIFE",
+                        "roadAddress": "경기 남양주시 와부읍 덕소로2번길 90",
+                        "activeTime": "[영업시간] 10:00~18:00",
+                        "rating": 3.5,
+                        "reviewCount": 65
+                      }
                 ]
               }
             }

@@ -10,49 +10,36 @@ import SwiftUI
 import Combine
 import CombineMoya
 
-class AILoadingViewModel: ObservableObject {
+class AIPlaceListViewModel: ObservableObject {
     
     let container: DIContainer
     
     var cancellables = Set<AnyCancellable>()
-    
-    // MARK: - AI 코스 생성 로딩화면 Properties
-    /// 애니메이션 시간
-    let duration: TimeInterval = 1
-
-    @Published var showRedPin = false
-    @Published var showYellowPin = false
-    @Published var showPurplePin = false
-    @Published var showBluePin = false
-    
-    @Published var floatingRedPin = false
-    @Published var floatingYellowPin = false
-    @Published var floatingPurplePin = false
-    @Published var floatingBluePin = false
-    
-    /// AI 생성 응답 기다리는 중?
-    @Published var isLoading = true
-    
+        
     /// AI 생성 코스 응답
-    @Published var courseAIResponse: CourseAICreateResponse?
+    var courseAIResponse: CourseAICreateResponse?
     
+    /// 코스 북마크?
+    @Published var isBookmark: Bool = false
+        
     // MARK: - Init
-    init(container: DIContainer) {
+    init(container: DIContainer, courseAIResponse: CourseAICreateResponse?) {
         self.container = container
+        self.courseAIResponse = courseAIResponse
     }
 
 }
 
 
-extension AILoadingViewModel {
+extension AIPlaceListViewModel {
     
-    // MARK: - API 요청 함수
-    /// 코스 생성(AI) API
-    func postCreateCourseAI() {
-                
+    /// 코스 북마크 API
+    func patchCourseBookmark() {
+        
+        guard let course = courseAIResponse else { return }
         container.useCaseProvider.courseUseCase
-            .executePostCreateCourseAI()
-            .tryMap{ responseData -> ResponseData<CourseAICreateResponse> in
+            .executePatchCourseBookmark(courseId: course.courseId)
+            .tryMap{ responseData -> ResponseData<CourseBookmarkResponse> in
                 if !responseData.isSuccess{
                     throw APIError
                         .serverError(
@@ -67,20 +54,17 @@ extension AILoadingViewModel {
             .sink(receiveCompletion: {
                 [weak self] completion in
                 guard let self = self else { return }
-                print(self.isLoading)
-                self.isLoading = false
-                print(self.isLoading)
                 switch completion {
                 case .finished:
-                    print("✅ Post CreateAICourse Server Completed")
+                    print("✅ Patch CourseBookmark Server Completed")
                 case .failure(let failure):
-                    print("❌ Post CreateAICourse Failed: \(failure)")
+                    print("❌ Patch CourseBookmark Failed: \(failure)")
                 }
             },receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 
                 if let response = response.result{
-                    self.courseAIResponse = response
+                    isBookmark = response.bookmarked
                 }
                 
             }

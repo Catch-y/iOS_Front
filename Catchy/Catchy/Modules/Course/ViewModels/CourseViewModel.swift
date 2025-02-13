@@ -73,12 +73,17 @@ class CourseViewModel: ObservableObject{
     
     
     // MARK: - FLoating Button Properties
-    /// 플로팅 버튼 상태
-    @Published var isFloating: Bool = false
     
     /// 탭 된 플로팅 버튼 
     @Published var selectedFloatingSegment: CourseSegment?
     
+    // MARK: - AI Create Course Properties
+    /// AI 코스 생성중인가?
+    var isAICourseLoadingFinish: Bool = false
+    
+    /// AI로 생성된 코스 응답
+    @Published var courseAIResponse: CourseAICreateResponse?
+
     // MARK: - Init
     init(container: DIContainer) {
         self.container = container
@@ -89,16 +94,21 @@ class CourseViewModel: ObservableObject{
 extension CourseViewModel {
     
     // MARK: - API 호출 함수
-    /// 코스 조회
+    /// 내 코스 조회 API
     func getCourseList(){
-                
+        
         guard !isPrefetching, !isLast else {
             return
         }
         let province = selectedUpperIndex == nil ? "" : upperLocations[selectedUpperIndex!].addrName
         let district = province == "" || selectedLowerIndex == nil ? "" : lowerLocations[selectedLowerIndex!]
         
-        let courseRequest: CourseRequest = .init(type: segment.courseType, upperLocation: province, lowerLocation: district, lastId: lastId)
+        let courseRequest: CourseRequest = .init(
+            type: segment.courseType,
+            upperLocation: province,
+            lowerLocation: district,
+            lastId: lastId
+        )
         
         container.useCaseProvider.courseUseCase
             .executeGetCourseList(courseRequest: courseRequest)
@@ -136,8 +146,47 @@ extension CourseViewModel {
                 
             })
             .store(in: &cancellables)
+    }
+        
+    /// 코스 생성(AI) API
+    func postCreateCourseAI() {
+        
+        container.useCaseProvider.courseUseCase
+            .executePostCreateCourseAI()
+            .tryMap{ responseData -> ResponseData<CourseAICreateResponse> in
+                if !responseData.isSuccess{
+                    throw APIError
+                        .serverError(
+                            message: responseData.message,
+                            code: responseData.code
+                        )
+                }
+                    
+                return responseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: {
+                [weak self] completion in
+                guard let self = self else { return }
+                self.isAICourseLoadingFinish = true
+                switch completion {
+                case .finished:
+                    print("✅ Post CreateAICourse Server Completed")
+                case .failure(let failure):
+                    print("❌ Post CreateAICourse Failed: \(failure)")
+                }
+            },receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                    
+                if let response = response.result{
+                    self.courseAIResponse = response
+                }
+                    
+            }
+            ).store(in: &cancellables)
         
     }
+        
         
 
     
@@ -161,7 +210,6 @@ extension CourseViewModel {
     func setInitialState(){
         self.resetLowerDropState()
         self.resetUpperDropState()
-        self.isFloating = false
     }
     
     /// 도 전체 드랍 다운 메뉴 상태 초기화
@@ -192,5 +240,13 @@ extension CourseViewModel {
         self.lowerScrollPosition = index
     }
     
+    func resetAndFetchCourseList() {
+        
+        isCourseListLoading = true
+        lastId = nil
+        courseList.removeAll()
+        isLast = false
+        getCourseList()
+    }
     
 }
