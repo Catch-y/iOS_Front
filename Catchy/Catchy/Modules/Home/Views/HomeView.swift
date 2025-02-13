@@ -27,7 +27,7 @@ struct HomeView: View {
                         firstSection()
                             .padding(.top, 35)
                         
-                        seconSection()
+                        secondSection()
                             .padding(.top, 42)
                         
                         thirdSection(datas: Binding(get: {
@@ -115,7 +115,7 @@ struct HomeView: View {
         .frame(minHeight: 240)
     }
     
-    private func seconSection() -> some View {
+    private func secondSection() -> some View {
             VStack(alignment: .leading, spacing: 10, content: {
                 Text(DataFormatter.shared.makeStyledText(for: "이번주 인기코스 TOP 10"))
                     .font(.Subtitle2)

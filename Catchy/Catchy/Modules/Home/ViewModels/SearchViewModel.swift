@@ -55,7 +55,6 @@ class SearchViewModel: ObservableObject {
     
     public func performSearch(for keyword: String) {
         guard !searchLoad, !isLast else {
-            print("한 번 더 호출 막힘")
             return
         }
         
@@ -108,5 +107,18 @@ class SearchViewModel: ObservableObject {
                 print("🔍 Search results updated: \(String(describing: response.result))")
             })
             .store(in: &cancellables)
+    }
+    
+    func searchRefresh() async {
+        self.isLast = false
+        self.currentPage = 1
+        
+        do {
+            try await Task.sleep(nanoseconds: 1_500_000_000)
+            self.searchResult = nil
+            performSearch(for: searchKeyword)
+        } catch {
+            print("❌ Refresh 오류: \(error)")
+        }
     }
 }
