@@ -31,7 +31,9 @@ struct CatchyApp: App {
                 PreferencePageView(container: container)
                     .environmentObject(appFlowViewModel)
             case .tabView:
-                ContentView()
+                CatchyTabView()
+                    .environmentObject(container)
+                    .environmentObject(appFlowViewModel)
             }
         }
     }

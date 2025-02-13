@@ -47,10 +47,6 @@ struct HomeView: View {
                 }
             })
             .ignoresSafeArea(.all)
-            .navigationDestination(for: NavigationDestination.self, destination: { destination in
-                NavigationRoutingView(destination: destination)
-                    .environmentObject(container)
-            })
             .task {
                 viewModel.getFirstSection()
                 viewModel.getSecondSection()

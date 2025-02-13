@@ -16,8 +16,8 @@ class HomeUseCase: HomeUseCaseProtocol {
         self.repository = repository
     }
     
-    func executeGetSearch(keyword: String) -> AnyPublisher<ResponseData<SearchPlaceResponse>, MoyaError> {
-        return repository.getSearchData(keyword: keyword)
+    func executeGetSearch(keyword: String, page: Int) -> AnyPublisher<ResponseData<SearchPlaceResponse>, MoyaError> {
+        return repository.getSearchData(keyword: keyword, page: page)
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }

@@ -35,6 +35,7 @@ struct RecommendPlaceCard: View {
                         ProgressView()
                             .controlSize(.regular)
                     }.retry(maxCount: 2, interval: .seconds(2))
+                    .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 103))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 149, height: 103)
