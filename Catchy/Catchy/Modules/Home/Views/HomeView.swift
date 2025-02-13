@@ -179,10 +179,13 @@ struct HomeView: View {
                         container.navigationRouter.push(to: .similarView)
                     }, label: {
                         HStack(spacing: 8) {
-                            Text("자세히 보기")
-                                .font(.body3)
-                                .foregroundStyle(Color.g4)
-                            
+                            Button(action: {
+                                
+                            }, label: {
+                                Text("자세히 보기")
+                                    .font(.body3)
+                                    .foregroundStyle(Color.g4)
+                            })
                             Icon.rightChevron.image
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)

@@ -109,6 +109,7 @@ class SearchViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    /// 리프레시 
     func searchRefresh() async {
         self.isLast = false
         self.currentPage = 1
