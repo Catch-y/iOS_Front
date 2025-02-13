@@ -32,8 +32,8 @@ struct VotingMemberView: View {
                 }
             }
         }
-        .onAppear {
-            viewModel.loadSampleData() // ✅ 샘플 데이터 로드
+        .task {
+            viewModel.loadSampleData() //  샘플 데이터 로드
         }
     }
     

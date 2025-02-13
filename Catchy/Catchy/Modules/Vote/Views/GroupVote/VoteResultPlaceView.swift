@@ -40,13 +40,12 @@ struct VoteResultPlaceView: View {
                 Text("서울시 용산구").font(.caption1)
             }
             .padding(.top, 31)
-
+            
             HStack {
                 Text(viewModel.category).font(.Subtitle2).foregroundStyle(.m6)
                 Text("를 추천해드릴게요!").font(.Subtitle2)
             }
         }
-        .padding(.horizontal, 16)
     }
 
     // MARK: - 장소 리스트
@@ -64,7 +63,6 @@ struct VoteResultPlaceView: View {
                 }
             }
         }
-        .padding(.horizontal, 16)
     }
 }
 
