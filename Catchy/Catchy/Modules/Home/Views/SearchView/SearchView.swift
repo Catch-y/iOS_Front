@@ -36,6 +36,7 @@ struct SearchView: View {
                 .padding(.top, 20)
                 .padding(.horizontal, 16)
                 .animation(.easeInOut(duration: 0.5), value: viewModel.searchKeyword)
+                .submitScope()
             
             if !viewModel.recentWords.isEmpty && viewModel.searchKeyword.isEmpty {
                 recenteKeywords
@@ -46,9 +47,11 @@ struct SearchView: View {
             if viewModel.showResult {
                 if !viewModel.searchKeyword.isEmpty {
                     if let placeResult = viewModel.searchResult {
-                        placeLazy(placeResult: placeResult)
-                            .padding(.horizontal, 16)
-                            .padding(.top, 32)
+                        ScrollView(.vertical, content: {
+                            placeLazy(placeResult: placeResult)
+                                .padding(.horizontal, 16)
+                                .padding(.top, 32)                            
+                        })
                     } else {
                         if !viewModel.searchLoad {
                             emptyView
@@ -106,6 +109,11 @@ struct SearchView: View {
                 ForEach(Array(placeResult.placeInfoPreviews.enumerated()), id: \.element.id) { index, result in
                     VStack(spacing: 19, content: {
                         SearchRecommendPlaceCard(data: result)
+                            .onAppear {
+                                if index == placeResult.placeInfoPreviews.count - 1 {
+                                    viewModel.performSearch(for: viewModel.searchKeyword)
+                                }
+                            }
                         
                         if index < placeResult.placeInfoPreviews.count - 1 {
                             Divider()

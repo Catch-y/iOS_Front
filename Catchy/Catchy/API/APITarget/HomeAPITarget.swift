@@ -9,7 +9,7 @@ import Foundation
 import Moya
 
 enum HomeAPITarget {
-    case getSearch(keyword: String) /* 검색 API */
+    case getSearch(keyword: String, page: Int) /* 검색 API */
     case getHomePersonalCourses /* 홈화면 추천 코스 API */
     case getHomeCourseTopTen /* 홈 화면 인기 코스 조회 10 */
     case getRecommendPlaces(userLocation: UserLocation, page: Int) /* 사용자 장소 추천 API */
@@ -35,8 +35,8 @@ extension HomeAPITarget: APITargetType {
     
     var task: Task {
         switch self {
-        case .getSearch(let keyword):
-            return .requestJSONEncodable(keyword)
+        case .getSearch(let keyword, let page):
+            return .requestParameters(parameters: ["searchKeyword": keyword, "page": page], encoding: URLEncoding.default)
         case .getHomePersonalCourses:
             return .requestPlain
         case .getHomeCourseTopTen:
@@ -64,31 +64,65 @@ extension HomeAPITarget: APITargetType {
                 "code": "200",
                 "message": "응답 메세지",
                 "result": {
-                    "placeInfoPreviews": [
-                        {
-                            "placeId": 1,
-                            "placeName": "SearchPlace",
-                            "searchedPlaceCategory": "CAFE",
-                            "placeName": "SearchPlace1",
-                            "placeImageUrl": "https://i.namu.wiki/i/gBVNMaAFN4xZCQhVVwRheOqrEQcM1WmsM6b6rOeFdOoEuE3nBXZM-7FcVpQXv6GmYj9Je6hbDZNVMWZfqoz9WpVuQ_bQns548g7GMtWDRO_qD_pG2uu5l9ePWpPuOfC92XWX0HMZn2CvOvoZ6p9TyggWZ1At2NLuwE9Fy6pPUbI.webp",
-                            "roadAddress": "서울시 용산구 한강대로52길 17-3 1F",
-                            "activeTime": "월-금 · 16:00 - 21:00",
-                            "reviewCount": 132,
-                            "averageRating": 4.6
-                        },
-                        {
-                            "placeId": 2,
-                            "searchedPlaceName": "SearchPlace",
-                            "searchedPlaceCategory": "CAFE",
-                            "placeName": "SearchPlace2",
-                            "placeImageUrl": "https://i.namu.wiki/i/gBVNMaAFN4xZCQhVVwRheHH517syiuLKWPDQ8emG8BeFhuEFp6QP4yADbRCW4n-by0Y7OE159lXmUJMkXrXUJLlnuqBjOwjxU8IrDXUOAbordzBwVYmj3NiORAZqBEypeML9E7r-TAwGHRcN9OPJBFlIAoTuJDhExH8RU_W_W4U.webp",
-                            "roadAddress": "456 Road Name",
-                            "activeTime": "09:00 - 18:00",
-                            "reviewCount": 13,
-                            "averageRating": 4.6
-                        }
-                    ]
-                }
+            "placeInfoPreviews": [
+              {
+                "placeId": 1,
+                "placeName": "한강공원",
+                "placeImage": "https://media.triple.guide/triple-cms/c_limit,f_auto,h_1024,w_1024/99b67970-512c-4496-bf5c-59472590bcb9.jpeg",
+                "category": "BAR",
+                "roadAddress": "서울특별시 영등포구 여의도동",
+                "activeTime": "24시간",
+                "rating": 4.8,
+                "reviewCount": 320,
+                "liked": true
+              },
+              {
+                "placeId": 2,
+                "placeName": "남산 타워",
+                "placeImage": "https://parks.seoul.go.kr/images/egovframework/com/template/nam02.jpg",
+                "category": "BAR",
+                "roadAddress": "서울특별시 용산구 남산공원길",
+                "activeTime": "09:00-23:00",
+                "rating": 4.7,
+                "reviewCount": 410,
+                "liked": false
+              },
+              {
+                "placeId": 3,
+                "placeName": "홍대 맛집 거리",
+                "placeImage": "https://i.namu.wiki/i/-YrQWzgmgedzi-Zpdf6eGXA-NXRhHjGhx7pUsMhUHqfI4mqRv6deS8ZY6xkYYrRBptr5S1GD6iUOHgAGX6bHM0ljC7htlDQtzBMV-BSv5h12dCcD4IyjKCE4aBQR_RrLbFehAybcuJL5hKfE9V0XPg.webp",
+                "category": "BAR",
+                "roadAddress": "서울특별시 마포구 홍익로",
+                "activeTime": "11:00-23:00",
+                "rating": 4.6,
+                "reviewCount": 280,
+                "liked": true
+              },
+              {
+                "placeId": 4,
+                "placeName": "경복궁",
+                "placeImage": "https://example.com/images/gyeongbokgung.jpg",
+                "category": "BAR",
+                "roadAddress": "서울특별시 종로구 사직로",
+                "activeTime": "09:00-18:00",
+                "rating": 4.9,
+                "reviewCount": 500,
+                "liked": true
+              },
+              {
+                "placeId": 5,
+                "placeName": "강남 스타벅스 리저브",
+                "placeImage": "https://example.com/images/starbucks.jpg",
+                "category": "BAR",
+                "roadAddress": "서울특별시 강남구 테헤란로",
+                "activeTime": "07:00-22:00",
+                "rating": 4.5,
+                "reviewCount": 200,
+                "liked": false
+              }
+            ],
+            "isLast": true
+            }
             }
             """
             return json.data(using: .utf8)!

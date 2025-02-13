@@ -24,6 +24,7 @@ struct PopularCourseCard: View {
                         ProgressView()
                             .controlSize(.regular)
                     }.retry(maxCount: 2, interval: .seconds(2))
+                    .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 261))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(minWidth: 360,  maxWidth: 365, maxHeight: 261)
