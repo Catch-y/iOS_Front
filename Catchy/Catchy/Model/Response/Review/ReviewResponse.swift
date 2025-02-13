@@ -34,3 +34,19 @@ struct ReviewImageData: Codable, Hashable {
     let reviewImageId: Int
     let imageUrl: String
 }
+
+extension ReviewContents: ReviewDataProtocol {
+    var images: [any ReviewImageProtocol] {
+        return reviewImages.map { $0 }
+    }
+    
+    var userName: String? {
+        return creatorNickname
+    }
+    
+    var placeOrCourseName: String? {
+        return nil
+    }
+}
+
+extension ReviewImageData: ReviewImageProtocol {}

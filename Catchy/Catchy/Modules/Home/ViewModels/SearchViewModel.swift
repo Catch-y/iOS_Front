@@ -16,6 +16,9 @@ class SearchViewModel: ObservableObject {
     @Published var searchLoad: Bool = false
     @Published var showResult: Bool = false
     
+    var currentPage: Int = 1
+    var isLast: Bool = false
+    
     let container: DIContainer
     private var cancellables = Set<AnyCancellable>()
     
@@ -44,17 +47,21 @@ class SearchViewModel: ObservableObject {
             .filter { !$0.isEmpty }
             .sink { [weak self] keyword in
                 guard let self = self else { return }
-                print("🔄 realTimeSearch triggered: \(keyword)") // ✅ 확인
+                print("🔄 realTimeSearch triggered: \(keyword)")
                 self.performSearch(for: keyword)
             }
             .store(in: &cancellables)
     }
     
-    private func performSearch(for keyword: String) {
+    public func performSearch(for keyword: String) {
+        guard !searchLoad, !isLast else {
+            print("한 번 더 호출 막힘")
+            return
+        }
         
         searchLoad = true
         
-        container.useCaseProvider.homeUseCase.executeGetSearch(keyword: keyword)
+        container.useCaseProvider.homeUseCase.executeGetSearch(keyword: keyword, page: currentPage)
             .tryMap { responseData -> ResponseData<SearchPlaceResponse> in
                 if !responseData.isSuccess {
                     throw APIError.serverError(message: responseData.message, code: responseData.code)
@@ -63,6 +70,7 @@ class SearchViewModel: ObservableObject {
                 guard let _ = responseData.result else {
                     throw APIError.emptyResult
                 }
+                
                 print("Get Search Server: \(responseData)")
                 return responseData
             }
@@ -80,13 +88,21 @@ class SearchViewModel: ObservableObject {
                     print("❌ Search request failed: \(failure)")
                     searchResult = nil
                 }
-            }, receiveValue: { [weak self] response in
+            }, receiveValue:{ [weak self] response in
                 guard let self = self else { return }
-                if let response = response.result {
-                    if response.content.isEmpty {
+                if let newData = response.result {
+                    if newData.placeInfoPreviews.isEmpty {
                         searchResult = nil
                     } else {
-                        searchResult = response
+                        if searchResult == nil {
+                            searchResult = newData
+                        } else {
+                            searchResult?.placeInfoPreviews.append(contentsOf: newData.placeInfoPreviews)
+                        }
+                        isLast = newData.isLast
+                        if !isLast {
+                            currentPage += 1
+                        }
                     }
                 }
                 print("🔍 Search results updated: \(String(describing: response.result))")

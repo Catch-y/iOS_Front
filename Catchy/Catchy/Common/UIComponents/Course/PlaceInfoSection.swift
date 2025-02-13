@@ -10,6 +10,7 @@ import Kingfisher
 
 struct PlaceInfoSection: View {
     
+    /// 장소 상세 정보 데이터
     var place: PlaceDetailResponse
     
     /// 북마크 할 수 있는가?
@@ -20,7 +21,7 @@ struct PlaceInfoSection: View {
         self.canBookmark = canBookmark
     }
     
-    var body: some View{
+    var body: some View {
         VStack(spacing: 19) {
             if let url = URL(string: place.imageUrl) {
                 KFImage(url)
@@ -38,8 +39,9 @@ struct PlaceInfoSection: View {
         }
         .safeAreaPadding(.horizontal, 16)
     }
+   
     
-    /// 장소 텍스트 그룹
+    /// 장소 상세 화면 텍스트 그룹
     private var placeTextGroup: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 10) {

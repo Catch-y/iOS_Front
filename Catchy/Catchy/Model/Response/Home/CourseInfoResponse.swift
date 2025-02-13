@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// AI 추천 5개 데이터
 struct CourseInfoResponse: Codable, Identifiable {
     var id = UUID()
     var courseId: Int

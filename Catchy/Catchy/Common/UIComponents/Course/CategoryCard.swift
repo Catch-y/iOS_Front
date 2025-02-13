@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CategoryCard: View {
     
+    /// 카테고리 타입
     var categoryType: CategoryType
     
     init(categoryType: CategoryType) {
@@ -17,7 +18,7 @@ struct CategoryCard: View {
     
     var body: some View {
         Text(categoryType.rawValue)
-            .font(.categoryTag)
+            .font(.caption3)
             .foregroundStyle(.white)
             .padding(.vertical, 4)
             .frame(maxWidth: .infinity, minHeight: 14)

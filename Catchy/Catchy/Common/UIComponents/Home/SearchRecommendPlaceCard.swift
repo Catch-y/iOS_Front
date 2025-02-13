@@ -32,7 +32,7 @@ struct SearchRecommendPlaceCard: View {
     
     @ViewBuilder
     private var placeImage: some View {
-        if let url = URL(string: data.placeImageUrl) {
+        if let url = URL(string: data.placeImage) {
             KFImage(url)
                 .placeholder {
                     ProgressView()
@@ -53,7 +53,7 @@ struct SearchRecommendPlaceCard: View {
                 .lineLimit(1)
                 .layoutPriority(1)
             
-            CategoryCard(categoryType: data.searchedPlaceCategory)
+            CategoryCard(categoryType: data.category)
                 .frame(minWidth: 50, maxWidth: 100)
                 .fixedSize()
 
@@ -64,13 +64,15 @@ struct SearchRecommendPlaceCard: View {
         VStack(alignment: .leading, spacing: 6, content: {
             makeInfoTitle(Icon.location.image, data.roadAddress)
             
-            makeInfoTitle(Icon.time.image, data.activeTime)
+            if let activeTime = data.activeTime, !activeTime.isEmpty {
+                makeInfoTitle(Icon.time.image, activeTime)
+            }
         })
     }
     
     private var placePointInfo: some View {
         HStack(spacing: 12, content: {
-            makeInfoTitle(Icon.star.image, "평점 \(data.averageRating)")
+            makeInfoTitle(Icon.star.image, "평점 \(data.rating)")
             
             makeReview(Icon.time.image, "리뷰 \(data.reviewCount)개", Icon.rightChevron.image)
         })

@@ -9,6 +9,7 @@ import Foundation
 import Moya
 import Combine
 import CombineMoya
+import SwiftUI
 
 class PlaceService: PlaceServiceProtocol {
     
@@ -19,8 +20,8 @@ class PlaceService: PlaceServiceProtocol {
     }
     
     /// 장소 평점/리뷰 달기 API
-    func postPlaceReviewSubmission(request: PlaceReviewSubmissionRequest) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, Moya.MoyaError> {
-        return provider.requestPublisher(.postPlaceReviewSubmission(request: request))
+    func postPlaceReviewSubmission(placeId: Int, request: PlaceReviewSubmissionRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<PlaceReviewSubmissionResponse>, Moya.MoyaError> {
+        return provider.requestPublisher(.postPlaceReviewSubmission(placeId: placeId, request: request, reviewImages: reviewImages))
             .map(ResponseData<PlaceReviewSubmissionResponse>.self)
             .eraseToAnyPublisher()
     }
@@ -29,6 +30,13 @@ class PlaceService: PlaceServiceProtocol {
     func patchPlaceLiked(placeId: Int) -> AnyPublisher<ResponseData<PlaceLikedResponse>, Moya.MoyaError> {
         return provider.requestPublisher(.patchPlaceLiked(placeId: placeId))
             .map(ResponseData<PlaceLikedResponse>.self)
+            .eraseToAnyPublisher()
+    }
+    
+    /// 장소 방문 날짜 리스트 조회 API
+    func getPlaceVisitedDates(placeId: Int) -> AnyPublisher<ResponseData<PlaceVisitedDateResponse>, MoyaError> {
+        return provider.requestPublisher(.getVisitedDateList(placeId: placeId))
+            .map(ResponseData<PlaceVisitedDateResponse>.self)
             .eraseToAnyPublisher()
     }
 }

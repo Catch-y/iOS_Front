@@ -20,16 +20,16 @@ struct PlaceView: View {
     var body: some View {
         NavigationStack(path: $container.navigationRouter.destination) {
             VStack {
-                if !viewModel.isPlaceListLoading { /// 데이터 요청 완료
+                if !viewModel.isPlaceListLoading {
                     
                     if let data = viewModel.placeSearchResponse {
-                        if data.placeInfoPreviews.isEmpty { /// 데이터가 0개인 경우
+                        if data.placeInfoPreviews.isEmpty {
                             infoView
                         } else {
                             scrollView
                         }
                     }
-                } else { /// 데이터 요청 중
+                } else {
                     Spacer ()
                     
                     ProgressView()

@@ -47,9 +47,11 @@ struct SearchView: View {
             if viewModel.showResult {
                 if !viewModel.searchKeyword.isEmpty {
                     if let placeResult = viewModel.searchResult {
-                        placeLazy(placeResult: placeResult)
-                            .padding(.horizontal, 16)
-                            .padding(.top, 32)
+                        ScrollView(.vertical, content: {
+                            placeLazy(placeResult: placeResult)
+                                .padding(.horizontal, 16)
+                                .padding(.top, 32)                            
+                        })
                     } else {
                         if !viewModel.searchLoad {
                             emptyView
@@ -104,11 +106,16 @@ struct SearchView: View {
     
     private func placeLazy(placeResult: SearchPlaceResponse) -> some View {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 30, content: {
-                ForEach(Array(placeResult.content.enumerated()), id: \.element.id) { index, result in
+                ForEach(Array(placeResult.placeInfoPreviews.enumerated()), id: \.element.id) { index, result in
                     VStack(spacing: 19, content: {
                         SearchRecommendPlaceCard(data: result)
+                            .onAppear {
+                                if index == placeResult.placeInfoPreviews.count - 1 {
+                                    viewModel.performSearch(for: viewModel.searchKeyword)
+                                }
+                            }
                         
-                        if index < placeResult.content.count - 1 {
+                        if index < placeResult.placeInfoPreviews.count - 1 {
                             Divider()
                                 .foregroundStyle(Color.g2)
                                 .frame(height: 1)

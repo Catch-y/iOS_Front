@@ -172,7 +172,7 @@ struct ReviewView: View {
     private func reviewTableSection(content: [ReviewContents]) -> some View {
         VStack(alignment: .center, spacing: 8, content: {
             ForEach(content, id: \.reviewId) { review in
-                ReviewCard(data: review)
+                ReviewCard(data: review, cardType: .ratingReview, reviewType: .place)
                 Divider()
                     .background(.g3)
             }
