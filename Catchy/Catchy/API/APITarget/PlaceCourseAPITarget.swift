@@ -330,7 +330,7 @@ extension PlaceCourseAPITarget: APITargetType {
                     "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
                     "activeTime": "[영업시간] 매일 09:00~22:00",
                     "rating": 3,
-                    "isVisited": true,
+                    "isVisited": false,
                     "reviewCount": 21,
                     "placeSite": "www.naver.com",
                     "liked": false

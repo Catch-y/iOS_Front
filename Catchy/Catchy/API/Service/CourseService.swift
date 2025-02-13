@@ -69,8 +69,8 @@ class CourseService: CourseServiceProtocol {
     }
     
     /// 장소 방문체크 API
-    func patchPlaceVisit(placeId: Int) -> AnyPublisher<ResponseData<PlaceVisitResponse>, MoyaError> {
-        return provider.requestPublisher(.patchPlaceVisit(placeId: placeId))
+    func postPlaceVisit(placeId: Int) -> AnyPublisher<ResponseData<PlaceVisitResponse>, MoyaError> {
+        return provider.requestPublisher(.postPlaceVisit(placeId: placeId))
             .map(ResponseData<PlaceVisitResponse>.self)
             .eraseToAnyPublisher()
     }

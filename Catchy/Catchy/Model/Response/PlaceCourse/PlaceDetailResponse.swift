@@ -37,7 +37,7 @@ struct PlaceDetailResponse: Codable, Identifiable, Likeable {
     let rating: Double
     
     /// 누군가 방문한 장소인지?
-    let isVisited: Bool
+    var isVisited: Bool
     
     /// 장소 리뷰 개수
     let reviewCount: Int

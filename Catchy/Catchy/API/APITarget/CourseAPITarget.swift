@@ -47,9 +47,9 @@ enum CourseAPITarget {
     case patchCourseBookmark(courseId: Int)
     
     /// 장소 방문체크 API
-    /// HTTP 메소드 : PATCH
+    /// HTTP 메소드 : POST
     /// API Path : /course/visited/{placeId}
-    case patchPlaceVisit(placeId: Int)
+    case postPlaceVisit(placeId: Int)
     
     /// 내 코스 조회 API
     /// HTTP 메소드 : GET
@@ -89,7 +89,7 @@ extension CourseAPITarget: APITargetType {
         case .patchCourseBookmark(let courseId):
             return "course/\(courseId)/bookmark"
             
-        case .patchPlaceVisit(let placeId):
+        case .postPlaceVisit(let placeId):
             return "course/visited/\(placeId)"
             
         case .getCourseList:
@@ -123,8 +123,8 @@ extension CourseAPITarget: APITargetType {
         case .patchCourseBookmark:
             return .patch
             
-        case .patchPlaceVisit:
-            return .patch
+        case .postPlaceVisit:
+            return .post
             
         case .getCourseList:
             return .get
@@ -157,8 +157,8 @@ extension CourseAPITarget: APITargetType {
         case .patchCourseBookmark(let courseId):
             return .requestJSONEncodable(courseId)
             
-        case .patchPlaceVisit(let placeId):
-            return .requestJSONEncodable(placeId)
+        case .postPlaceVisit:
+            return .requestPlain
             
         case .getCourseList(let course):
             return .requestParameters(parameters: ["type" : course.type, "upperLocation" : course.upperLocation, "lowerLocation" : course.lowerLocation, "lastId" : course.lastId], encoding: URLEncoding.default)
@@ -387,13 +387,17 @@ extension CourseAPITarget: APITargetType {
             }
             """.data(using: .utf8)!
             
-        case .patchPlaceVisit:
+        case .postPlaceVisit:
             return """
             {
               "isSuccess": true,
               "code": "COMMON200",
               "message": "성공했습니다.",
-              "result": {}
+              "result": {
+                 "placeVisitId": 0,
+                 "visitedDate": "2025-02-13",
+                 "isVisited": true
+              }
             }
             """.data(using: .utf8)!
         case .getCourseList:

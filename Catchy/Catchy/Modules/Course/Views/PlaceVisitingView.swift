@@ -24,6 +24,7 @@ struct PlaceVisitingView: View {
 
         VStack(spacing: 16) {
             if let place = viewModel.placeDetailResponse {
+        
                 PlaceInfoSection(place: Binding(
                     get: { place },
                     set: { viewModel.placeDetailResponse = $0 }
@@ -43,7 +44,8 @@ struct PlaceVisitingView: View {
                 )
                 .safeAreaPadding(.horizontal, 16)
                 
-
+                Spacer()
+                
             } else {
                 ProgressView()
             }
@@ -64,7 +66,8 @@ struct PlaceVisitingView: View {
             
             reviewBtn
             
-            stamp
+            stamp(isVisited: viewModel.placeDetailResponse!.isVisited)
+            
             Spacer()
         }
         .padding(.horizontal, 22)
@@ -75,7 +78,11 @@ struct PlaceVisitingView: View {
     /// 방문 체크 버튼
     private var visitCheckbtn: some View {
 
-        Button(action: {print("터치")}, label: {
+        Button(action: {
+            
+            viewModel.postPlaceVisiting()
+            
+        }, label: {
 
             ZStack {
                 RoundedRectangle(cornerRadius: 16.5)
@@ -105,7 +112,9 @@ struct PlaceVisitingView: View {
     /// 리뷰 남기기 버튼
     private var reviewBtn: some View {
 
-        Button(action: {print("터치")},
+        Button(action:
+                
+                { },
                label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 16.5)
@@ -126,14 +135,10 @@ struct PlaceVisitingView: View {
         }
         )
     }
-
-
-    /// 스탬프
-    private var stamp: some View {
-
-        Button(action: { print("gd") }, label: {
-            Icon.emptyStamp.image
-        })
+    
+    /// 방문 확인 스탬프
+    private func stamp(isVisited: Bool) -> some View {
+        isVisited ? Icon.visitStamp.image : Icon.emptyStamp.image
     }
 }
 
