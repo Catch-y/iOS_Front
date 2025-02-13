@@ -25,6 +25,18 @@ protocol UseCaseProtocol {
     var voteResultCategoryUseCase : VoteResultCategoryUseCase{ get set }
     /// [투표결과 - 카테고리별 장소] UseCase
     var voteResultPlaceUseCase : VoteResultPlaceUseCase{ get set }
+    /// [그룹생성] UseCase
+    var createGroupUsecase : CreateGroupUseCase { get set }
+    /// [그룹 초대코드] UseCase
+    var groupJoinUseCase: GroupJoinUseCase { get set }
+    /// [그룹 멤버 조회] UseCase
+    var groupMembersUseCase: GroupMembersUseCase { get set }
+    /// [내 그룹 조회] UseCase
+    var myGroupsUseCase: MyGroupsUseCase { get set }
+    /// [초대 코드로 그룹정보 조회] UseCase
+    var groupInviteUseCase: GroupInviteUseCase { get set }
+    /// [그룹탈퇴] UseCase
+    var groupLeaveUseCase: GroupLeaveUseCase { get set }
 }
 
 class UseCaseProvider: UseCaseProtocol {
@@ -52,6 +64,19 @@ class UseCaseProvider: UseCaseProtocol {
     /// [투표결과 - 카테고리별 장소] UseCase
     var voteResultPlaceUseCase : VoteResultPlaceUseCase
     
+    /// [그룹생성] UseCase
+    var createGroupUsecase : CreateGroupUseCase
+    /// [그룹초대코드] UseCase
+    var groupJoinUseCase: GroupJoinUseCase
+    /// [그룹멤버조회] UseCase
+    var groupMembersUseCase: GroupMembersUseCase
+    /// [내 그룹 조회] UseCase
+    var myGroupsUseCase: MyGroupsUseCase
+    /// [초대 코드로 그룹정보 조회] UseCase
+    var groupInviteUseCase: GroupInviteUseCase
+    /// [그룹탈퇴] UseCase
+    var groupLeaveUseCase: GroupLeaveUseCase
+    
     
     init() {
         self.authUseCase = AuthUseCase()
@@ -63,6 +88,12 @@ class UseCaseProvider: UseCaseProtocol {
         self.voteInProgressUseCase = VoteInProgressUseCase()
         self.voteResultCategoryUseCase = VoteResultCategoryUseCase()
         self.voteResultPlaceUseCase = VoteResultPlaceUseCase()
+        self.createGroupUsecase = CreateGroupUseCase()
+        self.groupJoinUseCase = GroupJoinUseCase()
+        self.groupMembersUseCase = GroupMembersUseCase()
+        self.myGroupsUseCase = MyGroupsUseCase()
+        self.groupInviteUseCase = GroupInviteUseCase()
+        self.groupLeaveUseCase = GroupLeaveUseCase()
     }
     
     

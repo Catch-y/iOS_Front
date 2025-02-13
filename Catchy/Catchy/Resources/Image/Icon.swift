@@ -81,9 +81,16 @@ enum Icon: String {
     case voteSport = "voteSport"
     case voteBar = "voteBar"
     
+    case voteStartButton = "voteStartButton"
     case circleHeart = "circleHeart"
 
-
+    //MARK: - Group
+    case plusGroup = "plusGroup"
+    case minusMonth = "minusMonth"
+    case plusMonth = "plusMonth"
+    case qrcodeIcon = "qrcodeIcon"
+    case shareButton = "shareButton"
+    case downButton = "downButton"
     
     var image: Image {
         return Image(self.rawValue)

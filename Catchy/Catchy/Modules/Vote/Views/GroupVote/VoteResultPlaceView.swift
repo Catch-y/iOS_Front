@@ -80,3 +80,4 @@ struct VoteResultPlaceView_Previews: PreviewProvider {
         }
     }
 }
+

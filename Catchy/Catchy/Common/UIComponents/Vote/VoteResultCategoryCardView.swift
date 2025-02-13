@@ -102,6 +102,6 @@ struct VoteResultCategoryCardView_Previews: PreviewProvider {
         return VoteResultCategoryCardView(viewModel: viewModel)
             .padding()
             .previewLayout(.sizeThatFits)
-            .previewDevice("iPhone 15 Pro")
+            .previewDevice("iPhone 16 Pro")
     }
 }

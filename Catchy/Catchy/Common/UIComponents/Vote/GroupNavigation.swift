@@ -29,7 +29,7 @@ struct GroupNavigation: View {
         }
         .padding()
         .background(Color.white)
-        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+        .s1w()
 
     }
 }
