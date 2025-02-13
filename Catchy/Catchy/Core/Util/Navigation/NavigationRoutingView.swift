@@ -22,7 +22,7 @@ struct NavigationRoutingView: View {
         case .searchView:
             SearchView(container: container)
         case .similarView:
-            SimilarPlaces(container: container)
+            SimilarPlacesView(container: container)
                 .environmentObject(container)
         }
     }

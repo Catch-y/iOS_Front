@@ -16,7 +16,7 @@ class HomeViewModel: ObservableObject {
     
     @Published var isHomeLoading: [Bool] = [true, true, false]
     
-    var isLastPage = false
+    var isLastPage: Bool = false
     var currentPage = 1
     
     let container: DIContainer

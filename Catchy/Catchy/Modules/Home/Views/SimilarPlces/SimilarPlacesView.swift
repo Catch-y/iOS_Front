@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct SimilarPlaces: View {
+/// 비슷한 취향을 가진 사람들이 좋아하는 장소 뷰
+struct SimilarPlacesView: View {
     
     @StateObject var viewModel: SimilarPlacesViewModel
     @EnvironmentObject var container: DIContainer
@@ -26,12 +27,15 @@ struct SimilarPlaces: View {
                 makeContents(datas: Binding(get: { viewModel.recommendPlaceResponse ?? [] },
                                             set: { viewModel.recommendPlaceResponse = $0 }))
             } else {
+                Spacer()
                 ProgressView(label: {
                     Text("로딩중입니다.")
                         .font(.body3)
                         .foregroundStyle(Color.g7)
                 })
                     .controlSize(.regular)
+                
+                Spacer()
             }
             
         })
@@ -61,13 +65,12 @@ struct SimilarPlaces: View {
                 })
             })
         })
-        .padding(.bottom, 20)
         .padding(.horizontal, 16)
     }
 }
 
 struct SimilarPlaces_Preview: PreviewProvider {
     static var previews: some View {
-        SimilarPlaces(container: DIContainer())
+        SimilarPlacesView(container: DIContainer())
     }
 }

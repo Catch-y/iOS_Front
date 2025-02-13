@@ -16,7 +16,7 @@ struct SearchView: View {
     }
     
     var body: some View {
-        VStack(alignment: .center, content: {
+        VStack(alignment: .center, spacing: 0, content: {
             
             CustomNavigation(action: {
                 viewModel.container.navigationRouter.pop()
@@ -39,19 +39,20 @@ struct SearchView: View {
                 .submitScope()
             
             if !viewModel.recentWords.isEmpty && viewModel.searchKeyword.isEmpty {
-                recenteKeywords
+                recentKeywords
                     .padding(.top, 38)
-                    .padding(.horizontal, 25)
+                    .padding(.leading, 25)
+                    .padding(.trailing, 20)
             }
+            
+            Spacer()
             
             if viewModel.showResult {
                 if !viewModel.searchKeyword.isEmpty {
                     if let placeResult = viewModel.searchResult {
-                        ScrollView(.vertical, content: {
                             placeLazy(placeResult: placeResult)
                                 .padding(.horizontal, 16)
-                                .padding(.top, 32)                            
-                        })
+                                .padding(.top, 5)
                     } else {
                         if !viewModel.searchLoad {
                             emptyView
@@ -60,7 +61,6 @@ struct SearchView: View {
                     }
                 }
             }
-            Spacer()
         })
         .onAppear {
             UIApplication.shared.hideKeyboard()
@@ -92,7 +92,7 @@ struct SearchView: View {
         }
     }
     
-    private var recenteKeywords: some View {
+    private var recentKeywords: some View {
         VStack(alignment: .leading, spacing: 14, content: {
             Text("최근 검색어")
                 .font(.body2)
@@ -105,6 +105,7 @@ struct SearchView: View {
     }
     
     private func placeLazy(placeResult: SearchPlaceResponse) -> some View {
+        ScrollView(.vertical, content: {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 30, content: {
                 ForEach(Array(placeResult.placeInfoPreviews.enumerated()), id: \.element.id) { index, result in
                     VStack(spacing: 19, content: {
@@ -123,7 +124,13 @@ struct SearchView: View {
                     })
                 }
             })
-
+        })
+        .refreshable {
+            await viewModel.searchRefresh()
+        }
+        .onAppear {
+            UIRefreshControl.appearance().tintColor = .main
+        }
     }
     
     private var emptyView: some View {
@@ -139,6 +146,8 @@ struct SearchView: View {
             Text("확인 후 다시 검색해주세요.")
                 .font(.Body1_2)
                 .foregroundStyle(Color.g4)
+            
+            Spacer()
         })
         
     }

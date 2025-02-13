@@ -27,7 +27,7 @@ struct HomeView: View {
                         firstSection()
                             .padding(.top, 35)
                         
-                        seconSection()
+                        secondSection()
                             .padding(.top, 42)
                         
                         thirdSection(datas: Binding(get: {
@@ -115,7 +115,7 @@ struct HomeView: View {
         .frame(minHeight: 240)
     }
     
-    private func seconSection() -> some View {
+    private func secondSection() -> some View {
             VStack(alignment: .leading, spacing: 10, content: {
                 Text(DataFormatter.shared.makeStyledText(for: "이번주 인기코스 TOP 10"))
                     .font(.Subtitle2)
@@ -179,10 +179,13 @@ struct HomeView: View {
                         container.navigationRouter.push(to: .similarView)
                     }, label: {
                         HStack(spacing: 8) {
-                            Text("자세히 보기")
-                                .font(.body3)
-                                .foregroundStyle(Color.g4)
-                            
+                            Button(action: {
+                                
+                            }, label: {
+                                Text("자세히 보기")
+                                    .font(.body3)
+                                    .foregroundStyle(Color.g4)
+                            })
                             Icon.rightChevron.image
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
