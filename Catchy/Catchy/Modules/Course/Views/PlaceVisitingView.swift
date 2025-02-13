@@ -64,7 +64,7 @@ struct PlaceVisitingView: View {
             
             visitCheckbtn
             
-            reviewBtn
+            reviewBtn(isVisited: viewModel.placeDetailResponse!.isVisited)
             
             stamp(isVisited: viewModel.placeDetailResponse!.isVisited)
             
@@ -110,24 +110,26 @@ struct PlaceVisitingView: View {
 
     
     /// 리뷰 남기기 버튼
-    private var reviewBtn: some View {
+    private func reviewBtn(isVisited: Bool) -> some View {
 
-        Button(action:
-                
-                { },
+        Button(action: {
+            if isVisited {
+                // TODO: 리뷰 남기기
+            }
+        },
                label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 16.5)
                     .fill(.white)
-                    .stroke(.main)
+                    .stroke(isVisited ? .main : .g3)
                     .frame(width: 108, height: 36)
 
                 HStack(spacing: 7) {
-
-                    Icon.colorReview.image
+                    
+                    isVisited ? Icon.colorReview.image : Icon.review.image
 
                     Text("리뷰 남기기")
-                        .foregroundStyle(.main)
+                        .foregroundStyle(isVisited ? .main : .g4)
                         .font(.body3)
 
                 }
@@ -138,7 +140,10 @@ struct PlaceVisitingView: View {
     
     /// 방문 확인 스탬프
     private func stamp(isVisited: Bool) -> some View {
-        isVisited ? Icon.visitStamp.image : Icon.emptyStamp.image
+        isVisited ? Icon.visitStamp.image
+            .padding(.leading, 10)
+                : Icon.emptyStamp.image
+            .padding(.leading, 10)
     }
 }
 
