@@ -32,7 +32,8 @@ class CourseDetailViewModel: ObservableObject {
 
 extension CourseDetailViewModel {
     
-    func getCourseDetail(){
+    /// 코스 상세 정보 조회 API
+    func getCourseDetail() {
         
         container.useCaseProvider.courseUseCase
             .executeGetCourseDetail(courseId: courseId)
@@ -65,6 +66,44 @@ extension CourseDetailViewModel {
                 
                 if let response = response.result{
                     self.courseDetailResponse = response
+                }
+                
+            })
+            .store(in: &cancellables)
+    }
+    
+    /// 코스 북마크 API
+    func patchCourseBookmark() {
+        container.useCaseProvider.courseUseCase
+            .executePatchCourseBookmark(courseId: courseId)
+            .tryMap{ responseData -> ResponseData<CourseBookmarkResponse> in
+                if !responseData.isSuccess{
+                    throw APIError
+                        .serverError(
+                            message: responseData.message,
+                            code: responseData.code
+                        )
+                }
+                
+                return responseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: {
+                [weak self] completion in
+                
+                guard let self = self else { return }
+                                
+                switch completion {
+                case .finished:
+                    print("✅ Patch CourseBookmark Server Completed")
+                case .failure(let failure):
+                    print("❌ Patch CourseBookmark Failed: \(failure)")
+                }
+            },receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                
+                if let response = response.result{
+                    self.courseDetailResponse?.isBookMarked = response.bookmarked
                 }
                 
             })

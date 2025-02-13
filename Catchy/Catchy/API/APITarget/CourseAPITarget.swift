@@ -60,6 +60,7 @@ enum CourseAPITarget {
     /// HTTP 메소드 : GET
     /// API Path : /course/detail/{courseId}
     case getCourseDetail(courseId: Int)
+    
 }
 
 extension CourseAPITarget: APITargetType {
@@ -160,7 +161,7 @@ extension CourseAPITarget: APITargetType {
             return .requestJSONEncodable(placeId)
             
         case .getCourseList(let course):
-            return .requestJSONEncodable(course)
+            return .requestParameters(parameters: ["type" : course.type, "upperLocation" : course.upperLocation, "lowerLocation" : course.lowerLocation, "lastId" : course.lastId], encoding: URLEncoding.default)
         
         case .getCourseDetail:
             return .requestPlain
@@ -531,7 +532,7 @@ extension CourseAPITarget: APITargetType {
                         "categories": ["REST"]
                       }
                     ],
-                    "isLast": false
+                    "isLast": true
                   }
                 }
 

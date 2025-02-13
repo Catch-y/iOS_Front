@@ -38,7 +38,7 @@ struct CourseDetailResponse: Codable {
     let participantsNumber: Int
     
     /// 코스 북마크 되었는가?
-    let isBookMarked: Bool
+    var isBookMarked: Bool
     
     /// 장소 데이터 배열
     let placeInfos: [PlaceInfoData]

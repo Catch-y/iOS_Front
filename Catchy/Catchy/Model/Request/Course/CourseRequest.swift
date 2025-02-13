@@ -25,5 +25,5 @@ struct CourseRequest: Codable {
     let lowerLocation: String
     
     
-    let lastId: Int
+    let lastId: Int?
 }

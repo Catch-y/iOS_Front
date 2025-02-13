@@ -24,17 +24,25 @@ struct CourseDetailView: View {
                     container.navigationRouter.pop()
                 }, title: "코스 정보", rightNaviIcon: nil, isShadow: true)
                 
-                ScrollView(.vertical, content: {
+                if viewModel.isLoading {
+                    Spacer()
+                    ProgressView()
+                    Spacer()
                     
-                    if let data = viewModel.courseDetailResponse {
-                        topContents(data: data)
-                            .padding(.top, 13)
-                    }
-                    
-                    bottomGroup
-                        .padding(.top, 14)
-                })
-                .scrollIndicators(.hidden)
+                } else {
+                    ScrollView(.vertical, content: {
+                        
+                        if let data = viewModel.courseDetailResponse {
+                            topContents(data: data)
+                                .padding(.top, 13)
+                        }
+                        
+                        bottomGroup
+                            .padding(.top, 14)
+                    })
+                    .scrollIndicators(.hidden)
+                }
+                
             })
             .background(Color.bg1)
             .ignoresSafeArea(.all)
@@ -106,7 +114,7 @@ struct CourseDetailView: View {
                 Spacer()
                 
                 Button(action: {
-                    // TODO: BookMark 함수
+                    viewModel.patchCourseBookmark()
                 }, label: {
                     returnBookMakr(data.isBookMarked)
                         .resizable()

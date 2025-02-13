@@ -35,26 +35,24 @@ struct CourseView: View {
     }
     
     var body: some View {
-        NavigationStack(path: $container.navigationRouter.destination) {
-            
             ZStack(alignment: .top) {
-                if let data = viewModel.courseResponse, !data.content.isEmpty {
-                    DropDown(viewModel: viewModel, provinceViewModel: provinceViewModel).zIndex(1)
-                        .padding(.top, 50)
-                }
+                
+                DropDown(viewModel: viewModel, provinceViewModel: provinceViewModel).zIndex(1)
+                    .padding(.top, 50)
+                
                 VStack {
+                    navigationGroup
+
                     if !viewModel.isCourseListLoading {
                         
-                        navigationGroup
-                        if let data = viewModel.courseResponse {
-                            if data.content.isEmpty {
-                                infoView
-                            } else {
-                                scrollView
-                            }
+                        if viewModel.courseList.isEmpty {
+                            infoView
+                        } else {
+                            scrollView
                         }
                         
                     } else {
+
                         Spacer()
                         
                         ProgressView()
@@ -65,8 +63,6 @@ struct CourseView: View {
                 }
                 .zIndex(0)
                 
-                    
-                
             }.task{
                 viewModel.getCourseList()
             }
@@ -74,28 +70,34 @@ struct CourseView: View {
                 viewModel.upperLocations = provinces
             }
             .fullScreenCover(isPresented: $isAIPresented) {
-                
-                AILoadingView(container: viewModel.container)
 
+                AILoadingView(container: viewModel.container)
             }
             .onChange(of: viewModel.selectedUpperIndex) { (_, _) in
+                viewModel.isCourseListLoading = true
+                viewModel.lastId = nil
+                viewModel.courseList.removeAll()
+                viewModel.isLast = false
                 viewModel.getCourseList()
             }
             .onChange(of: viewModel.selectedLowerIndex) { (_, lowerIndex) in
                 if lowerIndex != nil {
+                    viewModel.isCourseListLoading = true
+                    viewModel.lastId = nil
+                    viewModel.courseList.removeAll()
+                    viewModel.isLast = false
                     viewModel.getCourseList()
                 }
             }
             .onChange(of: viewModel.segment) { (_, _) in
+                viewModel.isCourseListLoading = true
+                viewModel.lastId = nil
+                viewModel.courseList.removeAll()
+                viewModel.isLast = false
                 viewModel.getCourseList()
             }
-            
-        }.navigationDestination(for: NavigationDestination.self, destination: { destination in
-            NavigationRoutingView(destination: destination)
-                .environmentObject(container)
-        })
-        
 
+    
     }
 
     /// 네비게이션 바와 세그먼트 그룹
@@ -115,24 +117,35 @@ struct CourseView: View {
     private var scrollView : some View {
         ScrollView(.vertical, content: {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 18, content: {
-                if let content = viewModel.courseResponse?.content {
-                    ForEach(content, id: \.id) { course in
-                        CourseGroupCard(course: course).onTapGesture {
+                
+                ForEach(viewModel.courseList, id: \.id) { course in
+                        CourseGroupCard(course: course)
+                        .onTapGesture {
                             container.navigationRouter.push(to: .courseDetailView(courseId: course.courseId))
                         }
+                        .task {
+                            guard let lastId = viewModel.lastId else { return }
+                            if course.courseId >= lastId {
+                                viewModel.getCourseList()
+                            }
+                        }
                     }
-                }
+                
             })
             
             .padding(.horizontal, 16)
             .padding(.top, 10)
         })
         .padding(.top, 50)
-        .padding(.bottom, 130)
+        .padding(.bottom, 110)
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
         .refreshable {
-            viewModel.getCourseList()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                viewModel.isLast = false
+                viewModel.courseList = []
+                viewModel.getCourseList()
+            })
         }
     }
     
