@@ -47,9 +47,9 @@ enum CourseAPITarget {
     case patchCourseBookmark(courseId: Int)
     
     /// 장소 방문체크 API
-    /// HTTP 메소드 : PATCH
+    /// HTTP 메소드 : POST
     /// API Path : /course/visited/{placeId}
-    case patchPlaceVisit(placeId: Int)
+    case postPlaceVisit(placeId: Int)
     
     /// 내 코스 조회 API
     /// HTTP 메소드 : GET
@@ -88,7 +88,7 @@ extension CourseAPITarget: APITargetType {
         case .patchCourseBookmark(let courseId):
             return "course/\(courseId)/bookmark"
             
-        case .patchPlaceVisit(let placeId):
+        case .postPlaceVisit(let placeId):
             return "course/visited/\(placeId)"
             
         case .getCourseList:
@@ -122,7 +122,7 @@ extension CourseAPITarget: APITargetType {
         case .patchCourseBookmark:
             return .patch
             
-        case .patchPlaceVisit:
+        case .postPlaceVisit:
             return .patch
             
         case .getCourseList:
@@ -156,7 +156,7 @@ extension CourseAPITarget: APITargetType {
         case .patchCourseBookmark(let courseId):
             return .requestJSONEncodable(courseId)
             
-        case .patchPlaceVisit(let placeId):
+        case .postPlaceVisit(let placeId):
             return .requestJSONEncodable(placeId)
             
         case .getCourseList(let course):
@@ -353,7 +353,7 @@ extension CourseAPITarget: APITargetType {
             }
             """.data(using: .utf8)!
             
-        case .patchPlaceVisit:
+        case .postPlaceVisit:
             return """
             {
               "isSuccess": true,

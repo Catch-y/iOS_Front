@@ -8,15 +8,11 @@
 import SwiftUI
 import Kingfisher
 
+/// 장소 검색 - > 장소 상세 정보
 struct PlaceDetailView: View {
     
     @EnvironmentObject var container: DIContainer
-    
-    // TODO: - 뷰 모델을 갖고 있어야함.
-    // @Binding var placeList: [PlaceSearchResponse]!
-    
-    let place: PlaceDetailResponse
-    
+        
     @ObservedObject var viewModel: PlaceSearchViewModel
     
     var body: some View {

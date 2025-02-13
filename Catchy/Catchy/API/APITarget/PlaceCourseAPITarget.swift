@@ -309,7 +309,7 @@ extension PlaceCourseAPITarget: APITargetType {
                 "imageUrl": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
                 "placeName": "심퍼티쿠시 용산점",
                 "placeDescription": "유러피언 요리를 아시안 스타일로 풀어내는 파인캐주얼 레스토랑",
-                "categoryName": "음식점",
+                "categoryName": "CULTURELIFE",
                 "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
                 "activeTime": "[영업시간] 매일 09:00~22:00",
                 "rating": 3,
