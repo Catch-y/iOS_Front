@@ -47,12 +47,14 @@ struct PlaceCard: View {
                     .lineLimit(1)
                     .padding(.trailing, 8)
                 
+                Spacer()
+
                 CategoryCard(categoryType: place.category)
                     .frame(width: 37.1)
                     .padding(.trailing, 19)
                 
-                Spacer()
             }
+            .padding(.bottom, 6)
             
             PlaceAddressText(addressText: place.roadAddress)
                 .padding(.top, 6)

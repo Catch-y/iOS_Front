@@ -21,11 +21,15 @@ struct CourseView: View {
     /// AI 코스 생성로딩 화면 상태
     @Binding var isAILoadingPresented: Bool
     
+    /// DIY 코스 생성 화면 상태
+    @Binding var isDIYPresented: Bool
+    
     /// AI 코스 생성결과 화면 상태
     @State var isAISheetPresented: Bool = false
     
-    init(container: DIContainer, isAILoadingPresented: Binding<Bool>) {
+    init(container: DIContainer, isAILoadingPresented: Binding<Bool>, isDIYPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
+        self._isDIYPresented = isDIYPresented
         self._isAILoadingPresented = isAILoadingPresented
     }
     
@@ -83,6 +87,9 @@ struct CourseView: View {
         }
         .fullScreenCover(isPresented: $isAILoadingPresented) {
             AILoadingView(viewModel: viewModel)
+        }
+        .fullScreenCover(isPresented: $isDIYPresented) {
+            PlaceSearchView(container: container)
         }
         .sheet(isPresented: $isAISheetPresented, onDismiss: {
             viewModel.resetAndGetCourseList()

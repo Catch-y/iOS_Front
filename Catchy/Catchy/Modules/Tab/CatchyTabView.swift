@@ -33,7 +33,7 @@ struct CatchyTabView: View {
                     case .home:
                         HomeView(container: container)
                     case .course:
-                        CourseView(container: container, isAILoadingPresented: $isAILoadingPresented)
+                        CourseView(container: container, isAILoadingPresented: $isAILoadingPresented, isDIYPresented: $isDIYPresented)
                         AddFloatingButton(isOpen: $isFloating, onSubButtonTap: {
                             segment in
                             switch segment {

@@ -10,7 +10,7 @@ import Kingfisher
 
 struct PlaceDetailView: View {
     
-    @EnvironmentObject var container: DIContainer
+    //@EnvironmentObject var container: DIContainer
     
     // TODO: - 뷰 모델을 갖고 있어야함.
     // @Binding var placeList: [PlaceSearchResponse]!
