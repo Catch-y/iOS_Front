@@ -240,7 +240,8 @@ extension CourseViewModel {
         self.lowerScrollPosition = index
     }
     
-    func resetAndFetchCourseList() {
+    /// 현재 상태를 초기화하고 다시 코스 리스트를 요청합니다
+    func resetAndGetCourseList() {
         
         isCourseListLoading = true
         lastId = nil

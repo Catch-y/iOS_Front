@@ -22,11 +22,10 @@ struct CourseView: View {
     @Binding var isAILoadingPresented: Bool
     
     /// AI 코스 생성결과 화면 상태
-    @Binding var isAISheetPresented: Bool
+    @State var isAISheetPresented: Bool = false
     
-    init(container: DIContainer, isAILoadingPresented: Binding<Bool>, isAISheetPresented: Binding<Bool>) {
+    init(container: DIContainer, isAILoadingPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
-        self._isAISheetPresented = isAISheetPresented
         self._isAILoadingPresented = isAILoadingPresented
     }
     
@@ -65,15 +64,15 @@ struct CourseView: View {
             viewModel.upperLocations = provinces
         }
         .onChange(of: viewModel.selectedUpperIndex) { (_, _) in
-            viewModel.resetAndFetchCourseList()
+            viewModel.resetAndGetCourseList()
         }
         .onChange(of: viewModel.selectedLowerIndex) { (_, lowerIndex) in
             if lowerIndex != nil {
-                viewModel.resetAndFetchCourseList()
+                viewModel.resetAndGetCourseList()
             }
         }
         .onChange(of: viewModel.segment) { (_, _) in
-            viewModel.resetAndFetchCourseList()
+            viewModel.resetAndGetCourseList()
         }
         .onChange(of: viewModel.isAICourseLoadingFinish) { (_, finished) in
             if finished {
@@ -85,7 +84,9 @@ struct CourseView: View {
         .fullScreenCover(isPresented: $isAILoadingPresented) {
             AILoadingView(viewModel: viewModel)
         }
-        .sheet(isPresented: $isAISheetPresented) {
+        .sheet(isPresented: $isAISheetPresented, onDismiss: {
+            viewModel.resetAndGetCourseList()
+        }) {
             AIPlaceListView(courseAIResponse: viewModel.courseAIResponse, container: container, isAISheetPresented: $isAISheetPresented)
         }
 
