@@ -115,7 +115,7 @@ class SearchViewModel: ObservableObject {
         self.currentPage = 1
         
         do {
-            try await Task.sleep(nanoseconds: 1_500_000_000)
+            try await Task.sleep(nanoseconds: 1_000_000_000)
             self.searchResult = nil
             performSearch(for: searchKeyword)
         } catch {

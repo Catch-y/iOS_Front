@@ -8,9 +8,13 @@
 import Foundation
 import Combine
 
+@MainActor
 class SimilarPlacesViewModel: ObservableObject {
-    @Published var recommendPlaceResponse: [RecommendPlaceResponseData]?
     
+    @Published var recommendPlaceResponse: [RecommendPlaceResponseData]?
+    @Published var isLoading: Bool = false
+    @Published var isRefreshing: Bool = false
+
     var currentPage: Int = 1
     var isLastPage: Bool = false
     
@@ -22,9 +26,13 @@ class SimilarPlacesViewModel: ObservableObject {
     }
     
     /// 추가로 보기 클릭 시 데이터 조회
-    func getMoreRecommendPlaceRespponse() {
-        guard !isLastPage else { return }
+    func getMoreRecommendPlaceRespponse(isRefresh: Bool = false) {
+        guard !isLoading, !isLastPage else { return }
         
+        if !isRefresh {
+            self.isLoading = true
+        }
+
         BaseLocationManager.shared.getCurrentUserLocation { [weak self] location in
             
             guard let self = self else { return }
@@ -51,7 +59,11 @@ class SimilarPlacesViewModel: ObservableObject {
                     return responseData
                 }
                 .receive(on: DispatchQueue.main)
-                .sink(receiveCompletion: { completion in
+                .sink(receiveCompletion: { [weak self] completion in
+                    guard let self = self else { return }
+                    
+                    self.isLoading = false
+
                     switch completion {
                     case .finished:
                         print("✅ get home more third section completed")
@@ -81,16 +93,44 @@ class SimilarPlacesViewModel: ObservableObject {
         }
     }
     
-    func getHomeSearch() async {
+    /// 추가로 보기 클릭 시 데이터 리프레시
+    func getRecommendPlaceRefresh() async {
         self.isLastPage = false
-        self.currentPage += 1
+        self.currentPage = 1
+        self.isRefreshing = true
         
-        do {
-            try await Task.sleep(nanoseconds: 1_500_000_000)
-            self.recommendPlaceResponse = nil
-            getMoreRecommendPlaceRespponse()
-        } catch {
-            print("❌ Refresh 오류: \(error)")
+        await withCheckedContinuation { continuation in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    continuation.resume()
+                }
+            }
+        
+        recommendPlaceResponse = nil
+
+        await withCheckedContinuation { continuation in
+            let cancellable = container.useCaseProvider.homeUseCase
+                .executeGetRecommendPlaces(userLocation: .init(latitude: 37.566612, longitude: 126.978244), page: currentPage)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .finished:
+                        print("✅ Refresh 완료")
+                    case .failure(let error):
+                        print("❌ Refresh 실패: \(error)")
+                    }
+                    continuation.resume()
+                }, receiveValue: { [weak self] response in
+                    guard let self = self else { return }
+                    if let result = response.result {
+                        self.recommendPlaceResponse = result.content
+                        self.isLastPage = result.isLast
+                        if !self.isLastPage {
+                            self.currentPage += 1
+                        }
+                    }
+                })
+
+            self.cancellables.insert(cancellable)
         }
     }
 }
