@@ -47,8 +47,10 @@ struct PlaceSearchResponseData: Codable, Identifiable{
     /// 장소 리뷰 개수
     let reviewCount: Int
     
-    init(id: UUID = UUID(), placeId: Int, placeName: String, placeImage: String, category: CategoryType, roadAddress: String, activeTime: String, rating: Double, reviewCount: Int) {
-        self.id = id
+    /// 장소 좋아요
+    var liked: Bool
+    
+    init(placeId: Int, placeName: String, placeImage: String, category: CategoryType, roadAddress: String, activeTime: String, rating: Double, reviewCount: Int, liked: Bool) {
         self.placeId = placeId
         self.placeName = placeName
         self.placeImage = placeImage
@@ -57,6 +59,7 @@ struct PlaceSearchResponseData: Codable, Identifiable{
         self.activeTime = activeTime
         self.rating = rating
         self.reviewCount = reviewCount
+        self.liked = liked
     }
     
     enum CodingKeys: CodingKey {
@@ -68,6 +71,7 @@ struct PlaceSearchResponseData: Codable, Identifiable{
         case activeTime
         case rating
         case reviewCount
+        case liked
     }
     
 }

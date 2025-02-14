@@ -11,7 +11,7 @@ import Foundation
 struct CourseResponse: Codable {
     
     /// 데이터를 담고 있는 배열
-    let content: [CourseResponseData]
+    var content: [CourseResponseData]
     
     /// 마지막 데이터를 포함한 응답인지
     let isLast: Bool

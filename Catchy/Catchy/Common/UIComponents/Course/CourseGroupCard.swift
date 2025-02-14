@@ -29,9 +29,9 @@ struct CourseGroupCard: View {
                             .controlSize(.regular)
                     }.retry(maxCount: 2, interval: .seconds(2))
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: type.imageSize.width, height: type.imageSize.height)
-                    .clipShape(RoundedRectangle(cornerRadius: 15)
-                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
             }
             courseTextGroup
         }

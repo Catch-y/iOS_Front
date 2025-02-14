@@ -9,44 +9,54 @@ import SwiftUI
 
 /// 코스 상세 정보 -> 장소 방문 뷰
 struct PlaceVisitingView: View {
-    
+
     @StateObject var viewModel: PlaceVisitingViewModel
-    
-    @Binding var placeId: Int
-        
-    init(container: DIContainer, placeId: Binding<Int>) {
+
+    /// 해당 뷰의 장소 ID
+    let placeId: Int
+
+    init(container: DIContainer, placeId: Int) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
-        self._placeId = placeId
+        self.placeId = placeId
     }
 
     var body: some View {
-        
+
         VStack(spacing: 16) {
             if let place = viewModel.placeDetailResponse {
-                
-                PlaceInfoSection(place: place)
-                
+        
+                PlaceInfoSection(place: Binding(
+                    get: { place },
+                    set: { viewModel.placeDetailResponse = $0 }
+                ), action: {
+                    viewModel.patchPlaceLike()
+                })
+
                 buttonGroup
                 
                 MainBtn(
                     text: "길 찾기",
                     action: {
                     },
-                    width: 370,
+                    width: 400,
                     height: 55,
-                    onoff: .on)
+                    onoff: .on
+                )
+                .safeAreaPadding(.horizontal, 16)
+                
+                Spacer()
                 
             } else {
                 ProgressView()
             }
-            
+
         }
         .task {
             viewModel.getPlaceDetail(placeId: placeId)
         }
         .navigationBarBackButtonHidden()
     }
-    
+
     /// 방문 체크 버튼 + 리뷰 버튼 + 방문 스탬프
     private var buttonGroup: some View {
         
@@ -54,77 +64,86 @@ struct PlaceVisitingView: View {
             
             visitCheckbtn
             
-            reviewBtn
+            reviewBtn(isVisited: viewModel.placeDetailResponse!.isVisited)
             
-            stamp
+            stamp(isVisited: viewModel.placeDetailResponse!.isVisited)
+            
             Spacer()
         }
         .padding(.horizontal, 22)
         .padding(.bottom, 30)
     }
+
     
     /// 방문 체크 버튼
     private var visitCheckbtn: some View {
-        
-        Button(action: {print("터치")}, label: {
+
+        Button(action: {
             
+            viewModel.postPlaceVisiting()
+            
+        }, label: {
+
             ZStack {
                 RoundedRectangle(cornerRadius: 16.5)
                     .fill(.white)
                     .stroke(.main)
                     .frame(width: 108, height: 36)
-                
+
                 HStack(spacing: 7) {
-                        
+
                     Icon.visitCheck.image
-                        
+
                     Text("방문 체크")
                         .foregroundStyle(.main)
                         .font(.body3)
                         .padding(.trailing, 15)
-                            
-                        
+
+
                 }
             }
-            
-                    
 
-        
+
         })
-            
+
     }
+
     
     /// 리뷰 남기기 버튼
-    private var reviewBtn: some View {
-        
-        Button(action: {print("터치")},
+    private func reviewBtn(isVisited: Bool) -> some View {
+
+        Button(action: {
+            if isVisited {
+                // TODO: 리뷰 남기기
+            }
+        },
                label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 16.5)
                     .fill(.white)
-                    .stroke(.main)
+                    .stroke(isVisited ? .main : .g3)
                     .frame(width: 108, height: 36)
-                
+
                 HStack(spacing: 7) {
-                        
-                    Icon.colorReview.image
-                        
+                    
+                    isVisited ? Icon.colorReview.image : Icon.review.image
+
                     Text("리뷰 남기기")
-                        .foregroundStyle(.main)
+                        .foregroundStyle(isVisited ? .main : .g4)
                         .font(.body3)
-                            
+
                 }
             }
         }
         )
     }
     
-    /// 스탬프
-    private var stamp: some View {
-        
-        Button(action: { print("gd") }, label: {
-            Icon.emptyStamp.image
-        })
+    /// 방문 확인 스탬프
+    private func stamp(isVisited: Bool) -> some View {
+        isVisited ? Icon.visitStamp.image
+            .padding(.leading, 10)
+                : Icon.emptyStamp.image
+            .padding(.leading, 10)
     }
 }
 
@@ -134,12 +153,10 @@ struct PlaceVisitingView_Previews: PreviewProvider {
             ["iPhone 16 Pro Max", "iPhone 11"],
             id: \.self
         ) { deviceName in
-            PlaceVisitingView(container: DIContainer(), placeId: .constant(1))
+            PlaceVisitingView(container: DIContainer(), placeId: 1)
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
                 .environmentObject(DIContainer())
         }
     }
 }
-
-

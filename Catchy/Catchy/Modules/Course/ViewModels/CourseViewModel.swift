@@ -17,24 +17,30 @@ class CourseViewModel: ObservableObject{
     var cancellables = Set<AnyCancellable>()
     
     // MARK: - Course View Properties
-    
     /// 코스 리스트
     @Published var courseResponse: CourseResponse?
     
     /// 코스 리스트가 로딩 중?
-    @Published var isCourseListLoading: Bool = false
+    @Published var isCourseListLoading: Bool = true
     
     /// 요청한 미지막 코스 ID
-    var lastId = 0
+    var lastId: Int?
+    
+    /// 마지막 코스인가?
+    var isLast: Bool = false
+    
+    /// 무한 스크롤 요청 중?
+    var isPrefetching: Bool = false
+    
+    /// 코스 배열
+    @Published var courseList: [CourseResponseData] = []
     
     // MARK: - Segment Control Properties
-    
     /// 코스 타입
     /// 세그먼트 컨트롤의 선택된 커스 타입입니다.
     @Published var segment: CourseSegment = .diy
     
     // MARK: - Dropdown Properties
-    
     /// 코스 도
     /// ex) 서울특별시, 인천광역시
     @Published var upperLocations: [Province] = []
@@ -67,16 +73,17 @@ class CourseViewModel: ObservableObject{
     
     
     // MARK: - FLoating Button Properties
-    /// 플로팅 버튼 상태
-    @Published var isFloating: Bool = false
     
     /// 탭 된 플로팅 버튼 
     @Published var selectedFloatingSegment: CourseSegment?
     
-    // MARK: - 화면 전환
-    /// AI 코스 생성 버튼이 눌렸을 때, 화면이 나타났는가?
-    @Published var isPresented: Bool = false
+    // MARK: - AI Create Course Properties
+    /// AI 코스 생성중인가?
+    var isAICourseLoadingFinish: Bool = false
     
+    /// AI로 생성된 코스 응답
+    @Published var courseAIResponse: CourseAICreateResponse?
+
     // MARK: - Init
     init(container: DIContainer) {
         self.container = container
@@ -87,19 +94,21 @@ class CourseViewModel: ObservableObject{
 extension CourseViewModel {
     
     // MARK: - API 호출 함수
-    /// 코스 조회
+    /// 내 코스 조회 API
     func getCourseList(){
         
-        if let isLast = courseResponse?.isLast, isLast {
+        guard !isPrefetching, !isLast else {
             return
         }
-        isCourseListLoading = true
-        
         let province = selectedUpperIndex == nil ? "" : upperLocations[selectedUpperIndex!].addrName
         let district = province == "" || selectedLowerIndex == nil ? "" : lowerLocations[selectedLowerIndex!]
         
-        print("province : \(province), district: \(district), lastId: \(lastId)")
-        let courseRequest: CourseRequest = .init(type: segment.courseType, upperLocation: province, lowerLocation: district, lastId: lastId)
+        let courseRequest: CourseRequest = .init(
+            type: segment.courseType,
+            upperLocation: province,
+            lowerLocation: district,
+            lastId: lastId
+        )
         
         container.useCaseProvider.courseUseCase
             .executeGetCourseList(courseRequest: courseRequest)
@@ -118,8 +127,8 @@ extension CourseViewModel {
             .sink(receiveCompletion: {
                 [weak self] completion in
                 guard let self = self else { return }
+                self.isPrefetching = false
                 self.isCourseListLoading = false
-                    
                 switch completion {
                 case .finished:
                     print("✅ Get CourseList Server Completed")
@@ -129,15 +138,55 @@ extension CourseViewModel {
             },receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 
-                if let response = response.result{
-                    self.courseResponse = response
-                    self.lastId = response.content.count > 0 ? response.content.last!.courseId : lastId
+                if let response = response.result {
+                    self.courseList.append(contentsOf: response.content)
+                    self.isLast = response.isLast
+                    self.lastId = response.content.last?.courseId ?? 0
                 }
                 
             })
             .store(in: &cancellables)
-            
     }
+        
+    /// 코스 생성(AI) API
+    func postCreateCourseAI() {
+        
+        container.useCaseProvider.courseUseCase
+            .executePostCreateCourseAI()
+            .tryMap{ responseData -> ResponseData<CourseAICreateResponse> in
+                if !responseData.isSuccess{
+                    throw APIError
+                        .serverError(
+                            message: responseData.message,
+                            code: responseData.code
+                        )
+                }
+                    
+                return responseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: {
+                [weak self] completion in
+                guard let self = self else { return }
+                self.isAICourseLoadingFinish = true
+                switch completion {
+                case .finished:
+                    print("✅ Post CreateAICourse Server Completed")
+                case .failure(let failure):
+                    print("❌ Post CreateAICourse Failed: \(failure)")
+                }
+            },receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                    
+                if let response = response.result{
+                    self.courseAIResponse = response
+                }
+                    
+            }
+            ).store(in: &cancellables)
+        
+    }
+        
         
 
     
@@ -161,7 +210,6 @@ extension CourseViewModel {
     func setInitialState(){
         self.resetLowerDropState()
         self.resetUpperDropState()
-        self.isFloating = false
     }
     
     /// 도 전체 드랍 다운 메뉴 상태 초기화
@@ -192,5 +240,14 @@ extension CourseViewModel {
         self.lowerScrollPosition = index
     }
     
+    /// 현재 상태를 초기화하고 다시 코스 리스트를 요청합니다
+    func resetAndGetCourseList() {
+        
+        isCourseListLoading = true
+        lastId = nil
+        courseList.removeAll()
+        isLast = false
+        getCourseList()
+    }
     
 }

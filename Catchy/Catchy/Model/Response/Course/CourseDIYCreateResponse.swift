@@ -37,24 +37,9 @@ struct CourseDIYCreateResponse: Codable {
     /// 방문자 수
     let participantsNumber: Int
     
-    let placeInfos: [PlaceInfoDIYData]
+    /// 장소 데이터
+    let placeInfos: [PlaceInfoData]
     
 }
 
-struct PlaceInfoDIYData: Codable {
-    
-    /// 장소 ID
-    let placeId: Int
-    
-    /// 장소 이름
-    let placeName: String
-    
-    /// 장소 위도
-    let placeLatitude: Double
-    
-    /// 장소 경도
-    let placeLongitude: Double
-    
-    /// 방문한 장소 인지?
-    let isVisited: Bool
-}
+

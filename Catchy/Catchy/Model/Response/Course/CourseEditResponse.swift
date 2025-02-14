@@ -45,7 +45,9 @@ struct CourseEditResponse: Codable {
 }
 
 
-struct PlaceInfoData: Codable {
+struct PlaceInfoData: Codable, Identifiable {
+    
+    var id = UUID()
     
     /// 장소 ID
     let placeId: Int
@@ -59,7 +61,16 @@ struct PlaceInfoData: Codable {
     /// 장소 경도
     let placeLongitude: Double
     
+    /// 방문한 장소인가?
     let isVisited: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case placeId
+        case placeName
+        case placeLatitude
+        case placeLongitude
+        case isVisited
+    }
 }
 
     

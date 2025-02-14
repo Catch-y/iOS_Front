@@ -10,6 +10,9 @@ import Foundation
 /// 코스 생성(AI) API
 struct CourseAICreateResponse: Codable {
     
+    /// 코스 ID
+    let courseId: Int
+    
     /// 코스 이름
     let courseName: String
     
@@ -26,21 +29,8 @@ struct CourseAICreateResponse: Codable {
     let courseRating: Double
     
     /// 코스 장소 정보 리스트
-    let placeInfos: [PlaceInfoAIData]
+    let placeInfos: [PlaceSearchResponseData]
 }
 
 
-struct PlaceInfoAIData: Codable {
-    
-    /// 장소 ID
-    let placeId: Int
-    
-    /// 장소 이름
-    let name: String
-    
-    /// 장소 주소
-    let roadAddress: String
-    
-    /// 장소 추천 방문 시간
-    let recommendVisitTime: String
-}
+

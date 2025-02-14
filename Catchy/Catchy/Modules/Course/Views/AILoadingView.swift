@@ -10,20 +10,31 @@ import SwiftUI
 /// AI 생성 버튼 탭 시 나타나는 뷰
 struct AILoadingView: View {
     
-    @StateObject var viewModel: AILoadingViewModel
+    // @StateObject var viewModel: AILoadingViewModel
     
-    @Environment(\.dismiss) var dismiss
+    @ObservedObject var viewModel: CourseViewModel
     
-    init(container: DIContainer) {
-        self._viewModel = StateObject(wrappedValue: .init(container: container))
+    @State var showRedPin = false
+    @State var showYellowPin = false
+    @State var showPurplePin = false
+    @State var showBluePin = false
+    
+    @State var floatingRedPin = false
+    @State var floatingYellowPin = false
+    @State var floatingPurplePin = false
+    @State var floatingBluePin = false
+        
+    let duration: TimeInterval = 1
+    
+    init(viewModel: CourseViewModel) {
+        self.viewModel = viewModel
     }
     
     var body: some View {
         
         GeometryReader { geometry in
             
-            /// 로딩 중이라면?
-            if viewModel.isLoading {
+            if viewModel.isAICourseLoadingFinish {
                 /// 화면의 가로 크기
                 let width = geometry.size.width
             
@@ -33,26 +44,23 @@ struct AILoadingView: View {
                     ZStack(alignment: .top) {
                         
                         gradient
-                                    
+                            
                         loadingView(with: width)
-                        
                         
                     }.onAppear {
                         animatePinSequence()
                     }
                     
                 }
-            /// 로딩 끝?
-            } else {
-                
-                // TODO: - Dismiss 구현
             }
             
-        
         }
         .task {
+            print("요청 보냄")
             viewModel.postCreateCourseAI()
         }
+        
+        
     }
     
     /// 안내 문구
@@ -86,8 +94,8 @@ struct AILoadingView: View {
                     screenWidth: width,
                     xOffset: width * 0.3,
                     yOffset: -width * 0.45,
-                    isShowing: viewModel.showRedPin,
-                    isFloating: viewModel.floatingRedPin
+                    isShowing: showRedPin,
+                    isFloating: floatingRedPin
                 )
                 
                 /// 노랑색 핀
@@ -96,8 +104,8 @@ struct AILoadingView: View {
                     screenWidth: width,
                     xOffset: -width * 0.18,
                     yOffset: -width * 0.125,
-                    isShowing: viewModel.showYellowPin,
-                    isFloating: viewModel.floatingYellowPin
+                    isShowing: showYellowPin,
+                    isFloating: floatingYellowPin
 
                 )
                 
@@ -107,8 +115,8 @@ struct AILoadingView: View {
                     screenWidth: width,
                     xOffset: width * 0.21,
                     yOffset: width * 0.37,
-                    isShowing: viewModel.showPurplePin,
-                    isFloating: viewModel.floatingPurplePin
+                    isShowing: showPurplePin,
+                    isFloating: floatingPurplePin
 
                 )
                 
@@ -118,8 +126,8 @@ struct AILoadingView: View {
                     screenWidth: width,
                     xOffset: -width * 0.35,
                     yOffset: width * 0.315,
-                    isShowing: viewModel.showBluePin,
-                    isFloating: viewModel.floatingBluePin
+                    isShowing: showBluePin,
+                    isFloating: floatingBluePin
                 )
 
             }
@@ -169,21 +177,20 @@ struct AILoadingView: View {
     /// 핀 나타나는 애니메이션
     private func animatePinSequence() {
         
-        let duration = viewModel.duration
         
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            viewModel.showRedPin = true
+            showRedPin = true
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * 2) {
-            viewModel.showYellowPin = true
+            showYellowPin = true
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * 3) {
-            viewModel.showPurplePin = true
+            showPurplePin = true
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * 4) {
-            viewModel.showBluePin = true
+            showBluePin = true
         }
 
         animateFloatingPins()
@@ -192,30 +199,29 @@ struct AILoadingView: View {
     /// 핀 플로팅 애니메이션
     private func animateFloatingPins() {
 
-        let duration = viewModel.duration
         
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
             withAnimation(
                 Animation.easeInOut(duration: duration).repeatForever(autoreverses: true)
-            ) { viewModel.floatingRedPin = true }
+            ) { floatingRedPin = true }
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * 2) {
             withAnimation(
                 Animation.easeInOut(duration: duration).repeatForever(autoreverses: true)
-            ) { viewModel.floatingYellowPin = true }
+            ) { floatingYellowPin = true }
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * 3) {
             withAnimation(
                 Animation.easeInOut(duration: duration).repeatForever(autoreverses: true)
-            ) { viewModel.floatingPurplePin = true }
+            ) { floatingPurplePin = true }
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * 4) {
             withAnimation(
                 Animation.easeInOut(duration: duration).repeatForever(autoreverses: true)
-            ) { viewModel.floatingBluePin = true }
+            ) { floatingBluePin = true }
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * 5) {
@@ -227,35 +233,18 @@ struct AILoadingView: View {
     /// 애니메이션을 재시작하기전 호출
     /// 애니메이션 관련 변수를 초기화
     private func resetAnimations() {
-        
-        let duration = viewModel.duration
-        
+                
         withAnimation(.smooth(duration: duration * 0.7)) {
-            viewModel.showRedPin = false
-            viewModel.showBluePin = false
-            viewModel.showPurplePin = false
-            viewModel.showYellowPin = false
+            showRedPin = false
+            showBluePin = false
+            showPurplePin = false
+            showYellowPin = false
         }
         
-        viewModel.floatingRedPin = false
-        viewModel.floatingBluePin = false
-        viewModel.floatingPurplePin = false
-        viewModel.floatingYellowPin = false
+        floatingRedPin = false
+        floatingBluePin = false
+        floatingPurplePin = false
+        floatingYellowPin = false
     }
     
 }
-
-struct AILoadingView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(
-            ["iPhone 16 Pro Max", "iPhone 11", "iPhone 12 mini"],
-            id: \.self
-        ) { deviceName in
-            AILoadingView(container: DIContainer())
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-        }
-    }
-}
-
-

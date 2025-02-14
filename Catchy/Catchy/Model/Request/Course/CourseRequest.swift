@@ -24,6 +24,6 @@ struct CourseRequest: Codable {
     /// ex) 동작구
     let lowerLocation: String
     
-    
+    /// 코스 마지막 ID
     let lastId: Int
 }

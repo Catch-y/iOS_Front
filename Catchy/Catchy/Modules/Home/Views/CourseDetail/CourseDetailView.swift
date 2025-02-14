@@ -24,17 +24,25 @@ struct CourseDetailView: View {
                     container.navigationRouter.pop()
                 }, title: "코스 정보", rightNaviIcon: nil, isShadow: true)
                 
-                ScrollView(.vertical, content: {
+                if viewModel.isLoading {
+                    Spacer()
+                    ProgressView()
+                    Spacer()
                     
-                    if let data = viewModel.courseEditResponse {
-                        topContents(data: data)
-                            .padding(.top, 13)
-                    }
-                    
-                    bottomGroup
-                        .padding(.top, 14)
-                })
-                .scrollIndicators(.hidden)
+                } else {
+                    ScrollView(.vertical, content: {
+                        
+                        if let data = viewModel.courseDetailResponse {
+                            topContents(data: data)
+                                .padding(.top, 13)
+                        }
+                        
+                        bottomGroup
+                            .padding(.top, 14)
+                    })
+                    .scrollIndicators(.hidden)
+                }
+                
             })
             .background(Color.bg1)
             .ignoresSafeArea(.all)
@@ -51,9 +59,13 @@ struct CourseDetailView: View {
                 
             }
         }
+        .navigationBarBackButtonHidden(true)
+        .task {
+            viewModel.getCourseDetail()
+        }
     }
     
-    private func topContents(data: CourseEditResponse) -> some View {
+    private func topContents(data: CourseDetailResponse) -> some View {
         VStack(alignment: .leading, content: {
             
             courseImage(data: data)
@@ -69,7 +81,7 @@ struct CourseDetailView: View {
     // MARK: - TopView
     
     @ViewBuilder
-    private func courseImage(data: CourseEditResponse) -> some View {
+    private func courseImage(data: CourseDetailResponse) -> some View {
         if let imageUrl = URL(string: data.courseImage) {
             KFImage(imageUrl)
                 .placeholder {
@@ -92,7 +104,7 @@ struct CourseDetailView: View {
         }
     }
     
-    private func makeCourseInfo(data: CourseEditResponse) -> some View {
+    private func makeCourseInfo(data: CourseDetailResponse) -> some View {
         return VStack(alignment: .leading, spacing: 0, content: {
             HStack(content: {
                 Text(data.courseName)
@@ -102,7 +114,7 @@ struct CourseDetailView: View {
                 Spacer()
                 
                 Button(action: {
-                    // TODO: BookMark 함수
+                    viewModel.patchCourseBookmark()
                 }, label: {
                     returnBookMakr(data.isBookMarked)
                         .resizable()
@@ -259,3 +271,4 @@ struct CourseDetailView_Preview: PreviewProvider {
         CourseDetailView(container: DIContainer(), courseId: 1)
     }
 }
+

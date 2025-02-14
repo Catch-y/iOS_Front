@@ -16,7 +16,6 @@ class PlaceSearchViewModel: ObservableObject {
     var cancellables = Set<AnyCancellable>()
     
     // MARK: - Place Search View Properties
-    
     /// 장소 검색 결과
     @Published var placeSearchResponse: PlaceSearchResponse?
     
@@ -39,6 +38,9 @@ class PlaceSearchViewModel: ObservableObject {
     /// placeId가 있음.
     @Published var places: [Int] = []
     
+    /// 현재 요청한 페이지
+    var page: Int = 1
+    
     init(container: DIContainer){
         self.container = container
     }
@@ -49,11 +51,12 @@ extension PlaceSearchViewModel {
     
     // MARK: - API 호출 함수
     /// 장소 검색 - 지역명 기반
-    func getPlaceList(placeSearchRequest: PlaceSearchByRegionRequest) {
+    func getPlaceList() {
         
         isPlaceListLoading = true
         
-        container.useCaseProvider.placeCourseUseCase.executeGetPlaceListByRegion(placeSearchRequest: placeSearchRequest)
+        let request = PlaceSearchByRegionRequest(searchKeyword: searchText, page: 1)
+        container.useCaseProvider.placeCourseUseCase.executeGetPlaceListByRegion(placeSearchRequest: request)
             .tryMap {
                 responseData ->
                 ResponseData<PlaceSearchResponse> in
@@ -89,7 +92,7 @@ extension PlaceSearchViewModel {
             .store(in: &cancellables)
     }
     
-    /// 장소 검색 - 상세 화면
+    /// 장소 검색 - 상세 화면 API
     func getPlaceDetail(placeId: Int) {
         
         isPlaceDetailLoading = true

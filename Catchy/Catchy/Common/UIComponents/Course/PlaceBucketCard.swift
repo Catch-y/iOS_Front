@@ -13,14 +13,24 @@ struct PlaceBucketCard: View {
     /// 애니메이션 변수
     @State private var isRemoved = false
     
-    /// 장소 상세정보 모델
-    var placeDetailResponse: PlaceDetailResponse
+    /// 장소 모델
+    var placeSearchResponseData: PlaceDataProtocol
     
     /// 현재 장소의 인덱스
     let index: Int
     
     /// X 버튼 탭시 실행
     var closeButtonTap: ((Int) -> Void)
+    
+    
+    let canDelete: Bool
+    
+    init(placeSearchResponseData: PlaceDataProtocol, index: Int, canDelete: Bool = true, closeButtonTap: @escaping ((Int) -> Void)) {
+        self.placeSearchResponseData = placeSearchResponseData
+        self.index = index
+        self.closeButtonTap = closeButtonTap
+        self.canDelete = canDelete
+    }
     
     var body: some View {
         
@@ -31,7 +41,7 @@ struct PlaceBucketCard: View {
             numberingLabel
             
             /// 이미지
-            if let url = URL(string: placeDetailResponse.imageUrl) {
+            if let url = URL(string: placeSearchResponseData.placeImage) {
                 KFImage(url)
                     .placeholder{
                         ProgressView()
@@ -49,7 +59,7 @@ struct PlaceBucketCard: View {
             Spacer()
             
             /// X 버튼
-            closeButton
+            if canDelete { closeButton }
         }
         
         .padding(.bottom, 20)
@@ -74,31 +84,31 @@ struct PlaceBucketCard: View {
             HStack{
                 
                 /// 카테고리 카드
-                CategoryCard(categoryType: placeDetailResponse.categoryName)
+                CategoryCard(categoryType: placeSearchResponseData.category)
                     .frame(width: 40)
                 
-                Text(placeDetailResponse.placeName)
+                Text(placeSearchResponseData.placeName)
                     .font(.Subtitle3_SM)
                     .foregroundStyle(.g7)
                     .lineLimit(1)
         
 
-            }
+            }.padding(.bottom, 6)
 
             
             /// 장소 주소
-            PlaceAddressText(addressText: placeDetailResponse.roadAddress)
+            PlaceAddressText(addressText: placeSearchResponseData.roadAddress)
                 
             /// 장소 영업시간
-            PlaceTimeText(timeText: placeDetailResponse.activeTime)
+            PlaceTimeText(timeText: placeSearchResponseData.activeTime)
             
             HStack(spacing: 12) {
                 
                 /// 장소 평점
-                PlaceRatingText(rating: placeDetailResponse.rating)
+                PlaceRatingText(rating: placeSearchResponseData.rating)
                 
                 /// 장소 리뷰 버튼
-                placeReviewButton(reviewCount: placeDetailResponse.reviewCount)
+                placeReviewButton(reviewCount: placeSearchResponseData.reviewCount)
             }
             .padding(.top, 8)
         }

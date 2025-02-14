@@ -56,8 +56,8 @@ class CourseUseCase: CourseUseCaseProtocol {
     }
     
     /// 장소 방문체크 API
-    func executePatchPlaceVisit(placeId: Int) -> AnyPublisher<ResponseData<PlaceVisitResponse>, MoyaError> {
-        return repository.patchPlaceVisitData(placeId: placeId)
+    func executePostPlaceVisit(placeId: Int) -> AnyPublisher<ResponseData<PlaceVisitResponse>, MoyaError> {
+        return repository.postPlaceVisitData(placeId: placeId)
     }
     
     /// 코스 조회

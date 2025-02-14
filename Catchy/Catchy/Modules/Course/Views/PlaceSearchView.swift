@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PlaceView: View {
+struct PlaceSearchView: View {
     
     @StateObject var viewModel: PlaceSearchViewModel
     
@@ -18,44 +18,32 @@ struct PlaceView: View {
     }
     
     var body: some View {
-        NavigationStack(path: $container.navigationRouter.destination) {
-            VStack {
-                if !viewModel.isPlaceListLoading {
+        VStack {
+            if !viewModel.isPlaceListLoading {
                     
-                    if let data = viewModel.placeSearchResponse {
-                        if data.placeInfoPreviews.isEmpty {
-                            infoView
-                        } else {
-                            scrollView
-                        }
+                if let data = viewModel.placeSearchResponse {
+                    if data.placeInfoPreviews.isEmpty {
+                        infoView
+                    } else {
+                        scrollView
                     }
-                } else {
-                    Spacer ()
-                    
-                    ProgressView()
                     
                     Spacer()
                 }
+            } else {
+                Spacer ()
+                    
+                ProgressView()
+                    
+                Spacer()
+            }
                 
-            }
-            .navigationDestination(
-                for: NavigationDestination.self
-            ) { destination in
-                NavigationRoutingView(destination: destination)
-                    .environmentObject(container)
-            }
-            .task {
-                viewModel
-                    .getPlaceList(
-                        placeSearchRequest: .init(
-                            searchKeyword: "",
-                            page: 0
-                        )
-                    )
-            }
         }
-            
+        .task {
+            viewModel.getPlaceList()
+        }
     }
+            
     
     /// 스크롤 뷰
     /// 장소의 리스트들을 보여줌
@@ -74,6 +62,9 @@ struct PlaceView: View {
                         place in
                         VStack(spacing: 0) {
                             PlaceCard(place: place)
+                                .onTapGesture {
+                                    
+                                }
                             if index < content.count - 1 {
                                 Divider()
                                     .padding(.vertical, 20)
@@ -85,7 +76,6 @@ struct PlaceView: View {
             .padding(.horizontal, 16)
             .padding(.top, 43)
             .padding(.bottom, 17)
-            
             
         }
     }
@@ -116,7 +106,7 @@ struct PlaceView_Previews: PreviewProvider {
             ["iPhone 16 Pro Max", "iPhone 11"],
             id: \.self
         ) { deviceName in
-            PlaceView(container: DIContainer())
+            PlaceSearchView(container: DIContainer())
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
                 .environmentObject(DIContainer())

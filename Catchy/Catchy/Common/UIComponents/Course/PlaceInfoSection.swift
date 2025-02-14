@@ -11,14 +11,15 @@ import Kingfisher
 struct PlaceInfoSection: View {
     
     /// 장소 상세 정보 데이터
-    var place: PlaceDetailResponse
+    @Binding var place: PlaceDetailResponse
     
-    /// 북마크 할 수 있는가?
-    let canBookmark: Bool
+    /// 좋아요 누를 때 액션
+    /// nil인 경우 좋아요 못 누름
+    let action: (() -> Void)?
     
-    init(place: PlaceDetailResponse, canBookmark: Bool = false) {
-        self.place = place
-        self.canBookmark = canBookmark
+    init(place: Binding<PlaceDetailResponse>, action: (() -> Void)? = nil) {
+        self._place = place
+        self.action = action
     }
     
     var body: some View {
@@ -31,6 +32,7 @@ struct PlaceInfoSection: View {
                     }
                     .retry(maxCount: 2, interval: .seconds(2))
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(maxWidth: .infinity, maxHeight: 144)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
             }
@@ -50,26 +52,15 @@ struct PlaceInfoSection: View {
                     .foregroundStyle(.g7)
                     .lineLimit(1)
                 
-                
                 CategoryCard(categoryType: place.categoryName)
                     .frame(width: 60)
                 
                 Spacer()
                 
-                // TODO: - 북마크 Swagger 수정 후 작성
-                if canBookmark {
-                    Button(action: { }, label: {
-                        
-                        Icon.empyHeart.image
-                            .resizable()
-                            .frame(width: 16, height: 16)
-                    })
+                if action != nil {
+                    LikeButton(data: $place, action: action!, forPlace: true)
+                    
                 }
-                
-                
-        
-                
-                
                 
             }
             .padding(.bottom, 8)
@@ -109,6 +100,3 @@ struct PlaceInfoSection: View {
     
 }
 
-#Preview {
-    PlaceInfoSection(place: .init(placeId: 1, imageUrl: "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg", placeName: "중앙대학교", placeDescription: "넓고 큰 중앙대학교", categoryName: .BAR, roadAddress: "도로명 주소 ㅇㅇ", activeTime: "dsds~dsds", rating: 4.2, isVisited: false, reviewCount: 53, placeSite: "www.naver.com"))
-}

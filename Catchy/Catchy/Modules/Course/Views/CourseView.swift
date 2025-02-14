@@ -10,35 +10,48 @@ import FloatingButton
 
 struct CourseView: View {
     
+    @EnvironmentObject var container: DIContainer
+    
     /// 코스 뷰 모델
     @StateObject var viewModel: CourseViewModel
-    
+        
     /// 드랍 다운 메뉴의 뷰 모델
     @StateObject var provinceViewModel: GetProvinceViewModel = .init()
-
-    init(container: DIContainer) {
+    
+    /// AI 코스 생성로딩 화면 상태
+    @Binding var isAILoadingPresented: Bool
+    
+    /// DIY 코스 생성 화면 상태
+    @Binding var isDIYPresented: Bool
+    
+    /// AI 코스 생성결과 화면 상태
+    @State var isAISheetPresented: Bool = false
+    
+    init(container: DIContainer, isAILoadingPresented: Binding<Bool>, isDIYPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
+        self._isDIYPresented = isDIYPresented
+        self._isAILoadingPresented = isAILoadingPresented
     }
     
     var body: some View {
-        
         ZStack(alignment: .top) {
-            if let data = viewModel.courseResponse, !data.content.isEmpty {
-                DropDown(viewModel: viewModel, provinceViewModel: provinceViewModel).zIndex(1)
-            }
+            
+            DropDown(viewModel: viewModel, provinceViewModel: provinceViewModel).zIndex(1)
+                .padding(.top, 50)
+            
             VStack {
+                navigationGroup
+                
                 if !viewModel.isCourseListLoading {
                     
-                    navigationGroup
-                    if let data = viewModel.courseResponse {
-                        if data.content.isEmpty {
-                            infoView
-                        } else {
-                            scrollView
-                        }
+                    if viewModel.courseList.isEmpty {
+                        infoView
+                    } else {
+                        scrollView
                     }
                     
                 } else {
+                    
                     Spacer()
                     
                     ProgressView()
@@ -48,54 +61,44 @@ struct CourseView: View {
                 
             }
             .zIndex(0)
-            
-            if viewModel.isFloating {
-                Color.black
-                    .opacity(0.8)
-                    .ignoresSafeArea(.all)
-                    .zIndex(2)
-            }
-            AddFloatingButton(isOpen: $viewModel.isFloating, onSubButtonTap: {
-                segment in
-                viewModel.selectedFloatingSegment = segment
-                viewModel.isPresented.toggle()
-                viewModel.isFloating.toggle()
-            })
-                .zIndex(3)
-                
-            
         }.task{
             viewModel.getCourseList()
         }
         .onChange(of: provinceViewModel.provinces){ (_ , provinces) in
             viewModel.upperLocations = provinces
         }
-        .fullScreenCover(isPresented: $viewModel.isPresented) {
-            
-            if let segment = viewModel.selectedFloatingSegment {
-                switch segment {
-                case .ai:
-                    AILoadingView(container: viewModel.container)
-                case .diy:
-                    EmptyView()
-                }
-            }
-            
-        }
         .onChange(of: viewModel.selectedUpperIndex) { (_, _) in
-            viewModel.getCourseList()
+            viewModel.resetAndGetCourseList()
         }
         .onChange(of: viewModel.selectedLowerIndex) { (_, lowerIndex) in
             if lowerIndex != nil {
-                viewModel.getCourseList()
+                viewModel.resetAndGetCourseList()
             }
         }
         .onChange(of: viewModel.segment) { (_, _) in
-            viewModel.getCourseList()
+            viewModel.resetAndGetCourseList()
+        }
+        .onChange(of: viewModel.isAICourseLoadingFinish) { (_, finished) in
+            if finished {
+                isAILoadingPresented.toggle()
+                isAISheetPresented.toggle()
+                viewModel.isAICourseLoadingFinish.toggle()
+            }
+        }
+        .fullScreenCover(isPresented: $isAILoadingPresented) {
+            AILoadingView(viewModel: viewModel)
+        }
+        .fullScreenCover(isPresented: $isDIYPresented) {
+            PlaceSearchView(container: container)
+        }
+        .sheet(isPresented: $isAISheetPresented, onDismiss: {
+            viewModel.resetAndGetCourseList()
+        }) {
+            AIPlaceListView(courseAIResponse: viewModel.courseAIResponse, container: container, isAISheetPresented: $isAISheetPresented)
         }
 
     }
-
+        
     /// 네비게이션 바와 세그먼트 그룹
     private var navigationGroup : some View {
         VStack(alignment: .center) {
@@ -107,30 +110,41 @@ struct CourseView: View {
                 })
         }
         .ignoresSafeArea(edges: .top)
-        .frame(height: 130)
     }
     
     /// 스크롤 뷰 
     private var scrollView : some View {
         ScrollView(.vertical, content: {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 18, content: {
-                if let content = viewModel.courseResponse?.content {
-                    ForEach(content, id: \.id) { course in
+                
+                ForEach(viewModel.courseList, id: \.id) { course in
                         CourseGroupCard(course: course)
-                            
+                        .onTapGesture {
+                            container.navigationRouter.push(to: .courseDetailView(courseId: course.courseId))
+                        }
+                        .task {
+                            guard let lastId = viewModel.lastId else { return }
+                            if course.courseId >= lastId {
+                                viewModel.getCourseList()
+                            }
+                        }
                     }
-                }
+                
             })
             
             .padding(.horizontal, 16)
             .padding(.top, 10)
         })
-        .padding(.top, 70)
+        .padding(.top, 50)
         .padding(.bottom, 110)
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
         .refreshable {
-            viewModel.getCourseList()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                viewModel.isLast = false
+                viewModel.courseList = []
+                viewModel.getCourseList()
+            })
         }
     }
     
@@ -150,13 +164,4 @@ struct CourseView: View {
     }
 }
 
-struct CourseView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
-            CourseView(container: DIContainer())
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-        }
-    }
-}
 
