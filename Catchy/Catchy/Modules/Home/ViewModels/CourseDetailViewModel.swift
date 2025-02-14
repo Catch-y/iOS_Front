@@ -35,6 +35,8 @@ extension CourseDetailViewModel {
     /// 코스 상세 정보 조회 API
     func getCourseDetail() {
         
+        isLoading = true
+        
         container.useCaseProvider.courseUseCase
             .executeGetCourseDetail(courseId: courseId)
             .tryMap{ responseData -> ResponseData<CourseDetailResponse> in
@@ -74,6 +76,9 @@ extension CourseDetailViewModel {
     
     /// 코스 북마크 API
     func patchCourseBookmark() {
+        
+        courseDetailResponse?.isBookMarked.toggle()
+        
         container.useCaseProvider.courseUseCase
             .executePatchCourseBookmark(courseId: courseId)
             .tryMap{ responseData -> ResponseData<CourseBookmarkResponse> in
@@ -88,22 +93,18 @@ extension CourseDetailViewModel {
                 return responseData
             }
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: {
-                completion in
-                
+            .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
                     print("✅ Patch CourseBookmark Server Completed")
                 case .failure(let failure):
                     print("❌ Patch CourseBookmark Failed: \(failure)")
                 }
-            },receiveValue: { [weak self] response in
-                guard let self = self else { return }
+            },receiveValue: { response in
                 
                 if let response = response.result{
-                    self.courseDetailResponse?.isBookMarked = response.bookmarked
+                    print("북마크 결과 표시: \(response)")
                 }
-                
             })
             .store(in: &cancellables)
     }

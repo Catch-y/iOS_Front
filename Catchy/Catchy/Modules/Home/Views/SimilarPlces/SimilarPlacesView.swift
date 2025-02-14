@@ -27,6 +27,7 @@ struct SimilarPlacesView: View {
                 makeContents(datas: Binding(get: { viewModel.recommendPlaceResponse ?? [] },
                                             set: { viewModel.recommendPlaceResponse = $0 }))
             } else {
+
                 Spacer()
                 ProgressView(label: {
                     Text("로딩중입니다.")
@@ -36,6 +37,7 @@ struct SimilarPlacesView: View {
                 .controlSize(.regular)
                 
                 Spacer()
+                MainProgressComponents()
             }
         })
         .ignoresSafeArea(.all)

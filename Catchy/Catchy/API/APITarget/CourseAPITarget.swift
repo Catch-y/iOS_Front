@@ -161,7 +161,15 @@ extension CourseAPITarget: APITargetType {
             return .requestPlain
             
         case .getCourseList(let course):
-            return .requestParameters(parameters: ["type" : course.type, "upperLocation" : course.upperLocation, "lowerLocation" : course.lowerLocation, "lastId" : course.lastId ?? 0], encoding: URLEncoding.default)
+
+            let parameter: [String: Any]
+            
+            if let lastId = course.lastId {
+                parameter = ["type" : course.type, "upperLocation" : course.upperLocation, "lowerLocation" : course.lowerLocation, "lastId" : lastId]
+            } else {
+                parameter = ["type" : course.type, "upperLocation" : course.upperLocation, "lowerLocation" : course.lowerLocation]
+            }
+            return .requestParameters(parameters: parameter, encoding: URLEncoding.default)
         
         case .getCourseDetail:
             return .requestPlain
