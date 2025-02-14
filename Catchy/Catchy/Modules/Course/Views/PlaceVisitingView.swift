@@ -54,7 +54,7 @@ struct PlaceVisitingView: View {
                 }
             }
              else {
-                ProgressView()
+                 MainProgressComponents()
             }
 
         }

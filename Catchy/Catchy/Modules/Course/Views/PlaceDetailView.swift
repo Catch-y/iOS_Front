@@ -47,7 +47,7 @@ struct PlaceDetailView: View {
                     
                 }
             } else {
-                ProgressView()
+                MainProgressComponents()
             }
             
         }

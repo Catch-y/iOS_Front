@@ -22,6 +22,7 @@ class PlaceDetailViewModel: ObservableObject {
     /// 장소 카테고리 선택 뷰 상태
     @Published var isPresented: Bool = false
     
+    /// 로딩중인가?
     @Published var isLoading: Bool = false
     
     init(container: DIContainer) {

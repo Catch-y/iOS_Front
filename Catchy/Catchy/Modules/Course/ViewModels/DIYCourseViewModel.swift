@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
+// TODO: - 무한 스크롤 처리
 class DIYCourseViewModel: ObservableObject {
         
     let container: DIContainer
@@ -30,13 +31,6 @@ class DIYCourseViewModel: ObservableObject {
     
     /// 장소 목록 - API 통신 중인가?
     @Published var isPlaceListLoading: Bool = false
-    
-    /// 장소 상세 정보 -  API 통신 중인가?
-    @Published var isPlaceDetailLoading: Bool = false
-    
-    /// 현재 코스에 담은 장소들의 ID 리스트
-    /// placeId가 있음.
-    @Published var places: [Int] = []
     
     /// 현재 요청한 페이지
     var page: Int = 1

@@ -51,12 +51,7 @@ struct CourseView: View {
                     }
                     
                 } else {
-                    
-                    Spacer()
-                    
-                    ProgressView()
-                    
-                    Spacer()
+                    MainProgressComponents()
                 }
                 
             }
@@ -140,11 +135,10 @@ struct CourseView: View {
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
         .refreshable {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                viewModel.isLast = false
-                viewModel.courseList = []
-                viewModel.getCourseList()
-            })
+            await viewModel.refresh()
+        }
+        .onAppear {
+            UIRefreshControl.appearance().tintColor = .main
         }
     }
     

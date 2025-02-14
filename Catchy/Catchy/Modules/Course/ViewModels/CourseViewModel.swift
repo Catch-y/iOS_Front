@@ -139,6 +139,7 @@ extension CourseViewModel {
                 guard let self = self else { return }
                 
                 if let response = response.result {
+                    self.courseResponse = response
                     self.courseList.append(contentsOf: response.content)
                     self.isLast = response.isLast
                     self.lastId = response.content.last?.courseId ?? 0
@@ -243,11 +244,26 @@ extension CourseViewModel {
     /// 현재 상태를 초기화하고 다시 코스 리스트를 요청합니다
     func resetAndGetCourseList() {
         
-        isCourseListLoading = true
+        isCourseListLoading = false
         lastId = 0
         courseList.removeAll()
         isLast = false
         getCourseList()
+    }
+
+    /// 리프레시 함수
+    func refresh() async {
+        self.isLast = false
+        self.lastId = nil
+        self.courseList.removeAll()
+
+        do {
+            try await Task.sleep(nanoseconds: 1_500_000_000)
+            self.courseResponse = nil
+            self.getCourseList()
+        } catch {
+            print("❌ Refresh 오류: \(error)")
+        }
     }
     
 }

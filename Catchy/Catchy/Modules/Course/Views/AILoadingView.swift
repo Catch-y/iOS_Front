@@ -9,9 +9,7 @@ import SwiftUI
 
 /// AI 생성 버튼 탭 시 나타나는 뷰
 struct AILoadingView: View {
-    
-    // @StateObject var viewModel: AILoadingViewModel
-    
+        
     @ObservedObject var viewModel: CourseViewModel
     
     @State var showRedPin = false
@@ -56,7 +54,6 @@ struct AILoadingView: View {
             
         }
         .task {
-            print("요청 보냄")
             viewModel.postCreateCourseAI()
         }
         

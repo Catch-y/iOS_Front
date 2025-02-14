@@ -31,11 +31,7 @@ struct PlaceSearchView: View {
                     Spacer()
                 }
             } else {
-                Spacer ()
-                    
-                ProgressView()
-                    
-                Spacer()
+                MainProgressComponents()
             }
                 
         }
