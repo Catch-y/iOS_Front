@@ -244,7 +244,7 @@ extension CourseViewModel {
     func resetAndGetCourseList() {
         
         isCourseListLoading = true
-        lastId = nil
+        lastId = 0
         courseList.removeAll()
         isLast = false
         getCourseList()

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PlaceSearchView: View {
     
-    @StateObject var viewModel: PlaceSearchViewModel
+    @StateObject var viewModel: DIYCourseViewModel
     
     @EnvironmentObject var container: DIContainer
     

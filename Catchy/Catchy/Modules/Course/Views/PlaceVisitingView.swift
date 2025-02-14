@@ -10,6 +10,8 @@ import SwiftUI
 /// 코스 상세 정보 -> 장소 방문 뷰
 struct PlaceVisitingView: View {
 
+    @EnvironmentObject var container: DIContainer
+    
     @StateObject var viewModel: PlaceVisitingViewModel
 
     /// 해당 뷰의 장소 ID
@@ -23,36 +25,44 @@ struct PlaceVisitingView: View {
     var body: some View {
 
         VStack(spacing: 16) {
-            if let place = viewModel.placeDetailResponse {
-        
-                PlaceInfoSection(place: Binding(
-                    get: { place },
-                    set: { viewModel.placeDetailResponse = $0 }
-                ), action: {
-                    viewModel.patchPlaceLike()
-                })
+            if !viewModel.isLoading {
+                if let place = viewModel.placeDetailResponse {
+            
+                    PlaceInfoSection(place: Binding(
+                        get: { place },
+                        set: { viewModel.placeDetailResponse = $0 }
+                    ), likeTap: {
+                        viewModel.patchPlaceLike()
+                    }, reviewTap: {
+                        // TODO: - 리뷰 보는 화면으로 이동
+                    })
 
-                buttonGroup
-                
-                MainBtn(
-                    text: "길 찾기",
-                    action: {
-                    },
-                    width: 400,
-                    height: 55,
-                    onoff: .on
-                )
-                .safeAreaPadding(.horizontal, 16)
-                
-                Spacer()
-                
-            } else {
+                    buttonGroup
+                    
+                    MainBtn(
+                        text: "길 찾기",
+                        action: {
+                        },
+                        width: 400,
+                        height: 55,
+                        onoff: .on
+                    )
+                    .safeAreaPadding(.horizontal, 16)
+                    
+                    Spacer()
+                    
+                }
+            }
+             else {
                 ProgressView()
             }
 
         }
         .task {
             viewModel.getPlaceDetail(placeId: placeId)
+        }
+        .fullScreenCover(isPresented: $viewModel.isPresented) {
+            PlaceReviewRegisterView(container: container, placeId: placeId, isPresented: $viewModel.isPresented)
         }
         .navigationBarBackButtonHidden()
     }
@@ -74,7 +84,6 @@ struct PlaceVisitingView: View {
         .padding(.bottom, 30)
     }
 
-    
     /// 방문 체크 버튼
     private var visitCheckbtn: some View {
 
@@ -114,7 +123,7 @@ struct PlaceVisitingView: View {
 
         Button(action: {
             if isVisited {
-                // TODO: 리뷰 남기기
+                viewModel.show()
             }
         },
                label: {
@@ -136,6 +145,7 @@ struct PlaceVisitingView: View {
             }
         }
         )
+        
     }
     
     /// 방문 확인 스탬프

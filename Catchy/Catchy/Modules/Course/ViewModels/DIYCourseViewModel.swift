@@ -1,5 +1,5 @@
 //
-//  PlaceSearchViewModel.swift
+//  DIYCourseViewModel.swift
 //  Catchy
 //
 //  Created by LEE on 1/27/25.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-class PlaceSearchViewModel: ObservableObject {
+class DIYCourseViewModel: ObservableObject {
         
     let container: DIContainer
     
@@ -18,12 +18,12 @@ class PlaceSearchViewModel: ObservableObject {
     // MARK: - Place Search View Properties
     /// 장소 검색 결과
     @Published var placeSearchResponse: PlaceSearchResponse?
-    
-    /// 장소 상세 정보
-    @Published var placeDetailResponse: PlaceDetailResponse?
-    
+        
     /// 현재 담은 장소 리스트
-    @Published var placeList: [PlaceDetailResponse]?
+    @Published var selectedPlaceList: [PlaceSearchResponseData] = []
+    
+    /// 스크롤 뷰에서 보여주는 장소
+    @Published var placeList: [PlaceSearchResponseData] = []
     
     /// 검색어
     @Published var searchText: String = ""
@@ -47,7 +47,7 @@ class PlaceSearchViewModel: ObservableObject {
     
 }
 
-extension PlaceSearchViewModel {
+extension DIYCourseViewModel {
     
     // MARK: - API 호출 함수
     /// 장소 검색 - 지역명 기반
@@ -91,47 +91,5 @@ extension PlaceSearchViewModel {
             })
             .store(in: &cancellables)
     }
-    
-    /// 장소 검색 - 상세 화면 API
-    func getPlaceDetail(placeId: Int) {
-        
-        isPlaceDetailLoading = true
-        
-        container.useCaseProvider.placeCourseUseCase.executeGetPlaceDetail(placeId: placeId)
-            .tryMap {
-                responseData ->
-                ResponseData<PlaceDetailResponse> in
-                if !responseData.isSuccess {
-                    throw APIError
-                        .serverError(message: responseData.message,
-                            code: responseData.code
-                        )
-                }
-                
-                return responseData
-            }
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: {
-                [weak self] completion in
-                guard let self = self else { return }
-
-                isPlaceDetailLoading = false
-                
-                switch completion {
-                case .finished:
-                    print("✅ Get PlaceDetail Server Completed")
-                case .failure(let failure):
-                    print("❌ Get PlaceDetail Failed: \(failure)")
-                }
-            },receiveValue: { [weak self] response in
-                guard let self = self else { return }
-                if let response = response.result {
-                    self.placeDetailResponse = response
-                }
-            })
-            .store(in: &cancellables)
-    }
-    
-    
     
 }

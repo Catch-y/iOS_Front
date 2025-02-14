@@ -15,11 +15,14 @@ struct PlaceInfoSection: View {
     
     /// 좋아요 누를 때 액션
     /// nil인 경우 좋아요 못 누름
-    let action: (() -> Void)?
+    let likeTap: (() -> Void)?
     
-    init(place: Binding<PlaceDetailResponse>, action: (() -> Void)? = nil) {
+    let reviewTap: (() -> Void)
+    
+    init(place: Binding<PlaceDetailResponse>, likeTap: (() -> Void)? = nil, reviewTap: @escaping () -> Void) {
         self._place = place
-        self.action = action
+        self.likeTap = likeTap
+        self.reviewTap = reviewTap
     }
     
     var body: some View {
@@ -57,8 +60,8 @@ struct PlaceInfoSection: View {
                 
                 Spacer()
                 
-                if action != nil {
-                    LikeButton(data: $place, action: action!, forPlace: true)
+                if likeTap != nil {
+                    LikeButton(data: $place, action: likeTap!, forPlace: true)
                     
                 }
                 

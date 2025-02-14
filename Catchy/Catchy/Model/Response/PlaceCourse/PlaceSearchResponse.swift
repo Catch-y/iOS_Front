@@ -33,7 +33,7 @@ struct PlaceSearchResponseData: Codable, Identifiable{
     let placeImage: String
     
     /// 장소의 카테고리
-    let category: CategoryType
+    var category: CategoryType
     
     /// 장소 주소
     let roadAddress: String
@@ -78,3 +78,4 @@ struct PlaceSearchResponseData: Codable, Identifiable{
 
 extension PlaceSearchResponseData: PlaceDataProtocol {
 }
+
