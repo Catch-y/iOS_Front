@@ -21,7 +21,7 @@ struct FavoritePlacesView: View {
     var body: some View {
         
         VStack(alignment: .center, spacing: 20, content: {
-            if !viewModel.isLoading {
+            if !viewModel.isMyPlaceLoading {
                 CustomNavigation(action: {
                     print("hello")
                 }, title: "선호 장소", rightNaviIcon: nil, isShadow: true)

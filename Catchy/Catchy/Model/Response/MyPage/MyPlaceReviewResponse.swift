@@ -1,37 +1,38 @@
 //
-//  MyReviewResponse.swift
+//  MyPlaceReviewResponse.swift
 //  Catchy
 //
-//  Created by 권용빈 on 2/6/25.
+//  Created by 권용빈 on 2/11/25.
 //
 
 import Foundation
 
-struct MyReviewResponse: Codable {
+/// 내가 작성한 장소 리뷰 조회 response 모델
+struct MyPlaceReviewResponse: Codable {
     
-    /// 요청한 리뷰 타입 (PLACE / COURSE)
-    let reviewType: ReviewType
+    /// 리뷰 타입
+    let reviewType: String
     
     /// 작성한 리뷰 개수
     let reviewCount: Int
     
     /// 리뷰 목록
-    let content: [ReviewData]
+    let content: [PlaceReviewData]
     
     /// 마지막 페이지 여부
     let last: Bool
 }
 
-/// 개별 리뷰 데이터 모델
-struct ReviewData: Codable {
+/// 개별 장소 리뷰 데이터를 담는 구조체
+struct PlaceReviewData: Codable {
     
     /// 리뷰 ID
     let reviewId: Int
     
-    /// 장소 또는 코스 이름
+    /// 장소 이름
     let name: String
     
-    /// 리뷰 내용 (사용자가 작성한 댓글)
+    /// 리뷰 내용
     let comment: String
     
     /// 리뷰 이미지 리스트

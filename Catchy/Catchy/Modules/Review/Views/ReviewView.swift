@@ -40,10 +40,10 @@ struct ReviewView: View {
                     })
                     .padding(.horizontal, 16)
                 } else {
-                    makeProgressView()
+                    LoadingView()
                 }
             } else {
-                makeProgressView()
+                LoadingView()
             }
         })
         .ignoresSafeArea(.all)
@@ -172,22 +172,21 @@ struct ReviewView: View {
     private func reviewTableSection(content: [ReviewContents]) -> some View {
         VStack(alignment: .center, spacing: 8, content: {
             ForEach(content, id: \.reviewId) { review in
-                ReviewCard(data: review, cardType: .ratingReview, reviewType: .place)
+                ReviewCard(
+                    cardType: .ratingReview,
+                    reviewType: .place,
+                    reviewId: review.reviewId,
+                    comment: review.comment,
+                    images: review.reviewImages,
+                    rating: review.rating,
+                    placeOrCourseName: nil,
+                    userName: review.creatorNickname,
+                    visitedDate: review.visitedDate
+                    )
                 Divider()
                     .background(.g3)
             }
         })
-    }
-    
-    private func makeProgressView() -> some View {
-        VStack(alignment: .center) {
-            Spacer()
-            
-            ProgressView()
-                .controlSize(.regular)
-            
-            Spacer()
-        }
     }
 }
 

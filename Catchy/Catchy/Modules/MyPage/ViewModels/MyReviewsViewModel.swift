@@ -10,14 +10,21 @@ import Combine
 
 class MyReviewsViewModel: ObservableObject {
     
+    /// 내 리뷰 조회 Response
     @Published var myReviewsData: MyReviewResponse?
-    @Published var isLoading: Bool = false  // API 로딩 상태
     
+    /// 내 리뷰 조회 API 로딩중?
+    @Published var isMyReviewsLoading: Bool = false
+    
+    /// 선택된 세그먼트
     @Published var selectedSegment: ReviewSegment = .course
+    
+    /// 내 리뷰 개수
     @Published var reviewCount: Int = 0
     
     
     let container: DIContainer
+    
     var cancellables = Set<AnyCancellable>()
     
     init(container: DIContainer) {
@@ -27,8 +34,7 @@ class MyReviewsViewModel: ObservableObject {
 
 extension MyReviewsViewModel {
     func getMyReviews(review: MyReviewRequest){
-        isLoading = true
-        myReviewsData = nil  /// 기존 데이터 초기화 (새 요청을 위해)
+        isMyReviewsLoading = true
         
         container.useCaseProvider.myPageUseCase.executeGetMyReviews(review: review)
             .tryMap { responseData -> ResponseData<MyReviewResponse> in
@@ -41,7 +47,7 @@ extension MyReviewsViewModel {
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
                 guard let self = self else { return }
-                self.isLoading = false
+                self.isMyReviewsLoading = false
                 
                 switch completion {
                 case .finished:
