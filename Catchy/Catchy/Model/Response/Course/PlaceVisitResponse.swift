@@ -9,6 +9,9 @@ import Foundation
 
 /// 장소 방문체크 API
 struct PlaceVisitResponse: Codable {
+ 
+    /// 장소 방문 ID
+    let placeVisitId: Int
     
     /// 장소 방문 ID
     let placeVisitId: Int

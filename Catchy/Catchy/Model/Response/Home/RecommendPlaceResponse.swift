@@ -9,6 +9,7 @@ import Foundation
 
 struct RecommendPlaceResponse: Codable {
     let content: [RecommendPlaceResponseData]
+    let isLast: Bool
 }
 
 struct RecommendPlaceResponseData: Codable, Identifiable, Likeable {
@@ -22,4 +23,16 @@ struct RecommendPlaceResponseData: Codable, Identifiable, Likeable {
     let rating: Double
     let reviewCount: Int
     var liked: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case placeId
+        case placeName
+        case placeImage
+        case category
+        case roadAddress
+        case activeTime
+        case rating
+        case reviewCount
+        case liked
+    }
 }

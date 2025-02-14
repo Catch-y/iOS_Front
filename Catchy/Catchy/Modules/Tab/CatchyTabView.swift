@@ -48,7 +48,7 @@ struct CatchyTabView: View {
                             .zIndex(3)
                     case .group:
                         Text("11")
-                    case .myPage:
+                    case .mypage:
                         Text("11")
                     }
                     

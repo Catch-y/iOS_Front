@@ -22,7 +22,7 @@ struct PlaceInfoSection: View {
         self.action = action
     }
     
-    var body: some View{
+    var body: some View {
         VStack(spacing: 19) {
             if let url = URL(string: place.imageUrl) {
                 KFImage(url)
@@ -40,7 +40,7 @@ struct PlaceInfoSection: View {
         }
         .safeAreaPadding(.horizontal, 16)
     }
-    
+   
     
     /// 장소 상세 화면 텍스트 그룹
     private var placeTextGroup: some View {
@@ -87,11 +87,18 @@ struct PlaceInfoSection: View {
             PlaceTimeText(timeText: place.activeTime)
                 .padding(.bottom, 4)
             
-            PlaceDomainButton(domain: place.placeSite).padding(.leading, 1)
+            Link(destination: URL(string: place.placeSite )!) {
+                PlaceDomainButton(domain: place.placeSite).padding(.leading, 1)
+            }
+            
         }
         .padding(.horizontal, 11)
         
         
     }
     
+}
+
+#Preview {
+    PlaceInfoSection(place: .init(placeId: 1, imageUrl: "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg", placeName: "중앙대학교", placeDescription: "넓고 큰 중앙대학교", categoryName: .BAR, roadAddress: "도로명 주소 ㅇㅇ", activeTime: "dsds~dsds", rating: 4.2, isVisited: false, reviewCount: 53, placeSite: "www.naver.com"))
 }

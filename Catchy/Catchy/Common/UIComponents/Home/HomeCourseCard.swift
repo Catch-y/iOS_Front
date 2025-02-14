@@ -73,6 +73,7 @@ struct HomeCourseCard: View {
                     ProgressView()
                         .controlSize(.regular)
                 }.retry(maxCount: 2, interval: .seconds(2))
+                .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 132))
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(maxWidth: .infinity, maxHeight: 132)
@@ -84,5 +85,13 @@ struct HomeCourseCard: View {
 struct CourseCard_Preview: PreviewProvider {
     static var previews: some View {
         HomeCourseCard(data: .init(courseId: 223, courseName: "경복궁", courseDescription: "ㅁㄴㅇㅁㅇㄴㅇㅁㄴㅁㄴㅇㅁㄴㅇㅇㅁㅇㅁㅇd", courseImage: "https://i.namu.wiki/i/5oX24wIySIGKLQK-xivKI_-DGXsfLmGLupQcvGVOC-luX4GkZZBZJf3OYC96jlGHFGdqzaNpoRULIPjYsSmI8k-OTB1J-v1ZHxU8ILUO8zMI2AH2nGBqIACorKDlDHFywU58LEvaYrR6Hyq043vBeQ.webp", courseType: .ai))
+    }
+}
+
+extension UIScreen {
+    static var screenWidth: CGFloat {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first?.screen.bounds.width ?? 375 // 기본값 설정 (iPhone 13 기준)
     }
 }
