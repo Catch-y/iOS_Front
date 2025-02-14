@@ -32,6 +32,7 @@ struct PlaceInfoSection: View {
                     }
                     .retry(maxCount: 2, interval: .seconds(2))
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(maxWidth: .infinity, maxHeight: 144)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
             }
@@ -99,6 +100,3 @@ struct PlaceInfoSection: View {
     
 }
 
-#Preview {
-    PlaceInfoSection(place: .init(placeId: 1, imageUrl: "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg", placeName: "중앙대학교", placeDescription: "넓고 큰 중앙대학교", categoryName: .BAR, roadAddress: "도로명 주소 ㅇㅇ", activeTime: "dsds~dsds", rating: 4.2, isVisited: false, reviewCount: 53, placeSite: "www.naver.com"))
-}

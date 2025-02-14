@@ -52,8 +52,9 @@ extension AIPlaceListViewModel {
             }
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: {
-                [weak self] completion in
-                guard let self = self else { return }
+                
+                completion in
+                
                 switch completion {
                 case .finished:
                     print("✅ Patch CourseBookmark Server Completed")

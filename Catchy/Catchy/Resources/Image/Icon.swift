@@ -69,10 +69,6 @@ enum Icon: String {
     case emptyStamp = "emptyStamp"
     case colorReview = "colorReview"
     case warningIntro = "warningIntro"
-    case visitCheck = "visitCheck"
-    case visitStamp = "visitStamp"
-    case emptyStamp = "emptyStamp"
-    case colorReview = "colorReview"
     
     //MARK: - Category
     case breaks = "breaks"

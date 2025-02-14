@@ -46,7 +46,7 @@ extension PlaceVisitingViewModel {
             }
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: {
-                [weak self] completion in
+                completion in
 
                 switch completion {
                 case .finished:
@@ -83,7 +83,7 @@ extension PlaceVisitingViewModel {
             }
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: {
-                [weak self] completion in
+                completion in
                 switch completion {
                 case .finished:
                     print("✅ Patch PlaceLiked Server Completed")
@@ -119,7 +119,7 @@ extension PlaceVisitingViewModel {
             }
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: {
-                [weak self] completion in
+                completion in
 
                 switch completion {
                 case .finished:

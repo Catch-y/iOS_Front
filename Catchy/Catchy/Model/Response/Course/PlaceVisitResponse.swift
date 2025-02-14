@@ -12,10 +12,7 @@ struct PlaceVisitResponse: Codable {
  
     /// 장소 방문 ID
     let placeVisitId: Int
-    
-    /// 장소 방문 ID
-    let placeVisitId: Int
-    
+        
     /// 장소 방문 날짜
     let visitedDate: String
     

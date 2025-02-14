@@ -25,7 +25,7 @@ struct PlaceBucketCard: View {
     
     let canDelete: Bool
     
-    init(placeSearchResponseData: PlaceDataProtocol, index: Int, closeButtonTap: @escaping (Int) -> Void, canDelete: Bool = true) {
+    init(placeSearchResponseData: PlaceDataProtocol, index: Int, canDelete: Bool = true, closeButtonTap: @escaping ((Int) -> Void)) {
         self.placeSearchResponseData = placeSearchResponseData
         self.index = index
         self.closeButtonTap = closeButtonTap

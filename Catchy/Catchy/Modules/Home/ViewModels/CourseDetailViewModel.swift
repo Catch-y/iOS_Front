@@ -89,10 +89,8 @@ extension CourseDetailViewModel {
             }
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: {
-                [weak self] completion in
+                completion in
                 
-                guard let self = self else { return }
-                                
                 switch completion {
                 case .finished:
                     print("✅ Patch CourseBookmark Server Completed")
