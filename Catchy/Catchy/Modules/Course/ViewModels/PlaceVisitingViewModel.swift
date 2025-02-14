@@ -18,7 +18,6 @@ class PlaceVisitingViewModel: ObservableObject {
 
     @Published var placeDetailResponse: PlaceDetailResponse?
 
-    
     init(container: DIContainer) {
         self.container = container
     }
@@ -127,11 +126,8 @@ extension PlaceVisitingViewModel {
                 case .failure(let failure):
                     print("❌ Ppost PlaceVisit Failed: \(failure)")
                 }
-            },receiveValue: { [weak self] response in
-                guard let self = self else { return }
-                if let response = response.result {
-                    self.placeDetailResponse?.isVisited = response.isVisited
-                }
+            },receiveValue: { response in
+    
             })
             .store(in: &cancellables)
     }

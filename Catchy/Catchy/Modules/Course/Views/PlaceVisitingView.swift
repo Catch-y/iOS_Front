@@ -147,16 +147,16 @@ struct PlaceVisitingView: View {
     }
 }
 
-struct PlaceVisitingView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(
-            ["iPhone 16 Pro Max", "iPhone 11"],
-            id: \.self
-        ) { deviceName in
-            PlaceVisitingView(container: DIContainer(), placeId: 1)
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-                .environmentObject(DIContainer())
-        }
-    }
-}
+//struct PlaceVisitingView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ForEach(
+//            ["iPhone 16 Pro Max", "iPhone 11"],
+//            id: \.self
+//        ) { deviceName in
+//            PlaceVisitingView(container: DIContainer(), placeId: 1)
+//                .previewDevice(PreviewDevice(rawValue: deviceName))
+//                .previewDisplayName(deviceName)
+//                .environmentObject(DIContainer())
+//        }
+//    }
+//}

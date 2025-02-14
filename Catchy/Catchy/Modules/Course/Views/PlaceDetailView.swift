@@ -1,7 +1,7 @@
-////
-////  PlaceDetailView.swift
-////  Catchy
-///
+//
+//  PlaceDetailView.swift
+//  Catchy
+//
 //  Created by LEE on 1/28/25.
 //
 
@@ -13,7 +13,9 @@ struct PlaceDetailView: View {
     
     @EnvironmentObject var container: DIContainer
         
-    @ObservedObject var viewModel: PlaceSearchViewModel
+    @ObservedObject var viewModel: DIYCourseViewModel
+    
+    let placeId: Int
     
     var body: some View {
         VStack {
@@ -33,7 +35,6 @@ struct PlaceDetailView: View {
                     onoff: .on
                 )
                 .safeAreaPadding(.horizontal, 16)
-                
                 Spacer()
                 
             } else {
@@ -53,3 +54,16 @@ struct PlaceDetailView: View {
     
 }
 
+//struct PlaceVisitingView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ForEach(
+//            ["iPhone 16 Pro Max", "iPhone 11"],
+//            id: \.self
+//        ) { deviceName in
+//            PlaceDetailView()
+//                .previewDevice(PreviewDevice(rawValue: deviceName))
+//                .previewDisplayName(deviceName)
+//                .environmentObject(DIContainer())
+//        }
+//    }
+//}

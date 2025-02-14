@@ -1,5 +1,5 @@
 //
-//  PlaceSearchViewModel.swift
+//  DIYCourseViewModel.swift
 //  Catchy
 //
 //  Created by LEE on 1/27/25.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-class PlaceSearchViewModel: ObservableObject {
+class DIYCourseViewModel: ObservableObject {
         
     let container: DIContainer
     
@@ -47,7 +47,7 @@ class PlaceSearchViewModel: ObservableObject {
     
 }
 
-extension PlaceSearchViewModel {
+extension DIYCourseViewModel {
     
     // MARK: - API 호출 함수
     /// 장소 검색 - 지역명 기반
