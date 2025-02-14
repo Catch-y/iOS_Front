@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// 내가 작성한 코스 리뷰 조회 요청 모델
+/// 내가 작성한 코스 리뷰 조회 Reqeust 모델
 struct MyCourseReviewRequest: Codable {
     
     /// 한 번에 조회할 리뷰 개수

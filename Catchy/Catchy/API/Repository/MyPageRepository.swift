@@ -29,8 +29,13 @@ class MyPageRepository: MyPageRepositoryProtocol {
         return service.getBookmarkCourseList(pageSize: pageSize, lastCourseId: lastCourseId)
     }
     
-    /// 내 리뷰 조회 API
-    func getMyReviewsData(review: MyReviewRequest) -> AnyPublisher<ResponseData<MyReviewResponse>, Moya.MoyaError> {
-        return service.getMyReviews(review: review)
+    /// 내 코스 리뷰 조회 API
+    func getMyCourseReviewsData(review: MyCourseReviewRequest) -> AnyPublisher<ResponseData<MyCourseReviewResponse>, Moya.MoyaError> {
+        return service.getMyCourseReviews(review: review)
+    }
+    
+    /// 내 장소 리뷰 조회 API
+    func getMyPlaceReviewsData(review: MyPlaceReviewRequest) -> AnyPublisher<ResponseData<MyPlaceReviewResponse>, Moya.MoyaError> {
+        return service.getMyPlaceReviews(review: review)
     }
 }

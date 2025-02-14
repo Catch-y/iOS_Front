@@ -30,6 +30,9 @@ struct ReviewCard: View {
     
     /* 필요 시 표시할 데이터 */
     
+    /// 카테고리 태그
+    // let categoryTags: [Category]?
+    
     /// 평점
     let rating: Int?
     
@@ -39,8 +42,8 @@ struct ReviewCard: View {
     /// 사용자 이름 (평점, 리뷰 보기에서 사용)
     let userName: String?
     
-    /// 방문일
-    let visitedDate: String?
+    /// 방문일 or 리뷰작성일
+    let date: String?
     
     // MARK: - body
     
@@ -58,7 +61,7 @@ struct ReviewCard: View {
         VStack(alignment: .leading, spacing: 14) {
             cardTopSection()
             
-            if images.isEmpty {
+            if !images.isEmpty {
                 reviewImages()
             }
             
@@ -71,8 +74,9 @@ struct ReviewCard: View {
     /// 1. 리뷰 상단섹션 : 내 리뷰에서는 장소 or 코스 이름 + 별점 + 삭제 / 평점 리뷰 보기에서는 별점 + 신고하기
     /// - Returns: 리뷰 상단 뷰
     private func cardTopSection() -> some View {
-        switch cardType {
-        case .myReview:
+        switch (cardType, reviewType) {
+            
+        case (.myReview, .course), (.myReview, .place):
             return AnyView(
                 VStack(alignment: .leading, content: {
                     HStack(content:{
@@ -83,7 +87,7 @@ struct ReviewCard: View {
                         Spacer()
                         
                         Button {
-                        // TODO: - 신고하기 로직
+                            // TODO: - 신고하기 로직
                         } label: {
                             Text("삭제")
                                 .font(.caption)
@@ -94,7 +98,10 @@ struct ReviewCard: View {
                     StarRating(rating: Double(rating ?? 0))
                 })
             )
-        case .ratingReview:
+            
+            
+            
+        case (.ratingReview, .course), (.ratingReview , .place):
             return AnyView (
                 HStack(content: {
                     // 별점 표시
@@ -152,20 +159,41 @@ struct ReviewCard: View {
     /// 4. 닉네임과 방문일
     /// - Returns: 닉네임과 방문일 뷰
     private func reviewFooter() -> some View {
-        switch cardType {
-        case .myReview:
+        switch (cardType, reviewType) {
+        case (.myReview, .course):
+            return AnyView(
+                HStack(spacing: 6, content: {
+                    Text("리뷰 작성일")
+                        .font(.caption)
+                        .foregroundStyle(Color.g4)
+                    
+                    Text(date ?? "")
+                        .font(.caption)
+                        .foregroundStyle(Color.g5)
+                })
+            )
+            
+        case (.myReview, .place):
             return AnyView(
                 HStack(spacing: 6, content: {
                     Text("방문일")
                         .font(.caption)
                         .foregroundStyle(Color.g4)
                     
-                    Text(visitedDate ?? "")
+                    Text(date ?? "")
                         .font(.caption)
                         .foregroundStyle(Color.g5)
                 })
             )
-        case .ratingReview:
+        
+        case (.ratingReview, .course):
+            return AnyView(
+                Text(userName ?? "")
+                    .font(.caption)
+                    .foregroundColor(.g5)
+            )
+            
+        case (.ratingReview, .place):
             return AnyView(
                 HStack(spacing: 6, content: {
                     Text(userName ?? "")
@@ -181,7 +209,7 @@ struct ReviewCard: View {
                         .font(.caption)
                         .foregroundStyle(Color.g4)
                     
-                    Text(visitedDate ?? "")
+                    Text(date ?? "")
                         .font(.caption)
                         .foregroundStyle(Color.g5)
                 })
@@ -193,16 +221,16 @@ struct ReviewCard: View {
 #Preview {
     ReviewCard(
         cardType: .myReview,
-        reviewType: .place,
+        reviewType: .course,
         reviewId: 1,
         comment: "스타벅스 너무 좋았어요!",
         images: [
-            ReviewImageData(reviewImageId: 101, imageUrl: "https://example.com/image1.jpg"),
-            ReviewImageData(reviewImageId: 102, imageUrl: "https://example.com/image2.jpg")
+            ReviewImageData(reviewImageId: 101, imageUrl: "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp"),
+            ReviewImageData(reviewImageId: 102, imageUrl: "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp")
         ],
         rating: 5,
         placeOrCourseName: "스타벅스 용산점",
-        userName: "빈센",  // 마이페이지에서 필요
-        visitedDate: nil  // 평점 리뷰에서는 필요
+        userName: "빈센",
+        date: "2025.01.23"
     )
 }

@@ -181,7 +181,7 @@ struct ReviewView: View {
                     rating: review.rating,
                     placeOrCourseName: nil,
                     userName: review.creatorNickname,
-                    visitedDate: review.visitedDate
+                    date: review.visitedDate
                     )
                 Divider()
                     .background(.g3)
