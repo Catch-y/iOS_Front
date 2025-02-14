@@ -56,7 +56,7 @@ class CourseRepository: CourseRepositoryProtocol {
     
     /// 장소 방문체크 API
     func postPlaceVisitData(placeId: Int) -> AnyPublisher<ResponseData<PlaceVisitResponse>, MoyaError> {
-        return provider.postPlaceVisit(placeId: placeId)
+        return service.postPlaceVisit(placeId: placeId)
     }
     
     /// 내 코스 조회 API

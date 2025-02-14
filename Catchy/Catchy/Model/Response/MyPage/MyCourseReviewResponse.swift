@@ -32,9 +32,18 @@ struct CourseReviewData: Codable {
     /// 코스 이름
     let name: String
     
+    /// 코스 카테고리 태그
+    let categories: [CategoryType]
+    
     /// 리뷰 내용
     let comment: String
     
     /// 리뷰 이미지 리스트
     let reviewImages: [ReviewImageData]
+    
+    /// 별점
+    let rating: Int
+    
+    /// 리뷰 작성일
+    let createdDate: String
 }

@@ -64,10 +64,11 @@ struct MyCourseReviewsView: View {
                         reviewId: review.reviewId,
                         comment: review.comment,
                         images: review.reviewImages,
-                        rating: nil,
+                        categories: review.categories,
+                        rating: review.rating,
                         placeOrCourseName: review.name,
                         userName: nil,
-                        date: nil
+                        date: review.createdDate
                     )
                     .padding(.bottom, 40)
 
@@ -78,6 +79,16 @@ struct MyCourseReviewsView: View {
                     }
                 }
             }
+        }
+    }
+}
+
+struct MyCourseReviewsView_Previews: PreviewProvider {
+    static var previews: some View {
+        ForEach(["iPhone 16 Pro", "iPhone 11"], id: \ .self) { deviceName in
+            MyCourseReviewsView(container: DIContainer())
+                .previewDevice(PreviewDevice(rawValue: deviceName))
+                .previewDisplayName(deviceName)
         }
     }
 }

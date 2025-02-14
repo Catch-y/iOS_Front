@@ -30,6 +30,7 @@ struct ProfileImage: View {
                         .controlSize(.large)
                 }
                 .retry(maxCount: 2, interval: .seconds(2))
+                .downsampling(size: CGSize(width: UIScreen.screenWidth, height: size))
                 .resizable()
                 .scaledToFill()
                 .frame(width: size, height: size)

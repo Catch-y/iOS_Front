@@ -178,6 +178,7 @@ struct ReviewView: View {
                     reviewId: review.reviewId,
                     comment: review.comment,
                     images: review.reviewImages,
+                    categories: nil,
                     rating: review.rating,
                     placeOrCourseName: nil,
                     userName: review.creatorNickname,

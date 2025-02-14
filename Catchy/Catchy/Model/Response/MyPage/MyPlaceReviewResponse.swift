@@ -32,6 +32,9 @@ struct PlaceReviewData: Codable {
     /// 장소 이름
     let name: String
     
+    /// 카테고리 태그
+    let categories: [CategoryType]
+    
     /// 리뷰 내용
     let comment: String
     

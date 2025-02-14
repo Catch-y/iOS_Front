@@ -66,6 +66,7 @@ struct MyPlaceReviewsView: View {
                         reviewId: review.reviewId,
                         comment: review.comment,
                         images: review.reviewImages,
+                        categories: review.categories,
                         rating: review.rating,
                         placeOrCourseName: review.name,
                         userName: nil,

@@ -31,7 +31,7 @@ struct ReviewCard: View {
     /* 필요 시 표시할 데이터 */
     
     /// 카테고리 태그
-    // let categoryTags: [Category]?
+    let categories: [CategoryType]?
     
     /// 평점
     let rating: Int?
@@ -83,11 +83,24 @@ struct ReviewCard: View {
                         Text(placeOrCourseName ?? "")
                             .font(.Subtitle3)
                             .foregroundStyle(Color.g7)
+                            .lineLimit(2)
+                            .lineSpacing(2.5)
+                            .multilineTextAlignment(.leading)
                         
-                        Spacer()
+                        if let categories = categories {
+                            /// 카테고리 태그
+                            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: 5), content: {
+                                ForEach(categories, id: \.self) { category in
+                                    CategoryCard(categoryType: category)
+                                }
+                            })
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                        }
                         
                         Button {
-                            // TODO: - 신고하기 로직
+                            withAnimation {
+                                // TODO: - 신고하기 로직
+                            }
                         } label: {
                             Text("삭제")
                                 .font(.caption)
@@ -132,6 +145,7 @@ struct ReviewCard: View {
                                 ProgressView()
                                     .controlSize(.regular)
                             }.retry(maxCount: 2, interval: .seconds(2))
+                            .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 85))
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 85, height: 85)
@@ -228,6 +242,7 @@ struct ReviewCard: View {
             ReviewImageData(reviewImageId: 101, imageUrl: "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp"),
             ReviewImageData(reviewImageId: 102, imageUrl: "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp")
         ],
+        categories: [.CAFE, .BAR, .CULTURELIFE, .EXPERIENCE, .REST],
         rating: 5,
         placeOrCourseName: "스타벅스 용산점",
         userName: "빈센",
