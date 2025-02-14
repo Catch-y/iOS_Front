@@ -30,7 +30,7 @@ struct CourseReviewData: Codable {
     let reviewId: Int
     
     /// 코스 이름
-    let courseName: String
+    let name: String
     
     /// 리뷰 내용
     let comment: String

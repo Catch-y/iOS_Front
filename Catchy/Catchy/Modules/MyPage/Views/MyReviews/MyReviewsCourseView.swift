@@ -1,0 +1,83 @@
+//
+//  MyReviewsCourse.swift
+//  Catchy
+//
+//  Created by 권용빈 on 2/14/25.
+//
+
+import SwiftUI
+
+/// 사용자가 작성한 코스 리뷰 목록을 보여주는 화면
+struct MyCourseReviewsView: View {
+    
+    @StateObject var viewModel: MyCourseReviewsViewModel
+
+    init(container: DIContainer) {
+        self._viewModel = StateObject(wrappedValue: .init(container: container))
+    }
+    
+    // MARK: - Body
+    var body: some View {
+        VStack(alignment: .center, spacing: 22) {
+            if viewModel.isMyCourseReviewsLoading {
+                LoadingView()
+            } else if let data = viewModel.myCourseReviewsData {
+                contentSection(data: data)
+                    .padding(.horizontal, 16)
+            } else {
+                CustomEmptyStateView(label: "작성하신 코스 리뷰가 없습니다.", subLabel: "내가 방문한 코스에 대한 리뷰를 적어주세요!")
+                    .padding(.top, 231)
+                Spacer()
+            }
+        }
+        .onAppear {
+            viewModel.getMyCourseReviews(review: .init(pageSize: 10, lastReviewId: 1))
+        }
+    }
+
+    // MARK: - 리뷰 콘텐츠
+    private func contentSection(data: MyCourseReviewResponse) -> some View {
+        VStack(alignment: .leading, spacing: 22) {
+            reviewCountSection(count: data.reviewCount)
+            reviewTableSection(content: data.content)
+        }
+    }
+
+    private func reviewCountSection(count: Int) -> some View {
+        HStack(spacing: 9) {
+            Text("작성한 리뷰")
+                .font(.body2)
+                .foregroundStyle(Color.g6)
+            Text("\(count)")
+                .font(.body2)
+                .foregroundStyle(Color.m6)
+        }
+    }
+
+    private func reviewTableSection(content: [CourseReviewData]) -> some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 8) {
+                ForEach(content, id: \.reviewId) { review in
+                    ReviewCard(
+                        cardType: .myReview,
+                        reviewType: .course,
+                        reviewId: review.reviewId,
+                        comment: review.comment,
+                        images: review.reviewImages,
+                        rating: nil,
+                        placeOrCourseName: review.name,
+                        userName: nil,
+                        date: nil
+                    )
+                    .padding(.bottom, 40)
+
+                    if review.reviewId != content.last?.reviewId {
+                        Divider()
+                            .background(Color.g3)
+                            .padding(.bottom, 40)
+                    }
+                }
+            }
+        }
+    }
+}

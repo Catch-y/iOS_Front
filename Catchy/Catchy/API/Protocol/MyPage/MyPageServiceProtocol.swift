@@ -19,6 +19,9 @@ protocol MyPageServiceProtocol {
     /// 북마크된 코스 무한 스크롤 API
     func getBookmarkCourseList(pageSize: Int, lastCourseId: Int?) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError>
     
-    /// 내 리뷰 조회 API
-    func getMyReviews(review: MyReviewRequest) -> AnyPublisher<ResponseData<MyReviewResponse>, MoyaError>
+    /// 내 코스 리뷰 조회 API
+    func getMyCourseReviews(review: MyCourseReviewRequest) -> AnyPublisher<ResponseData<MyCourseReviewResponse>, MoyaError>
+    
+    /// 내 장소 리뷰 조회 API
+    func getMyPlaceReviews(review: MyPlaceReviewRequest) -> AnyPublisher<ResponseData<MyPlaceReviewResponse>, MoyaError>
 }

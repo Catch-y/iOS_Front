@@ -33,9 +33,16 @@ class MyPageUseCase: MyPageUseCaseProtocol {
             .eraseToAnyPublisher()
     }
     
-    /// 내 리뷰 조회 API
-    func executeGetMyReviews(review: MyReviewRequest) -> AnyPublisher<ResponseData<MyReviewResponse>, Moya.MoyaError> {
-        return repository.getMyReviewsData(review: review)
+    /// 내 코스 리뷰 조회 API
+    func executeGetMyCourseReviews(review: MyCourseReviewRequest) -> AnyPublisher<ResponseData<MyCourseReviewResponse>, Moya.MoyaError> {
+        return repository.getMyCourseReviewsData(review: review)
+            .mapError { $0 as MoyaError }
+            .eraseToAnyPublisher()
+    }
+    
+    /// 내 장소 리뷰 조회 API
+    func executeGetMyPlaceReviews(review: MyPlaceReviewRequest) -> AnyPublisher<ResponseData<MyPlaceReviewResponse>, Moya.MoyaError> {
+        return repository.getMyPlaceReviewsData(review: review)
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }
