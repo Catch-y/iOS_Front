@@ -25,28 +25,34 @@ struct CourseDetailView: View {
                 }, title: "코스 정보", rightNaviIcon: nil, isShadow: true)
                 
                 if viewModel.isLoading {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
+                    MainProgressComponents()
                     
                 } else {
                     ScrollView(.vertical, content: {
                         
                         if let data = viewModel.courseDetailResponse {
                             topContents(data: data)
-                                .padding(.top, 13)
                         }
-                        
                         bottomGroup
                             .padding(.top, 14)
                     })
+                    .padding(.top, 13)
                     .scrollIndicators(.hidden)
+                    .refreshable {
+                        viewModel.getCourseDetail()
+                    }
+                    .onAppear {
+                        UIRefreshControl.appearance().tintColor = .main
+                    }
                 }
                 
             })
             .background(Color.bg1)
             .ignoresSafeArea(.all)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .task {
+                viewModel.getCourseDetail()
+            }
             
             if viewModel.showAlert {
                 Color.black.opacity(0.5)
@@ -60,9 +66,6 @@ struct CourseDetailView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
-        .task {
-            viewModel.getCourseDetail()
-        }
     }
     
     private func topContents(data: CourseDetailResponse) -> some View {
@@ -88,6 +91,7 @@ struct CourseDetailView: View {
                     ProgressView()
                         .controlSize(.regular)
                 }.retry(maxCount: 2, interval: .seconds(2))
+                .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 231))
                 .resizable()
                 .frame(maxWidth: .infinity, maxHeight: 231)
                 .overlay(content: {
@@ -118,7 +122,7 @@ struct CourseDetailView: View {
                         viewModel.patchCourseBookmark()
                     }
                 }, label: {
-                    returnBookMakr(data.isBookMarked)
+                    returnBookMark(data.isBookMarked)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 18, height: 18)
@@ -259,7 +263,7 @@ extension CourseDetailView {
         })
     }
     
-    func returnBookMakr(_ bookMark: Bool) -> Image {
+    func returnBookMark(_ bookMark: Bool) -> Image {
         if bookMark {
             Icon.bookMarkTrue.image
         } else {
