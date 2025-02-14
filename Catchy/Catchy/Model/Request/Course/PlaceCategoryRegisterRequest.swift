@@ -19,6 +19,5 @@ struct PlaceCategoryRegisterRequest: Codable {
     
     /// 장소 소 카테고리
     /// ex) 일식, 중식
-    // TODO: - 소 카테고리 타입 처리.
-    let smallCategory: [String]
+    let smallCategory: String
 }

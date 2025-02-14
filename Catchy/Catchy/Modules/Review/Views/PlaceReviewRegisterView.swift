@@ -10,17 +10,18 @@ import SwiftUI
 struct PlaceReviewRegisterView: View {
     
     @StateObject var viewModel: PlaceReviewRegisterViewModel
-    
+    @Binding var isPresented: Bool
     /// 리뷰 작성할 장소의 ID
-    @Binding var placeId: Int
+    let placeId: Int
 
     /// 보라색 안내 문구
     let infoText: String = PlaceReviewInfoText.randomText
 
     
-    init(container: DIContainer, placeId: Binding<Int>) {
+    init(container: DIContainer, placeId: Int, isPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
-        self._placeId = placeId
+        self.placeId = placeId
+        self._isPresented = isPresented
     }
     
     var body: some View {
@@ -30,6 +31,8 @@ struct PlaceReviewRegisterView: View {
             navigationGroup
             
             scrollView
+            
+            Spacer()
         }
         .task {
             viewModel.getPlaceVisitedDateList(placeId: placeId)
@@ -50,7 +53,7 @@ struct PlaceReviewRegisterView: View {
         CustomNavigation(
             action: {
                 // TODO: - 뒤로 가기 구현
-                print("뒤로 가기 탭")
+                isPresented.toggle()
             } ,
             title: "평점, 리뷰 남기기",
             leftNaviIcon: Icon.leftChevron.image,
@@ -257,18 +260,5 @@ extension PlaceReviewRegisterView {
             return false
         }
         return viewModel.rating != nil && viewModel.visitedDate != nil
-    }
-}
-
-struct PlaceReviewRegisterView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(
-            ["iPhone 16 Pro Max", "iPhone 11", "iPhone 12 mini"],
-            id: \.self
-        ) { deviceName in
-            PlaceReviewRegisterView(container: DIContainer(), placeId: .constant(1))
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-        }
     }
 }

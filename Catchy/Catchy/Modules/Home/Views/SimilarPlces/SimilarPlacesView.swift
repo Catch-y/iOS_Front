@@ -34,7 +34,6 @@ struct SimilarPlacesView: View {
                         .foregroundStyle(Color.g7)
                 })
                 .controlSize(.regular)
-                .tint(Color.main)
                 
                 Spacer()
             }

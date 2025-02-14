@@ -25,7 +25,7 @@ struct PlaceDetailResponse: Codable, Identifiable, Likeable {
     let placeDescription: String
     
     /// 장소의 카테고리
-    let categoryName: CategoryType
+    var categoryName: CategoryType
     
     /// 장소 주소
     let roadAddress: String

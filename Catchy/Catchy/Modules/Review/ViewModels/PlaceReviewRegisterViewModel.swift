@@ -59,11 +59,9 @@ class PlaceReviewRegisterViewModel: ObservableObject, ImageHandling {
         }
     }
     
-    
     /// 현재 선택된 이미지 수
     @Published var selectedImageCount = 0
-    
-    
+        
     init(container: DIContainer) {
         self.container = container
     }
