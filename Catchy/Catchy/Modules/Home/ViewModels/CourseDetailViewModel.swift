@@ -97,13 +97,11 @@ extension CourseDetailViewModel {
                 case .failure(let failure):
                     print("❌ Patch CourseBookmark Failed: \(failure)")
                 }
-            },receiveValue: { [weak self] response in
-                guard let self = self else { return }
+            },receiveValue: { response in
                 
                 if let response = response.result{
-                    self.courseDetailResponse?.isBookMarked = response.bookmarked
+                    print("북마크 결과 표시: \(response)")
                 }
-                
             })
             .store(in: &cancellables)
     }

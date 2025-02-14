@@ -114,7 +114,9 @@ struct CourseDetailView: View {
                 Spacer()
                 
                 Button(action: {
-                    viewModel.patchCourseBookmark()
+                    withAnimation {
+                        viewModel.patchCourseBookmark()
+                    }
                 }, label: {
                     returnBookMakr(data.isBookMarked)
                         .resizable()
