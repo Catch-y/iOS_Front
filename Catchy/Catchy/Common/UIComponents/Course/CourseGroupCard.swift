@@ -22,7 +22,6 @@ struct CourseGroupCard: View {
     
     var body: some View {
         HStack(spacing: 14) {
-            // TODO : - 이미지 로딩 구햔
             if let url = URL(string: course.courseImage) {
                 KFImage(url)
                     .placeholder {
@@ -34,7 +33,6 @@ struct CourseGroupCard: View {
                     .clipShape(RoundedRectangle(cornerRadius: 15)
                 )
             }
-            /// 코스 카드의 텍스트 그룹
             courseTextGroup
         }
         .padding(.vertical, 18)
@@ -52,7 +50,6 @@ struct CourseGroupCard: View {
     private var courseTextGroup: some View{
         VStack(alignment: .leading, spacing: 6) {
             
-            /// 코스 이름
             Text(course.courseName.customLineBreak())
                 .font(type.titleFont)
                 .foregroundStyle(Color.g7)
@@ -60,14 +57,13 @@ struct CourseGroupCard: View {
                 .lineLimit(2)
             
             /// 카테고리 태그
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: type.lazyVGridColumnCount), content: {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: type.lazyVGridColumnCount), content: 
                 ForEach(course.categories, id: \.self) { categoryType in
                     CategoryCard(categoryType: categoryType)
                 }
                 
             })
             
-            /// 코스 설명
             Text(course.courseDescription)
                 .font(.body3)
                 .foregroundStyle(Color.g5)
@@ -87,3 +83,4 @@ struct COurseGroupCard_Preview: PreviewProvider {
         
     }
 }
+

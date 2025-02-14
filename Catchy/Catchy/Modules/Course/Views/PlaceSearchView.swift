@@ -20,16 +20,16 @@ struct PlaceView: View {
     var body: some View {
         NavigationStack(path: $container.navigationRouter.destination) {
             VStack {
-                if !viewModel.isPlaceListLoading { /// 데이터 요청 완료
+                if !viewModel.isPlaceListLoading {
                     
                     if let data = viewModel.placeSearchResponse {
-                        if data.placeInfoPreviews.isEmpty { /// 데이터가 0개인 경우
+                        if data.placeInfoPreviews.isEmpty {
                             infoView
                         } else {
                             scrollView
                         }
                     }
-                } else { /// 데이터 요청 중
+                } else {
                     Spacer ()
                     
                     ProgressView()
@@ -37,6 +37,12 @@ struct PlaceView: View {
                     Spacer()
                 }
                 
+            }
+            .navigationDestination(
+                for: NavigationDestination.self
+            ) { destination in
+                NavigationRoutingView(destination: destination)
+                    .environmentObject(container)
             }
             .task {
                 viewModel
@@ -47,13 +53,8 @@ struct PlaceView: View {
                         )
                     )
             }
-            
-        }.navigationDestination(
-            for: NavigationDestination.self
-        ) { destination in
-            NavigationRoutingView(destination: destination)
-                .environmentObject(container)
         }
+            
     }
     
     /// 스크롤 뷰
@@ -72,25 +73,7 @@ struct PlaceView: View {
                         index,
                         place in
                         VStack(spacing: 0) {
-                            PlaceCard(place: place).onTapGesture{
-                                Task{
-                                    await viewModel
-                                        .getPlaceDetail(
-                                            placeId: place.placeId
-                                        )
-                                        
-                                    if let placeData = viewModel.placeDetailResponse {
-                                            
-                                        container.navigationRouter.push(
-                                            to: .PlaceDetailView(
-                                                placeDetailResponse: placeData
-                                            )
-                                        )
-                                    }
-                                }
-                                    
-                            }
-                                
+                            PlaceCard(place: place)
                             if index < content.count - 1 {
                                 Divider()
                                     .padding(.vertical, 20)

@@ -19,7 +19,6 @@ struct PlaceCard: View {
     var body: some View {
         
         HStack(spacing: 17) {
-            /// 이미지
             if let url = URL(string: place.placeImage) {
                 KFImage(url)
                     .placeholder{
@@ -41,14 +40,13 @@ struct PlaceCard: View {
         VStack(alignment: .leading, spacing: 6) {
             
             HStack(spacing: 8) {
-                /// 장소  이름
+                
                 Text(place.placeName.customLineBreak())
                     .font(.Subtitle3_SM)
                     .foregroundStyle(.g7)
                     .lineLimit(1)
                     .padding(.trailing, 8)
                 
-                /// 장소 카테고리
                 CategoryCard(categoryType: place.category)
                     .frame(width: 37.1)
                     .padding(.trailing, 19)
@@ -56,11 +54,9 @@ struct PlaceCard: View {
                 Spacer()
             }
             
-            /// 장소 위치
             PlaceAddressText(addressText: place.roadAddress)
                 .padding(.top, 6)
             
-            /// 장소 운영 시간
             PlaceTimeText(timeText: place.activeTime)
                 .padding(.bottom, 8)
             

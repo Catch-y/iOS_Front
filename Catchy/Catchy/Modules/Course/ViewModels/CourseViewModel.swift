@@ -24,6 +24,9 @@ class CourseViewModel: ObservableObject{
     /// 코스 리스트가 로딩 중?
     @Published var isCourseListLoading: Bool = false
     
+    /// 요청한 미지막 코스 ID
+    var lastId = 0
+    
     // MARK: - Segment Control Properties
     
     /// 코스 타입
@@ -64,12 +67,17 @@ class CourseViewModel: ObservableObject{
     
     
     // MARK: - FLoating Button Properties
-    
     /// 플로팅 버튼 상태
     @Published var isFloating: Bool = false
     
-    // MARK: - Init
+    /// 탭 된 플로팅 버튼 
+    @Published var selectedFloatingSegment: CourseSegment?
     
+    // MARK: - 화면 전환
+    /// AI 코스 생성 버튼이 눌렸을 때, 화면이 나타났는가?
+    @Published var isPresented: Bool = false
+    
+    // MARK: - Init
     init(container: DIContainer) {
         self.container = container
     }
@@ -80,9 +88,18 @@ extension CourseViewModel {
     
     // MARK: - API 호출 함수
     /// 코스 조회
-    func getCourseList(courseRequest: CourseRequest){
+    func getCourseList(){
         
+        if let isLast = courseResponse?.isLast, isLast {
+            return
+        }
         isCourseListLoading = true
+        
+        let province = selectedUpperIndex == nil ? "" : upperLocations[selectedUpperIndex!].addrName
+        let district = province == "" || selectedLowerIndex == nil ? "" : lowerLocations[selectedLowerIndex!]
+        
+        print("province : \(province), district: \(district), lastId: \(lastId)")
+        let courseRequest: CourseRequest = .init(type: segment.courseType, upperLocation: province, lowerLocation: district, lastId: lastId)
         
         container.useCaseProvider.courseUseCase
             .executeGetCourseList(courseRequest: courseRequest)
@@ -114,6 +131,7 @@ extension CourseViewModel {
                 
                 if let response = response.result{
                     self.courseResponse = response
+                    self.lastId = response.content.count > 0 ? response.content.last!.courseId : lastId
                 }
                 
             })
@@ -135,7 +153,8 @@ extension CourseViewModel {
         self.upperScrollPosition = nil
         self.resetLowerDropState()
         self.segment = segment
-    // TODO: - 세그먼트 컨트롤 변경시 API 요청
+        self.lastId = 0
+      
     }
     
     /// 모든 상태를 처음 화면의 상태와 동일하게 합니다.
@@ -145,6 +164,7 @@ extension CourseViewModel {
         self.isFloating = false
     }
     
+    /// 도 전체 드랍 다운 메뉴 상태 초기화
     func resetUpperDropState(){
         self.isUpperDrop = false
         self.selectedUpperIndex = nil
@@ -152,6 +172,7 @@ extension CourseViewModel {
         self.upperLocations.removeAll()
     }
     
+    /// 시/군/구 전체 드랍 다운 메뉴 상태 초기화
     func resetLowerDropState(){
         self.isLowerDrop = false
         self.selectedLowerIndex = nil
@@ -171,11 +192,5 @@ extension CourseViewModel {
         self.lowerScrollPosition = index
     }
     
-    // TODO: - 도 전체 버튼의 들어갈 값 요청
-    func requestUpperDropMenuItems(){
-        
-        // let response =
-        // self.upperLocations = response
-    }
     
 }

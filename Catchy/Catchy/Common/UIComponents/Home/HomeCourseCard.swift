@@ -42,8 +42,8 @@ struct HomeCourseCard: View {
         .background {
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.white)
-                .s1w()
         }
+        .s1w()
     }
     
     // MARK: - CourseInfo

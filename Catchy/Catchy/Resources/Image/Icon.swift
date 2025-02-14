@@ -21,6 +21,8 @@ enum Icon: String {
     
     //MARK: - SignUp
     case signupProfile = "signupProfile"
+    case notCheckName = "notCheckName"
+    case checkName = "checkName"
     
     //MARK: - ETC
     case leftChevron = "leftChevron"
@@ -38,6 +40,7 @@ enum Icon: String {
     case time = "time"
     case review = "review"
     case rightChevron = "rightChevron"
+    case emptyResult = "emptyResult"
     
     //MARK: - Course
     case courseAI = "courseAI"
@@ -46,6 +49,16 @@ enum Icon: String {
     case check = "check"
     case smileSearch = "smileSearch"
     case domain = "domain"
+
+    case loading = "loading"
+    case red_pin = "red_pin"
+    case blue_pin = "blue_pin"
+    case yellow_pin = "yellow_pin"
+    case purple_pin = "purple_pin"
+
+    case bookmark = "bookmark"
+    case bookMarkTrue = "bookMarkTrue"
+    case warningIntro = "warningIntro"
     
     //MARK: - Category
     case breaks = "breaks"
@@ -81,7 +94,7 @@ enum Icon: String {
     case solo = "solo"
     case allCheckBtn = "allCheckBtn"
     case allSelectCheckBtn = "allSelectCheckBtn"
-    case  provinceBtn = "provinceBtn"
+    case provinceBtn = "provinceBtn"
     
     var image: Image {
         return Image(self.rawValue)
