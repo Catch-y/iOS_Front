@@ -17,7 +17,7 @@ struct CalendarSubView: View {
     // MARK: - Body
     var body: some View {
         VStack(spacing: 20) {
-            weekDateView() // 주간 날짜 뷰 (항상 보이도록 설정)
+            weekDateView() // 주간 날짜
                 .padding(.vertical, 8)
                 .background(Color.white)
 
@@ -34,17 +34,19 @@ struct CalendarSubView: View {
     }
 
     // MARK: - 주간 날짜 뷰
-    /// 선택된 주간의 날짜를 표시하는 뷰 (선택된 날짜 없어도 표시)
     private func weekDateView() -> some View {
-        let weekDates = viewModel.weekForDate(viewModel.selectedDate ?? Date()) // 선택된 날짜 없으면 오늘 기준 표시
+        // 만약 selectedDate가 없으면 오늘 기준으로 계산
+        let targetDate = viewModel.selectedDate ?? Date()
+        let weekDates = viewModel.weekForDate(targetDate)
 
         return HStack(spacing: 8) {
             ForEach(weekDates, id: \.self) { date in
                 VStack {
+                    // 현재 반복 중인 date == selectedDate 라면 강조 표시
                     if date == viewModel.selectedDate {
                         ZStack {
                             Rectangle()
-                                .fill(Color.m6) // 선택한 날짜 하이라이트
+                                .fill(Color.m6) // 선택한 날짜 배경
                                 .frame(width: 48, height: 69)
                                 .mask(RoundedRectangle(cornerRadius: 10, style: .continuous))
 
@@ -68,11 +70,11 @@ struct CalendarSubView: View {
                         }
                     }
                 }
-                .frame(width: 48, height: 69) // 크기 고정
+                .frame(width: 48, height: 69) // 각 날짜 셀 크기
             }
         }
-        .padding(.horizontal, 10) //  좌우 여백 추가
-        .frame(height: 80) //  높이 조정
+        .padding(.horizontal, 10)
+        .frame(height: 80)
     }
 
     // MARK: - Date Formatters

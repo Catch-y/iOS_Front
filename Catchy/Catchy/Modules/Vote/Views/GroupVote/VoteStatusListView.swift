@@ -8,48 +8,47 @@
 import SwiftUI
 
 struct VoteStatusListView: View {
-    @ObservedObject var viewModel: VoteStatusListViewModel  // ViewModel 바인딩
+    @ObservedObject var viewModel: VoteStatusListViewModel
     var voteId: Int  // 투표 ID를 파라미터로 받기
-    
+
     // MARK: - Body
     var body: some View {
         LazyVStack(spacing: 12) {
             if viewModel.isLoading {
-                로딩뷰
+                loadingView
             } else if viewModel.voteStatus.isEmpty {
-                빈데이터뷰
+                emptyDataView
             } else {
-                투표현황리스트
+                voteStatusList
             }
-
-            // 선택된 카테고리 표시
-            선택된카테고리뷰
         }
-        .onAppear { viewModel.fetchCategories(voteId: voteId) }
+        .task {
+            viewModel.fetchCategories(groupId: 1, voteId: voteId) //
+        }
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .padding([.vertical], 46)
-        .padding([.horizontal], 26)
+        .padding(.vertical, 46)
+        .padding(.horizontal, 26)
     }
 
-    // MARK: - 로딩 뷰
-    private var 로딩뷰: some View {
+    // MARK: - Loading View
+    private var loadingView: some View {
         ProgressView("Loading...")
     }
 
-    // MARK: - 빈 데이터 뷰
-    private var 빈데이터뷰: some View {
+    // MARK: - Empty Data View
+    private var emptyDataView: some View {
         Text("투표 현황 데이터가 없습니다.")
             .font(.body3)
             .foregroundStyle(.g5)
     }
 
-    // MARK: - 투표 현황 리스트
-    private var 투표현황리스트: some View {
-        ForEach(viewModel.voteStatus, id: \.categoryId) { status in
+    // MARK: - Vote Status List
+    private var voteStatusList: some View {
+        ForEach(viewModel.voteStatus, id: \.category) { status in // category 기반으로 수정
             HStack(spacing: 16) {
-                순위서클(순위: status.categoryId)
-                투표현황텍스트(상태: status)
+                rankingCircle(rank: status.count) // ✅ count 기반으로 수정
+                voteStatusText(status: status)
             }
             .padding(16)
             .background(RoundedRectangle(cornerRadius: 20)
@@ -60,74 +59,27 @@ struct VoteStatusListView: View {
         }
     }
 
-    // MARK: - 선택된 카테고리 뷰
-    private var 선택된카테고리뷰: some View {
-        VStack(alignment: .leading, spacing: 8) {
-
-            ForEach(viewModel.selectedCategories, id: \.self) { category in
-                HStack {
-                    카테고리아이콘(이름: category.rawValue) // 카테고리 아이콘
-                        .resizable()
-                        .frame(width: 24, height: 24)
-
-                    Text(category.rawValue) // 카테고리 이름
-                        .font(.body2)
-                        .foregroundStyle(.g7)
-                }
-            }
-        }
-        .padding(16)
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
-    }
-
-    // MARK: - 카테고리 아이콘 가져오기
-    private func 카테고리아이콘(이름: String) -> Image {
-        switch 이름 {
-        case "휴식":
-            return Icon.voteBreaks.image
-        case "카페":
-            return Icon.voteCafe.image
-        case "문화생활":
-            return Icon.voteCultureLife.image
-        case "체험":
-            return Icon.voteExperience.image
-        case "음식점":
-            return Icon.voteRestaurant.image
-        case "스포츠":
-            return Icon.voteSport.image
-        case "주류":
-            return Icon.voteBar.image
-        default:
-            return Icon.close.image // 기본 아이콘
-        }
-    }
-
-    // MARK: - 순위 서클
-    private func 순위서클(순위: Int) -> some View {
+    // MARK: - Ranking Circle
+    private func rankingCircle(rank: Int) -> some View {
         Circle()
             .fill(Color.m3)
             .frame(width: 25, height: 25)
             .overlay(
-                Text("\(순위)")
+                Text("\(rank)")
                     .font(.body1)
                     .foregroundStyle(.white)
             )
     }
 
-    // MARK: - 투표 현황 텍스트
-    private func 투표현황텍스트(상태: VoteCategoryResponse.CategoryDto) -> some View {
+    // MARK: - Vote Status Text
+    private func voteStatusText(status: CategoryResultData) -> some View {
         HStack(spacing: 3) {
-            Text(상태.name)
+            Text(status.category) // ✅ 변경된 모델 사용
                 .font(.Body1_2)
                 .foregroundStyle(.g7)
-            Text("0명")  // voteCount 대신 "0명" 표시
+            Text("\(status.count)명")  // ✅ count 값 적용
                 .font(.body3)
                 .foregroundStyle(.m5)
-            Text("/ \(4)명")  // 예시로 4명으로 설정
-                .font(.body3)
-                .foregroundStyle(.g4)
             Spacer()
         }
     }

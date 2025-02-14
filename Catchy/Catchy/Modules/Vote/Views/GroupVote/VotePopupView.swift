@@ -17,6 +17,7 @@ struct VotePopupView: View {
         popupBackground {
             VStack(spacing: 8) {
                 headerView
+                    .padding(.top , 30)
                 titleView
                 categoryListView
                     .padding()
@@ -59,7 +60,7 @@ extension VotePopupView {
             HStack(spacing: 2) {
                 Text("코스에 추가")
                     .font(.Subtitle3)
-                    .foregroundStyle(.m4)
+                    .foregroundStyle(.main)
                 Text("하고 싶은")
                     .font(.Subtitle3)
                     .foregroundStyle(.g7)

@@ -10,55 +10,80 @@ import Combine
 
 class GroupVoteBeforeViewModel: ObservableObject {
     
-    // MARK: - Properties
-    @Published var voteStatus: [VoteCategoryResponse.CategoryDto] = []
+    // MARK: - Published Properties
+    @Published var voteStatusListViewModel: VoteStatusListViewModel
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     
+    // MARK: - Private
     private var cancellables = Set<AnyCancellable>()
-    private let container: DIContainer
+    let container: DIContainer
+    let voteId: Int
     
     // MARK: - Initializer
-    init(container: DIContainer) {
-        self.container = container
-    }
+    init(container: DIContainer, voteId: Int) {
+            self.container = container
+            self.voteId = voteId
+            self._voteStatusListViewModel = Published(initialValue: VoteStatusListViewModel(container: container)) 
+        }
     
     // MARK: - Methods
-    func fetchCategories(voteId: Int) {
+    func fetchCategories(groupId: Int) {
         isLoading = true
         errorMessage = nil
-        
-        container.useCaseProvider.categoryVoteUseCase
-            .getCategories(voteId: voteId)
-            .tryMap { response -> VoteCategoryResponse in
-                if !response.isSuccess {
-                    throw APIError.serverError(
-                        message: response.message,
-                        code: response.code
-                    )
-                }
-                // result로부터 데이터 반환
-                guard let result = response.result else {
-                    throw APIError.serverError(
-                        message: "결과가 비어 있습니다.",
-                        code: "NO_RESULT"
-                    )
-                }
-                return result
-            }
-            .receive(on: DispatchQueue.main)
+
+        container.useCaseProvider.voteUseCase
+            .executeGetVoteResults(groupId: groupId, voteId: voteId)
+            .receive(on: DispatchQueue.main)  // ✅ 메인 스레드에서 실행
             .sink(receiveCompletion: { [weak self] completion in
-                guard let self = self else { return }
-                self.isLoading = false
-                if case let .failure(error) = completion {
-                    self.errorMessage = "API 호출 실패: \(error.localizedDescription)"
-                    print("❌ API 호출 실패: \(error.localizedDescription)")
+                switch completion {
+                case .failure(let error):
+                    self?.isLoading = false
+                    self?.errorMessage = "API 호출 실패: \(error.localizedDescription)"
+                    print("[❌ API 호출 실패]: \(error.localizedDescription)")
+                    self?.loadSampleData()  // ✅ API 실패 시 샘플 데이터 로드
+                case .finished:
+                    break
                 }
-            }, receiveValue: { [weak self] response in
-                guard let self = self else { return }
-                self.voteStatus = response.categories
-                print("✅ 카테고리 데이터 로드 성공: \(self.voteStatus)")
+            }, receiveValue: { [weak self] responseData in
+                if responseData.isSuccess, let categories = responseData.result?.categories {
+                    self?.voteStatusListViewModel.voteStatus = categories
+                    self?.isLoading = false
+                    print("✅ API 데이터 로드 성공: \(categories)")
+                } else {
+                    self?.errorMessage = "서버 오류 발생"
+                    print("[❌ 서버 오류] 메시지: \(responseData.message)")
+                }
             })
-            .store(in: &cancellables)
+            .store(in: &cancellables)  // ✅ 메모리 해제 방지
     }
+
+
+    
+    // MARK: - 샘플 데이터 로드
+    func loadSampleData() {
+        guard let sampleResponse = try? JSONDecoder().decode(
+            BaseResponse<VoteResultCategoryResponse>.self,
+            from: VoteAPITarget.getVoteResults(groupId: 1, voteId: 1).sampleData
+        ) else {
+            print("[❌ 오류] 샘플 데이터 디코딩 실패")
+            return
+        }
+
+        DispatchQueue.main.async {
+            if let categories = sampleResponse.result?.categories {
+                self.voteStatusListViewModel.voteStatus = categories
+                print("[✅ 샘플 데이터 로드 성공] 카테고리 데이터:", categories)
+                print("📢 현재 voteStatusListViewModel.voteStatus:", self.voteStatusListViewModel.voteStatus)
+
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                  
+                }
+            } else {
+                print("[❌ 오류] 샘플 데이터에 카테고리 없음")
+            }
+        }
+    }
+
 }

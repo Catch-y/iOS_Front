@@ -32,7 +32,7 @@ struct VotingBeforeMemberView: View {
         }
         .task {
             print("투표 멤버 데이터 로드 중")
-            viewModel.getVoteMember(voteRequest: VoteRequest(groupId: 1, voteId: 1))
+            viewModel.getVoteMembers(groupId: 1, voteId: 1)
             print("투표 멤버 데이터 로드 완료")
         }
     }
@@ -40,7 +40,7 @@ struct VotingBeforeMemberView: View {
     // MARK: - Avatars View
     private var avatarsView: some View {
         HStack(spacing: 12) {
-            ForEach(viewModel.avatars, id: \.image) { avatar in
+            ForEach(viewModel.avatars, id: \ .image) { avatar in
                 VStack {
                     if avatar.image.starts(with: "http") {
                         KFImage(URL(string: avatar.image))
@@ -67,8 +67,9 @@ struct VotingBeforeMemberView: View {
                 }
             }
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 20)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 11)
+        .frame(maxWidth: .infinity, alignment: .center)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 85))
     }
@@ -87,5 +88,7 @@ struct VotingBeforeMemberView_Previews: PreviewProvider {
         VotingBeforeMemberView(container: DIContainer())
             .previewDevice(PreviewDevice(rawValue: "iPhone 16 Pro Max"))
             .previewDisplayName("iPhone 16 Pro Max")
+            .background(.blue)
     }
+       
 }

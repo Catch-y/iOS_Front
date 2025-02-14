@@ -67,8 +67,9 @@ struct VotingMemberView: View {
                 }
             }
         }
-        .padding(.horizontal, 41)
-        .padding(.vertical, 23)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 11)
+        .frame(maxWidth: .infinity, alignment: .center)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 85))
     }
@@ -88,6 +89,7 @@ struct VotingMemberView_Previews: PreviewProvider {
             VotingMemberView(container: DIContainer())
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
+                .background(.blue)
         }
     }
 }

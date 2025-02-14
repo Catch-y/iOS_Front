@@ -1,12 +1,13 @@
 //
-//  CategoryVoteRequest.swift
+//  VoteCategoryRequest.swift
 //  Catchy
 //
-//  Created by 임소은 on 2/7/25.
+//  Created by 임소은 on 2/14/25.
 //
 
 import Foundation
 
+/// 카테고리 투표 Request DTO
 struct VoteCategoryRequest: Codable {
-    let voteId: Int  // voteId는 URL 파라미터로 전달되므로 모델에 포함
+    let categories: [String]
 }

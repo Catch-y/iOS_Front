@@ -2,16 +2,17 @@
 //  CreateVoteRequest.swift
 //  Catchy
 //
-//  Created by 임소은 on 1/31/25.
+//  Created by 임소은 on 2/14/25.
 //
 
 import Foundation
 
-
-/// 투표 생성 요청 모델
+/// 투표 생성 Request DTO
 struct CreateVoteRequest: Codable {
-    let groupId: Int  // 그룹 ID
+    /// 그룹 ID
+    let groupId: Int
 
+    /// CodingKeys 추가
     enum CodingKeys: String, CodingKey {
         case groupId = "groupId"
     }

@@ -12,8 +12,8 @@ struct GroupVoteView: View {
     @StateObject private var viewModel: VoteViewModel
     @State private var isPopupVisible: Bool = false // 팝업 표시 상태 관리
 
-    init(container: DIContainer, groupID: Int) {
-        self._viewModel = StateObject(wrappedValue: VoteViewModel(container: container, groupID: groupID))
+    init(container: DIContainer, groupId: Int) {
+        self._viewModel = StateObject(wrappedValue: VoteViewModel(container: container, groupId: groupId))
     }
 
     // MARK: - Body
@@ -25,8 +25,8 @@ struct GroupVoteView: View {
                 }
 
                 VStack(spacing: 20) {
-                    // GroupAvatarView에서 groupID 전달
-                    GroupAvatarView(groupId: viewModel.groupID)
+                    // GroupAvatarView에서 groupId 전달
+                    GroupAvatarView(groupId: viewModel.groupId)
                         .padding(.top, 25)
 
                     emptyState()
@@ -38,7 +38,7 @@ struct GroupVoteView: View {
                     Spacer()
                 }
                 .padding(.horizontal, 16)
-                .background(.bg2)
+                .background(Color.bg2)
             }
             .padding(.bottom, 110)
 
@@ -58,16 +58,15 @@ struct GroupVoteView: View {
                             isPopupVisible = false
                         },
                         onComplete: { selectedCategoryNames in
-                            // String 배열을 CategoryType 배열로 변환 후 ViewModel에 전달
-                            let selectedCategories = selectedCategoryNames.compactMap { CategoryType(rawValue: $0) }
-                            viewModel.updateCategories(with: selectedCategories)
+                            // String 배열을 전달 후 API 호출
+                            viewModel.updateCategories(with: selectedCategoryNames)
+                            viewModel.saveCategoriesToServer(voteId: 123) // 예시 voteId 값 전달
                         }
                     )
 
                     .frame(width: 350, height: 783) // 팝업 크기
                     .background(Color.white)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .shadow(radius: 10)
                 }
                 .transition(.scale) // 팝업 애니메이션
                 .animation(.easeInOut, value: isPopupVisible)
@@ -108,7 +107,7 @@ struct GroupVoteView: View {
             .padding()
             .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 20))
-            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+            .s1w()
         }
     }
 }
@@ -116,6 +115,6 @@ struct GroupVoteView: View {
 // MARK: - Preview
 struct GroupVoteView_Previews: PreviewProvider {
     static var previews: some View {
-        GroupVoteView(container: DIContainer(), groupID: 1)
+        GroupVoteView(container: DIContainer(), groupId: 1)
     }
 }

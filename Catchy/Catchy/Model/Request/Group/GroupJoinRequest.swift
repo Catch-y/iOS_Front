@@ -2,17 +2,18 @@
 //  GroupJoinRequest.swift
 //  Catchy
 //
-//  Created by 임소은 on 2/1/25.
+//  Created by 임소은 on 2/14/25.
 //
 
 import Foundation
 
-/// [그룹 초대 코드로 가입] Request 모델
+/// 그룹 초대 코드 가입 Request DTO
 struct GroupJoinRequest: Codable {
+    /// 그룹 초대 코드
     let inviteCode: String
-    
-    /// CodingKeys 정의 (필요 시 사용)
+
+    /// CodingKeys 추가
     enum CodingKeys: String, CodingKey {
-        case inviteCode
+        case inviteCode = "inviteCode"
     }
 }

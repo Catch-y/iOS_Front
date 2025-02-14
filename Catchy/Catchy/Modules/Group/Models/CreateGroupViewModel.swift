@@ -6,88 +6,73 @@
 //
 
 import SwiftUI
-import PhotosUI
-import Moya
 import Combine
+import Moya
+import PhotosUI
 
-class CreateGroupViewModel: ObservableObject {
+/// 뷰 모델
+final class CreateGroupViewModel: ObservableObject {
     @Published var groupName: String = ""
     @Published var selectedDate: Date = Date()
+    @Published var groupLocation: String = ""
+    @Published var inviteCode: String = ""
     @Published var groupImage: UIImage? = nil
     @Published var selectedItem: PhotosPickerItem? = nil {
-        didSet {
-            loadImage()
-        }
+        didSet { loadImage() }
     }
+    @Published var errorMessage: String = ""
+    @Published var isLoading: Bool = false
 
     let container: DIContainer
-    let provider = MoyaProvider<CreateGroupAPITarget>(stubClosure: MoyaProvider.immediatelyStub) // 샘플데이터로드
+    private let provider = MoyaProvider<GroupAPITarget>()
+    private var cancellables = Set<AnyCancellable>()
 
     init(container: DIContainer) {
         self.container = container
     }
 
-    // MARK: - 그룹 데이터 초기화 (새 그룹 생성 시 실행)
-    func resetGroupData() {
-        groupName = ""
-        selectedDate = Date()
-        groupImage = nil
-        selectedItem = nil
-        print("🔄 그룹 데이터 초기화 완료")
-    }
-
-    // MARK: - "다음" 버튼을 눌렀을 때 저장
-    func saveGroupData() {
-        let data = GroupData(
-            groupName: groupName,
-            promiseTime: formatDate(selectedDate)
-        )
-        if let encoded = try? JSONEncoder().encode(data) {
-            UserDefaults.standard.set(encoded, forKey: "tempGroupInfo")
-            print("✅ 그룹 데이터 저장됨: \(groupName), \(selectedDate)")
-        }
-    }
-
-    // MARK: - 그룹 생성 API 호출
+    // MARK: - 그룹 생성 API 호출 (API Target의 샘플 데이터 활용)
     func createGroup() {
-        print("✅ 그룹 생성 시작: \(groupName), \(selectedDate)")
-
-        guard !groupName.isEmpty else {
-            print("❌ 그룹 이름이 비어있음")
+        guard !groupName.isEmpty, !groupLocation.isEmpty else {
+            errorMessage = "그룹 이름과 위치를 입력해주세요."
             return
         }
 
+        isLoading = true
+
         let request = CreateGroupRequest(
             groupName: groupName,
-            groupLocation: "", // 그룹 위치는 다른 페이지에서 입력받으므로 빈값
+            groupLocation: groupLocation,
             promiseTime: formatDate(selectedDate),
             inviteCode: generateInviteCode(),
             groupImage: groupImage?.jpegData(compressionQuality: 0.8)
         )
 
-        provider.request(.postCreateGroup(creategroup: request)) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let response):
-                    do {
-                        let decodedResponse = try JSONDecoder().decode(CreateGroupResponse.self, from: response.data)
-                        print("✅ 그룹 생성 성공: \(decodedResponse.groupName)")
-
-                        // 🔹 API 성공 후 최종 저장
-                        if let groupData = try? JSONEncoder().encode(decodedResponse) {
-                            UserDefaults.standard.set(groupData, forKey: "createdGroupInfo")
-                        }
-                    } catch {
-                        print("❌ 디코딩 오류: \(error.localizedDescription)")
-                    }
-                case .failure(let error):
-                    print("❌ API 요청 실패: \(error.localizedDescription)")
+        provider.requestPublisher(.postCreateGroup(createGroup: request))
+            .map { response -> ResponseData<CreateGroupResponse>? in
+                return try? JSONDecoder().decode(ResponseData<CreateGroupResponse>.self, from: response.data)
+            }
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                self.isLoading = false
+                if case let .failure(error) = completion {
+                    self.errorMessage = "❌ API 요청 실패: \(error.localizedDescription)"
+                    print("⚠️ 서버 응답 실패: API Target의 샘플 데이터 활용")
+                }
+            } receiveValue: { responseData in
+                if let responseData = responseData, responseData.isSuccess, let groupData = responseData.result {
+                    self.inviteCode = groupData.inviteCode
+                    UserDefaults.standard.set(try? JSONEncoder().encode(groupData), forKey: "createdGroupInfo")
+                    print("✅ 그룹 생성 성공: \(groupData)")
+                } else {
+                    self.errorMessage = responseData?.message ?? "서버 응답이 없습니다."
+                    print("⚠️ API Target의 샘플 데이터 활용")
                 }
             }
-        }
+            .store(in: &cancellables)
     }
 
-    // MARK: - 날짜 포맷 변환 (ISO8601)
+    // MARK: - 날짜 포맷 변환
     private func formatDate(_ date: Date) -> String {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
@@ -96,31 +81,27 @@ class CreateGroupViewModel: ObservableObject {
 
     // MARK: - 초대 코드 생성
     private func generateInviteCode() -> String {
-        return UUID().uuidString.prefix(6).uppercased()
+        return UUID().uuidString.prefix(8).uppercased()
     }
 
-    // MARK: - 이미지 로드
+    // MARK: - 이미지 로드 (Task 오류 해결: DispatchQueue 사용)
     private func loadImage() {
         guard let selectedItem = selectedItem else { return }
-        selectedItem.loadTransferable(type: Data.self) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let data):
-                    if let data = data, let uiImage = UIImage(data: data) {
-                        self.groupImage = uiImage
-                    } else {
-                        print("❌ 이미지를 로드할 수 없습니다.")
+
+        DispatchQueue.global(qos: .userInitiated).async {
+            selectedItem.loadTransferable(type: Data.self) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let imageData):
+                        if let imageData = imageData, let image = UIImage(data: imageData) {
+                            self.groupImage = image
+                        }
+                    case .failure(let error):
+                        print("❌ 이미지 로드 실패: \(error.localizedDescription)")
                     }
-                case .failure(let error):
-                    print("❌ 이미지 로드 오류: \(error.localizedDescription)")
                 }
             }
         }
     }
-}
 
-// MARK: - GroupData 모델 (UserDefaults 저장용)
-struct GroupData: Codable {
-    let groupName: String
-    let promiseTime: String
 }

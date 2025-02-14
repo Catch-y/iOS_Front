@@ -8,7 +8,7 @@
 import Foundation
 
 /// [초대 코드로 그룹 정보 조회] Response 모델
-struct GroupInviteResult: Codable {
+struct GroupInviteResponse: Codable {
     let groupName: String
     let groupLocation: String
     let promiseTime: String
@@ -19,5 +19,5 @@ struct BaseResponseGroupInviteResult: Codable {
     let isSuccess: Bool
     let code: String
     let message: String
-    let result: GroupInviteResult
+    let result: GroupInviteResponse
 }

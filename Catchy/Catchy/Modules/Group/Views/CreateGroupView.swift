@@ -31,21 +31,18 @@ struct CreateGroupView: View {
                     Spacer()
                     
                     NextButton(title: "다음") {
-                        viewModel.saveGroupData()
                         viewModel.createGroup()
                     }
                     .frame(maxWidth: .infinity, minHeight: 50)
-                    .background(Color.m5)
+                    .background(viewModel.isLoading ? Color.gray : Color.m5)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .foregroundStyle(.white)
+                    .disabled(viewModel.isLoading)
                 }
             }
             .padding(.horizontal, 16)
         }
         .padding(.bottom, 110)
-        .onAppear {
-            viewModel.resetGroupData() // 새로운 그룹 추가 시 기존 값 초기화
-        }
     }
 
     // MARK: - 그룹 이름 입력
@@ -111,10 +108,10 @@ struct CreateGroupView: View {
                 .foregroundStyle(.g7)
 
             CreateCalenderView(container: viewModel.container)
-               
         }
     }
 }
+
 
 // MARK: - Preview
 struct CreateGroupView_Previews: PreviewProvider {

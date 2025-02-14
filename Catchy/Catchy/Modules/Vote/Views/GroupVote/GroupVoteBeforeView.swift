@@ -10,11 +10,15 @@ import SwiftUI
 struct GroupVoteBeforeView: View {
     
     // MARK: - 속성
-    @StateObject private var viewModel: VoteStatusListViewModel // VoteStatusListViewModel을 사용
+    @StateObject private var viewModel: GroupVoteBeforeViewModel
+    @ObservedObject private var voteStatusViewModel: VoteStatusListViewModel
+    
+    @State private var voteId: Int = 1  // 기본값 설정
 
     init(container: DIContainer) {
-        // DIContainer를 통해 ViewModel 초기화
-        self._viewModel = StateObject(wrappedValue: VoteStatusListViewModel(container: container))
+        let viewModel = GroupVoteBeforeViewModel(container: container, voteId: 1)
+        self._viewModel = StateObject(wrappedValue: viewModel)
+        self._voteStatusViewModel = ObservedObject(initialValue: viewModel.voteStatusListViewModel) 
     }
     
     // MARK: - Body
@@ -34,18 +38,42 @@ struct GroupVoteBeforeView: View {
                     sectionTitle("투표 현황")
                         .padding(.top, 39)
                     
-                    // 투표 현황 리스트
-                    VoteStatusListView(viewModel: viewModel, voteId: 123) // 동일한 ViewModel 사용
-                        .background(Color.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                    if viewModel.isLoading {
+                        ProgressView("데이터 로딩 중...")
+                    } else if voteStatusViewModel.voteStatus.isEmpty {  // ✅ @ObservedObject 사용
+                        Text("현재 진행 중인 투표가 없습니다.")
+                            .font(.body2)
+                            .foregroundStyle(.g4)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .task {
+                                viewModel.fetchCategories(groupId: 1)  // ✅ async 함수 호출에 await 추가
+                                print("🔄 [GroupVoteBeforeView] fetchCategories 실행 완료")
+                                print("🔍 최종 voteStatusListViewModel.voteStatus:", voteStatusViewModel.voteStatus)
+                            }
+
+                    } else {
+                        VoteStatusListView(viewModel: voteStatusViewModel, voteId: voteId)  // ✅ @ObservedObject 적용
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .task {
+                                print("✅ [GroupVoteBeforeView] VoteStatusListView 렌더링됨! \(voteStatusViewModel.voteStatus)")
+                            }
+                    }
                 }
                 .padding(.horizontal, 16)
             }
             .background(Color.bg2)
         }
         .padding(.bottom, 110)
-        .onAppear {
-            viewModel.fetchCategories(voteId: 123)  // 예시 voteId 값으로 데이터 로드
+        .task {
+            viewModel.fetchCategories(groupId: 1)
+            print("🔄 [GroupVoteBeforeView] fetchCategories 실행 완료")
+            print("🔍 최종 voteStatusListViewModel.voteStatus:", voteStatusViewModel.voteStatus)
+
+            // ✅ UI 업데이트 확인을 위해 0.1초 후 다시 출력
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                print("🔄 0.1초 후 최종 voteStatusListViewModel.voteStatus:", voteStatusViewModel.voteStatus)
+            }
         }
     }
     

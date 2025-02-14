@@ -4,6 +4,7 @@
 //
 //  Created by 임소은 on 1/28/25.
 //
+
 import SwiftUI
 import Kingfisher
 
@@ -15,12 +16,18 @@ struct GroupAvatarView: View {
     // MARK: - Body
     var body: some View {
         VStack {
-            if viewModel.avatars.isEmpty {
-                Text("No avatars available") // 데이터가 없을 때
+            if viewModel.isLoading {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+            } else if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .foregroundStyle(.g3)
+            } else if viewModel.avatars.isEmpty {
+                Text("No avatars available")
                     .foregroundStyle(.g3)
             } else {
                 HStack(spacing: 12) {
-                    ForEach(viewModel.avatars) { avatar in
+                    ForEach(viewModel.avatars, id: \.id) { avatar in
                         VStack {
                             if avatar.imageName.starts(with: "http") {  //  URL 이미지 (서버)
                                 KFImage(URL(string: avatar.imageName))
@@ -42,12 +49,12 @@ struct GroupAvatarView: View {
                         }
                     }
                 }
-                .padding(.horizontal, 20) // 좌우 간격
-                .padding(.vertical, 23)   // 상하 간격
-                .frame(width: 330)       // ✅ 흰색 배경의 가로 길이 고정
-                .background(Color.white) // 흰색 배경
-                .clipShape(RoundedRectangle(cornerRadius: 85)) // 곡선
-                .s1w() // 그림자 효과
+                .padding(.horizontal, 16)
+                .padding(.vertical, 23)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 85))
+
             }
         }
         .onAppear {
@@ -60,5 +67,6 @@ struct GroupAvatarView: View {
 struct GroupAvatarView_Previews: PreviewProvider {
     static var previews: some View {
         GroupAvatarView(groupId: 1)
+            .background(.blue)
     }
 }

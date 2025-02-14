@@ -12,9 +12,4 @@ struct MyGroupsRequest: Codable {
     let page: Int
     let size: Int
     
-    /// CodingKeys 정의
-    enum CodingKeys: String, CodingKey {
-        case page
-        case size
-    }
 }

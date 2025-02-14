@@ -10,62 +10,70 @@ import Combine
 import Moya
 
 class GroupAvatarViewModel: ObservableObject {
-    // MARK: - Properties
-    @Published var avatars: [UserAvatarModel] = []
+    
+    @Published var avatars: [(id: UUID, imageName: String)] = []
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String?
+
     private var cancellables = Set<AnyCancellable>()
-    private var provider = MoyaProvider<GroupMembersAPITarget>()
+    private let provider = MoyaProvider<VoteAPITarget>(stubClosure: MoyaProvider.immediatelyStub)
 
-    // MARK: - 그룹 멤버 조회 API 호출
+    // MARK: - API 호출
     func fetchGroupMembers(groupId: Int) {
-        let request = GroupMembersRequest(groupId: groupId)
-        provider.request(.getGroupMembers(groupMemberRequest: request)) { [weak self] result in
-            guard let self = self else { return }
-
+        isLoading = true
+        errorMessage = nil
+        
+        provider.request(.getVoteMembers(groupId: groupId, voteId: 1)) { result in
             switch result {
             case .success(let response):
                 do {
-                    let decodedData = try JSONDecoder().decode(BaseResponseListGroupMemberResponse.self, from: response.data)
-                    if decodedData.isSuccess, let members = decodedData.result {
-                        DispatchQueue.main.async {
-                            self.avatars = members.map { member in
-                                UserAvatarModel(imageName: member.profileImage)
+                    let decodedData = try JSONDecoder().decode(BaseResponseVoteMemberListResponse.self, from: response.data)
+                    
+                    DispatchQueue.main.async {
+                        self.isLoading = false
+                        
+                        if decodedData.isSuccess {
+                            self.avatars = decodedData.result.map { member in
+                                return (id: UUID(), imageName: member.profileImage)
                             }
-                            print("✅ API 데이터 로드 성공")
+                            print("✅ API 데이터 로드 성공: 총 \(self.avatars.count)명")
+                        } else {
+                            self.errorMessage = decodedData.message
+                            print("❌ API 응답 실패: \(decodedData.message ?? "알 수 없는 오류")")
+                            self.loadSampleData() // 샘플 데이터 로드
                         }
-                    } else {
-                        print("❌ 서버 오류 발생: \(decodedData.message)")
-                        self.loadSampleData() // 샘플 데이터 로드
                     }
                 } catch {
-                    print("❌ 데이터 디코딩 실패: \(error)")
+                    print("❌ JSON 디코딩 실패:", error)
                     self.loadSampleData() // 샘플 데이터 로드
                 }
             case .failure(let error):
-                print("❌ API 요청 실패: \(error.localizedDescription)")
+                print("❌ API 요청 실패:", error.localizedDescription)
                 self.loadSampleData() // 샘플 데이터 로드
             }
         }
     }
-
-    // MARK: - 샘플 데이터 로드
+    
+    // MARK: - 샘플 데이터 로드 함수
     private func loadSampleData() {
         guard let sampleResponse = try? JSONDecoder().decode(
-            BaseResponseListGroupMemberResponse.self,
-            from: GroupMembersAPITarget.getGroupMembers(groupMemberRequest: GroupMembersRequest(groupId: 1)).sampleData
+            BaseResponseVoteMemberListResponse.self,
+            from: VoteAPITarget.getVoteMembers(groupId: 1, voteId: 1).sampleData
         ) else {
-            print("❌ 샘플 데이터 디코딩 실패")
+            DispatchQueue.main.async {
+                self.errorMessage = "샘플 데이터 디코딩 실패"
+                print("❌ 샘플 데이터 디코딩 실패")
+            }
             return
         }
-
+        
         DispatchQueue.main.async {
-            if let members = sampleResponse.result {
-                self.avatars = members.map { member in
-                    UserAvatarModel(imageName: member.profileImage)
-                }
-                print("✅ 샘플 데이터 로드 성공")
-            } else {
-                print("❌ 샘플 데이터에 멤버가 없습니다.")
+            self.avatars = sampleResponse.result.map { member in
+                return (id: UUID(), imageName: member.profileImage)
             }
+            
+            self.isLoading = false
+            print("✅ 샘플 데이터 로드 성공: 총 \(self.avatars.count)명")
         }
     }
 }

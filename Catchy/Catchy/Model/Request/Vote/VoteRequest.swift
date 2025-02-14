@@ -1,18 +1,20 @@
 //
-//  GroupRequest.swift
+//
+//  VoteRequest.swift
 //  Catchy
 //
-//  Created by 임소은 on 1/30/25.
+//  Created by 임소은 on 2/14/25.
 //
 
 import Foundation
 
 struct VoteRequest: Codable {
-    
-    //그룹 ID
-    let groupId : Int
-    
-    //투표 ID
-    let voteId : Int
-    
+    let groupId: Int
+    let voteId: Int
 }
+//  Untitled.swift
+//  Catchy
+//
+//  Created by 임소은 on 2/14/25.
+//
+

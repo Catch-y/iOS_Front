@@ -38,6 +38,7 @@ struct GroupVoteStartView: View {
 
                     voteRankingView
                 }
+                .padding(.horizontal, 16)
             }
             .background(Color.bg2)
         }
@@ -71,7 +72,7 @@ struct GroupVoteStartView: View {
                 RoundedRectangle(cornerRadius: 30)
             )
             .padding(.bottom, 110)
-            .padding(.horizontal, 16)
+            
     }
 }
 

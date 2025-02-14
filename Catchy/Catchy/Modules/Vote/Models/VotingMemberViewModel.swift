@@ -8,80 +8,77 @@
 import Foundation
 import SwiftUI
 import Combine
+import Moya
 
 class VotingMemberViewModel: ObservableObject {
     
     // MARK: - Properties
     let container: DIContainer
-    var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>()
     
     @Published var avatars: [(image: String, status: Bool)] = []
-    @Published var voteResponse: VoteResponse?
     @Published var isVoteMemberLoading: Bool = false
+    @Published var errorMessage: String?
+
+    let provider = MoyaProvider<VoteAPITarget>(stubClosure: MoyaProvider.immediatelyStub) // 샘플 데이터 사용
     
     // MARK: - Initializer
     init(container: DIContainer) {
         self.container = container
     }
     
-    // MARK: - 샘플 데이터 로드 함수
-    func loadSampleData() {
-        let sampleTarget = VotingMemberAPITarget.getVoteMember(vote: VoteRequest(groupId: 1, voteId: 1))
-        do {
-            let response = try JSONDecoder().decode(ResponseData<VoteResponse>.self, from: sampleTarget.sampleData)
-            DispatchQueue.main.async {
-                if let members = response.result?.members {
-                    self.avatars = members.map { member in
-                        return (image: member.profileImage, status: member.hasVoted)
+    // MARK: - API 호출 함수
+    func getVoteMembers(groupId: Int, voteId: Int) {
+        isVoteMemberLoading = true
+        errorMessage = nil
+
+        provider.request(.getVoteMembers(groupId: groupId, voteId: voteId)) { result in
+            switch result {
+            case .success(let response):
+                do {
+                    let decodedData = try JSONDecoder().decode(BaseResponseVoteMemberListResponse.self, from: response.data)
+                    
+                    DispatchQueue.main.async {
+                        self.isVoteMemberLoading = false
+
+                        if decodedData.isSuccess {
+                            self.avatars = decodedData.result.map { member in
+                                return (image: member.profileImage, status: member.hasVoted)
+                            }
+                        } else {
+                            self.errorMessage = decodedData.message
+                            self.loadSampleData() // 샘플 데이터 로드
+                        }
                     }
+                } catch {
+                    print("[오류] JSON 디코딩 실패: \(error)")
+                    self.loadSampleData()
                 }
-                // ✅ 샘플 데이터 로드 성공 메시지
-                print("✅ 샘플 데이터 로드 성공: \(response)")
+            case .failure(let error):
+                print("[오류] API 요청 실패: \(error.localizedDescription)")
+                self.loadSampleData()
             }
-        } catch {
-            print("❌ 샘플 데이터 디코딩 실패: \(error)")
         }
     }
     
-    // MARK: - API 호출 함수
-    func getVoteMember(voteRequest: VoteRequest) {
-        isVoteMemberLoading = true
-        
-        container.useCaseProvider.votingMemberUseCase
-            .executeGetVoteMember(voteRequest: voteRequest)
-            .tryMap { responseData -> ResponseData<VoteResponse> in
-                if !responseData.isSuccess {
-                    throw APIError.serverError(
-                        message: responseData.message,
-                        code: responseData.code
-                    )
-                }
-                return responseData
+    // MARK: - 샘플 데이터 로드 함수
+    func loadSampleData() {
+        guard let sampleResponse = try? JSONDecoder().decode(
+            BaseResponseVoteMemberListResponse.self,
+            from: VoteAPITarget.getVoteMembers(groupId: 1, voteId: 1).sampleData
+        ) else {
+            DispatchQueue.main.async {
+                self.errorMessage = "샘플 데이터 디코딩 실패"
+                print("[오류] 샘플 데이터 디코딩 실패")
             }
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { [weak self] completion in
-                guard let self = self else { return }
-                self.isVoteMemberLoading = false
-                
-                switch completion {
-                case .finished:
-                    print("✅ Get VoteMember Server Completed")
-                case .failure(let failure):
-                    print("❌ Get VoteMember Failed: \(failure)")
-                }
-            }, receiveValue: { [weak self] response in
-                guard let self = self else { return }
-                
-                if let result = response.result {
-                    self.voteResponse = result
-                    self.avatars = result.members.map { member in
-                        return (image: member.profileImage, status: member.hasVoted)
-                    }
-                    
-                    // ✅ 성공 메시지 출력
-                    print("✅ Get VoteMember 성공: \(result)")
-                }
-            })
-            .store(in: &cancellables)
+            return
+        }
+
+        DispatchQueue.main.async {
+            self.avatars = sampleResponse.result.map { member in
+                return (image: member.profileImage, status: member.hasVoted)
+            }
+            print("샘플 데이터 로드 성공")
+        }
     }
 }

@@ -7,14 +7,17 @@
 
 import Foundation
 import SwiftUI
+import Combine
 import Moya
 
 class VoteResultCategoryCardViewModel: ObservableObject {
     @Published var isBookmarked: Bool = false
     @Published var places: [PlaceResponse] = []
+    @Published var errorMessage: String?
 
-    let provider: MoyaProvider<VoteResultPlaceAPITarget>
-    let groupId: Int
+    private let provider = MoyaProvider<VoteAPITarget>()
+    private var cancellables = Set<AnyCancellable>()
+    private let groupId: Int
     let category: String
 
     init(groupId: Int, category: String, useSampleData: Bool = false) {
@@ -22,59 +25,56 @@ class VoteResultCategoryCardViewModel: ObservableObject {
         self.category = category
 
         if useSampleData {
-            self.provider = MoyaProvider<VoteResultPlaceAPITarget>(stubClosure: { _ in .immediate })
             loadSampleData()
         } else {
-            self.provider = MoyaProvider<VoteResultPlaceAPITarget>()
             fetchPlaces()
         }
     }
 
+    // MARK: - API 호출
     func fetchPlaces() {
-        let request = VoteResultPlaceRequest(groupId: groupId, category: category)
-
-        provider.request(.getPlacesByCategory(request: request)) { result in
-            switch result {
-            case .success(let response):
-                do {
-                    let decodedResponse = try JSONDecoder().decode(VoteResultPlaceResponse.self, from: response.data)
-                    DispatchQueue.main.async {
-                        self.places = decodedResponse.places
-                        print("[데이터 로드 성공] 실제 API에서 \(self.places.count)개의 장소를 가져왔습니다.")
-                    }
-                } catch {
-                    print("[오류] 데이터 디코딩 실패:", error)
+        let request = VoteAPITarget.getVoteResults(groupId: 1, voteId: 1)
+        provider.requestPublisher(.getCategoryPlaces(groupId: groupId, category: category))
+            .map(ResponseData<[PlaceResponse]>.self)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    self.errorMessage = "API 요청 실패: \(error.localizedDescription)"
+                    print("[오류] API 요청 실패:", error.localizedDescription)
+                    self.loadSampleData()
                 }
-            case .failure(let error):
-                print("[오류] API 요청 실패:", error)
-            }
-        }
+            }, receiveValue: { responseData in
+                if responseData.isSuccess, let result = responseData.result {
+                    self.places = result
+                    print("[데이터 로드 성공] API에서 \(self.places.count)개의 장소를 가져왔습니다.")
+                } else {
+                    self.errorMessage = responseData.message
+                    self.loadSampleData()
+                }
+            })
+            .store(in: &cancellables)
     }
 
-    private var isSampleDataLoaded = false // 중복 실행 방지 플래그
-
-    func loadSampleData() {
-        // 이미 샘플 데이터를 로드했다면 실행하지 않음
-        guard !isSampleDataLoaded else { return }
-        isSampleDataLoaded = true // 플래그 설정
-
-        let sampleTarget = VoteResultPlaceAPITarget.getPlacesByCategory(
-            request: VoteResultPlaceRequest(groupId: 1, category: "카페")
-        )
-
-        do {
-            let response = try JSONDecoder().decode(VoteResultPlaceResponse.self, from: sampleTarget.sampleData)
+    // MARK: - 샘플 데이터 로드
+    private func loadSampleData() {
+        guard let sampleResponse = try? JSONDecoder().decode(
+            ResponseData<VoteResultPlaceResponse>.self,
+            from: VoteAPITarget.getCategoryPlaces(groupId: 1, category: "카페").sampleData
+        ) else {
             DispatchQueue.main.async {
-                self.places = response.places
-                print("✅ 샘플 데이터 로드 성공 !: \(response)")
+                self.errorMessage = "샘플 데이터 디코딩 실패"
+                print("[오류] 샘플 데이터 디코딩 실패")
             }
-        } catch {
-            print("❌ 샘플 데이터 디코딩 실패: \(error)")
+            return
+        }
+
+        DispatchQueue.main.async {
+            self.places = sampleResponse.result?.places ?? []
+            print("[샘플 데이터 로드 성공] \(self.places.count)개의 장소를 불러왔습니다.")
         }
     }
 
-
-
+    // MARK: - 북마크 토글
     func toggleBookmark() {
         isBookmarked.toggle()
     }

@@ -8,7 +8,7 @@
 import Foundation
 
 struct VoteResultCategoryResponse: Codable {
-    let groupLocation: String
+    let groupLocation: String?
     let categories: [CategoryResultData]
 }
 
@@ -17,3 +17,9 @@ struct CategoryResultData: Codable {
     let count: Int
 }
 
+struct BaseResponse<T: Codable>: Codable {
+    let isSuccess: Bool
+    let code: String
+    let message: String
+    let result: T?
+}

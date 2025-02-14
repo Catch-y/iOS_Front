@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Combine
+import Moya
 
 // MARK: - CalendarDay
 /// 캘린더 날짜 정보 구조체
@@ -24,15 +26,18 @@ final class CalenderViewModel: ObservableObject {
     @Published var currentMonth: Date
     @Published var selectedDate: Date?
     @Published var schedules: [Date: String] = [:]
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String? = nil
 
     let container: DIContainer
+    private var cancellables = Set<AnyCancellable>()
+    private let provider = MoyaProvider<GroupAPITarget>()
 
     // MARK: - 초기화
     init(container: DIContainer, currentMonth: Date = Date(), selectedDate: Date? = nil) {
         self.container = container
         self.currentMonth = currentMonth
         self.selectedDate = selectedDate
-        addSampleSchedules()
     }
 
     // MARK: - 현재 월 변경
@@ -41,9 +46,60 @@ final class CalenderViewModel: ObservableObject {
         if let newMonth = calendar.date(byAdding: .month, value: value, to: currentMonth) {
             currentMonth = newMonth
             selectedDate = nil
+            fetchGroupSchedules()
         }
     }
 
+    func fetchGroupSchedules() {
+        isLoading = true // 로딩 시작
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: currentMonth)
+        let month = calendar.component(.month, from: currentMonth)
+
+        provider.requestPublisher(.getMyGroups(page: year, size: month))
+            .map(ResponseData<[GroupCalendarResponse]>.self)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self = self else { return }
+                self.isLoading = false // 로딩 종료
+                
+                switch completion {
+                case .failure(let error):
+                    self.errorMessage = "❌ API 요청 실패: \(error.localizedDescription)"
+                case .finished:
+                    break
+                }
+            }, receiveValue: { [weak self] decodedResponse in
+                guard let self = self else { return }
+                
+                if decodedResponse.isSuccess {
+                    if let schedules = decodedResponse.result {
+                        self.mapSchedules(from: schedules)
+                    } else {
+                        self.errorMessage = "❌ 그룹 일정 데이터가 없습니다."
+                    }
+                } else {
+                    self.errorMessage = decodedResponse.message
+                }
+            })
+            .store(in: &cancellables)
+    }
+    
+    private func mapSchedules(from groupSchedules: [GroupCalendarResponse]) {
+        let calendar = Calendar.current
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        schedules = [:]
+        
+        for schedule in groupSchedules {
+            if let dateString = schedule.promiseTime,
+               let date = dateFormatter.date(from: dateString) {
+                schedules[date] = schedule.groupName
+            }
+        }
+    }
+    
     // MARK: - 현재 월의 날짜 그리드 데이터
     func daysForCurrentGrid() -> [CalendarDay] {
         let calendar = Calendar.current
@@ -67,15 +123,17 @@ final class CalenderViewModel: ObservableObject {
         return days
     }
 
-    // MARK: - 주간 날짜 계산
-    func weekForSelectedDate() -> [Date] {
-        guard let selectedDate = selectedDate else { return [] }
+    // MARK: - 주간 날짜 계산 (선택된 날짜 기반)
+    /// 기존에 weekForSelectedDate가 있던 경우 -> weekForDate(_:)
+    func weekForDate(_ date: Date) -> [Date] {
         let calendar = Calendar.current
-        let weekday = calendar.component(.weekday, from: selectedDate)
-        let startOfWeek = calendar.date(byAdding: .day, value: -(weekday - 1), to: selectedDate) ?? selectedDate
-        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: startOfWeek) }
+        let weekday = calendar.component(.weekday, from: date)
+        let startOfWeek = calendar.date(byAdding: .day, value: -(weekday - 1), to: date) ?? date
+        return (0..<7).compactMap {
+            calendar.date(byAdding: .day, value: $0, to: startOfWeek)
+        }
     }
-
+    
     // MARK: - Helper Methods
     private func firstDayOfMonth() -> Date {
         let components = Calendar.current.dateComponents([.year, .month], from: currentMonth)
@@ -92,20 +150,6 @@ final class CalenderViewModel: ObservableObject {
         return Calendar.current.component(.weekday, from: firstDay)
     }
 
-    // MARK: - 샘플 일정 추가
-    private func addSampleSchedules() {
-        let calendar = Calendar.current
-        let today = Date()
-
-        if let firstDate = calendar.date(byAdding: .day, value: 1, to: today),
-           let secondDate = calendar.date(byAdding: .day, value: 3, to: today),
-           let thirdDate = calendar.date(byAdding: .day, value: 5, to: today) {
-            schedules[firstDate] = "회의 일정"
-            schedules[secondDate] = "프로젝트 마감일"
-            schedules[thirdDate] = "동아리 활동"
-        }
-    }
-
     // MARK: - 날짜 형식 문자열 생성
     func formattedDateString(from date: Date) -> String {
         let formatter = DateFormatter()
@@ -115,17 +159,7 @@ final class CalenderViewModel: ObservableObject {
     }
 }
 
-extension CalenderViewModel {
-    /// 특정 날짜가 포함된 주간의 날짜 배열을 반환
-    func weekForDate(_ date: Date) -> [Date] {
-        let calendar = Calendar.current
-        let weekday = calendar.component(.weekday, from: date)
-        let startOfWeek = calendar.date(byAdding: .day, value: -(weekday - 1), to: date) ?? date
-        return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: startOfWeek) }
-    }
-}
-
-// MARK: - Calendar Extension
+// MARK: - 공휴일
 extension Calendar {
     var koreanHolidays: [String] {
         return [
