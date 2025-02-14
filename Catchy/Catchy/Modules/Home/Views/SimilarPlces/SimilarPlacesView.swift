@@ -23,7 +23,7 @@ struct SimilarPlacesView: View {
                 container.navigationRouter.pop()
             }, title: nil, rightNaviIcon: nil, isShadow: true)
             
-            if let _ = viewModel.recommendPlaceResponse {
+            if !viewModel.isLoading || viewModel.isRefreshing {
                 makeContents(datas: Binding(get: { viewModel.recommendPlaceResponse ?? [] },
                                             set: { viewModel.recommendPlaceResponse = $0 }))
             } else {
@@ -33,14 +33,17 @@ struct SimilarPlacesView: View {
                         .font(.body3)
                         .foregroundStyle(Color.g7)
                 })
-                    .controlSize(.regular)
+                .controlSize(.regular)
+                .tint(Color.main)
                 
                 Spacer()
             }
-            
         })
         .ignoresSafeArea(.all)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .task {
+            viewModel.getMoreRecommendPlaceRespponse()
+        }
     }
     
     private func makeContents(datas: Binding<[RecommendPlaceResponseData]>) -> some View {
@@ -54,6 +57,11 @@ struct SimilarPlacesView: View {
                     ForEach(datas.indices, id: \.self) { index in
                         VStack(spacing: 18, content: {
                             RecommendPlaceCard(data: datas[index])
+                                .onAppear {
+                                    if index == datas.count - 1 {
+                                        viewModel.getMoreRecommendPlaceRespponse()
+                                    }
+                                }
                             
                             if index < datas.count - 1 {
                                 Divider()
@@ -64,8 +72,15 @@ struct SimilarPlacesView: View {
                     }
                 })
             })
+            .padding(.horizontal, 16)
         })
-        .padding(.horizontal, 16)
+        .padding(.bottom, 10)
+        .refreshable {
+            await viewModel.getRecommendPlaceRefresh()
+        }
+        .onAppear {
+            UIRefreshControl.appearance().tintColor = .main
+        }
     }
 }
 
