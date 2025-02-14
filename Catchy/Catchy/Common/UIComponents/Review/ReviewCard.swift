@@ -10,9 +10,37 @@ import Kingfisher
 
 struct ReviewCard: View {
     
-    let data: any ReviewDataProtocol  // ReviewData (내 리뷰) or ReviewContents(평점 리뷰 전체보기)
-    let cardType: ReviewCardType      // MyReview or RatingReview
-    let reviewType: ReviewType        // Course or Place
+    /* 리뷰 데이터 모델 */
+    
+    /// 카드 타입 (마이페이지 - 내 리뷰 or 평점, 리뷰 보기)
+    let cardType: ReviewCardType
+    
+    /// 리뷰 타입 (코스 or 장소)
+    let reviewType: ReviewType
+    
+    /// 리뷰 ID
+    let reviewId: Int
+    
+    /// 리뷰 내용
+    let comment: String
+    
+    /// 리뷰 이미지
+    let images: [ReviewImageData]
+    
+    
+    /* 필요 시 표시할 데이터 */
+    
+    /// 평점
+    let rating: Int?
+    
+    /// 장소 또는 코스 이름 (마이페이지 - 내 리뷰 에서 사용)
+    let placeOrCourseName: String?
+    
+    /// 사용자 이름 (평점, 리뷰 보기에서 사용)
+    let userName: String?
+    
+    /// 방문일
+    let visitedDate: String?
     
     // MARK: - body
     
@@ -30,14 +58,13 @@ struct ReviewCard: View {
         VStack(alignment: .leading, spacing: 14) {
             cardTopSection()
             
-            if !data.images.isEmpty {
-                // 사진이 있는 경우만 표시
+            if images.isEmpty {
                 reviewImages()
             }
             
-            reviewContent()             // 리뷰 내용
+            reviewContent()
             
-            reviewFooter() // 닉네임 및 방문일
+            reviewFooter()
         }
     }
     
@@ -49,15 +76,14 @@ struct ReviewCard: View {
             return AnyView(
                 VStack(alignment: .leading, content: {
                     HStack(content:{
-                        Text(data.placeOrCourseName ?? "")
+                        Text(placeOrCourseName ?? "")
                             .font(.Subtitle3)
                             .foregroundStyle(Color.g7)
                         
                         Spacer()
                         
-                        // 신고하기 버튼
                         Button {
-                            // 신고하기 로직
+                        // TODO: - 신고하기 로직
                         } label: {
                             Text("삭제")
                                 .font(.caption)
@@ -65,14 +91,14 @@ struct ReviewCard: View {
                                 .underline()
                         }
                     })
-                    StarRating(rating: Double(data.rating))
+                    StarRating(rating: Double(rating ?? 0))
                 })
             )
         case .ratingReview:
             return AnyView (
                 HStack(content: {
                     // 별점 표시
-                    StarRating(rating: Double(data.rating))
+                    StarRating(rating: Double(rating ?? 0))
                     
                     Spacer()
                     
@@ -92,7 +118,7 @@ struct ReviewCard: View {
     private func reviewImages() -> some View {
         ScrollView(.horizontal) {
             LazyHGrid(rows: Array(repeating: GridItem(.fixed(85)), count: 1), spacing: 6, content: {
-                ForEach(data.images, id: \.reviewImageId) { image in
+                ForEach(images, id: \.reviewImageId) { image in
                     if let url = URL(string: image.imageUrl) {
                         KFImage(url)
                             .placeholder {
@@ -115,7 +141,7 @@ struct ReviewCard: View {
     /// 3. 리뷰 내용
     /// - Returns: 리뷰 내용 뷰
     private func reviewContent() -> some View {
-        Text(data.comment.split(separator: "").joined(separator: "\u{200B}"))
+        Text(comment.split(separator: "").joined(separator: "\u{200B}"))
             .font(.body2)
             .foregroundColor(.g7)
             .lineLimit(nil)
@@ -134,7 +160,7 @@ struct ReviewCard: View {
                         .font(.caption)
                         .foregroundStyle(Color.g4)
                     
-                    Text(data.visitedDate)
+                    Text(visitedDate ?? "")
                         .font(.caption)
                         .foregroundStyle(Color.g5)
                 })
@@ -142,7 +168,7 @@ struct ReviewCard: View {
         case .ratingReview:
             return AnyView(
                 HStack(spacing: 6, content: {
-                    Text(data.userName ?? "")
+                    Text(userName ?? "")
                         .font(.caption)
                         .foregroundColor(.g5)
                     
@@ -155,7 +181,7 @@ struct ReviewCard: View {
                         .font(.caption)
                         .foregroundStyle(Color.g4)
                     
-                    Text(data.visitedDate)
+                    Text(visitedDate ?? "")
                         .font(.caption)
                         .foregroundStyle(Color.g5)
                 })
@@ -164,28 +190,19 @@ struct ReviewCard: View {
     }
 }
 
-//#Preview {
-//    ReviewCard(data: ReviewContents(reviewId: 1, comment: "안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다.안녕하세요 저는 중앙대학교 학생 정의찬입니다.", rating: 1, reviewImages: [.init(reviewImageId: 1, imageUrl: "https://i.namu.wiki/i/tWggtBqowGk0W5pu6Z9uZi_8qs_iAbdMC573fPCsrFuMPuPuTEiYZDyXGUsCymPqZTNv6gslp9TUsAEQ2v_it3vytlJnMG1Mhdz0bxHUZ2e5u1CJhPn7GsnNx3sLtR77Fx-6EybMT9g2MvJL4NoPlw.webp")], creatorNickname: "dragon", visitedDate: "1111"))
-//}
 #Preview {
-    ReviewCard(data: ReviewData(
-        reviewId: 1, name: "스타벅스용산점",
-        comment: "안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다. 안녕하세요 저는 중앙대학교 학생 정의찬입니다.안녕하세요 저는 중앙대학교 학생 정의찬입니다.",
-        reviewImages: [ReviewImage(reviewImageId: 101, imageUrl: "https://i.namu.wiki/i/--V4800RVw7ZlVcdBO3Eye-YyvmQv1mghyXYdgYMfE0og0zHAdu3pRpdJptpRSrB5vR1GFu-chsQgxDdYtRXwg.webp"),
-                       ReviewImage(reviewImageId: 102, imageUrl: "https://i.namu.wiki/i/nPwiRawmrOrIcfYrdcZ02iKHErrmjUW9uvwzQitt7hf49g1lx6JQB2Q7qguJmjy7jBO41QphiMxw0QurSEF9-Q.webp")],
-        rating: 1,
-        visitedDate: "2025.01.25"
-    ), cardType: .myReview, reviewType: .course)
-}
-
-#Preview {
-    ReviewCard(data: ReviewContents(
+    ReviewCard(
+        cardType: .myReview,
+        reviewType: .place,
         reviewId: 1,
-        comment: "안녕하세요 저는 빈용입니다. 대학생이고요. 제가 여기 가봤는데 너무 좋아요. 다음에도 다시 갈 것 같아요 안녕하세요 저는 빈용입니다. 대학생이고요. 제가 여기 가봤는데 너무 좋아요. 다음에도 다시 갈 것 같아요안녕하세요 저는 빈용입니다. 대학생이고요. 제가 여기 가봤는데 너무 좋아요. 다음에도 다시 갈 것 같아요",
-        rating: 3,
-        reviewImages: [ReviewImageData(reviewImageId: 101, imageUrl: "https://i.namu.wiki/i/--V4800RVw7ZlVcdBO3Eye-YyvmQv1mghyXYdgYMfE0og0zHAdu3pRpdJptpRSrB5vR1GFu-chsQgxDdYtRXwg.webp"),
-                       ReviewImageData(reviewImageId: 102, imageUrl: "https://i.namu.wiki/i/nPwiRawmrOrIcfYrdcZ02iKHErrmjUW9uvwzQitt7hf49g1lx6JQB2Q7qguJmjy7jBO41QphiMxw0QurSEF9-Q.webp")],
-        creatorNickname: "빈센",
-        visitedDate: "2025.02.01"), cardType: .ratingReview, reviewType: .place
-               )
+        comment: "스타벅스 너무 좋았어요!",
+        images: [
+            ReviewImageData(reviewImageId: 101, imageUrl: "https://example.com/image1.jpg"),
+            ReviewImageData(reviewImageId: 102, imageUrl: "https://example.com/image2.jpg")
+        ],
+        rating: 5,
+        placeOrCourseName: "스타벅스 용산점",
+        userName: "빈센",  // 마이페이지에서 필요
+        visitedDate: nil  // 평점 리뷰에서는 필요
+    )
 }

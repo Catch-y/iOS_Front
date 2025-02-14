@@ -14,8 +14,11 @@ class FavoritePlacesViewModel: ObservableObject {
     
     var cancellables = Set<AnyCancellable>()
     
+    /// 내 선호 장소 조회 response
     @Published var myPlaceResponse: MyPlaceResponse?
-    @Published var isLoading: Bool = false
+    
+    /// 내 선호 장소 조회 API 로딩 중?
+    @Published var isMyPlaceLoading: Bool = false
 
     // MARK: - Init
     
@@ -23,12 +26,13 @@ class FavoritePlacesViewModel: ObservableObject {
         self.container = container
     }
 }
+
 extension FavoritePlacesViewModel {
     // MARK: - API 호출 함수
     /// 좋아요한 장소 무한 스크롤
     func getMyPlaceList(pageSize: Int, lastPlaceId: Int? = nil)
     {
-        isLoading = true
+        isMyPlaceLoading = true
         
         container.useCaseProvider.placeCourseUseCase
             .executeGetMyPlaceList(pageSize: pageSize, lastPlaceId: lastPlaceId)
@@ -47,7 +51,7 @@ extension FavoritePlacesViewModel {
             .sink(receiveCompletion: {
                 [weak self] completion in
                 guard let self = self else { return }
-                self.isLoading = false
+                self.isMyPlaceLoading = false
                 
                 switch completion {
                 case .finished:

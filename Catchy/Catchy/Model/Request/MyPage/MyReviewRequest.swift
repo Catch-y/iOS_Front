@@ -15,7 +15,7 @@ struct MyReviewRequest: Codable {
     /// 요청할 페이지 크기
     let pageSize: Int
     
-    /// 마지막 리뷰 ID (없으면 첫 페이지)
+    /// 마지막 리뷰 ID
     let lastReviewId: Int?
 
 }

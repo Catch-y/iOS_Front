@@ -20,7 +20,7 @@ struct MyReviewsView: View {
     // MARK: - Body
     var body: some View {
         VStack(alignment: .center, spacing: 22, content: {
-            if !viewModel.isLoading {
+            if !viewModel.isMyReviewsLoading {
                 CustomNavigation(action: {
                     print("hello")
                 }, title: "내 리뷰", rightNaviIcon: nil, isShadow: true)
@@ -47,7 +47,7 @@ struct MyReviewsView: View {
     
     // MARK: - 세그먼트 UI
     
-    /// 리뷰 유형 선택을 위한 세그먼트 뷰
+    /// 리뷰 유형 선택을 위한 세그먼트 뷰 (코스 / 장소)
     /// - Returns: 코스 리뷰 / 장소 리뷰 선택 UI
     private func segmentSection() -> some View {
         ZStack(alignment: .leading) {
@@ -101,7 +101,7 @@ struct MyReviewsView: View {
     private func contentSection(data: MyReviewResponse) -> some View {
         VStack(alignment: .leading, spacing: 22, content: {
             reviewCountSection(count: data.reviewCount)
-            reviewTableSection(content: data.content)
+            //reviewTableSection(content: data.content)
         })
     }
     
@@ -122,21 +122,21 @@ struct MyReviewsView: View {
     /// 리뷰 리스트를 표시하는 섹션
     /// - Parameter content: 사용자의 리뷰 데이터 리스트를 포함하는 ReviewData 객체 (코스 or 장소)
     /// - Returns: 리뷰 리스트를 포함하는 스크롤 뷰
-    private func reviewTableSection(content: [ReviewDataProtocol]) -> some View {
-        ScrollView {
-            LazyVStack(alignment: .leading, spacing: 8) {
-                ForEach(content, id: \.reviewId) { review in
-                    ReviewCard(data: review, cardType: .myReview, reviewType: .course)
-                        .padding(.bottom, 40)
-                    if review.reviewId != content.last?.reviewId {
-                        Divider()
-                            .background(Color.g3)
-                            .padding(.bottom, 40)
-                    }
-                }
-            }
-        }
-    }
+//    private func reviewTableSection(content: [ReviewDataProtocol]) -> some View {
+//        ScrollView {
+//            LazyVStack(alignment: .leading, spacing: 8) {
+//                ForEach(content, id: \.reviewId) { review in
+//                    ReviewCard(data: review, cardType: .myReview, reviewType: .course)
+//                        .padding(.bottom, 40)
+//                    if review.reviewId != content.last?.reviewId {
+//                        Divider()
+//                            .background(Color.g3)
+//                            .padding(.bottom, 40)
+//                    }
+//                }
+//            }
+//        }
+//    }
     
 }
 

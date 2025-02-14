@@ -13,29 +13,29 @@ import Moya
 /// [PlaceCourse] Repository 객체
 class PlaceCourseRepository: PlaceCourseRepositoryProtocol {
     
-    let provider: PlaceCourseServiceProtocol
+    let service: PlaceCourseServiceProtocol
     
-    init(provider: PlaceCourseServiceProtocol = PlaceCourseService()) {
-        self.provider = provider
+    init(service: PlaceCourseServiceProtocol = PlaceCourseService()) {
+        self.service = service
     }
 
     /// 코스 상세 화면 API
     func getPlaceDetailData(placeId: Int) -> AnyPublisher<ResponseData<PlaceDetailResponse>, MoyaError> {
-        return provider.getPlaceDetail(placeId: placeId)
+        return service.getPlaceDetail(placeId: placeId)
     }
     
     /// 지역명 기반 장소 검색 API
     func getPlaceListByRegionData(placeSearchRequest: PlaceSearchByRegionRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError> {
-        return provider.getPlaceListByRegion(placeSearchRequest: placeSearchRequest)
+        return service.getPlaceListByRegion(placeSearchRequest: placeSearchRequest)
     }
     
     /// 좋아요한 장소 무한 스크롤 API
     func getMyPlaceListData(pageSize: Int, lastPlaceId: Int? = nil) -> AnyPublisher<ResponseData<MyPlaceResponse>, MoyaError> {
-        return provider.getMyPlaceList(pageSize: pageSize, lastPlaceId: lastPlaceId)
+        return service.getMyPlaceList(pageSize: pageSize, lastPlaceId: lastPlaceId)
     }
     
     /// 내 위치 기반 장소 검색 API
     func getPlaceListByCurrentData(placeSearchRequest: PlaceSearchByCurrentRequest) -> AnyPublisher<ResponseData<PlaceSearchResponse>, MoyaError> {
-        return provider.getPlaceListByCurrent(placeSearchRequest: placeSearchRequest)
+        return service.getPlaceListByCurrent(placeSearchRequest: placeSearchRequest)
     }
 }

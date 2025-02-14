@@ -23,10 +23,10 @@ class MyPageViewModel: ObservableObject {
     /// 북마크한 코스 조회 response
     @Published var courseResponse: CourseResponse?
     
-    /// 마이페이지 프로필 조회 response 로딩 중?
+    /// 마이페이지 프로필 조회 API 로딩 중?
     @Published var isProfileLoading: Bool = false
     
-    /// 북마크한 코스 조회 response 로딩 중?
+    /// 북마크한 코스 조회 API 로딩 중?
     @Published var isBookmarkedCourseLoading: Bool = false
     
     /// 닉네임 수정 모달 상태 추가
@@ -42,6 +42,7 @@ class MyPageViewModel: ObservableObject {
 extension MyPageViewModel {
     
     // MARK: - API 호출 함수
+    
     /// 마이페이지 프로필 조회
     func getProfile(){
         

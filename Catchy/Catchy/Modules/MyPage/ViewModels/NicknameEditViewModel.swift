@@ -10,9 +10,13 @@ import Combine
 
 class NicknameEditViewModel: ObservableObject {
     
-    @Published var nickname: String = ""  // 닉네임 입력 값
-    @Published var isDuplicateChecked: Bool = false  // 중복 확인 여부
-    @Published var isLoading: Bool = false  // API 로딩 상태
+    /// 닉네임 입력 값
+    @Published var nickname: String = ""
+    
+    /// 중복 확인 여부
+    @Published var isDuplicateChecked: Bool = false
+    
+    
     
     private var cancellables = Set<AnyCancellable>()
     
