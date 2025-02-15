@@ -34,7 +34,8 @@ struct PlaceVisitingView: View {
                     ), likeTap: {
                         viewModel.patchPlaceLike()
                     }, reviewTap: {
-                        // TODO: - 리뷰 보는 화면으로 이동
+                        // TODO: - 리뷰 남기기 화면으로 이동
+                        viewModel.show()
                     })
 
                     buttonGroup

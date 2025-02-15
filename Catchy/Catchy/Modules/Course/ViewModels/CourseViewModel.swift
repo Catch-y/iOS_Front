@@ -23,6 +23,9 @@ class CourseViewModel: ObservableObject{
     /// 코스 리스트가 로딩 중?
     @Published var isCourseListLoading: Bool = true
     
+    /// 코스 삭제중?
+    @Published var isCourseDeleting: Bool = false
+    
     /// 요청한 미지막 코스 ID
     var lastId: Int?
     
@@ -34,7 +37,7 @@ class CourseViewModel: ObservableObject{
     
     /// 코스 배열
     @Published var courseList: [CourseResponseData] = []
-    
+            
     // MARK: - Segment Control Properties
     /// 코스 타입
     /// 세그먼트 컨트롤의 선택된 커스 타입입니다.
@@ -188,7 +191,41 @@ extension CourseViewModel {
         
     }
         
+    /// 코스 삭제 API
+    func deleteCourse(courseId: Int) {
         
+        guard !isCourseDeleting else { return }
+        
+        self.isCourseDeleting = true
+
+        container.useCaseProvider.courseUseCase.executeDeleteCourse(courseId: courseId)
+            .tryMap{ responseData -> ResponseData<CourseDeleteResponse> in
+                if !responseData.isSuccess{
+                    throw APIError
+                        .serverError(
+                            message: responseData.message,
+                            code: responseData.code
+                        )
+                }
+                    
+                return responseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: {
+                [weak self] completion in
+                guard let self = self else { return }
+                self.isCourseDeleting = false
+                switch completion {
+                case .finished:
+                    print("✅ Delete Course Server Completed")
+                case .failure(let failure):
+                    print("❌ Delete Course Failed: \(failure)")
+                }
+            },receiveValue: { response in
+                                    
+            }
+            ).store(in: &cancellables)
+    }
 
     
     
@@ -255,10 +292,10 @@ extension CourseViewModel {
     func refresh() async {
         self.isLast = false
         self.lastId = nil
-        self.courseList.removeAll()
 
         do {
             try await Task.sleep(nanoseconds: 1_500_000_000)
+            self.courseList.removeAll()
             self.courseResponse = nil
             self.getCourseList()
         } catch {

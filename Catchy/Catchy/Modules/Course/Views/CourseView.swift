@@ -14,7 +14,7 @@ struct CourseView: View {
     
     /// 코스 뷰 모델
     @StateObject var viewModel: CourseViewModel
-        
+    
     /// 드랍 다운 메뉴의 뷰 모델
     @StateObject var provinceViewModel: GetProvinceViewModel = .init()
     
@@ -26,6 +26,8 @@ struct CourseView: View {
     
     /// AI 코스 생성결과 화면 상태
     @State var isAISheetPresented: Bool = false
+    
+    @State var courseOffsets: [Int: CGFloat] = [:]
     
     init(container: DIContainer, isAILoadingPresented: Binding<Bool>, isDIYPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
@@ -91,9 +93,9 @@ struct CourseView: View {
         }) {
             AIPlaceListView(courseAIResponse: viewModel.courseAIResponse, container: container, isAISheetPresented: $isAISheetPresented)
         }
-
-    }
         
+    }
+    
     /// 네비게이션 바와 세그먼트 그룹
     private var navigationGroup : some View {
         VStack(alignment: .center) {
@@ -107,23 +109,49 @@ struct CourseView: View {
         .ignoresSafeArea(edges: .top)
     }
     
-    /// 스크롤 뷰 
+    /// 스크롤 뷰
     private var scrollView : some View {
+        
         ScrollView(.vertical, content: {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 18, content: {
-                
                 ForEach(viewModel.courseList, id: \.id) { course in
-                        CourseGroupCard(course: course)
-                        .onTapGesture {
-                            container.navigationRouter.push(to: .courseDetailView(courseId: course.courseId))
-                        }
+                    CourseGroupCard(course: course)
+                        .offset(x: courseOffsets[course.courseId] ?? 0)
+                        .gesture(
+                            DragGesture(minimumDistance: 20, coordinateSpace: .local)
+                                .onChanged { value in
+                                    if value.translation.width < 0 {
+                                        courseOffsets[course.courseId] = value.translation.width
+                                    }
+                                }
+                                .onEnded { value in
+                                    if value.translation.width < -300 {
+                                        withAnimation {
+                                            viewModel.courseList.removeAll { $0.id == course.id }
+                                            viewModel.deleteCourse(courseId: course.courseId)
+                                        }
+                                    } else {
+                                        withAnimation {
+                                            courseOffsets[course.courseId] = 0
+                                        }
+                                    }
+                                }
+                        )
                         .task {
                             guard let lastId = viewModel.lastId else { return }
                             if course.courseId >= lastId {
                                 viewModel.getCourseList()
                             }
                         }
-                    }
+                        .scrollTransition(axis: .vertical) { content, phase in
+                            content
+                                .scaleEffect(
+                                    x: phase.isIdentity ? 1.0 : 0.94,
+                                    y: phase.isIdentity ? 1.0 : 0.94)
+                            
+                        }
+                    
+                }
                 
             })
             
@@ -133,13 +161,14 @@ struct CourseView: View {
         .padding(.top, 50)
         .padding(.bottom, 110)
         .frame(maxWidth: .infinity)
-        .scrollIndicators(.hidden)
         .refreshable {
             await viewModel.refresh()
         }
         .onAppear {
             UIRefreshControl.appearance().tintColor = .main
         }
+        
+        
     }
     
     /// 코스가 없을 때 텍스트 뷰
@@ -156,6 +185,5 @@ struct CourseView: View {
         .ignoresSafeArea(edges: .all)
         .padding(.bottom, 110)
     }
+
 }
-
-

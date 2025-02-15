@@ -10,7 +10,9 @@ import SwiftUI
 struct PlaceReviewRegisterView: View {
     
     @StateObject var viewModel: PlaceReviewRegisterViewModel
+    
     @Binding var isPresented: Bool
+    
     /// 리뷰 작성할 장소의 ID
     let placeId: Int
 
@@ -85,12 +87,16 @@ struct PlaceReviewRegisterView: View {
                 MainBtn(
                     text: "리뷰 남기기",
                     action: {
-                        viewModel.postPlaceReviewSubmission(placeId: placeId)
+                        if canRegisterReview {
+                            viewModel.postPlaceReviewSubmission(placeId: placeId)
+                        }
                     },
                     width: 370,
                     height: 60,
                     onoff: canRegisterReview ? .on : .off
                 )
+                
+                Spacer()
                 
             }
             .frame(maxHeight: .infinity)
@@ -259,6 +265,7 @@ extension PlaceReviewRegisterView {
         guard let comment = viewModel.comment, !comment.trimmingCharacters(in: .whitespaces).isEmpty else {
             return false
         }
+        print(viewModel.rating != nil && viewModel.visitedDate != nil)
         return viewModel.rating != nil && viewModel.visitedDate != nil
     }
 }

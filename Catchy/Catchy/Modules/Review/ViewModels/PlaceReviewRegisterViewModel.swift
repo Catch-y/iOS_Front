@@ -43,7 +43,7 @@ class PlaceReviewRegisterViewModel: ObservableObject, ImageHandling {
     @Published var reviewSubmissionResponse: PlaceReviewSubmissionResponse?
     
     /// 장소 방문 날짜 로딩 중인가?
-    @Published var isDateLoading: Bool = true
+    @Published var isDateLoading: Bool = false
     
     /// 리뷰 등록 완료 되었는가
     @Published var hasRegister: Bool = false
@@ -100,6 +100,8 @@ extension PlaceReviewRegisterViewModel {
     /// 장소 방문 날짜 리스트 조회 API
     func getPlaceVisitedDateList(placeId: Int) {
         
+        isDateLoading = true
+        
         container.useCaseProvider.placeUseCase
             .executeGetPlaceVisitedDates(placeId: placeId)
             .tryMap{ responseData -> ResponseData<PlaceVisitedDateResponse> in
@@ -146,7 +148,6 @@ extension PlaceReviewRegisterViewModel {
             visitedDate: visitedDate!
         )
         
-        
         container.useCaseProvider.placeUseCase
             .executePostPlaceReviewSubmission(placeId: placeId, request: request, reviewImages: self.getImages())
             .tryMap{ responseData -> ResponseData<PlaceReviewSubmissionResponse> in
@@ -178,7 +179,6 @@ extension PlaceReviewRegisterViewModel {
                 
                 if let response = response.result{
                     self.reviewSubmissionResponse = response
-                    print(response)
                 }
                 
             })
