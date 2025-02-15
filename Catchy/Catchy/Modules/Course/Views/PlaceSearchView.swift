@@ -74,6 +74,12 @@ struct PlaceSearchView: View {
             .padding(.bottom, 17)
             
         }
+        .refreshable {
+            await viewModel.refresh()
+        }
+        .onAppear {
+            UIRefreshControl.appearance().tintColor = .main
+        }
     }
                    
     /// 검색 결과가 없을 떄의 뷰

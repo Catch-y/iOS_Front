@@ -127,6 +127,7 @@ struct CourseView: View {
                                 .onEnded { value in
                                     if value.translation.width < -300 {
                                         withAnimation {
+                                            courseOffsets[course.courseId] = 0
                                             viewModel.courseList.removeAll { $0.id == course.id }
                                             viewModel.deleteCourse(courseId: course.courseId)
                                         }

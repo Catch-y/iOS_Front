@@ -142,10 +142,14 @@ extension CourseViewModel {
                 guard let self = self else { return }
                 
                 if let response = response.result {
+                    if courseResponse == nil {
+                        self.courseList = response.content
+                    } else {
+                        self.courseList.append(contentsOf: response.content)
+                    }
                     self.courseResponse = response
-                    self.courseList.append(contentsOf: response.content)
                     self.isLast = response.isLast
-                    self.lastId = response.content.last?.courseId ?? 0
+                    self.lastId = response.content.last?.courseId
                 }
                 
             })
@@ -282,9 +286,10 @@ extension CourseViewModel {
     func resetAndGetCourseList() {
         
         isCourseListLoading = false
-        lastId = 0
-        courseList.removeAll()
         isLast = false
+        lastId = nil
+        isPrefetching = false
+        courseResponse = nil
         getCourseList()
     }
 
@@ -295,7 +300,6 @@ extension CourseViewModel {
 
         do {
             try await Task.sleep(nanoseconds: 1_500_000_000)
-            self.courseList.removeAll()
             self.courseResponse = nil
             self.getCourseList()
         } catch {
