@@ -48,9 +48,9 @@ struct PlaceSearchResponseData: Codable, Identifiable{
     let reviewCount: Int
     
     /// 장소 좋아요
-    var liked: Bool
+    var liked: Bool?
     
-    init(placeId: Int, placeName: String, placeImage: String, category: CategoryType?, roadAddress: String, activeTime: String, rating: Double, reviewCount: Int, liked: Bool) {
+    init(placeId: Int, placeName: String, placeImage: String, category: CategoryType?, roadAddress: String, activeTime: String, rating: Double, reviewCount: Int, liked: Bool?) {
         self.placeId = placeId
         self.placeName = placeName
         self.placeImage = placeImage

@@ -82,7 +82,7 @@ class CourseViewModel: ObservableObject{
     
     // MARK: - AI Create Course Properties
     /// AI 코스 생성중인가?
-    var isAICourseLoadingFinish: Bool = false
+    @Published var isAICourseLoading: Bool = true
     
     /// AI로 생성된 코스 응답
     @Published var courseAIResponse: CourseAICreateResponse?
@@ -160,6 +160,7 @@ extension CourseViewModel {
     /// 코스 생성(AI) API
     func postCreateCourseAI() {
         
+        self.isAICourseLoading = true
         container.useCaseProvider.courseUseCase
             .executePostCreateCourseAI()
             .tryMap{ responseData -> ResponseData<CourseAICreateResponse> in
@@ -177,7 +178,8 @@ extension CourseViewModel {
             .sink(receiveCompletion: {
                 [weak self] completion in
                 guard let self = self else { return }
-                self.isAICourseLoadingFinish = true
+                self.isAICourseLoading = false
+
                 switch completion {
                 case .finished:
                     print("✅ Post CreateAICourse Server Completed")
@@ -286,7 +288,7 @@ extension CourseViewModel {
     
     /// 현재 상태를 초기화하고 다시 코스 리스트를 요청합니다
     func resetAndGetCourseList() {
-        
+        self.courseList.removeAll()
         isCourseListLoading = false
         isLast = false
         lastId = nil

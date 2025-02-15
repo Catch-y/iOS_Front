@@ -48,7 +48,7 @@ struct CourseView: View {
             VStack {
                 navigationGroup
                 
-                if !viewModel.isCourseListLoading {
+                if viewModel.isCourseListLoading {
                     
                     if viewModel.courseList.isEmpty {
                         infoView
@@ -79,20 +79,23 @@ struct CourseView: View {
         .onChange(of: viewModel.segment) { (_, _) in
             viewModel.resetAndGetCourseList()
         }
-        .onChange(of: viewModel.isAICourseLoadingFinish) { (_, finished) in
-            if finished {
+        .onChange(of: viewModel.isAICourseLoading) { (a, loading) in
+            
+            if !loading {
+
                 isAILoadingPresented.toggle()
                 isAISheetPresented.toggle()
-                viewModel.isAICourseLoadingFinish.toggle()
             }
         }
-        .fullScreenCover(isPresented: $isAILoadingPresented) {
+
+        .fullScreenCover(isPresented: $isAILoadingPresented){
             AILoadingView(viewModel: viewModel)
         }
         .fullScreenCover(isPresented: $isDIYPresented) {
             PlaceSearchView(container: container)
         }
         .sheet(isPresented: $isAISheetPresented, onDismiss: {
+            viewModel.isAICourseLoading.toggle()
             viewModel.resetAndGetCourseList()
         }) {
             AIPlaceListView(courseAIResponse: viewModel.courseAIResponse, container: container, isAISheetPresented: $isAISheetPresented)
@@ -127,14 +130,17 @@ struct CourseView: View {
                                     if value.translation.width < 0 {
                                         courseOffsets[course.courseId] = value.translation.width
                                     }
+                                    
                                 }
                                 .onEnded { value in
-                                    if value.translation.width < -300 {
+                                    if value.translation.width < -UIScreen.screenWidth * 0.75 {
+                                        courseOffsets[course.courseId] = 0
                                         withAnimation {
-                                            courseOffsets[course.courseId] = 0
                                             viewModel.courseList.removeAll { $0.id == course.id }
-                                            viewModel.deleteCourse(courseId: course.courseId)
                                         }
+                                        viewModel.deleteCourse(courseId: course.courseId)
+
+                                        
                                     } else {
                                         withAnimation {
                                             courseOffsets[course.courseId] = 0
@@ -142,6 +148,9 @@ struct CourseView: View {
                                     }
                                 }
                         )
+                        .onTapGesture {
+                            container.navigationRouter.push(to: .courseDetailView(courseId: course.courseId))
+                        }
                         .task {
                             guard let lastId = viewModel.lastId else { return }
                             if course.courseId >= lastId {

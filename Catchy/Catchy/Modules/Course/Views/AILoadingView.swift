@@ -39,7 +39,7 @@ struct AILoadingView: View {
         
         GeometryReader { geometry in
             
-            if viewModel.isAICourseLoadingFinish {
+            if viewModel.isAICourseLoading {
                 
                 let width = geometry.size.width
             
@@ -61,7 +61,7 @@ struct AILoadingView: View {
             
         }
         .task {
-            viewModel.postCreateCourseAI()
+            // viewModel.postCreateCourseAI()
         }
         
         
@@ -178,18 +178,26 @@ struct AILoadingView: View {
         
         
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            showRedPin = true
+            withAnimation {
+                showRedPin = true
+            }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * 2) {
-            showYellowPin = true
+            withAnimation {
+                showYellowPin = true
+            }
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * 3) {
-            showPurplePin = true
+            withAnimation{
+                showPurplePin = true
+            }
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * 4) {
-            showBluePin = true
+            withAnimation {
+                showBluePin = true
+            }
         }
 
         animateFloatingPins()
