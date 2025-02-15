@@ -10,8 +10,11 @@ import Kingfisher
 
 struct PlaceCard: View {
     
+    // MARK: - Properties
+    /// 장소 데이터
     var place : PlaceDataProtocol
     
+    // MARK: - Init
     init(place: PlaceDataProtocol){
         self.place = place
     }

@@ -10,10 +10,11 @@ import Kingfisher
 
 struct CourseGroupCard: View {
     
+    // MARK: - Properties
     var course : CourseResponseData
     var type: CourseCardType    // 코스용 / 마이페이지용 구분
     
-    
+    // MARK: - Init
     /// 기본값을 코스용으로 하고 마이페이지 필요할 때 타입 추가
     init(course: CourseResponseData, type: CourseCardType = .course) {
         self.course = course

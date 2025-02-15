@@ -16,6 +16,7 @@ class PlaceDetailViewModel: ObservableObject {
     
     var cancellables = Set<AnyCancellable>()
     
+    // MARK: - 장소 상세 화면 Properties
     /// 장소 상세화면에서 보여주는 데이터
     @Published var placeDetailResponse: PlaceDetailResponse?
     
@@ -32,10 +33,12 @@ class PlaceDetailViewModel: ObservableObject {
     
 }
 
+// MARK: - Extension
 extension PlaceDetailViewModel {
     
-    // MARK: - API 요청 함수
+    // MARK: - API 호출 함수
     /// 장소 상세화면 API
+    /// - Parameter placeId: 상세화면에서 보여줄 장소의 ID
     func getPlaceDetail(placeId: Int) {
         
         isLoading = true
@@ -76,7 +79,7 @@ extension PlaceDetailViewModel {
             .store(in: &cancellables)
     }
         
-    
+    /// 장소 카테고리 등록 화면을 보여줍니다
     func show(){
         isPresented.toggle()
     }

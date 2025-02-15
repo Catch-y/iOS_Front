@@ -7,16 +7,19 @@
 
 import SwiftUI
 
-/// 코스 상세 정보 -> 장소 방문 뷰
+/// 코스 상세 정보 -> 장소 방문 화면
 struct PlaceVisitingView: View {
 
     @EnvironmentObject var container: DIContainer
     
+    // MARK: - 뷰 모델
     @StateObject var viewModel: PlaceVisitingViewModel
 
+    // MARK: - 장소 방문 화면 Properties
     /// 해당 뷰의 장소 ID
     let placeId: Int
 
+    // MARK: - Init
     init(container: DIContainer, placeId: Int) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
         self.placeId = placeId

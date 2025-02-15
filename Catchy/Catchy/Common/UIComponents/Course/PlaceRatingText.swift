@@ -10,8 +10,10 @@ import SwiftUI
 /// 장소 평점 텍스트
 struct PlaceRatingText: View {
     
+    // MARK: Properties
     let rating: String
     
+    // MARK: - Init
     init(rating: Double) {
         let roundedValue = round(rating * 10) / 10
         self.rating = String(format: "%.1f", roundedValue)

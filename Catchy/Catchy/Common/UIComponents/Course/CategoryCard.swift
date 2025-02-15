@@ -9,9 +9,11 @@ import SwiftUI
 
 struct CategoryCard: View {
     
+    // MARK: - Properties
     /// 카테고리 타입
     var categoryType: CategoryType
     
+    // MARK: - Init
     init(categoryType: CategoryType) {
         self.categoryType = categoryType
     }

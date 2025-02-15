@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CategoryButton: View {
     
+    // MARK: - Properties
+    /// 해당 버튼의 카테고리
     let category: CategoryType
     
     /// 선택되었는가?

@@ -8,16 +8,18 @@
 import SwiftUI
 import FloatingButton
 
+/// 코스 리스트 화면
 struct CourseView: View {
     
     @EnvironmentObject var container: DIContainer
-    
-    /// 코스 뷰 모델
+
+    // MARK: - 뷰 모델
     @StateObject var viewModel: CourseViewModel
-    
+        
     /// 드랍 다운 메뉴의 뷰 모델
     @StateObject var provinceViewModel: GetProvinceViewModel = .init()
     
+    // MARK: - 코스 리스트 화면 Properties
     /// AI 코스 생성로딩 화면 상태
     @Binding var isAILoadingPresented: Bool
     
@@ -27,8 +29,10 @@ struct CourseView: View {
     /// AI 코스 생성결과 화면 상태
     @State var isAISheetPresented: Bool = false
     
+    /// 코스 카드의 오프셋(코스 삭제 시 값 저장)
     @State var courseOffsets: [Int: CGFloat] = [:]
     
+    // MARK: - Init
     init(container: DIContainer, isAILoadingPresented: Binding<Bool>, isDIYPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
         self._isDIYPresented = isDIYPresented

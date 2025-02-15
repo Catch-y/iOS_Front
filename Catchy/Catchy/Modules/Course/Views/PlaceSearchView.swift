@@ -7,12 +7,15 @@
 
 import SwiftUI
 
+/// 코스 DIY 생성 -> 장소 검색 화면
 struct PlaceSearchView: View {
     
-    @StateObject var viewModel: DIYCourseViewModel
-    
     @EnvironmentObject var container: DIContainer
-    
+
+    // MARK: - 뷰 모델
+    @StateObject var viewModel: DIYCourseViewModel
+        
+    // MARK: - Init
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
     }

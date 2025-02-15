@@ -16,7 +16,7 @@ class CourseViewModel: ObservableObject{
     
     var cancellables = Set<AnyCancellable>()
     
-    // MARK: - Course View Properties
+    // MARK: - 코스 리스트 화면 Properties
     /// 코스 리스트
     @Published var courseResponse: CourseResponse?
     
@@ -94,6 +94,7 @@ class CourseViewModel: ObservableObject{
 
 }
 
+// MARK: - Extension
 extension CourseViewModel {
     
     // MARK: - API 호출 함수
@@ -196,6 +197,7 @@ extension CourseViewModel {
     }
         
     /// 코스 삭제 API
+    /// - Parameter courseId: 삭제하고자 하는 코스 ID
     func deleteCourse(courseId: Int) {
         
         guard !isCourseDeleting else { return }

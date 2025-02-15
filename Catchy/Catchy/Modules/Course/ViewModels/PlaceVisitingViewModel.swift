@@ -16,6 +16,7 @@ class PlaceVisitingViewModel: ObservableObject {
 
     var cancellables = Set<AnyCancellable>()
 
+    // MARK: - 장소 방문 체크 화면 Properties
     /// 현재 화면에서 보여주는 장소 데이터
     @Published var placeDetailResponse: PlaceDetailResponse?
 
@@ -25,6 +26,7 @@ class PlaceVisitingViewModel: ObservableObject {
     /// 리뷰 남기기 뷰의 상태
     @Published var isPresented: Bool = false
     
+    // MARK: - Init
     init(container: DIContainer) {
         self.container = container
     }
@@ -35,6 +37,7 @@ extension PlaceVisitingViewModel {
 
     // MARK: - API 요청 함수
     /// 장소 상세화면 API
+    /// - Parameter placeId: 상세화면에서 보여줄 장소 ID
     func getPlaceDetail(placeId: Int) {
         
         isLoading = true
@@ -145,8 +148,8 @@ extension PlaceVisitingViewModel {
             .store(in: &cancellables)
     }
     
-    // MARK: - API 요청 없는 함수
-    /// 평점, 리뷰 남기기 뷰 보여줌
+    // MARK: - API 호출 없는 함수
+    /// 평점, 리뷰 남기기 뷰 보여줍니다
     func show() {
         isPresented.toggle()
     }

@@ -10,6 +10,7 @@ import Kingfisher
 
 struct PlaceInfoSection: View {
     
+    // MARK: - Properties
     /// 장소 상세 정보 데이터
     @Binding var place: PlaceDetailResponse
     
@@ -17,8 +18,10 @@ struct PlaceInfoSection: View {
     /// nil인 경우 좋아요 못 누름
     let likeTap: (() -> Void)?
     
+    /// 리뷰 탭 액션
     let reviewTap: (() -> Void)
     
+    // MARK: - Init
     init(place: Binding<PlaceDetailResponse>, likeTap: (() -> Void)? = nil, reviewTap: @escaping () -> Void) {
         self._place = place
         self.likeTap = likeTap

@@ -7,14 +7,17 @@
 
 import SwiftUI
 
-/// 장소 카테고리 선택 뷰
+/// 장소 카테고리 선택 화면
 struct CategoryRegisterView: View {
     
+    // MARK: - 뷰 모델
     @StateObject var viewModel: PlaceCategoryRegisterViewModel
         
+    // MARK: - 장소 카테고리 선택 화면 Properties
     /// 카태고리 선택 시 스크롤 뷰 하단으로 이동
     @Namespace var bottomID
     
+    // MARK: - Init
     init(placeSearchResponseData: Binding<PlaceSearchResponseData>, container: DIContainer, isPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container, placeSearchResponseData: placeSearchResponseData, isPresented: isPresented))
     }
@@ -109,9 +112,12 @@ struct CategoryRegisterView: View {
        
 }
 
+// MARK: - Extension
 extension CategoryRegisterView {
     
     /// 서브 카테고리 선택 버튼
+    /// - Parameter category: 서브 카테고리 버튼을 생성할 메인 카테고리
+    /// - Returns: 서브 카테고리 버튼
     func makeSubSection(category: CategoryType) -> some View {
         Section(header: Text(category.rawValue)
             .font(.body1)

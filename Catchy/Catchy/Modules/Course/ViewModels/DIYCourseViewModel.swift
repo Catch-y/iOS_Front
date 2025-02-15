@@ -9,14 +9,13 @@ import Foundation
 import SwiftUI
 import Combine
 
-// TODO: - 무한 스크롤 처리
 class DIYCourseViewModel: ObservableObject {
         
     let container: DIContainer
     
     var cancellables = Set<AnyCancellable>()
     
-    // MARK: - Place Search View Properties
+    // MARK: - 장소 검색 화면 Properties (코스 DIY)
     /// 장소 검색 결과
     @Published var placeSearchResponse: PlaceSearchResponse?
         
@@ -41,12 +40,14 @@ class DIYCourseViewModel: ObservableObject {
     /// 무한 스크롤 요청 중?
     var isPrefetching: Bool = false
     
+    // MARK: - Init
     init(container: DIContainer){
         self.container = container
     }
     
 }
 
+// MARK: - Extension
 extension DIYCourseViewModel {
     
     // MARK: - API 호출 함수
@@ -104,6 +105,8 @@ extension DIYCourseViewModel {
             .store(in: &cancellables)
     }
     
+    // MARK: - API 호출 없는 함수
+    /// 리프레시 함수
     func refresh() async {
         self.isLast = false
         self.page = 1

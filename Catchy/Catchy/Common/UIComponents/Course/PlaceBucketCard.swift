@@ -10,6 +10,7 @@ import Kingfisher
 
 struct PlaceBucketCard: View {
     
+    // MARK: - Properties
     /// 애니메이션 변수
     @State private var isRemoved = false
     
@@ -22,9 +23,11 @@ struct PlaceBucketCard: View {
     /// X 버튼 탭시 실행
     var closeButtonTap: ((Int) -> Void)
     
-    
+    /// 지울 수 있는지
     let canDelete: Bool
     
+    // MARK: - Init
+    /// 클로즈 버튼이 없으면, 삭제 기능 X
     init(placeSearchResponseData: PlaceDataProtocol, index: Int, canDelete: Bool = true, closeButtonTap: @escaping ((Int) -> Void)) {
         self.placeSearchResponseData = placeSearchResponseData
         self.index = index
@@ -37,10 +40,8 @@ struct PlaceBucketCard: View {
             
         HStack(alignment: .top, spacing: 10) {
             
-            /// 장소 순서 레이블
             numberingLabel
             
-            /// 이미지
             if let url = URL(string: placeSearchResponseData.placeImage) {
                 KFImage(url)
                     .placeholder{
@@ -53,12 +54,10 @@ struct PlaceBucketCard: View {
                     .clipShape(RoundedRectangle(cornerRadius: 15))
             }
                 
-            /// 텍스트 그룹
             textGroup
             
             Spacer()
             
-            /// X 버튼
             if canDelete { closeButton }
         }
         
@@ -83,7 +82,6 @@ struct PlaceBucketCard: View {
         VStack(alignment: .leading) {
             HStack{
                 
-                /// 카테고리 카드
                 CategoryCard(categoryType: placeSearchResponseData.category)
                     .frame(width: 40)
                 
@@ -96,18 +94,14 @@ struct PlaceBucketCard: View {
             }.padding(.bottom, 6)
 
             
-            /// 장소 주소
             PlaceAddressText(addressText: placeSearchResponseData.roadAddress)
                 
-            /// 장소 영업시간
             PlaceTimeText(timeText: placeSearchResponseData.activeTime)
             
             HStack(spacing: 12) {
                 
-                /// 장소 평점
                 PlaceRatingText(rating: placeSearchResponseData.rating)
                 
-                /// 장소 리뷰 버튼
                 placeReviewButton(reviewCount: placeSearchResponseData.reviewCount)
             }
             .padding(.top, 8)
