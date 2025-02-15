@@ -37,6 +37,7 @@ struct PlaceInfoSection: View {
                             .controlSize(.large)
                     }
                     .retry(maxCount: 2, interval: .seconds(2))
+                    .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 103))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(maxWidth: .infinity, maxHeight: 144)
@@ -58,8 +59,10 @@ struct PlaceInfoSection: View {
                     .foregroundStyle(.g7)
                     .lineLimit(1)
                 
-                CategoryCard(categoryType: place.categoryName)
-                    .frame(width: 60)
+                if let category = place.categoryName {
+                    CategoryCard(categoryType: category)
+                        .frame(width: 60)
+                }
                 
                 Spacer()
                 

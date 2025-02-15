@@ -49,7 +49,9 @@ struct PlaceBucketCard: View {
                             .controlSize(.regular)
                     }
                     .retry(maxCount: 2, interval: .seconds(2))
+                    .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 103))
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(maxWidth: 90, maxHeight: 116)
                     .clipShape(RoundedRectangle(cornerRadius: 15))
             }
@@ -82,8 +84,11 @@ struct PlaceBucketCard: View {
         VStack(alignment: .leading) {
             HStack{
                 
-                CategoryCard(categoryType: placeSearchResponseData.category)
-                    .frame(width: 40)
+                if let category = placeSearchResponseData.category {
+                    CategoryCard(categoryType: category)
+                        .frame(width: 40)
+                }
+                
                 
                 Text(placeSearchResponseData.placeName)
                     .font(.Subtitle3_SM)

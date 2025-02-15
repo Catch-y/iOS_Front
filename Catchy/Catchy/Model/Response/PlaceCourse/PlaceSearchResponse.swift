@@ -33,7 +33,7 @@ struct PlaceSearchResponseData: Codable, Identifiable{
     let placeImage: String
     
     /// 장소의 카테고리
-    var category: CategoryType
+    var category: CategoryType?
     
     /// 장소 주소
     let roadAddress: String
@@ -50,7 +50,7 @@ struct PlaceSearchResponseData: Codable, Identifiable{
     /// 장소 좋아요
     var liked: Bool
     
-    init(placeId: Int, placeName: String, placeImage: String, category: CategoryType, roadAddress: String, activeTime: String, rating: Double, reviewCount: Int, liked: Bool) {
+    init(placeId: Int, placeName: String, placeImage: String, category: CategoryType?, roadAddress: String, activeTime: String, rating: Double, reviewCount: Int, liked: Bool) {
         self.placeId = placeId
         self.placeName = placeName
         self.placeImage = placeImage

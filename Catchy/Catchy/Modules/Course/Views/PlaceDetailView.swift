@@ -44,7 +44,7 @@ struct PlaceDetailView: View {
                     }
                     )
                 
-                    mainBtn(hasCategory: place.categoryName.rawValue != "", hasSelected: selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId})
+                    mainBtn(hasCategory: place.categoryName?.rawValue != "", hasSelected: selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId})
                     
                     Spacer()
                     
