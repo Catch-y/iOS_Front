@@ -47,7 +47,7 @@ struct VoteStatusListView: View {
     private var voteStatusList: some View {
         ForEach(viewModel.voteStatus, id: \.category) { status in // category 기반으로 수정
             HStack(spacing: 16) {
-                rankingCircle(rank: status.count) // ✅ count 기반으로 수정
+                rankingCircle(rank: status.count) //  count 기반으로 수정
                 voteStatusText(status: status)
             }
             .padding(16)

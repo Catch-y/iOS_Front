@@ -86,7 +86,7 @@ final class CalenderViewModel: ObservableObject {
     }
     
     private func mapSchedules(from groupSchedules: [GroupCalendarResponse]) {
-        let calendar = Calendar.current
+        _ = Calendar.current
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         

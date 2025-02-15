@@ -11,6 +11,17 @@ struct VoteBarChartView: View {
     
     // MARK: - Properties
     @StateObject private var viewModel: VoteBarChartViewModel
+
+    //  카테고리 고정 순서
+    private let fixedCategories: [(name: String, color: Color)] = [
+        ("카페", .cafe),
+        ("주류", .bar),
+        ("음식점", .restaurant),
+        ("체험", .experience),
+        ("문화생활", .culturaLife),
+        ("스포츠", .sport),
+        ("휴식", .rest)
+    ]
     
     // MARK: - Initializer
     init(groupId: Int, voteId: Int) {
@@ -23,41 +34,47 @@ struct VoteBarChartView: View {
             VStack {
                 Spacer() // 상단 여백
                 
-                HStack(alignment: .bottom, spacing: 16) { // 막대그래프 간 간격 16
-                    Spacer(minLength: 0) // ✅ 막대그래프 중앙 정렬
-                    ForEach(viewModel.options) { option in
+                HStack(alignment: .bottom, spacing: 8) {
+                    Spacer(minLength: 0) //
+                    ForEach(fixedCategories, id: \.name) { category in
+                        let option = viewModel.options.first { $0.name == category.name }
                         VStack(spacing: 10) {
-                            // 막대 그래프
+                            // 투표값이 없어도 최소 높이 유지
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(option.color)
+                                .fill(category.color)
                                 .frame(
                                     width: 40,
-                                    height: max(CGFloat(option.count) * 15, 8) // ✅ 최소 높이 8
+                                    height: max(CGFloat(option?.count ?? 0) * 15, 4) //  최소 높이 4
                                 )
                             
-                            // 카테고리 텍스트 (값이 없어도 항상 표시)
-                            Text(option.name)
+                            // 항상 표시되는 카테고리 텍스트
+                            Text(category.name)
                                 .lineLimit(1)
                                 .font(.body3)
                                 .multilineTextAlignment(.center)
-                                .frame(width: 40)
+                                .frame(width: 42)
                                 .foregroundStyle(.g5)
                         }
                     }
-                    Spacer(minLength: 0) // ✅ 막대그래프 중앙 정렬
+                    Spacer(minLength: 0) // 막대그래프 중앙 정렬
                 }
                 .padding(.bottom, 36)
                 .padding(.top, 33)
             }
-            .frame(height: 333) // ✅ 흰색 프레임 높이 고정
-            .padding(.horizontal, 16) // ✅ 그래프 내부 여백
+            .frame(height: 333) //  흰색 배경 높이 고정
+            .padding(.horizontal, 20)
             .background(
                 Color.white
-                    .clipShape(RoundedRectangle(cornerRadius: 20)) // ✅ 둥근 모서리
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .padding(.horizontal, 20)
+            
             )
-            .frame(width: geometry.size.width) // ✅ 전체 배경이 좌우 16 여백을 제외하고 가득 차도록 설정
+            
+            .frame(width: geometry.size.width) //  전체 배경이 좌우 16 여백을 제외하고 가득 차도록 설정
+           
         }
-        .frame(height: 333) // ✅ 전체 뷰의 높이 고정
+        .frame(height: 333) //  전체 뷰의 높이 고정
+        
     }
 }
 

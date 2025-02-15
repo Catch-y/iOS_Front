@@ -39,7 +39,7 @@ class GroupAvatarViewModel: ObservableObject {
                             print("✅ API 데이터 로드 성공: 총 \(self.avatars.count)명")
                         } else {
                             self.errorMessage = decodedData.message
-                            print("❌ API 응답 실패: \(decodedData.message ?? "알 수 없는 오류")")
+                            print("❌ API 응답 실패: \(decodedData.message)")
                             self.loadSampleData() // 샘플 데이터 로드
                         }
                     }

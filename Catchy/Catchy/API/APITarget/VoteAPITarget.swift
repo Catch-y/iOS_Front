@@ -181,7 +181,20 @@ extension VoteAPITarget: APITargetType {
                         {
                             "category": "카페",
                             "count": 7
+                        },
+                        {
+                            "category": "음식점",
+                             "count": 5
+                        },
+                        {
+                            "category": "주류",
+                             "count": 4
+                        },
+                        {
+                            "category": "문화생활",
+                             "count": 3
                         }
+                        
                     ]
                 }
             }
