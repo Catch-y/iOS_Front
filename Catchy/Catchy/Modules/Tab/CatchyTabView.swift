@@ -25,6 +25,9 @@ struct CatchyTabView: View {
     @EnvironmentObject var container: DIContainer
     @EnvironmentObject var appFlowViewModel: AppFlowViewModel
     
+    
+    //MARK: - Property
+    
     var body: some View {
         NavigationStack(path: $container.navigationRouter.destination) {
             Group {

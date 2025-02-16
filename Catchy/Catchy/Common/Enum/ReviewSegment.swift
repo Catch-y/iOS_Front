@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 리뷰 유형 분리
 enum ReviewSegment: String, CaseIterable {
     case course = "코스 리뷰"
     case place  = "장소 리뷰"

@@ -13,6 +13,7 @@ enum MainBtnClick {
     case custom
 }
 
+/// 캐치 베인 버튼
 struct MainBtn: View {
     
     let text: String
@@ -20,6 +21,8 @@ struct MainBtn: View {
     let width: CGFloat
     let height: CGFloat
     let onoff: MainBtnClick
+    
+    //MARK: - Init
     
     init(
         text: String,
@@ -35,6 +38,7 @@ struct MainBtn: View {
         self.onoff = onoff
     }
     
+    //MARK: - Property
     
     var body: some View {
         Button(
@@ -61,6 +65,10 @@ struct MainBtn: View {
 
     }
     
+    // MARK: - Funtion
+    
+    /// 버튼 색 지정
+    /// - Returns: case에 맞는 버튼 색 반환
     func returnBtnColor() -> Color {
         switch onoff {
         case .on:
@@ -72,6 +80,8 @@ struct MainBtn: View {
         }
     }
     
+    /// 텍스트 컬러 반환
+    /// - Returns: case에 맞는 텍스트 색 반환
     func returnTextColor() -> Color {
         switch onoff {
         case .on:
@@ -83,6 +93,8 @@ struct MainBtn: View {
         }
     }
 }
+
+//MARK: - Preview
 
 #Preview {
     MainBtn(

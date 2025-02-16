@@ -92,6 +92,6 @@ extension UIScreen {
     static var screenWidth: CGFloat {
         UIApplication.shared.connectedScenes
             .compactMap { $0 as? UIWindowScene }
-            .first?.screen.bounds.width ?? 375 // 기본값 설정 (iPhone 13 기준)
+            .first?.screen.bounds.width ?? 375
     }
 }

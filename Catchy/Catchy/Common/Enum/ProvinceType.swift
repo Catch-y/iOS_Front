@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUICore
 
+/// 시/도 Enum
 enum ProvinceType: String, CaseIterable {
     case busan = "부산광역시"
     case chungcheongbuk = "충청북도"

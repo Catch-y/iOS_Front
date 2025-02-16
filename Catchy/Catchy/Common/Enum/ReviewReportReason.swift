@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 신고 관련 내용 작상
 enum ReviewReportReason: String, Codable, CaseIterable {
     case notRelatedToPlace = "장소와 관련 없는 내용"
     case obsceneLanguage = "음란성, 욕설 등 부적절한 내용"

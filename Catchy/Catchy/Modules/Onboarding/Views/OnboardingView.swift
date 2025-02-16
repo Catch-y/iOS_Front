@@ -33,6 +33,7 @@ struct OnboardingView: View {
         }
     }
     
+    /// 온보딩 로고
     private var onboardingLogo: some View {
         VStack(spacing: 7, content: {
             Icon.appIcon.image

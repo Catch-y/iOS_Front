@@ -10,9 +10,9 @@ import Moya
 import SwiftUI
 
 enum AuthAPITarget {
-    case sendRefreshToken(refreshToken: String)
-    case socialLogin(socialLoginType: SocialLoginType, socialToken: String)
-    case signup(socialSignup: SocialLoginType, signupRequest: SignupRequest, image: UIImage)
+    case sendRefreshToken(refreshToken: String) // 리프레시 토큰 갱신
+    case socialLogin(socialLoginType: SocialLoginType, socialToken: String) // 소셜 로그인 애플 및 카카오 처리
+    case signup(socialSignup: SocialLoginType, signupRequest: SignupRequest, image: UIImage) // 회원가입 멀티파트폼
 }
 
 extension AuthAPITarget: APITargetType {

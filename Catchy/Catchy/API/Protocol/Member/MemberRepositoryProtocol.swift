@@ -10,6 +10,7 @@ import Moya
 import Combine
 
 protocol MemberRepositoryProtocol {
+    /* 닉네임 수정 */
     func patchNicknameData(nickname: String) -> AnyPublisher<ResponseData<EmptyResponse>, MoyaError>
     
     /* 카테고리 전달 */

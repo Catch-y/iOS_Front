@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 구 선택 컴포넌트
 struct SelectDistrictBtn: View {
     
     @Binding var isSelectedBtn: Bool

@@ -11,5 +11,6 @@ import CombineMoya
 import Moya
 
 protocol ReviewReportRepositoryProtocol {
+    // 리뷰 신고하기
     func postReviewReportInfoData(reviewReportRequest: PostReviewReportRequest) -> AnyPublisher<ResponseData<ReviewReportResponse>, MoyaError>
 }

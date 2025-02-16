@@ -9,7 +9,7 @@ import Foundation
 import Moya
 
 enum ReviewReportAPITarget {
-    case postReviewReportInfo(request: PostReviewReportRequest)
+    case postReviewReportInfo(request: PostReviewReportRequest) // 리뷰 신고 하기
 }
 
 extension ReviewReportAPITarget: APITargetType {

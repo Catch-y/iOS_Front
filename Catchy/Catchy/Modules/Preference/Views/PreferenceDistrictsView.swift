@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 취향 설문 조사 지도 내부 구 선택 뷰
 struct PreferenceDistrictsView: View {
     
     @ObservedObject var viewModel: PreferenceViewModel

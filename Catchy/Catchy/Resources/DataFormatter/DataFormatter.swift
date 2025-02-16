@@ -52,6 +52,9 @@ class DataFormatter {
         return attributedString
     }
     
+    /// 시간 반환 DataFormatter
+    /// - Parameter date: 시간 데이터 입력
+    /// - Returns: String 타입으로 반환
     func timeString(from date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
