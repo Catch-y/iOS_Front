@@ -34,7 +34,7 @@ struct ReviewReportView: View {
                     action: {
                         viewModel.postReviewReportInfo(reviewReportRequest: .init(reviewId: 1, reviewType: .course, reason: .copyrightViolation))
                     },
-                    width: UIScreen.main.bounds.width - 32,
+                    width: UIScreen.screenWidth,
                     height: 60,
                     onoff: viewModel.selectedReasons.isEmpty ? .off : .on
                 )
