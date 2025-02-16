@@ -22,7 +22,7 @@ struct PlaceInfoSection: View {
     let reviewTap: () -> Void
     
     // MARK: - Init
-    init(place: Binding<PlaceDetailResponse>, likeTap: (() -> Void)? = nil, reviewTap: @escaping (Int) -> Void) {
+    init(place: Binding<PlaceDetailResponse>, likeTap: (() -> Void)? = nil, reviewTap: @escaping () -> Void) {
         self._place = place
         self.likeTap = likeTap
         self.reviewTap = reviewTap
