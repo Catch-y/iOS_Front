@@ -45,6 +45,7 @@ struct SimilarPlacesView: View {
         .task {
             viewModel.getMoreRecommendPlaceRespponse()
         }
+        .navigationBarBackButtonHidden(true)
     }
     
     private func makeContents(datas: Binding<[RecommendPlaceResponseData]>) -> some View {

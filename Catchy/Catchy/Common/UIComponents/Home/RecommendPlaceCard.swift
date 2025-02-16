@@ -35,7 +35,7 @@ struct RecommendPlaceCard: View {
     private var placeImage: some View {
         ZStack(alignment: .topLeading, content: {
             
-            if let url = URL(string: data.placeImage) {
+            if let url = URL(string: DataFormatter.shared.formattedImageUrl(placeImageURL: data.placeImage)) {
                 KFImage(url)
                     .placeholder {
                         ProgressView()
