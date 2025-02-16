@@ -62,7 +62,7 @@ struct PlaceSearchView: View {
                         VStack(spacing: 0) {
                             PlaceCard(place: place)
                                 .onTapGesture {
-                                    
+                                    // TODO: - 장소 상세 화면으로 이동
                                 }
                             if index < content.count - 1 {
                                 Divider()

@@ -48,7 +48,7 @@ struct CourseView: View {
             VStack {
                 navigationGroup
                 
-                if viewModel.isCourseListLoading {
+                if !viewModel.isCourseListLoading {
                     
                     if viewModel.courseList.isEmpty {
                         infoView
@@ -82,7 +82,6 @@ struct CourseView: View {
         .onChange(of: viewModel.isAICourseLoading) { (a, loading) in
             
             if !loading {
-
                 isAILoadingPresented.toggle()
                 isAISheetPresented.toggle()
             }

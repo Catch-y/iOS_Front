@@ -61,7 +61,7 @@ struct AILoadingView: View {
             
         }
         .task {
-            // viewModel.postCreateCourseAI()
+            viewModel.postCreateCourseAI()
         }
         
         

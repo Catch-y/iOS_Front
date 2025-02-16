@@ -13,6 +13,8 @@ struct PlaceReviewRegisterView: View {
     // MARK: - 뷰 모댈
     @StateObject var viewModel: PlaceReviewRegisterViewModel
     
+    @EnvironmentObject var container: DIContainer
+    
     // MARK: - 장소 리뷰 남기기 화면 Properties
     /// 현재 화면이 나타난 상태
     @Binding var isPresented: Bool
@@ -84,7 +86,6 @@ struct PlaceReviewRegisterView: View {
                 }
                 .padding(.bottom, 30)
                 
-
                 photoGroup
                     .padding(.bottom, 60)
                 

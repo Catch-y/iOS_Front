@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
+@MainActor
 class DIYCourseViewModel: ObservableObject {
         
     let container: DIContainer
