@@ -87,11 +87,3 @@ struct CourseCard_Preview: PreviewProvider {
         HomeCourseCard(data: .init(courseId: 223, courseName: "경복궁", courseDescription: "ㅁㄴㅇㅁㅇㄴㅇㅁㄴㅁㄴㅇㅁㄴㅇㅇㅁㅇㅁㅇd", courseImage: "https://i.namu.wiki/i/5oX24wIySIGKLQK-xivKI_-DGXsfLmGLupQcvGVOC-luX4GkZZBZJf3OYC96jlGHFGdqzaNpoRULIPjYsSmI8k-OTB1J-v1ZHxU8ILUO8zMI2AH2nGBqIACorKDlDHFywU58LEvaYrR6Hyq043vBeQ.webp", courseType: .ai))
     }
 }
-
-extension UIScreen {
-    static var screenWidth: CGFloat {
-        UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .first?.screen.bounds.width ?? 375
-    }
-}

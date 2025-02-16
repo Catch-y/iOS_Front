@@ -8,6 +8,12 @@
 import SwiftUI
 
 struct CatchyTabView: View {
+    // MARK: - State Property
+    
+    /* Tab Animation */
+    
+    @State private var scale: CGFloat = 0.95
+    @State private var tabOpacity = 0.0
     
     @State private var selectedTab: TabCase = .home
     @State private var opacity = 0.0
@@ -65,6 +71,14 @@ struct CatchyTabView: View {
                     
                     
                 })
+                .opacity(tabOpacity)
+                .scaleEffect(scale)
+                .onAppear {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        tabOpacity = 1
+                        scale = 1
+                    }
+                }
                 .navigationDestination(for: NavigationDestination.self) { destination in
                     NavigationRoutingView(destination: destination)
                         .environmentObject(container)

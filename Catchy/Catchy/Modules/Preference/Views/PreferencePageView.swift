@@ -13,13 +13,12 @@ struct PreferencePageView: View {
     
     @StateObject var viewModel: PreferenceViewModel
     @StateObject var provinceViewmodel: GetProvinceViewModel = .init()
-    @EnvironmentObject var appFlowViewModel: AppFlowViewModel
     
     @State var scaleFactor: CGFloat = 1.0
     @State var tappedLocation: (latitude: Double, longitude: Double)? = nil
     
-    init(container: DIContainer) {
-        self._viewModel = StateObject(wrappedValue: .init(container: container))
+    init(container: DIContainer, appFlowViewModel: AppFlowViewModel) {
+        self._viewModel = StateObject(wrappedValue: .init(container: container, appFlowViewModel: appFlowViewModel))
     }
     
     var body: some View {
@@ -77,7 +76,7 @@ struct PreferencePageView: View {
                             viewModel.preferenceStep += 1
                         }
                     }
-                }, width: 366, height: 60, onoff: (viewModel.bigCategoryBtn.isEmpty ? .off : .on))
+                }, width: UIScreen.screenWidth - 32, height: 60, onoff: (viewModel.bigCategoryBtn.isEmpty ? .off : .on))
                 .disabled(viewModel.bigCategoryBtn.isEmpty)
                 
                 Spacer()
@@ -125,7 +124,7 @@ struct PreferencePageView: View {
                                             withAnimation(.easeIn(duration: 0.5)) {
                                                 viewModel.preferenceStep += 1
                                             }
-                                    }, width: 366, height: 60, onoff: (viewModel.smallCategoryBtn[viewModel.bigCategoryBtn.last!] ?? []).isEmpty ? .off : .on)
+                                    }, width: UIScreen.screenWidth - 32, height: 60, onoff: (viewModel.smallCategoryBtn[viewModel.bigCategoryBtn.last!] ?? []).isEmpty ? .off : .on)
                                     .disabled((viewModel.smallCategoryBtn[viewModel.bigCategoryBtn.last!] ?? []).isEmpty)
                                     
                                     Spacer()
@@ -481,6 +480,15 @@ struct PreferencePageView: View {
                 .presentationDetents([.fraction(0.6)])
                 .presentationCornerRadius(30)
         })
+        .overlay(content: {
+            if viewModel.isLoading {
+                ZStack {
+                    Color.gray.opacity(0.4).ignoresSafeArea(.all)
+                    
+                    MainProgressComponents(text: "잠시만 기다려주세요")
+                }
+            }
+        })
     }
     
     
@@ -505,6 +513,8 @@ struct PreferencePageView: View {
         }
     }
 }
+
+//MARK: - Extension
 
 extension PreferencePageView {
     
@@ -560,6 +570,6 @@ extension PreferencePageView {
 
 struct PerferencePageView_Preview: PreviewProvider {
     static var previews: some View {
-        PreferencePageView(container: DIContainer())
+        PreferencePageView(container: DIContainer(), appFlowViewModel: AppFlowViewModel())
     }
 }

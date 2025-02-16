@@ -39,13 +39,16 @@ struct SignUpView: View {
             inputUserInfoGroup
                 .padding(.top, 44)
             
+            Spacer()
+            
             MainBtn(text: "확인", action: {
                 viewModel.signupAction(signUpNaviData: signUpNaviData)
-            }, width: 370, height: 60, onoff: viewModel.checkMainBtn() ? .on : .off)
-                .padding(.top, 104)
+            }, width: UIScreen.screenWidth - 32, height: 60, onoff: viewModel.checkMainBtn() ? .on : .off)
             
-            Spacer()
         })
+        .onAppear {
+            UIApplication.shared.hideKeyboard()
+        }
         .sheet(isPresented: $viewModel.isImagePickerPresented, content: {
             ImagePicker(imageHandler: viewModel, selectedLimit: 1)
         })
@@ -54,6 +57,15 @@ struct SignUpView: View {
         .onAppear {
             UIApplication.shared.hideKeyboard()
         }
+        .overlay(content: {
+            if viewModel.isLoading {
+                ZStack {
+                    Color.gray.opacity(0.4).ignoresSafeArea(.all)
+                    
+                    MainProgressComponents(text: "잠시만 기다려주세요")
+                }
+            }
+        })
     }
     
     private var topTitle: some View {
@@ -146,7 +158,7 @@ extension SignUpView {
     }
     
     
-    private func returnCheckBox(nicknameAvail: Bool) -> Image{
+    private func returnCheckBox(nicknameAvail: Bool) -> Image {
         if nicknameAvail {
             Icon.checkName.image
         } else {

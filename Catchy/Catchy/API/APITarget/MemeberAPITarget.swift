@@ -41,9 +41,9 @@ extension MemeberAPITarget: APITargetType {
     var task: Task {
         switch self {
         case .patchNickname(let nickname):
-            return .requestJSONEncodable(nickname)
+            return .requestParameters(parameters: ["nickname": nickname], encoding: JSONEncoding.default)
         case .postServeyCategory(let categories):
-            return .requestJSONEncodable(categories)
+            return .requestJSONEncodable(["categories": categories])
         case .postServeyStyleTime(let styleTime):
             return .requestJSONEncodable(styleTime)
         case .postLocation(let locations):
@@ -53,5 +53,64 @@ extension MemeberAPITarget: APITargetType {
     
     var headers: [String : String]? {
         return ["Content-Type": "application/json"]
+    }
+    
+    var sampleData: Data {
+        switch self {
+        case .patchNickname:
+            return """
+            {
+              "isSuccess": true,
+              "code": "string",
+              "message": "string",
+              "result": {
+                "id": 0,
+                "nickname": "haha"
+              }
+            }
+            """.data(using: .utf8)!
+        case .postServeyCategory:
+            return """
+            {
+              "isSuccess": true,
+              "code": "string",
+              "message": "string",
+              "result": {
+                "memberCategoryIds": [
+                  1
+                ]
+              }
+            }
+            """.data(using: .utf8)!
+        case .postServeyStyleTime:
+            return """
+            {
+              "isSuccess": true,
+              "code": "string",
+              "message": "string",
+              "result": {
+                "memberStyleSurveyId": [
+                  0
+                ],
+                "activeTimeSurveyId": [
+                  1
+                ]
+              }
+            }
+            """.data(using: .utf8)!
+        case .postLocation:
+            return """
+            {
+              "isSuccess": true,
+              "code": "string",
+              "message": "string",
+              "result": {
+                "memberLocationId": [
+                  1
+                ]
+              }
+            }
+            """.data(using: .utf8)!
+        }
     }
 }
