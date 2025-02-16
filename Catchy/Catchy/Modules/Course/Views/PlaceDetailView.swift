@@ -8,19 +8,22 @@
 import SwiftUI
 import Kingfisher
 
-/// 장소 검색 - > 장소 상세 정보
+/// 코스 DIY 생성 -> 장소 검섹 - > 장소 상세 화면
 struct PlaceDetailView: View {
             
     @EnvironmentObject var container: DIContainer
 
+    // MARK: - 뷰 모델
     @StateObject var viewModel: PlaceDetailViewModel
 
+    // MARK: - 장소 상세 화면 Properties
     /// 장소 검색 화면에서 현재 사용자가 담은 장소의 리스트
     @Binding var selectedPlaceList: [PlaceSearchResponseData]
     
     /// 현재 보고 있는 장소의 데이터 (현재 뷰에서 데이터 보여줄 때 사용 X)
     @Binding var placeSearchResponseData: PlaceSearchResponseData
 
+    // MARK: - Init
     init(selectedPlaceList: Binding<[PlaceSearchResponseData]>, container: DIContainer, placeSearchResponseData: Binding<PlaceSearchResponseData>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
         self._selectedPlaceList = selectedPlaceList
@@ -41,13 +44,13 @@ struct PlaceDetailView: View {
                     }
                     )
                 
-                    mainBtn(hasCategory: place.categoryName.rawValue != "", hasSelected: selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId})
+                    mainBtn(hasCategory: place.categoryName?.rawValue != "", hasSelected: selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId})
                     
                     Spacer()
                     
                 }
             } else {
-                ProgressView()
+                MainProgressComponents()
             }
             
         }
@@ -65,6 +68,11 @@ struct PlaceDetailView: View {
         
     }
     
+    /// 현재 장소의 데이터에 따라 버튼 생성
+    /// - Parameters:
+    ///   - hasCategory: 해당 장소의 카테고리가 있는가
+    ///   - hasSelected: 현재 장소를 사용자가 담았는가
+    /// - Returns: 버튼 리턴
     private func mainBtn(hasCategory: Bool, hasSelected: Bool) -> some View {
         
         if hasCategory {
@@ -74,7 +82,7 @@ struct PlaceDetailView: View {
                     selectedPlaceList.append(placeSearchResponseData)
                     // TODO: - 이전화면으로 이동
                 },
-                width: 400,
+                width: 370,
                 height: 55,
                 onoff: hasSelected || (selectedPlaceList.count > 4) ? .off : .on
             )
@@ -87,7 +95,7 @@ struct PlaceDetailView: View {
                     print(viewModel.isPresented)
 
                 },
-                width: 400,
+                width: 370,
                 height: 55,
                 onoff: .custom
             )

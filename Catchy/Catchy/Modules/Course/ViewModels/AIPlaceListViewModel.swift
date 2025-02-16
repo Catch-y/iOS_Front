@@ -16,6 +16,7 @@ class AIPlaceListViewModel: ObservableObject {
     
     var cancellables = Set<AnyCancellable>()
         
+    // MARK: - AI 코스 생성 결과 화면 Properties
     /// AI 생성 코스 응답
     var courseAIResponse: CourseAICreateResponse?
     
@@ -30,7 +31,7 @@ class AIPlaceListViewModel: ObservableObject {
 
 }
 
-
+// MARK: - Extension
 extension AIPlaceListViewModel {
     
     /// 코스 북마크 API

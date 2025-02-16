@@ -11,6 +11,8 @@ import FloatingButton
 
 struct AddFloatingButton : View {
     
+    // MARK: - Properties
+    /// 현재 서브 플로팅 버튼이 열려있는 상태
     @Binding var isOpen: Bool
     
     /// 서브 버튼 탭 시 호출

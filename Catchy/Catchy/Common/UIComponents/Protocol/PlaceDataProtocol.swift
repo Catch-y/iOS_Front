@@ -12,7 +12,7 @@ protocol PlaceDataProtocol {
     var placeId: Int { get }
     var placeName: String { get }
     var placeImage: String { get }  // `imageUrl`도 대응
-    var category: CategoryType { get }  // `categoryName`도 대응
+    var category: CategoryType? { get }  // `categoryName`도 대응
     var roadAddress: String { get }
     var activeTime: String { get }
     var rating: Double { get }

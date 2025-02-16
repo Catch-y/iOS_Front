@@ -7,17 +7,26 @@
 
 import SwiftUI
 
+/// 장소 리뷰 남기기 화면
 struct PlaceReviewRegisterView: View {
     
+    // MARK: - 뷰 모댈
     @StateObject var viewModel: PlaceReviewRegisterViewModel
+    
+    @EnvironmentObject var container: DIContainer
+    
+    // MARK: - 장소 리뷰 남기기 화면 Properties
+    /// 현재 화면이 나타난 상태
     @Binding var isPresented: Bool
+    
     /// 리뷰 작성할 장소의 ID
     let placeId: Int
 
     /// 보라색 안내 문구
+    /// 뷰가 생성될 때마다 변경
     let infoText: String = PlaceReviewInfoText.randomText
 
-    
+    // MARK: - Init
     init(container: DIContainer, placeId: Int, isPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
         self.placeId = placeId
@@ -77,7 +86,6 @@ struct PlaceReviewRegisterView: View {
                 }
                 .padding(.bottom, 30)
                 
-
                 photoGroup
                     .padding(.bottom, 60)
                 
@@ -85,12 +93,16 @@ struct PlaceReviewRegisterView: View {
                 MainBtn(
                     text: "리뷰 남기기",
                     action: {
-                        viewModel.postPlaceReviewSubmission(placeId: placeId)
+                        if canRegisterReview {
+                            viewModel.postPlaceReviewSubmission(placeId: placeId)
+                        }
                     },
                     width: 370,
                     height: 60,
                     onoff: canRegisterReview ? .on : .off
                 )
+                
+                Spacer()
                 
             }
             .frame(maxHeight: .infinity)
@@ -252,6 +264,7 @@ struct PlaceReviewRegisterView: View {
     
 }
 
+// MARK: - Extension
 extension PlaceReviewRegisterView {
     
     /// 리뷰를 등록할 수 있는가
@@ -259,6 +272,7 @@ extension PlaceReviewRegisterView {
         guard let comment = viewModel.comment, !comment.trimmingCharacters(in: .whitespaces).isEmpty else {
             return false
         }
+        print(viewModel.rating != nil && viewModel.visitedDate != nil)
         return viewModel.rating != nil && viewModel.visitedDate != nil
     }
 }

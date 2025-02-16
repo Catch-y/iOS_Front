@@ -12,16 +12,21 @@ import CombineMoya
 
 class PlaceCategoryRegisterViewModel: ObservableObject {
     
-    @Published var selectedCategory: [CategoryType: String] = [:]
-
-    @Binding var placeSearchResponseData: PlaceSearchResponseData
-    
-    @Binding var isPresented: Bool
-    
     let container: DIContainer
     
     var cancellables = Set<AnyCancellable>()
     
+    // MARK: - 장소 카테고리 선택 화면 Properties
+    /// 선택된 카테고리
+    @Published var selectedCategory: [CategoryType: String] = [:]
+
+    /// 현재 카테고리를 등록하고자 하는 장소
+    @Binding var placeSearchResponseData: PlaceSearchResponseData
+    
+    /// 장소 카테고리 선택화면 샅애
+    @Binding var isPresented: Bool
+    
+    // MARK: - Init
     init(container: DIContainer, placeSearchResponseData: Binding<PlaceSearchResponseData>, isPresented: Binding<Bool>) {
         self.container = container
         self._placeSearchResponseData = placeSearchResponseData
@@ -29,7 +34,7 @@ class PlaceCategoryRegisterViewModel: ObservableObject {
     }
 }
 
-
+// MARK: - Extension
 extension PlaceCategoryRegisterViewModel {
     
     

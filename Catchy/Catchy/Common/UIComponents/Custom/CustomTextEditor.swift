@@ -21,6 +21,7 @@ struct CustomTextEditor: ViewModifier {
     /// 배경색
     let backgroundColor: Color
     
+
     /// 기본 이니셜라이저
     /// - Parameters:
     ///   - text: 바인딩된 텍스트
@@ -56,6 +57,7 @@ struct CustomTextEditor: ViewModifier {
         self.backgroundColor = .g1
     }
     
+
     /// 배경 색상을 추가로 지정하는 이니셜라이저
     /// - Parameters:
     ///   - text: 바인딩된 텍스트
@@ -158,23 +160,49 @@ struct CustomTextEditor: ViewModifier {
     }
 }
 
+// MARK: - Extension
 extension TextEditor {
-    /// 기본 커스텀 스타일 적용(테두리: g7, 배경: g1)
+  
+    /// 텍스트 에디터에 적용될 속성
+    /// - Parameters:
+    ///   - text: 에디터에 입력할 텍스트
+    ///   - placeholder: 에디터의 기본 텍스트
+    ///   - maxTextCount: 에디터의 최대 글자 수
+    /// - Returns: 텍스트 에디터
     func customStyleEditor(text: Binding<String>, placeholder: String, maxTextCount: Int) -> some View {
         self.modifier(CustomTextEditor(text: text, placeholder: placeholder, maxTextCount: maxTextCount))
     }
     
-    /// 테두리 색상을 지정하는 커스텀 스타일
+    /// 텍스트 에디터에 적용될 속성
+    /// - Parameters:
+    ///   - text: 에디터에 입력할 텍스트
+    ///   - placeholder: 에디터의 기본 텍스트
+    ///   - maxTextCount: 에디터의 최대 글자 수
+    ///   - border: 에디터의 테두리 색상
+    /// - Returns: 텍스트 에디터
     func customStyleTipsEditor(text: Binding<String>, placeholder: String, maxTextCount: Int, border: Color) -> some View {
         self.modifier(CustomTextEditor(text: text, placeholder: placeholder, maxTextCount: maxTextCount, strokeColor: border))
     }
     
-    /// 배경 색상을 지정하는 커스텀 스타일
+    /// 텍스트 에디터에 적용될 속성
+    /// - Parameters:
+    ///   - text: 에디터에 입력할 텍스트
+    ///   - placeholder: 에디터의 기본 텍스트
+    ///   - maxTextCount: 에디터의 최대 글자 수
+    ///   - backColor: 에디터의 배경 색상
+    /// - Returns: 텍스트 에디터
     func customStyleTipsEditor(text: Binding<String>, placeholder: String, maxTextCount: Int, backColor: Color) -> some View {
         self.modifier(CustomTextEditor(text: text, placeholder: placeholder, maxTextCount: maxTextCount, backgroundColor: backColor))
     }
     
-    /// 테두리 색상과 배경 색상을 모두 지정하는 커스텀 스타일
+    /// 텍스트 에디터에 적용될 속성
+    /// - Parameters:
+    ///   - text: 에디터에 입력할 텍스트
+    ///   - placeholder: 에디터의 기본 텍스트
+    ///   - maxTextCount: 에디터의 최대 글자 수
+    ///   - border: 에디터의 테두리 색상
+    ///   - backColor: 에디터의 배경 색상
+    /// - Returns: 텍스트 에디터
     func customStyleTipsEditor(text: Binding<String>, placeholder: String, maxTextCount: Int, border: Color = .clear, backColor: Color) -> some View {
         self.modifier(CustomTextEditor(text: text, placeholder: placeholder, maxTextCount: maxTextCount, strokeColor: border, backgroundColor: backColor))
     }

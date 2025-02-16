@@ -10,8 +10,11 @@ import SwiftUI
 /// 장소 이름 텍스트
 struct PlaceAddressText: View {
     
+    // MARK: - Properties
+    /// 장소 이름
     let addressText: String
     
+    // MARK: - Init
     init(addressText: String) {
         self.addressText = addressText
     }

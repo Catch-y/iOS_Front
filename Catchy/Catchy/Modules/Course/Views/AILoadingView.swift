@@ -9,33 +9,38 @@ import SwiftUI
 
 /// AI 생성 버튼 탭 시 나타나는 뷰
 struct AILoadingView: View {
-    
-    // @StateObject var viewModel: AILoadingViewModel
-    
+        
+    // MARK: - 뷰 모델
     @ObservedObject var viewModel: CourseViewModel
     
+    // MARK: - AI 코스 생성 로딩 화면 Properties
+    /// 해당 색상의 핀을 보여주고 있는 상태
     @State var showRedPin = false
     @State var showYellowPin = false
     @State var showPurplePin = false
     @State var showBluePin = false
     
+    /// 해당 핀이 플로팅된 상태
     @State var floatingRedPin = false
     @State var floatingYellowPin = false
     @State var floatingPurplePin = false
     @State var floatingBluePin = false
         
+    /// 핀 애니메이션 기본 시간
     let duration: TimeInterval = 1
     
+    // MARK: - Init
     init(viewModel: CourseViewModel) {
         self.viewModel = viewModel
     }
+    
     
     var body: some View {
         
         GeometryReader { geometry in
             
-            if viewModel.isAICourseLoadingFinish {
-                /// 화면의 가로 크기
+            if viewModel.isAICourseLoading {
+                
                 let width = geometry.size.width
             
                 VStack(spacing: 120) {
@@ -56,7 +61,6 @@ struct AILoadingView: View {
             
         }
         .task {
-            print("요청 보냄")
             viewModel.postCreateCourseAI()
         }
         
@@ -88,7 +92,6 @@ struct AILoadingView: View {
             .aspectRatio(contentMode: .fit)
             .overlay {
                 
-                /// 빨강색 핀
                 pinImage(
                     Icon.red_pin.image,
                     screenWidth: width,
@@ -98,7 +101,6 @@ struct AILoadingView: View {
                     isFloating: floatingRedPin
                 )
                 
-                /// 노랑색 핀
                 pinImage(
                     Icon.yellow_pin.image,
                     screenWidth: width,
@@ -109,7 +111,6 @@ struct AILoadingView: View {
 
                 )
                 
-                /// 보라색 핀
                 pinImage(
                     Icon.purple_pin.image,
                     screenWidth: width,
@@ -120,7 +121,6 @@ struct AILoadingView: View {
 
                 )
                 
-                /// 파랑색 핀
                 pinImage(
                     Icon.blue_pin.image,
                     screenWidth: width,
@@ -136,7 +136,6 @@ struct AILoadingView: View {
     /// 그라데이션 뷰
     private var gradient: some View {
         
-        /// #FF517D
         let startColor = Color(red:255/255, green: 81/255, blue: 125/255).opacity(
             0.1
         )
@@ -179,18 +178,26 @@ struct AILoadingView: View {
         
         
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            showRedPin = true
+            withAnimation {
+                showRedPin = true
+            }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * 2) {
-            showYellowPin = true
+            withAnimation {
+                showYellowPin = true
+            }
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * 3) {
-            showPurplePin = true
+            withAnimation{
+                showPurplePin = true
+            }
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + duration * 4) {
-            showBluePin = true
+            withAnimation {
+                showBluePin = true
+            }
         }
 
         animateFloatingPins()

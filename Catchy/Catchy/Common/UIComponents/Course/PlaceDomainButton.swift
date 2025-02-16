@@ -10,7 +10,13 @@ import SwiftUI
 /// 장소의 도메인 텍스트 버튼 
 struct PlaceDomainButton: View {
     
+    // MARK: - Properties
+    /// 해당 장소의 도메인 주소
     let domain: String
+    
+    init(domain: String) {
+        self.domain = domain
+    }
     
     var body: some View {
         HStack(spacing: 5) {
@@ -26,7 +32,4 @@ struct PlaceDomainButton: View {
         }
     }
     
-    init(domain: String) {
-        self.domain = domain
-    }
 }

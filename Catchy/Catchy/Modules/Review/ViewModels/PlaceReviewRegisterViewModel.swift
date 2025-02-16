@@ -16,8 +16,7 @@ class PlaceReviewRegisterViewModel: ObservableObject, ImageHandling {
 
     var cancellables = Set<AnyCancellable>()
     
-    // MARK: - 평점, 리뷰 남기기 Properties
-    
+    // MARK: - 평점, 리뷰 남기기 화면 Properties
     /// 드랍 다운 메뉴 열려있는가?
     @Published var isDrop: Bool = false
     
@@ -43,7 +42,7 @@ class PlaceReviewRegisterViewModel: ObservableObject, ImageHandling {
     @Published var reviewSubmissionResponse: PlaceReviewSubmissionResponse?
     
     /// 장소 방문 날짜 로딩 중인가?
-    @Published var isDateLoading: Bool = true
+    @Published var isDateLoading: Bool = false
     
     /// 리뷰 등록 완료 되었는가
     @Published var hasRegister: Bool = false
@@ -62,6 +61,7 @@ class PlaceReviewRegisterViewModel: ObservableObject, ImageHandling {
     /// 현재 선택된 이미지 수
     @Published var selectedImageCount = 0
         
+    // MARK: - Init
     init(container: DIContainer) {
         self.container = container
     }
@@ -69,6 +69,7 @@ class PlaceReviewRegisterViewModel: ObservableObject, ImageHandling {
     
 }
 
+// MARK: - Extension
 extension PlaceReviewRegisterViewModel {
     
     func addImage(_ images: UIImage) {
@@ -93,12 +94,15 @@ extension PlaceReviewRegisterViewModel {
     
     
 }
-
+// MARK: - Extension
 extension PlaceReviewRegisterViewModel {
     
-    // MARK: - API 요청이 있는 메소드
+    // MARK: - API 호출 메소드
     /// 장소 방문 날짜 리스트 조회 API
+    /// - Parameter placeId: 방문 날짜를 확인할 장소 ID
     func getPlaceVisitedDateList(placeId: Int) {
+        
+        isDateLoading = true
         
         container.useCaseProvider.placeUseCase
             .executeGetPlaceVisitedDates(placeId: placeId)
@@ -138,6 +142,7 @@ extension PlaceReviewRegisterViewModel {
     }
     
     /// 장소 평점/리뷰 달기 API
+    /// - Parameter placeId: 리뷰 등록할 장소 ID
     func postPlaceReviewSubmission(placeId: Int){
         
         let request = PlaceReviewSubmissionRequest(
@@ -145,7 +150,6 @@ extension PlaceReviewRegisterViewModel {
             comment: comment!,
             visitedDate: visitedDate!
         )
-        
         
         container.useCaseProvider.placeUseCase
             .executePostPlaceReviewSubmission(placeId: placeId, request: request, reviewImages: self.getImages())
@@ -178,14 +182,13 @@ extension PlaceReviewRegisterViewModel {
                 
                 if let response = response.result{
                     self.reviewSubmissionResponse = response
-                    print(response)
                 }
                 
             })
             .store(in: &cancellables)
     }
     
-    // MARK: - API 요청이 없는 메소드
+    // MARK: - API 요청 없는 함수
     /// 드랍 다운 메뉴의 스크롤 인덱스 값을 설정합니다.
     /// - Parameter index: 스크롤 뷰의 인덱스
     func setScrollPosition(by index: Int?){

@@ -9,13 +9,14 @@ import Foundation
 import SwiftUI
 import Combine
 
+@MainActor
 class DIYCourseViewModel: ObservableObject {
         
     let container: DIContainer
     
     var cancellables = Set<AnyCancellable>()
     
-    // MARK: - Place Search View Properties
+    // MARK: - 장소 검색 화면 Properties (코스 DIY)
     /// 장소 검색 결과
     @Published var placeSearchResponse: PlaceSearchResponse?
         
@@ -31,27 +32,30 @@ class DIYCourseViewModel: ObservableObject {
     /// 장소 목록 - API 통신 중인가?
     @Published var isPlaceListLoading: Bool = false
     
-    /// 장소 상세 정보 -  API 통신 중인가?
-    @Published var isPlaceDetailLoading: Bool = false
-    
-    /// 현재 코스에 담은 장소들의 ID 리스트
-    /// placeId가 있음.
-    @Published var places: [Int] = []
-    
     /// 현재 요청한 페이지
     var page: Int = 1
     
+    /// 마지막 요청인가?
+    var isLast: Bool = false
+    
+    /// 무한 스크롤 요청 중?
+    var isPrefetching: Bool = false
+    
+    // MARK: - Init
     init(container: DIContainer){
         self.container = container
     }
     
 }
 
+// MARK: - Extension
 extension DIYCourseViewModel {
     
     // MARK: - API 호출 함수
     /// 장소 검색 - 지역명 기반
     func getPlaceList() {
+        
+        guard !isPrefetching, !isLast else { return }
         
         isPlaceListLoading = true
         
@@ -73,8 +77,10 @@ extension DIYCourseViewModel {
             .sink(receiveCompletion: {
                 [weak self] completion in
                 guard let self = self else { return }
+                
                 self.isPlaceListLoading = false
-                    
+                self.isPrefetching = false
+                
                 switch completion {
                 case .finished:
                     print("✅ Get PlaceSearchList Server Completed")
@@ -84,12 +90,36 @@ extension DIYCourseViewModel {
             },receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 
-                if let response = response.result{
+                if let response = response.result {
+                    
+                    if placeSearchResponse == nil {
+                        placeList = response.placeInfoPreviews
+                    } else {
+                        self.placeList.append(contentsOf: response.placeInfoPreviews)
+                    }
                     self.placeSearchResponse = response
+                    self.isLast = response.isLast
+                    self.page += 1
                 }
                 
             })
             .store(in: &cancellables)
+    }
+    
+    // MARK: - API 호출 없는 함수
+    /// 리프레시 함수
+    func refresh() async {
+        self.isLast = false
+        self.page = 1
+        
+        do {
+            try await Task.sleep(nanoseconds: 1_500_000_000)
+            self.placeSearchResponse = nil
+            self.getPlaceList()
+        } catch {
+            print("❌ Refresh 오류: \(error)")
+        }
+                
     }
     
 }

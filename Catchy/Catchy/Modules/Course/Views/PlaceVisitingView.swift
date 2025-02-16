@@ -7,16 +7,19 @@
 
 import SwiftUI
 
-/// 코스 상세 정보 -> 장소 방문 뷰
+/// 코스 상세 정보 -> 장소 방문 화면
 struct PlaceVisitingView: View {
 
     @EnvironmentObject var container: DIContainer
     
+    // MARK: - 뷰 모델
     @StateObject var viewModel: PlaceVisitingViewModel
 
+    // MARK: - 장소 방문 화면 Properties
     /// 해당 뷰의 장소 ID
     let placeId: Int
 
+    // MARK: - Init
     init(container: DIContainer, placeId: Int) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
         self.placeId = placeId
@@ -34,7 +37,8 @@ struct PlaceVisitingView: View {
                     ), likeTap: {
                         viewModel.patchPlaceLike()
                     }, reviewTap: {
-                        // TODO: - 리뷰 보는 화면으로 이동
+                        // TODO: - 리뷰 남기기 화면으로 이동
+                        viewModel.show()
                     })
 
                     buttonGroup
@@ -43,18 +47,20 @@ struct PlaceVisitingView: View {
                         text: "길 찾기",
                         action: {
                         },
-                        width: 400,
+                        width: 370,
                         height: 55,
                         onoff: .on
                     )
-                    .safeAreaPadding(.horizontal, 16)
+                    .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+
+
                     
                     Spacer()
                     
                 }
             }
              else {
-                ProgressView()
+                 MainProgressComponents()
             }
 
         }

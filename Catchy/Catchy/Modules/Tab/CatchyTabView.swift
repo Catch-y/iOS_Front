@@ -80,7 +80,7 @@ struct CatchyTabView: View {
 
 struct CatchyTabView_Previews: PreviewProvider {
     static var previews: some View {
-        ForEach(["iPhone 16 Pro", "iPhone 11", "iPhone 12 mini"], id: \.self) { deviceName in
+        ForEach(["iPhone 16 Pro Max", "iPhone 11", "iPhone 12 mini"], id: \.self) { deviceName in
             CatchyTabView()
                 .environmentObject(DIContainer())
                 .environmentObject(AppFlowViewModel())
