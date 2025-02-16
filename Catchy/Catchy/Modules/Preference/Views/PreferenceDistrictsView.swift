@@ -46,12 +46,20 @@ struct PreferenceDistrictsView: View {
             
             MainBtn(text: "홈으로 넘어가기", action: {
                 appFlowViewModel.changeTabView()
-            }, width: 370, height: 60, onoff: viewModel.savedDistricts.isEmpty ? .off : .on)
+            }, width: UIScreen.screenWidth - 32, height: 60, onoff: viewModel.savedDistricts.isEmpty ? .off : .on)
             .padding(.top, 32)
             .disabled(viewModel.savedDistricts.isEmpty)
             
             Spacer()
         }
         .safeAreaPadding(EdgeInsets(top: 10, leading: 16, bottom: 0, trailing: 16))
+    }
+}
+
+
+struct PreferenceDistrictsView_Preview: PreviewProvider {
+    static var previews: some View {
+        PreferenceDistrictsView(viewModel: PreferenceViewModel(container: DIContainer()), provinceViewmodel: GetProvinceViewModel())
+            .environmentObject(AppFlowViewModel())
     }
 }
