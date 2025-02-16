@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 앱 진입 Enum
 enum AppState {
     case onBoarding
     case login

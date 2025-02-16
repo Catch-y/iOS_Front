@@ -38,9 +38,10 @@ struct SearchRecommendPlaceCard: View {
                     ProgressView()
                         .controlSize(.regular)
                 }.retry(maxCount: 2, interval: .seconds(2))
+                .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 116))
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 133, height: 116)
+                .frame(width: 140, height: 116)
                 .clipShape(.rect(cornerRadius: 15))
         }
     }

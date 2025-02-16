@@ -13,11 +13,14 @@ struct MainCategoryBtn: View {
     
     let categoryType: CategoryType
     
+    //MARK: - Init
     
     init(isSelected: Binding<Bool>, categoryType: CategoryType) {
         self._isSelected = isSelected
         self.categoryType = categoryType
     }
+    
+    //MARK: - Property
     
     var body: some View {
         Button(action: {

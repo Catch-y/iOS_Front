@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 데이터 비었을 때 보이는 화면
 struct CustomProgressView: View {
     
     let text: String

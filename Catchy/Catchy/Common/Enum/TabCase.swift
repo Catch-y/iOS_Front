@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 캐치 탭 정리
 enum TabCase: String, CaseIterable {
     case home = "home"
     case course = "course"

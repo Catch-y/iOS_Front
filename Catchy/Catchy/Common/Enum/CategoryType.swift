@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// 캐치 앱 카테고리 Enum
 enum CategoryType: String, Codable, CaseIterable {
     case CAFE = "카페"
     case BAR = "주류"

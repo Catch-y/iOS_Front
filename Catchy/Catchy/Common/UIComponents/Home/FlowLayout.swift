@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// 검색 화면 내부 최근 검색 버튼
 struct FlowLayout<Content: View>: View {
     let tags: [String]
     let content: (String) -> Content

@@ -7,7 +7,10 @@
 
 import SwiftUI
 
+/// 취향 설문 데이터에서 사용할 커스텀 타임 피커
 struct CustomTimePicker: View {
+    
+    //MARK: - Property
     
     @Binding var selectedTime: Date?
     @Binding var isExpand: Bool

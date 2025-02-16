@@ -12,6 +12,8 @@ struct MyPageItem: View {
     let title: String
     let onTap: () -> Void
     
+    //MARK: - Init
+    
     var body: some View {
         Button(action: onTap) {
             VStack(spacing: 5, content: {
@@ -35,7 +37,6 @@ struct MyPageItem: View {
         )
     }
 }
-
 
 struct MyPageItem_Previews: PreviewProvider {
     static var previews: some View {

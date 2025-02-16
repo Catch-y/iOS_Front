@@ -58,6 +58,7 @@ struct CustomNavigation: View {
         
     }
     
+    /// 왼쪽 및 오른쪽 네비 그룹
     private var naviGroup: some View {
         HStack(alignment: .center, content: {
             if let leftNaviIcon = leftNaviIcon {
@@ -72,6 +73,7 @@ struct CustomNavigation: View {
         })
     }
     
+    /// 네비 타이틀 설정
     @ViewBuilder
     private var naviTitle: some View {
         if let title = title {
@@ -88,6 +90,9 @@ struct CustomNavigation: View {
         }
     }
     
+    /// 네비게이션 내부 버튼 생성
+    /// - Parameter image: 버튼에 사용할 이미지
+    /// - Returns: 버튼 반환
     private func makeNaviButton(image: Image) -> some View {
         return Button(action: {
                 action()
@@ -97,6 +102,9 @@ struct CustomNavigation: View {
         })
     }
     
+    /// 네비게이션 내부 타이틀
+    /// - Parameter title: 네비게이션 사용 타이틀
+    /// - Returns: 네비게이션 타이틀 반환
     private func makeTitle(_ title: String) -> some View {
         Text(title)
             .font(.naviFont)
