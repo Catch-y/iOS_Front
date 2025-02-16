@@ -39,8 +39,8 @@ struct PlaceDetailView: View {
                     PlaceInfoSection(place: Binding(
                         get: { place },
                         set: { viewModel.placeDetailResponse = $0 }
-                    ), reviewTap: { placeId in
-                        viewModel.showReview(placeId: placeId)
+                    ), reviewTap: {
+                        viewModel.showReview(placeId: place.placeId)
                     }
                     )
                 

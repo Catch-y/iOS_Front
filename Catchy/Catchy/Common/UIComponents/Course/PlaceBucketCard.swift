@@ -45,7 +45,7 @@ struct PlaceBucketCard: View {
             
             numberingLabel
             
-            if let url = URL(string: placeSearchResponseData.placeImage) {
+            if let url = URL(string: DataFormatter.shared.formattedImageUrl(placeImageURL: placeSearchResponseData.placeImage)) {
                 KFImage(url)
                     .placeholder{
                         ProgressView()

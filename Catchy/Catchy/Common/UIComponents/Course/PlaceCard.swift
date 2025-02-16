@@ -15,10 +15,10 @@ struct PlaceCard: View {
     var place : PlaceDataProtocol
     
     /// 리뷰 버튼 탭 시 호출
-    let reviewTap: (Int) -> Void
+    let reviewTap: () -> Void
     
     // MARK: - Init
-    init(place: PlaceDataProtocol, reviewTap: @escaping (Int) -> Void){
+    init(place: PlaceDataProtocol, reviewTap: @escaping () -> Void){
         self.place = place
         self.reviewTap = reviewTap
     }
@@ -80,9 +80,10 @@ struct PlaceCard: View {
 
     }
     
+    /// 장소 리뷰 버튼
     private var reviewButton: some View {
         
-        Button(action: { reviewTap(place.placeId)}, label: {
+        Button(action: { reviewTap()}, label: {
             HStack(spacing: 6) {
                 Icon.review.image.fixedSize()
                 

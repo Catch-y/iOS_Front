@@ -33,8 +33,8 @@ struct FavoritePlacesView: View {
                         ScrollView {
                             LazyVGrid(columns: [GridItem(.flexible())], spacing: 40) {
                                 ForEach(data.content, id: \.placeId) { place in
-                                    PlaceCard(place: place, reviewTap: { placeId in
-                                        viewModel.showReview(placeId: placeId)
+                                    PlaceCard(place: place, reviewTap: {
+                                        viewModel.showReview(placeId: place.placeId)
                                     })
                                 }
                             }

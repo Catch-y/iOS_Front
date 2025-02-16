@@ -57,24 +57,16 @@ struct PlaceSearchView: View {
             LazyVGrid(
                 columns: [GridItem(.flexible())]
             ) {
-                if let content = viewModel.placeSearchResponse?.placeInfoPreviews {
-                    ForEach(
-                        Array(content.enumerated()),
-                        id: \.1.id
-                    ) {
-                        index,
-                        place in
-                        VStack(spacing: 0) {
-                            PlaceCard(place: place, reviewTap: { placeId in
-                                viewModel.showReview(placeId: placeId)
-                            })
-                                .onTapGesture {
-                                    // TODO: - 장소 상세 화면으로 이동
-                                }
-                            if index < content.count - 1 {
-                                Divider()
-                                    .padding(.vertical, 20)
+                
+                ForEach(Array(viewModel.placeList.enumerated()), id: \.element.id) { (index, place) in
+                    VStack(spacing: 0) {
+                        PlaceCard(place: place, reviewTap: { viewModel.showReview(placeId: place.placeId)})
+                            .onTapGesture {
+                                // TODO: - 장소 상세 화면으로 이동
                             }
+                        if index < viewModel.placeList.count - 1 {
+                            Divider()
+                                .padding(.vertical, 20)
                         }
                     }
                 }

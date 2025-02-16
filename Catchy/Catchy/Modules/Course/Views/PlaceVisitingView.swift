@@ -36,8 +36,8 @@ struct PlaceVisitingView: View {
                         set: { viewModel.placeDetailResponse = $0 }
                     ), likeTap: {
                         viewModel.patchPlaceLike()
-                    }, reviewTap: { placeId in
-                        viewModel.showReview(placeId: placeId)
+                    }, reviewTap: {
+                        viewModel.showReview(placeId: place.placeId)
                     })
 
                     buttonGroup
