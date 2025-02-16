@@ -14,7 +14,7 @@ struct RecommendPlaceResponse: Codable {
 
 struct RecommendPlaceResponseData: Codable, Identifiable, Likeable {
     var id = UUID()
-    let placeId: Int
+    var placeId: Int
     let placeName: String
     let placeImage: String
     let category: String

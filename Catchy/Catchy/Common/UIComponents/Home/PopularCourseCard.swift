@@ -8,9 +8,12 @@
 import SwiftUI
 import Kingfisher
 
+/// 두 번째 섹션 인기 코스 카드
 struct PopularCourseCard: View {
     
     let data: PopularCourseResponse
+    
+    //MARK: - Init
     
     init(data: PopularCourseResponse) {
         self.data = data

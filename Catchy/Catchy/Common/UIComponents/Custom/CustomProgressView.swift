@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 커스텀 프로그레스 뷰, MianColor 사용
 struct CustomProgressView: View {
     
     let text: String

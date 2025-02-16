@@ -26,6 +26,7 @@ struct NavigationRoutingView: View {
                 .environmentObject(container)
         case .courseDetailView(let courseId) :
             CourseDetailView(container: container, courseId: courseId)
+                .environmentObject(container)
         }
     }
 }

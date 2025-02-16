@@ -14,9 +14,13 @@ struct HomeView: View {
     
     @State var isRotationEnabled: Bool = false
     
+    //MARK: - Init
+    
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
     }
+    
+    //MARK: - Body
     
     var body: some View {
             VStack(alignment: .leading, spacing: 0, content: {
@@ -74,6 +78,9 @@ struct HomeView: View {
         Spacer()
     }
     
+    //MARK: - FirstSection
+    
+    /// 첫 번째 섹션 타이틀
     private var topTitle: some View {
         Text(DataFormatter.shared.makeStyledText(for: "\(UserState.shared.getUserNickname())님의 취향을 저격할 \n코스를 알려드릴게요!"))
             .multilineTextAlignment(.leading)
@@ -82,6 +89,8 @@ struct HomeView: View {
             .lineSpacing(3)
     }
     
+    /// 첫 번째 섹션 뷰 반환
+    /// - Returns: 뷰 반환
     private func firstSection() -> some View {
         VStack(alignment: .leading, spacing: 20, content: {
             topTitle
@@ -95,6 +104,9 @@ struct HomeView: View {
         .padding(.horizontal, 16)
     }
     
+    /// 첫 번째 섹션 가로 스크롤 적용
+    /// - Parameter data: 섹션 내부 데이터
+    /// - Returns: 뷰 반환
     private func firstScrollView(data: [CourseInfoResponse]) -> some View {
         GeometryReader { geometry in
             ScrollViewReader { proxy in
@@ -102,6 +114,10 @@ struct HomeView: View {
                     HStack(alignment: .top, spacing: 0, content: {
                         ForEach(data, id: \.id) { data in
                             courseCardView(geometry: geometry, data: data)
+                                .onTapGesture {
+                                    print("취향 저격 카드 코스 카드 클릭: \(data.courseId)")
+                                    container.navigationRouter.push(to: .courseDetailView(courseId: data.courseId))
+                                }
                         }
                     })
                     .scrollTargetLayout()
@@ -115,6 +131,10 @@ struct HomeView: View {
         .frame(minHeight: 240)
     }
     
+    //MARK: - SecondSection
+    
+    /// 두 번째 섹션
+    /// - Returns: 뷰 반환
     private func secondSection() -> some View {
             VStack(alignment: .leading, spacing: 10, content: {
                 Text(DataFormatter.shared.makeStyledText(for: "이번주 인기코스 TOP 10"))
@@ -138,6 +158,10 @@ struct HomeView: View {
                                             }
                                         }
                                         .zIndex(datas.zIndex(data))
+                                        .onTapGesture {
+                                            print("인기코스 카드 클릭: \(data.courseId)")
+                                            container.navigationRouter.push(to: .courseDetailView(courseId: data.courseId))
+                                        }
                                     
                                 }
                             })
@@ -156,6 +180,11 @@ struct HomeView: View {
             .padding(.trailing, 10)
     }
     
+    //MARK: - ThirdSection
+    
+    /// 세 번째 섹션
+    /// - Parameter datas:
+    /// - Returns: 뷰 반환
     @ViewBuilder
     private func thirdSection(datas: Binding<[RecommendPlaceResponseData]>) -> some View {
         if datas.isEmpty {
@@ -179,13 +208,9 @@ struct HomeView: View {
                         container.navigationRouter.push(to: .similarView)
                     }, label: {
                         HStack(spacing: 8) {
-                            Button(action: {
-                                
-                            }, label: {
-                                Text("자세히 보기")
-                                    .font(.body3)
-                                    .foregroundStyle(Color.g4)
-                            })
+                            Text("자세히 보기")
+                                .font(.body3)
+                                .foregroundStyle(Color.g4)
                             Icon.rightChevron.image
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
@@ -197,7 +222,9 @@ struct HomeView: View {
                 
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 18, content: {
                     ForEach(datas.prefix(10), id: \.id) { data in
-                        RecommendPlaceCard(data: data)
+                        RecommendPlaceCard(data: data) {
+                            viewModel.patchLikePlace(placeId: data.placeId.wrappedValue)
+                        }
                     }
                 })
                 .padding(.top, 20)
@@ -206,6 +233,7 @@ struct HomeView: View {
         }
     }
     
+    /// 세 번쨰 섹션 비었을 경우의 뷰
     private var thirdSectionEmptyView: some View {
         VStack(alignment: .leading, spacing: 10, content: {
             Text("\(DataFormatter.shared.makeStyledText(for: "아직 좋아요를 누르신 장소가 없네요!"))")
@@ -225,7 +253,10 @@ struct HomeView: View {
     
 }
 
+//MARK: - Home ScrollExtension
+
 extension HomeView {
+    
     private func scaleValue(geometry: GeometryProxy, itemGeometry: GeometryProxy) -> CGFloat {
         let itemCenter = itemGeometry.frame(in: .global).midX
         let screenCenter = geometry.size.width / 2

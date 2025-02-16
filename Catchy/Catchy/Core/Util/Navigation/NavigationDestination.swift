@@ -12,6 +12,6 @@ enum NavigationDestination: Hashable {
     
     case signUpView(signUpNaviData: SignUpNaviData)
     case searchView
-    case similarView
-    case courseDetailView(courseId: Int)
+    case similarView /* 비슷한 취향을 가진 장소 보기 */
+    case courseDetailView(courseId: Int) /* 코스 상세화면 보기 */
 }
