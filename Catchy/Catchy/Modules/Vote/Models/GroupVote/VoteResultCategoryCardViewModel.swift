@@ -33,7 +33,6 @@ class VoteResultCategoryCardViewModel: ObservableObject {
 
     // MARK: - API 호출
     func fetchPlaces() {
-        let request = VoteAPITarget.getVoteResults(groupId: 1, voteId: 1)
         provider.requestPublisher(.getCategoryPlaces(groupId: groupId, category: category))
             .map(ResponseData<[PlaceResponse]>.self)
             .receive(on: DispatchQueue.main)

@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct GroupNavigation: View {
+    
+    @EnvironmentObject var container: DIContainer
+    
     let title: String
     let onBackButtonTap: () -> Void
 
@@ -20,8 +23,11 @@ struct GroupNavigation: View {
 
             // 왼쪽 뒤로가기 버튼
             HStack {
-                Button(action: onBackButtonTap) {
-                    Image(systemName: "chevron.left")
+                Button(action: {
+                    container.navigationRouter.pop()
+                })
+                {
+                    Icon.leftChevron.image
                         .foregroundStyle(.g4)
                 }
                 Spacer()
