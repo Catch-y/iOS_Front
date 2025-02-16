@@ -46,11 +46,10 @@ struct PlaceVisitingView: View {
                         text: "길 찾기",
                         action: {
                         },
-                        width: 370,
+                        width: UIScreen.screenWidth - 32,
                         height: 55,
                         onoff: .on
                     )
-                    .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
 
 
                     

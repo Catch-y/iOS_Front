@@ -87,7 +87,7 @@ struct PlaceDetailView: View {
                     selectedPlaceList.append(placeSearchResponseData)
                     // TODO: - 이전화면으로 이동
                 },
-                width: 370,
+                width: UIScreen.screenWidth - 32,
                 height: 55,
                 onoff: hasSelected || (selectedPlaceList.count > 4) ? .off : .on
             )
@@ -97,7 +97,7 @@ struct PlaceDetailView: View {
                 action: {
                     viewModel.showCategoryView()
                 },
-                width: 370,
+                width: UIScreen.screenWidth - 32,
                 height: 55,
                 onoff: .custom
             )

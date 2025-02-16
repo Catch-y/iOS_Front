@@ -97,7 +97,7 @@ struct PlaceReviewRegisterView: View {
                             viewModel.postPlaceReviewSubmission(placeId: placeId)
                         }
                     },
-                    width: 370,
+                    width: UIScreen.screenWidth - 32,
                     height: 60,
                     onoff: canRegisterReview ? .on : .off
                 )
