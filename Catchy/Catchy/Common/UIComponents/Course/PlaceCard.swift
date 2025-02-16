@@ -14,9 +14,13 @@ struct PlaceCard: View {
     /// 장소 데이터
     var place : PlaceDataProtocol
     
+    /// 리뷰 버튼 탭 시 호출
+    let reviewTap: (Int) -> Void
+    
     // MARK: - Init
-    init(place: PlaceDataProtocol){
+    init(place: PlaceDataProtocol, reviewTap: @escaping (Int) -> Void){
         self.place = place
+        self.reviewTap = reviewTap
     }
     
     var body: some View {
@@ -70,10 +74,29 @@ struct PlaceCard: View {
             
             HStack(spacing: 12) {
                 PlaceRatingText(rating: place.rating)
-                placeReviewButton(reviewCount: place.reviewCount)
+                reviewButton
             }
         }
 
+    }
+    
+    private var reviewButton: some View {
+        
+        Button(action: { reviewTap(place.placeId)}, label: {
+            HStack(spacing: 6) {
+                Icon.review.image.fixedSize()
+                
+                Text("리뷰 \(place.reviewCount)개")
+                    .font(.caption)
+                    .foregroundStyle(.g5)
+                    .lineLimit(1)
+
+                
+                Icon.rightChevron.image.resizable()
+                    .frame(width: 4, height: 8)
+            }
+        })
+        
     }
 
 }

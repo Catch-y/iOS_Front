@@ -10,6 +10,8 @@ import SwiftUI
 /// 사용자가 좋아요한 장소를 보여주는 뷰
 struct FavoritePlacesView: View {
     
+    @EnvironmentObject var container: DIContainer
+    
     @StateObject var viewModel: FavoritePlacesViewModel
     
     init(container: DIContainer) {
@@ -31,7 +33,9 @@ struct FavoritePlacesView: View {
                         ScrollView {
                             LazyVGrid(columns: [GridItem(.flexible())], spacing: 40) {
                                 ForEach(data.content, id: \.placeId) { place in
-                                    PlaceCard(place: place)
+                                    PlaceCard(place: place, reviewTap: { placeId in
+                                        viewModel.showReview(placeId: placeId)
+                                    })
                                 }
                             }
                         }
@@ -49,6 +53,12 @@ struct FavoritePlacesView: View {
         .ignoresSafeArea(.all)
         .task {
             viewModel.getMyPlaceList(pageSize: 10, lastPlaceId: 1)
+        }
+        .fullScreenCover(isPresented: $viewModel.isPresented) {
+            if let placeId = viewModel.selectedPlaceId {
+                ReviewView(container: container, placeId: placeId, isPresented: $viewModel.isPresented)
+            }
+            
         }
     }
 }

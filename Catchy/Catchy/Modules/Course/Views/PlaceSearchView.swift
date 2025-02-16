@@ -41,6 +41,11 @@ struct PlaceSearchView: View {
         .task {
             viewModel.getPlaceList()
         }
+        .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
+            if let placeId = viewModel.selectedPlaceId {
+                ReviewView(container: container, placeId: placeId, isPresented: $viewModel.isReviewPresented)
+            }
+        }
     }
             
     
@@ -60,7 +65,9 @@ struct PlaceSearchView: View {
                         index,
                         place in
                         VStack(spacing: 0) {
-                            PlaceCard(place: place)
+                            PlaceCard(place: place, reviewTap: { placeId in
+                                viewModel.showReview(placeId: placeId)
+                            })
                                 .onTapGesture {
                                     // TODO: - 장소 상세 화면으로 이동
                                 }
