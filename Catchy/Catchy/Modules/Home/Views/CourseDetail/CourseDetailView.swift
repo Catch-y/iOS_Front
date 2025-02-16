@@ -13,6 +13,8 @@ struct CourseDetailView: View {
     @StateObject var viewModel: CourseDetailViewModel
     @EnvironmentObject var container: DIContainer
     
+    //MARK: - Init
+    
     init(container: DIContainer, courseId: Int) {
         self._viewModel = StateObject(wrappedValue: .init(container: container, courseId: courseId))
     }

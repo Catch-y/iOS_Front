@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// 코스 DIY, AI 세그먼트
 enum CourseSegment: String, CaseIterable, SegmentProtocol {
     case diy = "코스 DIY"
     case ai = "AI 추천"

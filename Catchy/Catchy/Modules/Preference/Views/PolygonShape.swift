@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import CoreGraphics
 
+/// 폴리곤 생성 Shape
 struct PolygonShape: Shape {
     let points: [CGPoint]
     let scale: CGFloat

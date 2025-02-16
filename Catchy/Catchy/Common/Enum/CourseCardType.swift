@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 코스 카드 사용 방식 Enum
 enum CourseCardType {
     case myPage  // 마이페이지용 (북마크한 코스)
     case course  // 코스용 (기존 기본값)

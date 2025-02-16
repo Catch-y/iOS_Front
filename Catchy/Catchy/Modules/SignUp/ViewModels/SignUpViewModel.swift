@@ -20,6 +20,8 @@ class SignUpViewModel: ObservableObject, ImageHandling {
     
     private var cancellables = Set<AnyCancellable>()
     
+    //MARK: - Init
+    
     init(container: DIContainer, appFlowViewModel: AppFlowViewModel) {
         self.container = container
         self.appflowViewModel = appFlowViewModel
@@ -46,6 +48,10 @@ class SignUpViewModel: ObservableObject, ImageHandling {
     }
     
     // MARK: - SignupFunc
+    /// 유저 정보 저장
+    /// - Parameters:
+    ///   - response: 소셜 로그인 Response
+    ///   - loginType: 로그인 타입
     private func saveUserInfo(response: SocialLoginResponse, loginType: SocialLoginType) {
         let userInfo = UserInfo(accessToken: response.accessToken, refreshToken: response.refreshToken)
         let success = KeychainManager.standard.saveSession(userInfo, for: "catchyUser")
@@ -56,6 +62,7 @@ class SignUpViewModel: ObservableObject, ImageHandling {
         UserState.shared.setUserEmail(response.email)
     }
     
+    /// 닉네임 실시간 입력 combine
     private func setupNicknameValidation() {
         $nickname
             .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
@@ -67,6 +74,8 @@ class SignUpViewModel: ObservableObject, ImageHandling {
             .store(in: &cancellables)
     }
 }
+
+//MARK: - Image Extension
 
 extension SignUpViewModel {
     func addImage(_ images: UIImage) {
@@ -88,6 +97,8 @@ extension SignUpViewModel {
         self.isImagePickerPresented.toggle()
     }
 }
+
+//MARK: - API Extension
 
 extension SignUpViewModel {
     /// 회원 가입 API 함수

@@ -22,6 +22,8 @@ class CourseDetailViewModel: ObservableObject {
     let courseId: Int
     let container: DIContainer
     
+    //MARK: - Init
+    
     init(container: DIContainer, courseId: Int) {
         self.container = container
         self.courseId = courseId
@@ -29,6 +31,7 @@ class CourseDetailViewModel: ObservableObject {
     
 }
 
+//MARK: - Extension
 
 extension CourseDetailViewModel {
     

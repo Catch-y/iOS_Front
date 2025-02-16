@@ -12,7 +12,9 @@ import Moya
 import SwiftUI
 
 protocol AuthUseCaseProtocol {
+    /// 소셜 로그인
     func executeSocialLogin(socialLoginType: SocialLoginType, socialToken: String) -> AnyPublisher<ResponseData<SocialLoginResponse>, MoyaError>
     
+    /// 회원 가입
     func executeSignup(socialSignup: SocialLoginType, signupRequest: SignupRequest, image: UIImage) -> AnyPublisher<ResponseData<SocialLoginResponse>, MoyaError>
 }

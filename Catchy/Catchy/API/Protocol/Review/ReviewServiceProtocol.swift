@@ -11,5 +11,6 @@ import Combine
 import Moya
 
 protocol ReviewServiceProtocol {
+    // 리뷰 정보 가져오기
     func getReviewInfo(reviewData: GetReviewRequest) -> AnyPublisher<ResponseData<ReviewResponse>, MoyaError>
 }

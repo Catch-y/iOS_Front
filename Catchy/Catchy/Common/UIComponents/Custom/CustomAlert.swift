@@ -52,6 +52,12 @@ struct CustomAlert: View {
         }
     }
     
+    /// 반복되는 텍스트 생성
+    /// - Parameters:
+    ///   - title: 텍스트 주 타이틀
+    ///   - subTitle: 텍스트 내 서브 타이틀
+    ///   - addDescrip: 추가 설명
+    /// - Returns: <#description#>
     private func makeText(_ title: String, _ subTitle: String, addDescrip: Bool = false) -> some View {
         VStack(alignment: .leading, spacing: 21, content: {
             Text("\(DataFormatter.shared.makeStyledText(for: title))")

@@ -51,7 +51,6 @@ struct SearchView: View {
                 if !viewModel.searchKeyword.isEmpty {
                     if let placeResult = viewModel.searchResult {
                             placeLazy(placeResult: placeResult)
-                                .padding(.horizontal, 16)
                                 .padding(.top, 5)
                     } else {
                         if !viewModel.searchLoad {
@@ -124,6 +123,7 @@ struct SearchView: View {
                     })
                 }
             })
+            .padding(.horizontal, 16)
         })
         .refreshable {
             await viewModel.searchRefresh()
