@@ -239,7 +239,7 @@ extension HomeAPITarget: APITargetType {
                 {
                   "placeId": 1,
                   "placeName": "한강공원",
-                  "placeImage": "https://media.triple.guide/triple-cms/c_limit,f_auto,h_1024,w_1024/99b67970-512c-4496-bf5c-59472590bcb9.jpeg",
+                  "placeImage": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=AVzFdbk6005jgCo4VXN07u047apVy9vYboZRJf1PJy24iAu1Kd7CO87mlWOoeQpojdi4WeGti_bOdOXaTgbaAMxPJPqz6gJKN-_j3rpHPz9RfxV5LauFVs0H_1KeD2qWo34LkKvOLRuMBw9k3-rIxBbufFx9RO5NHr-H9e66Zbf4ONnMxnf7&key=GOOGLE_API_KEY",
                   "category": "공원",
                   "roadAddress": "서울특별시 영등포구 여의도동",
                   "activeTime": "24시간",

@@ -60,4 +60,12 @@ class DataFormatter {
         formatter.dateFormat = "HH:mm"
         return formatter.string(from: date)
     }
+    
+    /// 장소 이미지 구글 이미지로 반환
+    /// - Parameter placeImageURL: json으로 받아온 구글 이미지 입력
+    /// - Returns: 구글 키 값 포함된 이미지로 반환
+    func formattedImageUrl(placeImageURL: String) -> String {
+        let updateURLString = placeImageURL.replacingOccurrences(of: "key=GOOGLE_API_KEY", with: "key=\(Config.locationImageKey)")
+        return updateURLString
+    }
 }

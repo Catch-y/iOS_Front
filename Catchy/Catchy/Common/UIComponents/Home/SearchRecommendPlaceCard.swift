@@ -8,6 +8,7 @@
 import SwiftUI
 import Kingfisher
 
+/// 장소 검색 시, 장소 목록 카드
 struct SearchRecommendPlaceCard: View {
     
     let data: SearchPlaceData
@@ -32,7 +33,7 @@ struct SearchRecommendPlaceCard: View {
     
     @ViewBuilder
     private var placeImage: some View {
-        if let url = URL(string: data.placeImage) {
+        if let url = URL(string: DataFormatter.shared.formattedImageUrl(placeImageURL: data.placeImage)) {
             KFImage(url)
                 .placeholder {
                     ProgressView()
