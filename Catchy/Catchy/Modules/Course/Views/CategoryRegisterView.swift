@@ -7,20 +7,27 @@
 
 import SwiftUI
 
+/// 장소 카테고리 선택 화면
 struct CategoryRegisterView: View {
     
-    /// 현재 선택된 카테고리
-    @State var selectedCategory: [CategoryType: String] = [:]
-    
+    // MARK: - 뷰 모델
+    @StateObject var viewModel: PlaceCategoryRegisterViewModel
+        
+    // MARK: - 장소 카테고리 선택 화면 Properties
     /// 카태고리 선택 시 스크롤 뷰 하단으로 이동
     @Namespace var bottomID
+    
+    // MARK: - Init
+    init(placeSearchResponseData: Binding<PlaceSearchResponseData>, container: DIContainer, isPresented: Binding<Bool>) {
+        self._viewModel = StateObject(wrappedValue: .init(container: container, placeSearchResponseData: placeSearchResponseData, isPresented: isPresented))
+    }
     
     var body: some View {
         
         VStack(alignment: .leading, spacing: 20) {
             CustomNavigation(
                 action: {
-                    // TODO: - 화면 닫기
+                    viewModel.close()
                 },
                 title: "카테고리 선택",
                 leftNaviIcon: nil,
@@ -31,6 +38,7 @@ struct CategoryRegisterView: View {
                         
             scrollView
             
+            Spacer()
 
         }
         .ignoresSafeArea(edges: .top)
@@ -79,17 +87,17 @@ struct CategoryRegisterView: View {
                 MainBtn(
                     text: "선택",
                     action: {
-                        // TODO: - 장소 카테고리 선택 API 요청
+                        viewModel.postPlaceCategoryRegister()
                     },
-                    width: 400,
+                    width: 370,
                     height: 60,
-                    onoff: selectedCategory.isEmpty ? .off : .on
+                    onoff: viewModel.selectedCategory.isEmpty ? .off : .on
                 )
                 .id(bottomID)
                 
             }
-            .onChange(of: selectedCategory) { (_, _) in
-                if !selectedCategory.isEmpty {
+            .onChange(of: viewModel.selectedCategory) { (_, _) in
+                if !viewModel.selectedCategory.isEmpty {
                     withAnimation(.bouncy) {
                         proxy.scrollTo(bottomID, anchor: .bottom)
                     }
@@ -104,9 +112,12 @@ struct CategoryRegisterView: View {
        
 }
 
+// MARK: - Extension
 extension CategoryRegisterView {
     
     /// 서브 카테고리 선택 버튼
+    /// - Parameter category: 서브 카테고리 버튼을 생성할 메인 카테고리
+    /// - Returns: 서브 카테고리 버튼
     func makeSubSection(category: CategoryType) -> some View {
         Section(header: Text(category.rawValue)
             .font(.body1)
@@ -122,16 +133,16 @@ extension CategoryRegisterView {
                         category: category,
                         isSelected: Binding(
                             get: {
-                                return selectedCategory[category] == subcategory
+                                return viewModel.selectedCategory[category] == subcategory
                             },
                             set: { newValue in
                                 
                                 if newValue {
-                                    selectedCategory.removeAll()
-                                    selectedCategory[category] = subcategory
+                                    viewModel.selectedCategory.removeAll()
+                                    viewModel.selectedCategory[category] = subcategory
                                     
                                 } else {
-                                    selectedCategory[category] = nil
+                                    viewModel.selectedCategory[category] = nil
                                 }
                             }
                         ),
@@ -146,19 +157,3 @@ extension CategoryRegisterView {
         
     }
 }
-
-
-struct CategoryRegisterView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(
-            ["iPhone 16 Pro Max", "iPhone 11", "iPhone 12 mini"],
-            id: \.self
-        ) { deviceName in
-            CategoryRegisterView()
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-        }
-    }
-}
-
-

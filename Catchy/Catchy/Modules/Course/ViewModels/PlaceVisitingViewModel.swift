@@ -16,9 +16,17 @@ class PlaceVisitingViewModel: ObservableObject {
 
     var cancellables = Set<AnyCancellable>()
 
+    // MARK: - 장소 방문 체크 화면 Properties
+    /// 현재 화면에서 보여주는 장소 데이터
     @Published var placeDetailResponse: PlaceDetailResponse?
 
+    /// 로딩중인가?
+    @Published var isLoading: Bool = false
+
+    /// 리뷰 남기기 뷰의 상태
+    @Published var isPresented: Bool = false
     
+    // MARK: - Init
     init(container: DIContainer) {
         self.container = container
     }
@@ -27,8 +35,12 @@ class PlaceVisitingViewModel: ObservableObject {
 
 extension PlaceVisitingViewModel {
 
+    // MARK: - API 요청 함수
     /// 장소 상세화면 API
+    /// - Parameter placeId: 상세화면에서 보여줄 장소 ID
     func getPlaceDetail(placeId: Int) {
+        
+        isLoading = true
         
         container.useCaseProvider.placeCourseUseCase.executeGetPlaceDetail(placeId: placeId)
             .tryMap {
@@ -46,8 +58,11 @@ extension PlaceVisitingViewModel {
             }
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: {
-                completion in
-
+                [weak self] completion in
+                guard let self = self else { return }
+                
+                self.isLoading = false
+                
                 switch completion {
                 case .finished:
                     print("✅ Get PlaceDetail Server Completed")
@@ -90,11 +105,8 @@ extension PlaceVisitingViewModel {
                 case .failure(let failure):
                     print("❌ Patch PlaceLiked Failed: \(failure)")
                 }
-            },receiveValue: { [weak self] response in
-                guard let self = self else { return }
-                if let response = response.result {
-                    self.placeDetailResponse?.liked = response.liked
-                }
+            },receiveValue: { response in
+
             })
             .store(in: &cancellables)
     }
@@ -134,5 +146,11 @@ extension PlaceVisitingViewModel {
                 }
             })
             .store(in: &cancellables)
+    }
+    
+    // MARK: - API 호출 없는 함수
+    /// 평점, 리뷰 남기기 뷰 보여줍니다
+    func show() {
+        isPresented.toggle()
     }
 }

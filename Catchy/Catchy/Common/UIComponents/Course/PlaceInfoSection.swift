@@ -10,16 +10,22 @@ import Kingfisher
 
 struct PlaceInfoSection: View {
     
+    // MARK: - Properties
     /// 장소 상세 정보 데이터
     @Binding var place: PlaceDetailResponse
     
     /// 좋아요 누를 때 액션
     /// nil인 경우 좋아요 못 누름
-    let action: (() -> Void)?
+    let likeTap: (() -> Void)?
     
-    init(place: Binding<PlaceDetailResponse>, action: (() -> Void)? = nil) {
+    /// 리뷰 탭 액션
+    let reviewTap: (() -> Void)
+    
+    // MARK: - Init
+    init(place: Binding<PlaceDetailResponse>, likeTap: (() -> Void)? = nil, reviewTap: @escaping () -> Void) {
         self._place = place
-        self.action = action
+        self.likeTap = likeTap
+        self.reviewTap = reviewTap
     }
     
     var body: some View {
@@ -31,6 +37,7 @@ struct PlaceInfoSection: View {
                             .controlSize(.large)
                     }
                     .retry(maxCount: 2, interval: .seconds(2))
+                    .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 103))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(maxWidth: .infinity, maxHeight: 144)
@@ -52,13 +59,15 @@ struct PlaceInfoSection: View {
                     .foregroundStyle(.g7)
                     .lineLimit(1)
                 
-                CategoryCard(categoryType: place.categoryName)
-                    .frame(width: 60)
+                if let category = place.categoryName {
+                    CategoryCard(categoryType: category)
+                        .frame(width: 60)
+                }
                 
                 Spacer()
                 
-                if action != nil {
-                    LikeButton(data: $place, action: action!, forPlace: true)
+                if likeTap != nil {
+                    LikeButton(data: $place, action: likeTap!, forPlace: true)
                     
                 }
                 

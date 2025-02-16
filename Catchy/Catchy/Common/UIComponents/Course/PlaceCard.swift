@@ -10,8 +10,11 @@ import Kingfisher
 
 struct PlaceCard: View {
     
+    // MARK: - Properties
+    /// 장소 데이터
     var place : PlaceDataProtocol
     
+    // MARK: - Init
     init(place: PlaceDataProtocol){
         self.place = place
     }
@@ -25,7 +28,9 @@ struct PlaceCard: View {
                         ProgressView()
                             .controlSize(.regular)
                     }.retry(maxCount: 2, interval: .seconds(2))
+                    .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 103))
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: 133, height: 116)
                     .clipShape(RoundedRectangle(cornerRadius: 15)
                     )
@@ -49,10 +54,11 @@ struct PlaceCard: View {
                 
                 Spacer()
 
-                CategoryCard(categoryType: place.category)
-                    .frame(width: 37.1)
-                    .padding(.trailing, 19)
-                
+                if let category = place.category {
+                    CategoryCard(categoryType: category)
+                        .frame(width: 37.1)
+                        .padding(.trailing, 19)
+                }
             }
             .padding(.bottom, 6)
             

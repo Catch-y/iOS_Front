@@ -29,6 +29,7 @@ struct CustomLogoNavi: View {
         .frame(maxWidth: .infinity, maxHeight: 115)
     }
     
+    /// 로고 그룹
     private var logoGroup: some View {
         HStack(content: {
             Icon.topLogo.image
@@ -47,7 +48,6 @@ struct CustomLogoNavi: View {
                     .disabled(true)
                     .onTapGesture {
                         container.navigationRouter.push(to: .searchView)
-                        print("hello")
                     }
             }
         })

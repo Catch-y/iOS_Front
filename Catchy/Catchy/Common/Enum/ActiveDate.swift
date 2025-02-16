@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 활동 시간 Enum
 enum ActiveDate: String, CaseIterable, Codable {
     case monDay = "MONDAY"
     case tuesDay = "TUESDAY"

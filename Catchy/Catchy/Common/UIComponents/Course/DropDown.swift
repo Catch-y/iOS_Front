@@ -7,19 +7,24 @@
 
 import SwiftUI
 
-/// 드랍 다운 메뉴
+/// 코스 뷰의 드랍 다운 메뉴
 struct DropDown: View {
     
+    // MARK: - 뷰 모델
     @ObservedObject var viewModel: CourseViewModel
-    
     @ObservedObject var provinceViewModel: GetProvinceViewModel
     
-    // MARK: - 드랍다운 메뉴 Properties
+    // MARK: - Properties
+    /// 버튼 높이
     let buttonHeight: CGFloat = 45
+    
+    /// 버튼 넓이
     let buttonWidth: CGFloat = 180
     
+    /// 최대 아이템 개수
     let maxItemDisplayed: Int = 5
     
+    /// 아이템 높이
     let itemHeight: CGFloat = 45
     
     var body: some View {
@@ -66,6 +71,8 @@ struct DropDown: View {
     }
     
     /// 도 전체 드랍 다운 메뉴 버튼
+    /// - Parameter text: 기본 텍스트
+    /// - Returns: 기본 드랍 다운 버튼
     private func selectedProvinceButton(placeholder text: String) -> some View {
         
         let selectedIndex = viewModel.selectedUpperIndex
@@ -110,6 +117,8 @@ struct DropDown: View {
     }
     
     /// 시/군/구 전체 드랍 다운 메뉴 버튼
+    /// - Parameter text: 기본 텍스트
+    /// - Returns: 기본 드랍 다운 버튼
     private func selectedDistrictButton(placeholder text: String) -> some View {
         
         let selectedIndex = viewModel.selectedLowerIndex
@@ -219,6 +228,8 @@ struct DropDown: View {
     }
     
     /// 도 전체 드랍 다운 메뉴 아이템
+    /// - Parameter index: 드랍 다운 메뉴 아이템의 인덱스
+    /// - Returns: 인덱스에 해당하는 아이템
     private func provinceDropDownMenuItem(for index: Int) -> some View {
         
         let selectedIndex = viewModel.selectedUpperIndex
@@ -265,6 +276,8 @@ struct DropDown: View {
     }
     
     /// 시/군/구 전체 드랍 다운 메뉴 아이템
+    /// - Parameter index: 드랍 다운 메뉴 아이템의 인덱스
+    /// - Returns: 인덱스에 해당하는 아이템
     private func districtDropDownMenuItem(for index: Int) -> some View {
         
         let selectedIndex = viewModel.selectedLowerIndex

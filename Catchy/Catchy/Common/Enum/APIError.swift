@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// API 호출 시 발생하는 에러
 enum APIError: LocalizedError {
     case serverError(message: String, code: String)
     case emptyResult // 빈 결과

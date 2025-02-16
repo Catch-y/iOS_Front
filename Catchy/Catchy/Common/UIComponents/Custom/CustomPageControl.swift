@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 커스텀 페이지 컨트롤 작성
 struct CustomPageControl: View {
     
     @Binding var pageCount: Int

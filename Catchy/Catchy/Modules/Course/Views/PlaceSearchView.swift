@@ -7,12 +7,15 @@
 
 import SwiftUI
 
+/// 코스 DIY 생성 -> 장소 검색 화면
 struct PlaceSearchView: View {
     
-    @StateObject var viewModel: PlaceSearchViewModel
-    
     @EnvironmentObject var container: DIContainer
-    
+
+    // MARK: - 뷰 모델
+    @StateObject var viewModel: DIYCourseViewModel
+        
+    // MARK: - Init
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
     }
@@ -31,11 +34,7 @@ struct PlaceSearchView: View {
                     Spacer()
                 }
             } else {
-                Spacer ()
-                    
-                ProgressView()
-                    
-                Spacer()
+                MainProgressComponents()
             }
                 
         }
@@ -63,7 +62,7 @@ struct PlaceSearchView: View {
                         VStack(spacing: 0) {
                             PlaceCard(place: place)
                                 .onTapGesture {
-                                    
+                                    // TODO: - 장소 상세 화면으로 이동
                                 }
                             if index < content.count - 1 {
                                 Divider()
@@ -77,6 +76,12 @@ struct PlaceSearchView: View {
             .padding(.top, 43)
             .padding(.bottom, 17)
             
+        }
+        .refreshable {
+            await viewModel.refresh()
+        }
+        .onAppear {
+            UIRefreshControl.appearance().tintColor = .main
         }
     }
                    

@@ -161,6 +161,7 @@ extension CourseAPITarget: APITargetType {
             return .requestPlain
             
         case .getCourseList(let course):
+
             let parameter: [String: Any]
             
             if let lastId = course.lastId {

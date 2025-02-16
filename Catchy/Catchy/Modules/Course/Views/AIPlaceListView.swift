@@ -7,13 +7,17 @@
 
 import SwiftUI
 
-/// AI 코스 생성 결과화면
+/// AI 코스 생성 결과 화면
 struct AIPlaceListView: View {
     
+    // MARK: - 뷰 모델
     @StateObject var viewModel: AIPlaceListViewModel
-        
+    
+    // MARK: - AI 코스 생성 결과 화면 Properties
+    /// 현재 화면이 보여지는 상태
     @Binding var isAISheetPresented: Bool
     
+    // MARK: - Init
     init(courseAIResponse: CourseAICreateResponse?, container: DIContainer, isAISheetPresented: Binding<Bool> ) {
         self._viewModel = StateObject(wrappedValue: .init(container: container, courseAIResponse: courseAIResponse))
         self._isAISheetPresented = isAISheetPresented
@@ -138,79 +142,3 @@ struct AIPlaceListView: View {
         }
     }
 }
-
-//struct AIPlaceListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ForEach(
-//            ["iPhone 16 Pro", "iPhone 11", "iPhone 12 mini"],
-//            id: \.self
-//        ) { deviceName in
-//            AIPlaceListView(courseAIResponse: .init(
-//                courseId: 1,
-//                courseName: "서울 문화 탐방 코스",
-//                courseDescription: "서울의 다양한 문화 명소를 둘러볼 수 있는 코스입니다.\n서울의 다양한 문화 명소를 둘러볼 수 있는 코스입니다@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
-//                recommendTime: "10:00 - 18:00",
-//                courseImage: "https://example.com/images/seoul_course.jpg",
-//                courseRating: 4.6,
-//                placeInfos: [
-//                    PlaceSearchResponseData(
-//                        placeId: 101,
-//                        placeName: "경복궁",
-//                        placeImage: "https://example.com/images/gyeongbokgung.jpg",
-//                        category: .CULTURELIFE,
-//                        roadAddress: "서울특별시 종로구 사직로 161",
-//                        activeTime: "09:00 - 18:00",
-//                        rating: 4.8,
-//                        reviewCount: 1200
-//                    ),
-//                    PlaceSearchResponseData(
-//                        placeId: 102,
-//                        placeName: "남산타워",
-//                        placeImage: "https://example.com/images/namsan.jpg",
-//                        category: .REST,
-//                        roadAddress: "서울특별시 용산구 남산공원길 105",
-//                        activeTime: "10:00 - 22:00",
-//                        rating: 4.7,
-//                        reviewCount: 950
-//                    ),
-//                    PlaceSearchResponseData(
-//                        placeId: 103,
-//                        placeName: "인사동 전통거리",
-//                        placeImage: "https://example.com/images/insadong.jpg",
-//                        category: .SPORT,
-//                        roadAddress: "서울특별시 종로구 인사동길",
-//                        activeTime: "10:00 - 20:00",
-//                        rating: 4.5,
-//                        reviewCount: 700
-//                    ),
-//                    PlaceSearchResponseData(
-//                        placeId: 104,
-//                        placeName: "한강공원",
-//                        placeImage: "https://example.com/images/hanriver.jpg",
-//                        category: .CAFE,
-//                        roadAddress: "서울특별시 영등포구 여의도동 85",
-//                        activeTime: "24시간 운영",
-//                        rating: 4.6,
-//                        reviewCount: 850
-//                    ),
-//                    PlaceSearchResponseData(
-//                        placeId: 102,
-//                        placeName: "남산타워",
-//                        placeImage: "https://example.com/images/namsan.jpg",
-//                        category: .REST,
-//                        roadAddress: "서울특별시 용산구 남산공원길 105",
-//                        activeTime: "10:00 - 22:00",
-//                        rating: 4.7,
-//                        reviewCount: 950
-//                    )
-//                    
-//                ]
-//            ), container: DIContainer()
-//            )
-//            
-//        }
-//        
-//    }
-//    
-//    
-//}

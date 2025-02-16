@@ -7,20 +7,30 @@
 
 import SwiftUI
 
+/// 장소 리뷰 남기기 화면
 struct PlaceReviewRegisterView: View {
     
+    // MARK: - 뷰 모댈
     @StateObject var viewModel: PlaceReviewRegisterViewModel
     
+    @EnvironmentObject var container: DIContainer
+    
+    // MARK: - 장소 리뷰 남기기 화면 Properties
+    /// 현재 화면이 나타난 상태
+    @Binding var isPresented: Bool
+    
     /// 리뷰 작성할 장소의 ID
-    @Binding var placeId: Int
+    let placeId: Int
 
     /// 보라색 안내 문구
+    /// 뷰가 생성될 때마다 변경
     let infoText: String = PlaceReviewInfoText.randomText
 
-    
-    init(container: DIContainer, placeId: Binding<Int>) {
+    // MARK: - Init
+    init(container: DIContainer, placeId: Int, isPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
-        self._placeId = placeId
+        self.placeId = placeId
+        self._isPresented = isPresented
     }
     
     var body: some View {
@@ -30,6 +40,8 @@ struct PlaceReviewRegisterView: View {
             navigationGroup
             
             scrollView
+            
+            Spacer()
         }
         .task {
             viewModel.getPlaceVisitedDateList(placeId: placeId)
@@ -50,7 +62,7 @@ struct PlaceReviewRegisterView: View {
         CustomNavigation(
             action: {
                 // TODO: - 뒤로 가기 구현
-                print("뒤로 가기 탭")
+                isPresented.toggle()
             } ,
             title: "평점, 리뷰 남기기",
             leftNaviIcon: Icon.leftChevron.image,
@@ -74,7 +86,6 @@ struct PlaceReviewRegisterView: View {
                 }
                 .padding(.bottom, 30)
                 
-
                 photoGroup
                     .padding(.bottom, 60)
                 
@@ -82,12 +93,16 @@ struct PlaceReviewRegisterView: View {
                 MainBtn(
                     text: "리뷰 남기기",
                     action: {
-                        viewModel.postPlaceReviewSubmission(placeId: placeId)
+                        if canRegisterReview {
+                            viewModel.postPlaceReviewSubmission(placeId: placeId)
+                        }
                     },
                     width: 370,
                     height: 60,
                     onoff: canRegisterReview ? .on : .off
                 )
+                
+                Spacer()
                 
             }
             .frame(maxHeight: .infinity)
@@ -249,6 +264,7 @@ struct PlaceReviewRegisterView: View {
     
 }
 
+// MARK: - Extension
 extension PlaceReviewRegisterView {
     
     /// 리뷰를 등록할 수 있는가
@@ -256,19 +272,7 @@ extension PlaceReviewRegisterView {
         guard let comment = viewModel.comment, !comment.trimmingCharacters(in: .whitespaces).isEmpty else {
             return false
         }
+        print(viewModel.rating != nil && viewModel.visitedDate != nil)
         return viewModel.rating != nil && viewModel.visitedDate != nil
-    }
-}
-
-struct PlaceReviewRegisterView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(
-            ["iPhone 16 Pro Max", "iPhone 11", "iPhone 12 mini"],
-            id: \.self
-        ) { deviceName in
-            PlaceReviewRegisterView(container: DIContainer(), placeId: .constant(1))
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-        }
     }
 }

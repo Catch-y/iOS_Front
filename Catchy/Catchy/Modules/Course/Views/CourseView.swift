@@ -8,16 +8,18 @@
 import SwiftUI
 import FloatingButton
 
+/// 코스 리스트 화면
 struct CourseView: View {
     
     @EnvironmentObject var container: DIContainer
-    
-    /// 코스 뷰 모델
+
+    // MARK: - 뷰 모델
     @StateObject var viewModel: CourseViewModel
         
     /// 드랍 다운 메뉴의 뷰 모델
     @StateObject var provinceViewModel: GetProvinceViewModel = .init()
     
+    // MARK: - 코스 리스트 화면 Properties
     /// AI 코스 생성로딩 화면 상태
     @Binding var isAILoadingPresented: Bool
     
@@ -27,6 +29,10 @@ struct CourseView: View {
     /// AI 코스 생성결과 화면 상태
     @State var isAISheetPresented: Bool = false
     
+    /// 코스 카드의 오프셋(코스 삭제 시 값 저장)
+    @State var courseOffsets: [Int: CGFloat] = [:]
+    
+    // MARK: - Init
     init(container: DIContainer, isAILoadingPresented: Binding<Bool>, isDIYPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
         self._isDIYPresented = isDIYPresented
@@ -51,12 +57,7 @@ struct CourseView: View {
                     }
                     
                 } else {
-                    
-                    Spacer()
-                    
-                    ProgressView()
-                    
-                    Spacer()
+                    MainProgressComponents()
                 }
                 
             }
@@ -78,27 +79,29 @@ struct CourseView: View {
         .onChange(of: viewModel.segment) { (_, _) in
             viewModel.resetAndGetCourseList()
         }
-        .onChange(of: viewModel.isAICourseLoadingFinish) { (_, finished) in
-            if finished {
+        .onChange(of: viewModel.isAICourseLoading) { (a, loading) in
+            
+            if !loading {
                 isAILoadingPresented.toggle()
                 isAISheetPresented.toggle()
-                viewModel.isAICourseLoadingFinish.toggle()
             }
         }
-        .fullScreenCover(isPresented: $isAILoadingPresented) {
+
+        .fullScreenCover(isPresented: $isAILoadingPresented){
             AILoadingView(viewModel: viewModel)
         }
         .fullScreenCover(isPresented: $isDIYPresented) {
             PlaceSearchView(container: container)
         }
         .sheet(isPresented: $isAISheetPresented, onDismiss: {
+            viewModel.isAICourseLoading.toggle()
             viewModel.resetAndGetCourseList()
         }) {
             AIPlaceListView(courseAIResponse: viewModel.courseAIResponse, container: container, isAISheetPresented: $isAISheetPresented)
         }
-
-    }
         
+    }
+    
     /// 네비게이션 바와 세그먼트 그룹
     private var navigationGroup : some View {
         VStack(alignment: .center) {
@@ -112,13 +115,38 @@ struct CourseView: View {
         .ignoresSafeArea(edges: .top)
     }
     
-    /// 스크롤 뷰 
+    /// 스크롤 뷰
     private var scrollView : some View {
+        
         ScrollView(.vertical, content: {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 18, content: {
-                
                 ForEach(viewModel.courseList, id: \.id) { course in
-                        CourseGroupCard(course: course)
+                    CourseGroupCard(course: course)
+                        .offset(x: courseOffsets[course.courseId] ?? 0)
+                        .gesture(
+                            DragGesture(minimumDistance: 20, coordinateSpace: .local)
+                                .onChanged { value in
+                                    if value.translation.width < 0 {
+                                        courseOffsets[course.courseId] = value.translation.width
+                                    }
+                                    
+                                }
+                                .onEnded { value in
+                                    if value.translation.width < -UIScreen.screenWidth * 0.75 {
+                                        courseOffsets[course.courseId] = 0
+                                        withAnimation {
+                                            viewModel.courseList.removeAll { $0.id == course.id }
+                                        }
+                                        viewModel.deleteCourse(courseId: course.courseId)
+
+                                        
+                                    } else {
+                                        withAnimation {
+                                            courseOffsets[course.courseId] = 0
+                                        }
+                                    }
+                                }
+                        )
                         .onTapGesture {
                             container.navigationRouter.push(to: .courseDetailView(courseId: course.courseId))
                         }
@@ -128,7 +156,15 @@ struct CourseView: View {
                                 viewModel.getCourseList()
                             }
                         }
-                    }
+                        .scrollTransition(axis: .vertical) { content, phase in
+                            content
+                                .scaleEffect(
+                                    x: phase.isIdentity ? 1.0 : 0.94,
+                                    y: phase.isIdentity ? 1.0 : 0.94)
+                            
+                        }
+                    
+                }
                 
             })
             
@@ -138,14 +174,14 @@ struct CourseView: View {
         .padding(.top, 50)
         .padding(.bottom, 110)
         .frame(maxWidth: .infinity)
-        .scrollIndicators(.hidden)
         .refreshable {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                viewModel.isLast = false
-                viewModel.courseList = []
-                viewModel.getCourseList()
-            })
+            await viewModel.refresh()
         }
+        .onAppear {
+            UIRefreshControl.appearance().tintColor = .main
+        }
+        
+        
     }
     
     /// 코스가 없을 때 텍스트 뷰
@@ -162,6 +198,5 @@ struct CourseView: View {
         .ignoresSafeArea(edges: .all)
         .padding(.bottom, 110)
     }
+
 }
-
-

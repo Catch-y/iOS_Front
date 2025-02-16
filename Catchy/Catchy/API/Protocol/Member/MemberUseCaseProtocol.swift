@@ -10,6 +10,8 @@ import Combine
 import Moya
 
 protocol MemberUseCaseProtocol {
+    
+    /* 닉네임 수정 */
     func executePatchNickname(nickname: String) -> AnyPublisher<ResponseData<EmptyResponse>, MoyaError>
     
     /* 카테고리 전달 */

@@ -7,14 +7,19 @@
 
 import SwiftUI
 
-/// 코스 상세 정보 -> 장소 방문 뷰
+/// 코스 상세 정보 -> 장소 방문 화면
 struct PlaceVisitingView: View {
 
+    @EnvironmentObject var container: DIContainer
+    
+    // MARK: - 뷰 모델
     @StateObject var viewModel: PlaceVisitingViewModel
 
+    // MARK: - 장소 방문 화면 Properties
     /// 해당 뷰의 장소 ID
     let placeId: Int
 
+    // MARK: - Init
     init(container: DIContainer, placeId: Int) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
         self.placeId = placeId
@@ -23,36 +28,47 @@ struct PlaceVisitingView: View {
     var body: some View {
 
         VStack(spacing: 16) {
-            if let place = viewModel.placeDetailResponse {
-        
-                PlaceInfoSection(place: Binding(
-                    get: { place },
-                    set: { viewModel.placeDetailResponse = $0 }
-                ), action: {
-                    viewModel.patchPlaceLike()
-                })
+            if !viewModel.isLoading {
+                if let place = viewModel.placeDetailResponse {
+            
+                    PlaceInfoSection(place: Binding(
+                        get: { place },
+                        set: { viewModel.placeDetailResponse = $0 }
+                    ), likeTap: {
+                        viewModel.patchPlaceLike()
+                    }, reviewTap: {
+                        // TODO: - 리뷰 남기기 화면으로 이동
+                        viewModel.show()
+                    })
 
-                buttonGroup
-                
-                MainBtn(
-                    text: "길 찾기",
-                    action: {
-                    },
-                    width: 400,
-                    height: 55,
-                    onoff: .on
-                )
-                .safeAreaPadding(.horizontal, 16)
-                
-                Spacer()
-                
-            } else {
-                ProgressView()
+                    buttonGroup
+                    
+                    MainBtn(
+                        text: "길 찾기",
+                        action: {
+                        },
+                        width: 370,
+                        height: 55,
+                        onoff: .on
+                    )
+                    .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+
+
+                    
+                    Spacer()
+                    
+                }
+            }
+             else {
+                 MainProgressComponents()
             }
 
         }
         .task {
             viewModel.getPlaceDetail(placeId: placeId)
+        }
+        .fullScreenCover(isPresented: $viewModel.isPresented) {
+            PlaceReviewRegisterView(container: container, placeId: placeId, isPresented: $viewModel.isPresented)
         }
         .navigationBarBackButtonHidden()
     }
@@ -74,7 +90,6 @@ struct PlaceVisitingView: View {
         .padding(.bottom, 30)
     }
 
-    
     /// 방문 체크 버튼
     private var visitCheckbtn: some View {
 
@@ -114,7 +129,7 @@ struct PlaceVisitingView: View {
 
         Button(action: {
             if isVisited {
-                // TODO: 리뷰 남기기
+                viewModel.show()
             }
         },
                label: {
@@ -136,6 +151,7 @@ struct PlaceVisitingView: View {
             }
         }
         )
+        
     }
     
     /// 방문 확인 스탬프

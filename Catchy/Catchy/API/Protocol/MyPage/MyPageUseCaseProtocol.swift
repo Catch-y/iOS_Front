@@ -16,6 +16,7 @@ protocol MyPageUseCaseProtocol {
     /// 프로필 조회
     func executeGetProfile() -> AnyPublisher<ResponseData<ProfileResponse>, MoyaError>
     
+    /// 북마크한 코스 조회
     func executeGetBookmarkCourseList(pageSize: Int, lastCourseId: Int?) -> AnyPublisher<ResponseData<CourseResponse>, MoyaError>
     
     /// 북마크된 코스 무한 스크롤 API
