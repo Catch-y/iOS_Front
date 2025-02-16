@@ -57,7 +57,9 @@ struct SimilarPlacesView: View {
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 10, content: {
                     ForEach(datas.indices, id: \.self) { index in
                         VStack(spacing: 18, content: {
-                            RecommendPlaceCard(data: datas[index])
+                            RecommendPlaceCard(data: datas[index]) {
+                                viewModel.patchLikePlace(placeId: datas[index].placeId.wrappedValue)
+                            }
                                 .onAppear {
                                     if index == datas.count - 1 {
                                         viewModel.getMoreRecommendPlaceRespponse()

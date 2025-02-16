@@ -22,10 +22,14 @@ class HomeViewModel: ObservableObject {
     let container: DIContainer
     private var cancellables = Set<AnyCancellable>()
     
+    //MARK: - Init
+    
     init(container: DIContainer) {
         self.container = container
     }
 }
+
+//MARK: - API Extension
 
 extension HomeViewModel {
     /// 홈의 첫 번째 ai 추천 섹션
@@ -178,5 +182,41 @@ extension HomeViewModel {
                 })
                 .store(in: &cancellables)
         }
+    }
+    
+    /// 홈 장소 좋아요
+    /// - Parameter placeId: 장소 id 입력
+    func patchLikePlace(placeId: Int) {
+        
+        print("좋아요 장소 ID: \(placeId)")
+        
+        container.useCaseProvider.placeUseCase.executePatchPlaceLiked(placeId: placeId)
+            .tryMap { responseData -> ResponseData<PlaceLikedResponse> in
+                if !responseData.isSuccess {
+                    throw APIError.serverError(message: responseData.message, code: responseData.code)
+                }
+                
+                guard let _ = responseData.result else {
+                    throw APIError.emptyResult
+                }
+                
+                print("Patch Like Place: \(responseData)")
+                return responseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("✅ Patch PlaceLiked Server Completed")
+                case .failure(let failure):
+                    print("❌ Patch PlaceLiked Failed: \(failure)")
+                }
+                
+            }, receiveValue: { response in
+                if let response = response.result {
+                    print("장소 좋아요 결과: \(response)")
+                }
+            })
+            .store(in: &cancellables)
     }
 }

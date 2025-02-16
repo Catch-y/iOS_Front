@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// 데이터 비었을 때 보이는 화면
+/// 커스텀 프로그레스 뷰, MianColor 사용
 struct CustomProgressView: View {
     
     let text: String

@@ -11,6 +11,12 @@ import Kingfisher
 struct RecommendPlaceCard: View {
     
     @Binding var data: RecommendPlaceResponseData
+    let action: () -> Void /* 장소 좋아요를 위한 Action */
+    
+    init(data: Binding<RecommendPlaceResponseData>, action: @escaping () -> Void) {
+        self._data = data
+        self.action = action
+    }
     
     var body: some View {
         HStack(spacing: 14, content: {
@@ -43,8 +49,7 @@ struct RecommendPlaceCard: View {
             }
             
             LikeButton(data: $data, action: {
-                //TODO: - Like API 연결
-                print("장소 좋아요 클릭")
+                action()
             })
             .padding(.leading, 8)
             .padding(.top, 6)
