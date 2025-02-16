@@ -13,7 +13,7 @@ struct SimilarPlacesView: View {
     @StateObject var viewModel: SimilarPlacesViewModel
     @EnvironmentObject var container: DIContainer
     
-    init(container: DIContainer) {
+    init(container: DIContainer) { 
         self._viewModel = StateObject(wrappedValue: .init(container: container))
     }
     

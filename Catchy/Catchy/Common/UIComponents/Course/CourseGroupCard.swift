@@ -29,7 +29,7 @@ struct CourseGroupCard: View {
                         ProgressView()
                             .controlSize(.regular)
                     }.retry(maxCount: 2, interval: .seconds(2))
-                    .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 103))
+                    .downsampling(size: CGSize(width: UIScreen.screenWidth, height: type.imageSize.height))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: type.imageSize.width, height: type.imageSize.height)

@@ -26,9 +26,6 @@ struct NicknameEditView: View {
             /* 어두운 배경 (탭하면 닫힘) */
             Color.black.opacity(0.3)
                 .edgesIgnoringSafeArea(.all)
-                .onTapGesture {
-                    isPresented = false
-                }
             
             /* 닉네임 변경 모달 UI */
             VStack(spacing: 16) {
@@ -67,7 +64,7 @@ struct NicknameEditView: View {
     private func closeSection() -> some View {
         HStack(content: {
             
-            Spacer().frame(width: 109)
+            Spacer().frame(width: 108)
             
             Text("변경할 닉네임을 입력해주세요")
                 .font(.body2)
@@ -97,7 +94,11 @@ struct NicknameEditView: View {
                     .padding(.vertical, 8)
                     .padding(.horizontal, 12)
                     .frame(width:140)
-                    
+                    .onChange(of: viewModel.nickname) {
+                        if viewModel.nickname.count > 8 {
+                            viewModel.nickname = String(viewModel.nickname.prefix(8))
+                        }
+                    }
                 
                 Divider()
                     .frame(height: 1)
@@ -125,8 +126,12 @@ struct NicknameEditView: View {
     
 }
 
-struct NicknameEditView_Previews: PreviewProvider {
+struct NicknmaeEditView_Previews: PreviewProvider {
     static var previews: some View {
-        NicknameEditView(isPresented: .constant(true), container: DIContainer())
+        ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
+            NicknameEditView(isPresented: .constant(true), container: DIContainer())
+                .previewDevice(PreviewDevice(rawValue: deviceName))
+                .previewDisplayName(deviceName)
+        }
     }
 }

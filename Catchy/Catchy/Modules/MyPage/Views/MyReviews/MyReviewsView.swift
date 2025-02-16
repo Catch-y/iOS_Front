@@ -20,19 +20,17 @@ struct MyReviewsView: View {
     // MARK: - Body
     var body: some View {
         VStack(alignment: .center, spacing: 22, content: {
-            if !viewModel.isLoading {
+            if !viewModel.isMyReviewsLoading {
                 CustomNavigation(action: {
                     print("hello")
                 }, title: "내 리뷰", rightNaviIcon: nil, isShadow: true)
-                if let data = viewModel.myReviewsData {
-                    segmentSection()
-                    
-                    contentSection(data: data)
-                        .padding(.horizontal, 16)
+                segmentSection()
+                    .padding(.bottom, 4)
+                
+                if viewModel.selectedSegment == .course {
+                    MyCourseReviewsView(container: DIContainer())
                 } else {
-                    CustomEmptyStateView(label: "작성하신 리뷰가 없습니다.", subLabel: "내가 방문한 장소에 대한 리뷰를 적어주세요!")
-                        .padding(.top, 231)
-                    Spacer()
+                    MyPlaceReviewsView(container: DIContainer())
                 }
             } else {
                 LoadingView()
@@ -40,14 +38,11 @@ struct MyReviewsView: View {
         })
         .ignoresSafeArea()
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
-        .task {
-            viewModel.getMyReviews(review: .init(reviewType: ReviewType.place, pageSize: 10, lastReviewId: 1))
-        }
     }
     
     // MARK: - 세그먼트 UI
     
-    /// 리뷰 유형 선택을 위한 세그먼트 뷰
+    /// 리뷰 유형 선택을 위한 세그먼트 뷰 (코스 / 장소)
     /// - Returns: 코스 리뷰 / 장소 리뷰 선택 UI
     private func segmentSection() -> some View {
         ZStack(alignment: .leading) {
@@ -92,52 +87,6 @@ struct MyReviewsView: View {
             .frame(width: 287, height: 40)
         }
     }
-    
-    // MARK: - 리뷰 콘텐츠
-    
-    /// 리뷰 콘텐츠들을 표시하는 섹션
-    /// - Parameter data: 사용자의 리뷰 목록을 포함하는 MyReviewResponse 객체
-    /// - Returns: 리뷰 개수 및 리뷰 리스트 뷰
-    private func contentSection(data: MyReviewResponse) -> some View {
-        VStack(alignment: .leading, spacing: 22, content: {
-            reviewCountSection(count: data.reviewCount)
-            reviewTableSection(content: data.content)
-        })
-    }
-    
-    /// 작성한 리뷰 개수를 표시하는 섹션
-    /// - Parameter count: 작성한 리뷰 개수
-    /// - Returns: 리뷰 개수를 표시하는 뷰
-    private func reviewCountSection(count: Int) -> some View {
-            return HStack(spacing: 9, content: {
-                Text("작성한 리뷰")
-                    .font(.body2)
-                    .foregroundStyle(Color.g6)
-                Text("\(count)")
-                    .font(.body2)
-                    .foregroundStyle(Color.m6)
-        })
-    }
-    
-    /// 리뷰 리스트를 표시하는 섹션
-    /// - Parameter content: 사용자의 리뷰 데이터 리스트를 포함하는 ReviewData 객체 (코스 or 장소)
-    /// - Returns: 리뷰 리스트를 포함하는 스크롤 뷰
-    private func reviewTableSection(content: [ReviewDataProtocol]) -> some View {
-        ScrollView {
-            LazyVStack(alignment: .leading, spacing: 8) {
-                ForEach(content, id: \.reviewId) { review in
-                    ReviewCard(data: review, cardType: .myReview, reviewType: .course)
-                        .padding(.bottom, 40)
-                    if review.reviewId != content.last?.reviewId {
-                        Divider()
-                            .background(Color.g3)
-                            .padding(.bottom, 40)
-                    }
-                }
-            }
-        }
-    }
-    
 }
 
 struct MyReviewsView_Previews: PreviewProvider {

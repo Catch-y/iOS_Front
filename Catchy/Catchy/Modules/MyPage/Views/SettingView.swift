@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 환경설정 뷰
 struct SettingView: View {
     
     @StateObject var viewModel: SettingViewModel

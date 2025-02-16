@@ -18,7 +18,7 @@ struct CourseResponse: Codable {
     
 }
 
-struct CourseResponseData: Codable, Identifiable{
+struct CourseResponseData: Codable, Identifiable, Equatable {
     
     /// 고유 ID
     /// 뷰를 생성할 때만 사용, API와 관련 없음.

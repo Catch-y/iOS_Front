@@ -33,10 +33,17 @@ class MyPageService: MyPageServiceProtocol {
             .eraseToAnyPublisher()
     }
     
-    /// 내 리뷰 조회 API
-    func getMyReviews(review: MyReviewRequest) -> AnyPublisher<ResponseData<MyReviewResponse>, Moya.MoyaError> {
-        return provider.requestPublisher(.getMyReviews(review: review))
-            .map(ResponseData<MyReviewResponse>.self)
+    /// 내 코스 리뷰 조회 API
+    func getMyCourseReviews(review: MyCourseReviewRequest) -> AnyPublisher<ResponseData<MyCourseReviewResponse>, Moya.MoyaError> {
+        return provider.requestPublisher(.getMyCourseReviews(review: review))
+            .map(ResponseData<MyCourseReviewResponse>.self)
+            .eraseToAnyPublisher()
+    }
+    
+    /// 내 장소 리뷰 조회 API
+    func getMyPlaceReviews(review: MyPlaceReviewRequest) -> AnyPublisher<ResponseData<MyPlaceReviewResponse>, Moya.MoyaError> {
+        return provider.requestPublisher(.getMyPlaceReviews(review: review))
+            .map(ResponseData<MyPlaceReviewResponse>.self)
             .eraseToAnyPublisher()
     }
 }
