@@ -16,7 +16,14 @@ class FavoritePlacesViewModel: ObservableObject {
     
     @Published var myPlaceResponse: MyPlaceResponse?
     @Published var isLoading: Bool = false
-
+    
+    // MARK: - 장소 평점 화면 Properties
+    /// 장소 평점 화면 상태
+    @Published var isPresented: Bool = false
+    
+    /// 평점을 보고자 하는 장소 ID
+    var selectedPlaceId: Int? = nil
+    
     // MARK: - Init
     
     init(container: DIContainer) {
@@ -65,5 +72,12 @@ extension FavoritePlacesViewModel {
             })
             .store(in: &cancellables)
         
+    }
+    
+    /// 장소 평점 화면을 보여줍니다
+    /// - Parameter placeId: 평점을 보고자 하는 장소 ID
+    func showReview(placeId: Int) {
+        self.selectedPlaceId = placeId
+        self.isPresented.toggle()
     }
 }

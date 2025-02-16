@@ -36,9 +36,8 @@ struct PlaceVisitingView: View {
                         set: { viewModel.placeDetailResponse = $0 }
                     ), likeTap: {
                         viewModel.patchPlaceLike()
-                    }, reviewTap: {
-                        // TODO: - 리뷰 남기기 화면으로 이동
-                        viewModel.show()
+                    }, reviewTap: { placeId in
+                        viewModel.showReview(placeId: placeId)
                     })
 
                     buttonGroup
@@ -67,8 +66,10 @@ struct PlaceVisitingView: View {
         .task {
             viewModel.getPlaceDetail(placeId: placeId)
         }
-        .fullScreenCover(isPresented: $viewModel.isPresented) {
-            PlaceReviewRegisterView(container: container, placeId: placeId, isPresented: $viewModel.isPresented)
+        .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
+            if let placeId = viewModel.selectedPlaceId {
+                ReviewView(container: container, placeId: placeId, isPresented: $viewModel.isReviewPresented)
+            }
         }
         .navigationBarBackButtonHidden()
     }
@@ -129,7 +130,7 @@ struct PlaceVisitingView: View {
 
         Button(action: {
             if isVisited {
-                viewModel.show()
+                viewModel.showReviewRegister()
             }
         },
                label: {

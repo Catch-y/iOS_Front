@@ -12,9 +12,18 @@ struct ReviewView: View {
     
     @StateObject var viewModel: ReviewsViewModel
     
+    // MARK: - 장소 리뷰, 평점 화면 Propertes
+    /// 현재 장소 ID
+    let placeId: Int
     
-    init(container: DIContainer) {
+    /// 현재 화면의 상태
+    @Binding var isPresented: Bool
+    
+    // MARK: - Init
+    init(container: DIContainer, placeId: Int, isPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
+        self.placeId = placeId
+        self._isPresented = isPresented
     }
     
     // MARK: - Body
@@ -23,7 +32,7 @@ struct ReviewView: View {
         VStack(alignment: .center, spacing: 20, content: {
             if !viewModel.isLoading {
                 CustomNavigation(action: {
-                    print("hello")
+                    isPresented.toggle()
                 }, title: "평점, 리뷰 보기", leftNaviIcon: nil, isShadow: true)
                 
                 if let data = viewModel.reviewData {
@@ -48,7 +57,7 @@ struct ReviewView: View {
         })
         .ignoresSafeArea(.all)
         .task {
-            viewModel.getReviewData(reviewData: GetReviewRequest(placeId: 12345, page: 2))
+            viewModel.getReviewData(reviewData: GetReviewRequest(placeId: placeId, page: 2))
         }
     }
     
@@ -198,7 +207,7 @@ struct ReviewView_Preview: PreviewProvider {
     
     static var previews: some View {
         ForEach(devices, id: \.self) { device in
-            ReviewView(container: DIContainer())
+            ReviewView(container: DIContainer(), placeId: 1, isPresented: .constant(true))
                 .environmentObject(DIContainer())
                 .previewDevice(PreviewDevice(rawValue: device))
                 .previewDisplayName(device)

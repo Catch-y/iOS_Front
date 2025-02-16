@@ -39,8 +39,8 @@ struct PlaceDetailView: View {
                     PlaceInfoSection(place: Binding(
                         get: { place },
                         set: { viewModel.placeDetailResponse = $0 }
-                    ), reviewTap: {
-                        // TODO: - 리뷰 보는 화면으로 이동
+                    ), reviewTap: { placeId in
+                        viewModel.showReview(placeId: placeId)
                     }
                     )
                 
@@ -57,12 +57,17 @@ struct PlaceDetailView: View {
         .task {
             viewModel.getPlaceDetail(placeId: placeSearchResponseData.placeId)
         }
-        .fullScreenCover(isPresented: $viewModel.isPresented, onDismiss: {
+        .fullScreenCover(isPresented: $viewModel.isCategoryViewPresented, onDismiss: {
             viewModel.getPlaceDetail(placeId: placeSearchResponseData.placeId)
         }) {
-        
-            CategoryRegisterView(placeSearchResponseData: $placeSearchResponseData, container: container, isPresented: $viewModel.isPresented)
+
+            CategoryRegisterView(placeSearchResponseData: $placeSearchResponseData, container: container, isPresented: $viewModel.isCategoryViewPresented)
             
+        }
+        .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
+            if let placeId = viewModel.placeDetailResponse?.placeId {
+                ReviewView(container: container, placeId: placeId, isPresented: $viewModel.isReviewPresented)
+            }
         }
         .navigationBarBackButtonHidden()
         
@@ -90,10 +95,7 @@ struct PlaceDetailView: View {
             MainBtn(
                 text: "이 장소의 카테고리 선택하기",
                 action: {
-                    print(viewModel.isPresented)
-                    viewModel.isPresented = true
-                    print(viewModel.isPresented)
-
+                    viewModel.showCategoryView()
                 },
                 width: 370,
                 height: 55,
