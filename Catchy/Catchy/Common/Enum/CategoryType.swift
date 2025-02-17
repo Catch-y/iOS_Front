@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// 캐치 앱 카테고리 Enum
 enum CategoryType: String, Codable, CaseIterable {
     case CAFE = "카페"
     case BAR = "주류"
@@ -16,7 +17,27 @@ enum CategoryType: String, Codable, CaseIterable {
     case CULTURELIFE = "문화생활"
     case SPORT = "스포츠"
     case REST = "휴식"
-    case EMPTY = ""
+    
+    private static let mapping: [String: CategoryType] = [
+        "CAFE": .CAFE,
+        "BAR": .BAR,
+        "RESTAURANT": .RESTAURANT,
+        "EXPERIENCE": .EXPERIENCE,
+        "CULTURELIFE": .CULTURELIFE,
+        "SPORT": .SPORT,
+        "REST": .REST
+    ]
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        
+        if let category = CategoryType.mapping[rawValue] {
+            self = category
+        } else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "영어 -> 한글 전환 불가 : \(rawValue)")
+        }
+    }
     
     /// 소 카테고리 작성
     var subcategories: [String] {
@@ -35,11 +56,10 @@ enum CategoryType: String, Codable, CaseIterable {
             return ["축구", "농구", "야구", "탁구", "배구", "골프", "사격", "양궁"]
         case .REST:
             return ["캠핑", "공원", "테라피", "마사지"]
-        case .EMPTY:
-            return []
         }
     }
     
+    /// 카테고리 별 이미지 리턴
     func reeturnIcon() -> Image {
         switch self {
         case .CAFE:
@@ -56,11 +76,10 @@ enum CategoryType: String, Codable, CaseIterable {
             return Icon.sport.image
         case .REST:
             return Icon.breaks.image
-        case .EMPTY:
-            return Image("")
         }
     }
     
+    /// 카테고리 별 배경 이미지 리턴
     func returnBackground() -> Image {
         switch self {
         case .CAFE:
@@ -77,11 +96,10 @@ enum CategoryType: String, Codable, CaseIterable {
             return Icon.sportBackground.image
         case .REST:
             return Icon.restBackground.image
-        case .EMPTY:
-            return Image("")
         }
     }
     
+    /// 카테고리 별 텍스트 리턴
     func retrunCategoryDescrip() -> String {
         switch self {
         case .CAFE:
@@ -98,12 +116,10 @@ enum CategoryType: String, Codable, CaseIterable {
             return "다양한 스포츠를 즐기며 활력을 채울 수 있는 장소를 추천드립니다."
         case .REST:
             return "몸과 마음의 힐링을 위한 휴식과 웰니스 공간을 추천드립니다."
-        case .EMPTY:
-            return ""
         }
     }
     
-    
+    /// 카테고리 별 배경색 리턴
     func setColor() -> Color {
         switch self {
         case .BAR:
@@ -120,8 +136,6 @@ enum CategoryType: String, Codable, CaseIterable {
             return Color.restaurant
         case .SPORT :
             return Color.sport
-        case .EMPTY :
-            return Color.clear
         }
     }
 }

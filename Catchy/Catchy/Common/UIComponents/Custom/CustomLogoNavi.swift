@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CustomLogoNavi: View {
     
-    @EnvironmentObject var cotainer: DIContainer
+    @EnvironmentObject var container: DIContainer
     
     let onlyLogo: Bool
     
@@ -29,6 +29,7 @@ struct CustomLogoNavi: View {
         .frame(maxWidth: .infinity, maxHeight: 115)
     }
     
+    /// 로고 그룹
     private var logoGroup: some View {
         HStack(content: {
             Icon.topLogo.image
@@ -44,6 +45,10 @@ struct CustomLogoNavi: View {
                 Spacer()
                 
                 CustomTextField(text: .constant(""), searchTextField: .homeView)
+                    .disabled(true)
+                    .onTapGesture {
+                        container.navigationRouter.push(to: .searchView)
+                    }
             }
         })
         .frame(height: 32)

@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 소셜 로그인
 enum SocialLoginType: String, Equatable, Codable {
     case kakao = "KAKAO"
     case apple = "APPLE"

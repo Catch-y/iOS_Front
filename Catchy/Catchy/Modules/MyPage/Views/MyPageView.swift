@@ -1,0 +1,162 @@
+//
+//  MyPageView.swift
+//  Catchy
+//
+//  Created by 권용빈 on 2/1/25.
+//
+
+import SwiftUI
+import Kingfisher
+
+/// 마이페이지 뷰
+struct MyPageView: View {
+    
+    @StateObject var viewModel: MyPageViewModel
+    @EnvironmentObject var container: DIContainer
+    
+    init(container: DIContainer) {
+        self._viewModel = StateObject(wrappedValue: MyPageViewModel(container: container))
+    }
+    
+    // MARK: - Body
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 53) {
+                if !viewModel.isProfileLoading && !viewModel.isBookmarkedCourseLoading {
+                    if let profile = viewModel.profileResponse {
+                        TopSectionView(data: profile)
+                        BookmarkedCoursesView(content: viewModel.courseResponse)
+                    } else {
+                        Spacer()
+                        CustomEmptyStateView(label: "프로필 정보를 찾을 수 없습니다.", subLabel: "")
+                            .frame(maxWidth: .infinity)
+                        Spacer()
+                    }
+                } else {
+                    LoadingView()
+                }
+            }
+        }
+        .background(Color(.g1))
+        .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+        .task {
+            viewModel.getProfile()
+            viewModel.getBookmarkCourseList(lastCourseId: nil)
+        }
+        .overlay(
+            Group {
+                if viewModel.isEditingNickname {
+                    NicknameEditView(isPresented: $viewModel.isEditingNickname, container: DIContainer())
+                }
+            }
+        )
+    }
+    
+    // MARK: - 마이페이지 상단 섹션 함수
+    private func TopSectionView(data: ProfileResponse) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            settingsButton()
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.trailing, 12)
+            ProfileSectionView(data: data)
+                .padding(.bottom, 31)
+            myPageMenuButtons()
+        }
+    }
+    
+    private func settingsButton() -> some View {
+        Button(action: {
+            print("설정 버튼 클릭")
+        }) {
+            Icon.settingIcon.image
+                .resizable()
+                .scaledToFit()
+                .frame(width: 20, height: 20)
+        }
+    }
+    
+    private func ProfileSectionView(data: ProfileResponse) -> some View {
+        HStack(spacing: 10) {
+            ProfileImage(
+                imageURL: data.profileImage,
+                size: 104
+            ) {
+                // TODO: - 프로필 수정 액션
+                print("프로필 수정 클릭")
+            }
+            Text(data.nickname)
+                .font(.title3)
+                .fontWeight(.bold)
+                .foregroundColor(.black)
+                .padding(.leading, 9)
+            Button(action: {
+                viewModel.isEditingNickname = true
+            }) {
+                Text("닉네임 수정")
+                    .font(.caption)
+                    .foregroundColor(.g4)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 16)
+                    .frame(width: 84, height: 32)
+                    .background(Color.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 24))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(.g2, lineWidth: 1)
+                    )
+            }
+        }
+    }
+    
+    private func myPageMenuButtons() -> some View {
+        let menuItems: [(icon: Image, title: String, action: () -> Void)] = [
+            (Icon.document.image, "취향 설문", { print("취향 설문 클릭") }),
+            (Icon.myPageHeart.image, "선호 장소", { print("선호 장소 클릭") }),
+            (Icon.myPageReview.image, "내 리뷰", { print("내 리뷰 클릭") })
+        ]
+        return HStack(spacing: 17) {
+            ForEach(menuItems, id: \.title) { item in
+                MyPageItem(icon: item.icon, title: item.title, onTap: item.action)
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+    
+    private func BookmarkedCoursesView(content: [CourseResponseData]?) -> some View {
+        VStack(alignment: .leading, spacing: 15) {
+            Text("북마크한 코스")
+                .font(.Subtitle3)
+                .foregroundStyle(Color.g7)
+            if let content = content, !content.isEmpty {
+                ScrollView(.vertical) {
+                    LazyVGrid(columns: [GridItem(.flexible())], spacing: 11) {
+                        ForEach(content, id: \.id) { course in
+                            CourseGroupCard(course: course, type: .myPage)
+                                .onAppear {
+                                    // 추가 로드 처리: 마지막 아이템에 도달 시
+                                    if course.courseId == content.last?.courseId, !viewModel.isLastPage {
+                                        viewModel.getBookmarkCourseList(lastCourseId: course.courseId)
+                                    }
+                                }
+                        }
+                    }
+                }
+            } else {
+                CustomEmptyStateView(label: "북마크한 코스가 없습니다.", subLabel: "관심 있는 코스를 저장해 보세요!")
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 50)
+                Spacer()
+            }
+        }
+    }
+}
+
+struct MyPageView_Previews: PreviewProvider {
+    static var previews: some View {
+        ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
+            MyPageView(container: DIContainer())
+                .previewDevice(PreviewDevice(rawValue: deviceName))
+                .previewDisplayName(deviceName)
+        }
+    }
+}

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// 검색 필터 유형 설정
 enum SearchTextField {
     case homeView
     case searchView

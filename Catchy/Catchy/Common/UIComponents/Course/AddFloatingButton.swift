@@ -11,8 +11,13 @@ import FloatingButton
 
 struct AddFloatingButton : View {
     
+    // MARK: - Properties
+    /// 현재 서브 플로팅 버튼이 열려있는 상태
     @Binding var isOpen: Bool
     
+    /// 서브 버튼 탭 시 호출
+    var onSubButtonTap: (CourseSegment) -> Void
+
     var body: some View {
         VStack {
             Spacer()
@@ -38,7 +43,7 @@ struct AddFloatingButton : View {
             .frame(alignment: .trailing)
             .ignoresSafeArea(.all)
         }
-        .padding(.bottom, 110)
+        .padding(.bottom, 130)
 
         
     }
@@ -93,14 +98,9 @@ struct AddFloatingButton : View {
         return CourseSegment.allCases.map { segment in
             makeSubButton(course: segment)
                 .onTapGesture {
-                    print(segment)
+                    onSubButtonTap(segment)
                 }
         }
     }
 }
 
-struct MainFloatingButton_Preview: PreviewProvider {
-    static var previews: some View {
-        AddFloatingButton(isOpen: .constant(true))
-    }
-}

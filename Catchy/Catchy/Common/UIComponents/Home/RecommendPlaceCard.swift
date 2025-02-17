@@ -10,7 +10,13 @@ import Kingfisher
 
 struct RecommendPlaceCard: View {
     
-    @Binding var data: RecommendPlaceResponse
+    @Binding var data: RecommendPlaceResponseData
+    let action: () -> Void /* 장소 좋아요를 위한 Action */
+    
+    init(data: Binding<RecommendPlaceResponseData>, action: @escaping () -> Void) {
+        self._data = data
+        self.action = action
+    }
     
     var body: some View {
         HStack(spacing: 14, content: {
@@ -22,19 +28,20 @@ struct RecommendPlaceCard: View {
                 placeLocationInfo
                     .padding(.top, 11)
             })
-            .frame(width: 165, height: 91)
         })
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     private var placeImage: some View {
         ZStack(alignment: .topLeading, content: {
             
-            if let url = URL(string: data.placeImage) {
+            if let url = URL(string: DataFormatter.shared.formattedImageUrl(placeImageURL: data.placeImage)) {
                 KFImage(url)
                     .placeholder {
                         ProgressView()
                             .controlSize(.regular)
                     }.retry(maxCount: 2, interval: .seconds(2))
+                    .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 103))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 149, height: 103)
@@ -42,7 +49,7 @@ struct RecommendPlaceCard: View {
             }
             
             LikeButton(data: $data, action: {
-                print("장소 좋아요 클릭")
+                action()
             })
             .padding(.leading, 8)
             .padding(.top, 6)
@@ -50,13 +57,12 @@ struct RecommendPlaceCard: View {
     }
     
     private var placeTitleTag: some View {
-        HStack(spacing: 15 ,content: {
+        HStack(spacing: 8, content: {
             Text(data.placeName)
                 .font(.body1)
                 .foregroundStyle(Color.g7)
-                .frame(width: 107, alignment: .leading)
             
-            Text(data.subCategory)
+            Text(data.category)
                 .font(.courseTag)
                 .foregroundStyle(Color.g6)
                 .padding(.vertical, 4)
@@ -66,21 +72,24 @@ struct RecommendPlaceCard: View {
                         .foregroundStyle(Color.g2)
                 }
         })
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     private var placePointInfo: some View {
         HStack(spacing: 8, content: {
-            makeInfoTitle(Icon.star.image, "평점 \(data.starPoint)")
+            makeInfoTitle(Icon.star.image, "평점 \(data.rating)")
             
-            makeReview(Icon.review.image, "리뷰 \(data.reviewCnt)개", Icon.rightChevron.image)
+            makeReview(Icon.review.image, "리뷰 \(data.reviewCount)개", Icon.rightChevron.image)
         })
     }
     
     private var placeLocationInfo: some View {
         VStack(alignment: .leading, spacing: 6, content: {
-            makeInfoTitle(Icon.location.image, data.placeLocation)
+            makeInfoTitle(Icon.location.image, data.roadAddress)
             
-            makeInfoTitle(Icon.time.image, data.placeOperTime)
+            if let activeTime = data.activeTime, !activeTime.isEmpty {
+                makeInfoTitle(Icon.time.image, activeTime)
+            }
         })
     }
     

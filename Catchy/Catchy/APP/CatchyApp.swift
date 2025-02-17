@@ -10,7 +10,7 @@ import KakaoSDKCommon
 
 @main
 struct CatchyApp: App {
-    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var appFlowViewModel: AppFlowViewModel = .init()
     @StateObject var container: DIContainer = .init()
     
@@ -28,9 +28,12 @@ struct CatchyApp: App {
                     .environmentObject(container)
                     .environmentObject(appFlowViewModel)
             case .preferrenceSurvey:
-                Text("1")
+                PreferencePageView(container: container)
+                    .environmentObject(appFlowViewModel)
             case .tabView:
-                ContentView()
+                CatchyTabView()
+                    .environmentObject(container)
+                    .environmentObject(appFlowViewModel)
             }
         }
     }

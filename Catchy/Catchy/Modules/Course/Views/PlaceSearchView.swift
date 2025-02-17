@@ -7,54 +7,47 @@
 
 import SwiftUI
 
-struct PlaceView: View {
-    
-    @StateObject var viewModel: PlaceSearchViewModel
+/// 코스 DIY 생성 -> 장소 검색 화면
+struct PlaceSearchView: View {
     
     @EnvironmentObject var container: DIContainer
-    
+
+    // MARK: - 뷰 모델
+    @StateObject var viewModel: DIYCourseViewModel
+        
+    // MARK: - Init
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
     }
     
     var body: some View {
-        NavigationStack(path: $container.navigationRouter.destination) {
-            VStack {
-                if !viewModel.isPlaceListLoading { /// 데이터 요청 완료
+        VStack {
+            if !viewModel.isPlaceListLoading {
                     
-                    if let data = viewModel.placeSearchResponse {
-                        if data.placeInfoPreviews.isEmpty { /// 데이터가 0개인 경우
-                            infoView
-                        } else {
-                            scrollView
-                        }
+                if let data = viewModel.placeSearchResponse {
+                    if data.placeInfoPreviews.isEmpty {
+                        infoView
+                    } else {
+                        scrollView
                     }
-                } else { /// 데이터 요청 중
-                    Spacer ()
-                    
-                    ProgressView()
                     
                     Spacer()
                 }
+            } else {
+                MainProgressComponents()
+            }
                 
+        }
+        .task {
+            viewModel.getPlaceList()
+        }
+        .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
+            if let placeId = viewModel.selectedPlaceId {
+                ReviewView(container: container, placeId: placeId, isPresented: $viewModel.isReviewPresented)
             }
-            .task {
-                viewModel
-                    .getPlaceList(
-                        placeSearchRequest: .init(
-                            searchKeyword: "",
-                            page: 0
-                        )
-                    )
-            }
-            
-        }.navigationDestination(
-            for: NavigationDestination.self
-        ) { destination in
-            NavigationRoutingView(destination: destination)
-                .environmentObject(container)
         }
     }
+            
     
     /// 스크롤 뷰
     /// 장소의 리스트들을 보여줌
@@ -64,37 +57,16 @@ struct PlaceView: View {
             LazyVGrid(
                 columns: [GridItem(.flexible())]
             ) {
-                if let content = viewModel.placeSearchResponse?.placeInfoPreviews {
-                    ForEach(
-                        Array(content.enumerated()),
-                        id: \.1.id
-                    ) {
-                        index,
-                        place in
-                        VStack(spacing: 0) {
-                            PlaceCard(place: place).onTapGesture{
-                                Task{
-                                    await viewModel
-                                        .getPlaceDetail(
-                                            placeId: place.placeId
-                                        )
-                                        
-                                    if let placeData = viewModel.placeDetailResponse {
-                                            
-                                        container.navigationRouter.push(
-                                            to: .PlaceDetailView(
-                                                placeDetailResponse: placeData
-                                            )
-                                        )
-                                    }
-                                }
-                                    
+                
+                ForEach(Array(viewModel.placeList.enumerated()), id: \.element.id) { (index, place) in
+                    VStack(spacing: 0) {
+                        PlaceCard(place: place, reviewTap: { viewModel.showReview(placeId: place.placeId)})
+                            .onTapGesture {
+                                // TODO: - 장소 상세 화면으로 이동
                             }
-                                
-                            if index < content.count - 1 {
-                                Divider()
-                                    .padding(.vertical, 20)
-                            }
+                        if index < viewModel.placeList.count - 1 {
+                            Divider()
+                                .padding(.vertical, 20)
                         }
                     }
                 }
@@ -103,7 +75,12 @@ struct PlaceView: View {
             .padding(.top, 43)
             .padding(.bottom, 17)
             
-            
+        }
+        .refreshable {
+            await viewModel.refresh()
+        }
+        .onAppear {
+            UIRefreshControl.appearance().tintColor = .main
         }
     }
                    
@@ -133,7 +110,7 @@ struct PlaceView_Previews: PreviewProvider {
             ["iPhone 16 Pro Max", "iPhone 11"],
             id: \.self
         ) { deviceName in
-            PlaceView(container: DIContainer())
+            PlaceSearchView(container: DIContainer())
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
                 .environmentObject(DIContainer())

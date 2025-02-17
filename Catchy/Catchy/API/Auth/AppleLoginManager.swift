@@ -21,6 +21,8 @@ class AppleLoginManager: NSObject {
     }
 }
 
+//MARK: - Extension
+
 extension AppleLoginManager: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {

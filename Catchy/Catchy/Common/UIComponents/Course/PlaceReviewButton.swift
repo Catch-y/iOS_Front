@@ -7,14 +7,18 @@
 
 import SwiftUI
 
-// 장소 리뷰 버튼 
+/// 장소 리뷰 버튼
 struct placeReviewButton: View {
     
+    // MARK: - Properties
+    /// 리뷰 개수
     let reviewCount: Int
     
+    // MARK: - Init
     init(reviewCount: Int) {
         self.reviewCount = reviewCount
     }
+    
     var body: some View {
         HStack(spacing: 6) {
             Icon.review.image.fixedSize()
