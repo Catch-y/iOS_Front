@@ -7,12 +7,19 @@
 
 import UIKit
 import UserNotifications
+import FirebaseCore
+import FirebaseMessaging
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
+        FirebaseApp.configure()
         requestNotificationPermission()
+        application.registerForRemoteNotifications()
+        Messaging.messaging().delegate = self
+        
+
         return true
     }
     
@@ -30,6 +37,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenStriing = deviceToken.map { String(format: "%02x", $0)}.joined()
         print("디바이스 토큰: \(tokenStriing)")
+        Messaging.messaging().apnsToken = deviceToken
         NotificationCenter.default.post(name: .deviceTokenReceived, object: tokenStriing)
     }
     
@@ -39,9 +47,19 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         print("📩 포그라운드에서 푸시 수신: \(notification.request.content.userInfo)")
+        completionHandler([.banner, .sound])
     }
+}
+extension AppDelegate: MessagingDelegate {
+    
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+           guard let fcmToken = fcmToken else { return }
+           print("✅ APNs를 위한 디바이스 토큰: \(fcmToken)")
+       }
+       
 }
 
 extension Notification.Name {
     static let deviceTokenReceived = Notification.Name("deviceTokenReceived")
 }
+
