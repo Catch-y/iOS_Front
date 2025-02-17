@@ -84,7 +84,7 @@ extension CourseAPITarget: APITargetType {
         case .deleteCourse(let courseId):
             return "course/\(courseId)"
             
-        case .patchCourseEdit(let courseId, let course, let courseImage):
+        case .patchCourseEdit(let courseId, _, _):
             return "course/\(courseId)"
             
         case .patchCourseBookmark(let courseId):

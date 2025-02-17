@@ -44,9 +44,9 @@ extension PlaceCategoryRegisterViewModel {
         
         guard let (bigCategory, smallCategory) = selectedCategory.first else { return }
         
-        let request = PlaceCategoryRegisterRequest(placeId: placeSearchResponseData.placeId, bigCategory: bigCategory, smallCategory: smallCategory)
+        let request = PlaceCategoryRegisterRequest(bigCategory: bigCategory, smallCategory: smallCategory)
         
-        container.useCaseProvider.courseUseCase.executePostPlaceCategoryRegister(place: request)
+        container.useCaseProvider.courseUseCase.executePostPlaceCategoryRegister(placeId: placeSearchResponseData.placeId, place: request)
             .tryMap {
                 responseData ->
                 ResponseData<PlaceCategoryRegisterResponse> in
