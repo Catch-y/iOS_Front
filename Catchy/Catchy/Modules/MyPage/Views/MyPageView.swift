@@ -13,9 +13,13 @@ struct MyPageView: View {
     
     @StateObject var viewModel: MyPageViewModel
     @EnvironmentObject var container: DIContainer
+    @EnvironmentObject var appFlowViewModel: AppFlowViewModel
     
-    init(container: DIContainer) {
+    @Binding var isEditingNickname: Bool
+    
+    init(container: DIContainer, isEditingNickname: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: MyPageViewModel(container: container))
+        self._isEditingNickname = isEditingNickname
     }
     
     // MARK: - Body
@@ -36,6 +40,8 @@ struct MyPageView: View {
                     LoadingView()
                 }
             }
+            .padding(.top, 62)
+            .padding(.bottom, 110)
         }
         .background(Color(.g1))
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
@@ -43,13 +49,6 @@ struct MyPageView: View {
             viewModel.getProfile()
             viewModel.getBookmarkCourseList(lastCourseId: nil)
         }
-        .overlay(
-            Group {
-                if viewModel.isEditingNickname {
-                    NicknameEditView(isPresented: $viewModel.isEditingNickname, container: DIContainer())
-                }
-            }
-        )
     }
     
     // MARK: - 마이페이지 상단 섹션 함수
@@ -89,8 +88,11 @@ struct MyPageView: View {
                 .fontWeight(.bold)
                 .foregroundColor(.black)
                 .padding(.leading, 9)
+            
             Button(action: {
-                viewModel.isEditingNickname = true
+                withAnimation {
+                    isEditingNickname.toggle()
+                }
             }) {
                 Text("닉네임 수정")
                     .font(.caption)
@@ -154,7 +156,7 @@ struct MyPageView: View {
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
-            MyPageView(container: DIContainer())
+            MyPageView(container: DIContainer(), isEditingNickname: .constant(true))
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
         }
