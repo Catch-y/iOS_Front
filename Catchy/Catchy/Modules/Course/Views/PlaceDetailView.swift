@@ -40,7 +40,7 @@ struct PlaceDetailView: View {
                         get: { place },
                         set: { viewModel.placeDetailResponse = $0 }
                     ), reviewTap: {
-                        // TODO: - 리뷰 보는 화면으로 이동
+                        viewModel.showReview(placeId: place.placeId)
                     }
                     )
                 
@@ -57,12 +57,17 @@ struct PlaceDetailView: View {
         .task {
             viewModel.getPlaceDetail(placeId: placeSearchResponseData.placeId)
         }
-        .fullScreenCover(isPresented: $viewModel.isPresented, onDismiss: {
+        .fullScreenCover(isPresented: $viewModel.isCategoryViewPresented, onDismiss: {
             viewModel.getPlaceDetail(placeId: placeSearchResponseData.placeId)
         }) {
-        
-            CategoryRegisterView(placeSearchResponseData: $placeSearchResponseData, container: container, isPresented: $viewModel.isPresented)
+
+            CategoryRegisterView(placeSearchResponseData: $placeSearchResponseData, container: container, isPresented: $viewModel.isCategoryViewPresented)
             
+        }
+        .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
+            if let placeId = viewModel.placeDetailResponse?.placeId {
+                ReviewView(container: container, placeId: placeId, isPresented: $viewModel.isReviewPresented)
+            }
         }
         .navigationBarBackButtonHidden()
         
@@ -82,7 +87,7 @@ struct PlaceDetailView: View {
                     selectedPlaceList.append(placeSearchResponseData)
                     // TODO: - 이전화면으로 이동
                 },
-                width: 370,
+                width: UIScreen.screenWidth - 32,
                 height: 55,
                 onoff: hasSelected || (selectedPlaceList.count > 4) ? .off : .on
             )
@@ -90,12 +95,9 @@ struct PlaceDetailView: View {
             MainBtn(
                 text: "이 장소의 카테고리 선택하기",
                 action: {
-                    print(viewModel.isPresented)
-                    viewModel.isPresented = true
-                    print(viewModel.isPresented)
-
+                    viewModel.showCategoryView()
                 },
-                width: 370,
+                width: UIScreen.screenWidth - 32,
                 height: 55,
                 onoff: .custom
             )

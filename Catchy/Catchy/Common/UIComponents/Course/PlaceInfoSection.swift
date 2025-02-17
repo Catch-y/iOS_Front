@@ -19,7 +19,7 @@ struct PlaceInfoSection: View {
     let likeTap: (() -> Void)?
     
     /// 리뷰 탭 액션
-    let reviewTap: (() -> Void)
+    let reviewTap: () -> Void
     
     // MARK: - Init
     init(place: Binding<PlaceDetailResponse>, likeTap: (() -> Void)? = nil, reviewTap: @escaping () -> Void) {
@@ -30,7 +30,7 @@ struct PlaceInfoSection: View {
     
     var body: some View {
         VStack(spacing: 19) {
-            if let url = URL(string: place.imageUrl) {
+            if let url = URL(string: DataFormatter.shared.formattedImageUrl(placeImageURL: place.imageUrl)) {
                 KFImage(url)
                     .placeholder{
                         ProgressView()
@@ -83,7 +83,7 @@ struct PlaceInfoSection: View {
                 
                 PlaceRatingText(rating: place.rating)
                 
-                placeReviewButton(reviewCount: place.reviewCount)
+                reviewButton
             }
             .padding(.top, 14)
             
@@ -104,6 +104,26 @@ struct PlaceInfoSection: View {
         }
         .padding(.horizontal, 11)
         
+        
+    }
+    
+    /// 장소 리뷰 버튼
+    private var reviewButton: some View {
+        
+        Button(action: { reviewTap()}, label: {
+            HStack(spacing: 6) {
+                Icon.review.image.fixedSize()
+                
+                Text("리뷰 \(place.reviewCount)개")
+                    .font(.caption)
+                    .foregroundStyle(.g5)
+                    .lineLimit(1)
+
+                
+                Icon.rightChevron.image.resizable()
+                    .frame(width: 4, height: 8)
+            }
+        })
         
     }
     

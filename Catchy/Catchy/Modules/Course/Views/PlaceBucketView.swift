@@ -57,7 +57,7 @@ struct PlaceBucketView: View {
             // TODO: - 코스 생성하기 API 구현
             MainBtn(text: "코스 생성하기" ,
                     action: { },
-                    width: 370,
+                    width: UIScreen.screenWidth,
                     height: 60,
                     onoff: !selectedPlaceList.isEmpty ? .custom : .off
             )

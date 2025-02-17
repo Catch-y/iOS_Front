@@ -121,48 +121,63 @@ struct CourseView: View {
         ScrollView(.vertical, content: {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 18, content: {
                 ForEach(viewModel.courseList, id: \.id) { course in
-                    CourseGroupCard(course: course)
-                        .offset(x: courseOffsets[course.courseId] ?? 0)
-                        .gesture(
-                            DragGesture(minimumDistance: 20, coordinateSpace: .local)
-                                .onChanged { value in
-                                    if value.translation.width < 0 {
-                                        courseOffsets[course.courseId] = value.translation.width
-                                    }
-                                    
-                                }
-                                .onEnded { value in
-                                    if value.translation.width < -UIScreen.screenWidth * 0.75 {
-                                        courseOffsets[course.courseId] = 0
-                                        withAnimation {
-                                            viewModel.courseList.removeAll { $0.id == course.id }
-                                        }
-                                        viewModel.deleteCourse(courseId: course.courseId)
+    
+                    ZStack(alignment: .trailing) {
+                        trashView
+                            .frame(height: CourseCardType.course.cardHeight)
+                            .frame(
+                              width: (courseOffsets[course.courseId] != nil && abs(courseOffsets[course.courseId]!) > 30)
+                                  ? abs(courseOffsets[course.courseId]!) - 10
+                                  : 0
+                            )
+                            .opacity((courseOffsets[course.courseId] != nil && abs(courseOffsets[course.courseId]!) > 30) ? 1 : 0)
 
+                        
+                        CourseGroupCard(course: course)
+                            .offset(x: courseOffsets[course.courseId] ?? 0)
+                            .gesture(
+                                DragGesture(minimumDistance: 20, coordinateSpace: .local)
+                                    .onChanged { value in
+                                        if value.translation.width < 0 {
+                                            courseOffsets[course.courseId] = value.translation.width
+                                        }
                                         
-                                    } else {
-                                        withAnimation {
+                                    }
+                                    .onEnded { value in
+                                        if value.translation.width < -UIScreen.screenWidth * 0.7 {
                                             courseOffsets[course.courseId] = 0
+                                            withAnimation {
+                                                viewModel.courseList.removeAll { $0.id == course.id }
+                                            }
+                                            viewModel.deleteCourse(courseId: course.courseId)
+                                            
+                                            
+                                        } else {
+                                            withAnimation {
+                                                courseOffsets[course.courseId] = 0
+                                            }
                                         }
                                     }
-                                }
-                        )
-                        .onTapGesture {
-                            container.navigationRouter.push(to: .courseDetailView(courseId: course.courseId))
-                        }
-                        .task {
-                            guard let lastId = viewModel.lastId else { return }
-                            if course.courseId >= lastId {
-                                viewModel.getCourseList()
+                            )
+                            .onTapGesture {
+                                container.navigationRouter.push(to: .courseDetailView(courseId: course.courseId))
                             }
-                        }
-                        .scrollTransition(axis: .vertical) { content, phase in
-                            content
-                                .scaleEffect(
-                                    x: phase.isIdentity ? 1.0 : 0.94,
-                                    y: phase.isIdentity ? 1.0 : 0.94)
-                            
-                        }
+                            .task {
+                                guard let lastId = viewModel.lastId else { return }
+                                if course.courseId >= lastId {
+                                    viewModel.getCourseList()
+                                }
+                            }
+                            .scrollTransition(axis: .vertical) { content, phase in
+                                content
+                                    .scaleEffect(
+                                        x: phase.isIdentity ? 1.0 : 0.94,
+                                        y: phase.isIdentity ? 1.0 : 0.94)
+                                
+                            }
+                    }
+                       
+                        
                     
                 }
                 
@@ -197,6 +212,17 @@ struct CourseView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea(edges: .all)
         .padding(.bottom, 110)
+    }
+    
+    /// 코스 카드르 드래그할 때 나타나는 뷰
+    private var trashView: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.m5)
+            
+            Icon.trash.image
+                
+        }
     }
 
 }
