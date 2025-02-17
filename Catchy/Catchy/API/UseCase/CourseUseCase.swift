@@ -31,7 +31,7 @@ class CourseUseCase: CourseUseCaseProtocol {
     }
     
     /// 코스 생성(DIY) API
-    func executePostCreateCourseDIY(course: CourseDIYCreateRequest, courseImage: UIImage) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError> {
+    func executePostCreateCourseDIY(course: CourseDIYCreateRequest, courseImage: [UIImage]) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError> {
         return repository.postCreateCourseDIYData(course: course, courseImage: courseImage)
     }
     

@@ -142,8 +142,14 @@ extension PlaceAPITarget: APITargetType {
 
 }
 
+// MARK: - Extension
 extension PlaceAPITarget {
     
+    /// 장소 평점/리뷰 달기 API
+    /// - Parameters:
+    ///   - reviewRequest: Request 모델
+    ///   - reviewImages: 업로드한 리뷰 이미지 배열
+    /// - Returns: 멀티파트폼 데이터
     private func encodeReviewData(reviewRequest: PlaceReviewSubmissionRequest, reviewImages: [UIImage]) -> [MultipartFormData] {
         
         var formData: [MultipartFormData] = []

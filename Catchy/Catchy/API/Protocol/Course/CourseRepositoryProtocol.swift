@@ -21,7 +21,7 @@ protocol CourseRepositoryProtocol {
     func postCourseReviewData(courseId: Int, course: CourseReviewRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<CourseReviewResponse>, MoyaError>
     
     /// 코스 생성(DIY) API
-    func postCreateCourseDIYData(course: CourseDIYCreateRequest, courseImage: UIImage) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError>
+    func postCreateCourseDIYData(course: CourseDIYCreateRequest, courseImage: [UIImage]) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError>
     
     /// 코스 생성(AI) API
     func postCreateCourseAIData() -> AnyPublisher<ResponseData<CourseAICreateResponse>, MoyaError>

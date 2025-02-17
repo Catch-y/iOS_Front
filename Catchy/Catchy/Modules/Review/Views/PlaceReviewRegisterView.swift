@@ -226,7 +226,7 @@ struct PlaceReviewRegisterView: View {
                                 
                             Icon.close.image
                                 .resizable()
-                                .frame(width: 14, height: 14)
+                                .frame(width: 12, height: 12)
                                 .background(
                                     Circle()
                                         .fill(Color.white)
