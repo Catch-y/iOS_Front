@@ -48,6 +48,7 @@ struct PreferencePageView: View {
                 .font(.Subtitle1)
                 .foregroundStyle(Color.g7)
                 .lineSpacing(3.3)
+                .padding(.horizontal, 16)
             
             Spacer()
             
@@ -66,6 +67,9 @@ struct PreferencePageView: View {
                             }), categoryType: category)
                 }
             })
+            .padding(.horizontal, 16)
+            
+            
             HStack {
                 
                 Spacer()
@@ -84,7 +88,6 @@ struct PreferencePageView: View {
             
         })
         .transition(.move(edge: .leading).combined(with: .opacity))
-        .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
     }
     
     // MARK: - Page 2
@@ -237,29 +240,40 @@ struct PreferencePageView: View {
                 viewModel.preferenceStep -= 1
             }, title: nil, rightNaviIcon: nil)
             
-            ScrollView(.vertical, content: {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("거의 다 끝났어요!\n활동을 선택해주세요")
-                        .font(.Subtitle1)
-                        .foregroundStyle(Color.g7)
-                        .lineSpacing(3.3)
-                    
-                    pageThirdCompanion
-                        .padding(.top, 47)
-                    
-                    pageThirdActivityWeekDay
-                        .padding(.top, 46)
-                    
-                    pageThirdActiveTime
-                        .padding(.top, 56)
-                    
-                    makeMainButton(
-                        !(viewModel.selectedCompanion.isEmpty || viewModel.selectedWeekDay.isEmpty || viewModel.leftSelectedTime == nil || viewModel.rightSelectedTime == nil)
-                    )
+            ScrollViewReader { proxy in
+                ScrollView(.vertical, content: {
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("거의 다 끝났어요!\n활동을 선택해주세요")
+                            .font(.Subtitle1)
+                            .foregroundStyle(Color.g7)
+                            .lineSpacing(3.3)
+                        
+                        pageThirdCompanion
+                            .padding(.top, 47)
+                        
+                        pageThirdActivityWeekDay
+                            .padding(.top, 46)
+                        
+                        pageThirdActiveTime
+                            .padding(.top, 56)
+                        
+                        makeMainButton(
+                            !(viewModel.selectedCompanion.isEmpty || viewModel.selectedWeekDay.isEmpty || viewModel.leftSelectedTime == nil || viewModel.rightSelectedTime == nil)
+                        )
                         .padding(.top, viewModel.isExpand.values.contains(true) ? 15 : 98)
+                    }
+                })
+                .scrollIndicators(.hidden)
+                .onChange(of: viewModel.isExpand) { oldValue, newValue in
+                    if !oldValue.values.contains(true) && newValue.values.contains(true) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation {
+                                proxy.scrollTo("activeTime", anchor: .bottom)
+                            }
+                        }
+                    }
                 }
-            })
-            .scrollIndicators(.hidden)
+            }
         })
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
     }
@@ -368,6 +382,10 @@ struct PreferencePageView: View {
                                  )
                 )
                 
+                Text("~")
+                    .font(.title2)
+                    .foregroundStyle(.g3)
+                
                 CustomTimePicker(selectedTime: $viewModel.rightSelectedTime,
                                  isExpand: Binding(
                                     get: { viewModel.isExpand[1] ?? false },
@@ -396,6 +414,7 @@ struct PreferencePageView: View {
                     .transition(.opacity)
             }
         })
+        .id("activeTime")
     }
     
     // MARK: - Page 4
@@ -523,7 +542,7 @@ extension PreferencePageView {
             withAnimation(.easeInOut(duration: 0.5)) {
                 viewModel.preferenceStep += 1
             }
-        }, width:  366, height: 60, onoff: (conditional ? .on : .off))
+        }, width:  UIScreen.screenWidth - 32, height: 60, onoff: (conditional ? .on : .off))
         .disabled(!conditional)
     }
     

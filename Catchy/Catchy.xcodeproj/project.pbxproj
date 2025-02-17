@@ -31,6 +31,19 @@
 		48DD48992D6305B6008E6595 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 48DD48982D6305B6008E6595 /* FirebaseMessaging */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		48DD48BC2D63226C008E6595 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		48F248682D2EB42C0079E120 /* Catchy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Catchy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -46,6 +59,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		48DD48B12D63226B008E6595 /* Notification */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Notification;
+			sourceTree = "<group>";
+		};
 		48F2486A2D2EB42C0079E120 /* Catchy */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -93,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				48F2486A2D2EB42C0079E120 /* Catchy */,
+				48DD48B12D63226B008E6595 /* Notification */,
 				48F248692D2EB42C0079E120 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -115,6 +134,7 @@
 				48F248642D2EB42C0079E120 /* Sources */,
 				48F248652D2EB42C0079E120 /* Frameworks */,
 				48F248662D2EB42C0079E120 /* Resources */,
+				48DD48BC2D63226C008E6595 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
