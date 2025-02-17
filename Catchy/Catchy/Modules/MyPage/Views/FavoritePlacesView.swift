@@ -25,7 +25,7 @@ struct FavoritePlacesView: View {
         VStack(alignment: .center, spacing: 20, content: {
             if !viewModel.isMyPlaceLoading {
                 CustomNavigation(action: {
-                    print("hello")
+                    container.navigationRouter.pop()
                 }, title: "선호 장소", rightNaviIcon: nil, isShadow: true)
                 
                 if let data = viewModel.myPlaceResponse {
@@ -60,6 +60,7 @@ struct FavoritePlacesView: View {
             }
             
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

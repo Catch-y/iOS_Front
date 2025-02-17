@@ -32,7 +32,9 @@ struct NavigationRoutingView: View {
             SettingView(container: container)
                 .environmentObject(container)
                 .environmentObject(appFlowViewModel)
-            
+        case .favoritePlacesView:
+            FavoritePlacesView(container: container)
+                .environmentObject(container)
         }
     }
 }

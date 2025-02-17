@@ -19,4 +19,12 @@ class SettingViewModel: ObservableObject {
     init(container: DIContainer) {
         self.container = container
     }
+    
+    public func logout() {
+        print("로그아웃")
+    }
+    
+    public func deleteUser() {
+        print("회원탈퇴")
+    }
 }

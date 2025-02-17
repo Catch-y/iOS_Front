@@ -113,7 +113,7 @@ struct MyPageView: View {
     private func myPageMenuButtons() -> some View {
         let menuItems: [(icon: Image, title: String, action: () -> Void)] = [
             (Icon.document.image, "취향 설문", { print("취향 설문 클릭") }),
-            (Icon.myPageHeart.image, "선호 장소", { print("선호 장소 클릭") }),
+            (Icon.myPageHeart.image, "선호 장소", { container.navigationRouter.push(to: .favoritePlacesView) }),
             (Icon.myPageReview.image, "내 리뷰", { print("내 리뷰 클릭") })
         ]
         return HStack(spacing: 17) {
