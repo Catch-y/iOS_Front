@@ -32,7 +32,7 @@ struct CourseReviewContents: Codable, Hashable {
     /// 리뷰 이미지
     let reviewImages: [ReviewImageData]
     
-    /// 방문일
+    /// 작성일
     let createdAt: String
     
     /// 작성자 닉네임

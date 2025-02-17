@@ -121,6 +121,18 @@ extension ReviewAPITarget: APITargetType {
                             {
                                 "reviewImageId": 2,
                                 "imageUrl": "https://i.namu.wiki/i/PagwakcE00JZaGpEvXym79-IMvKFBmdqOBlq778J-bvJMwz15lDLleTKc56S2wwcRcaEm3FZZ4EtniRa5bXdeQ.webp"
+                            },
+                            {
+                                "reviewImageId": 3,
+                                "imageUrl": "https://i.namu.wiki/i/PagwakcE00JZaGpEvXym79-IMvKFBmdqOBlq778J-bvJMwz15lDLleTKc56S2wwcRcaEm3FZZ4EtniRa5bXdeQ.webp"
+                            },
+                            {
+                                "reviewImageId": 4,
+                                "imageUrl": "https://i.namu.wiki/i/PagwakcE00JZaGpEvXym79-IMvKFBmdqOBlq778J-bvJMwz15lDLleTKc56S2wwcRcaEm3FZZ4EtniRa5bXdeQ.webp"
+                            },
+                            {
+                                "reviewImageId": 5,
+                                "imageUrl": "https://i.namu.wiki/i/PagwakcE00JZaGpEvXym79-IMvKFBmdqOBlq778J-bvJMwz15lDLleTKc56S2wwcRcaEm3FZZ4EtniRa5bXdeQ.webp"
                             }
                         ],
                         "visitedDate": "2025.01.15",
