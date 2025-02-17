@@ -83,7 +83,7 @@ struct MyPageView: View {
                 // TODO: - 프로필 수정 액션
                 print("프로필 수정 클릭")
             }
-            Text(data.nickname)
+            Text(UserState.shared.getUserNickname())
                 .font(.title3)
                 .fontWeight(.bold)
                 .foregroundColor(.black)

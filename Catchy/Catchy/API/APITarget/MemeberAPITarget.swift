@@ -9,6 +9,7 @@ import Foundation
 import Moya
 
 enum MemeberAPITarget {
+    case postNickname(nickname: String) /* 닉네임 중복 검사 */
     case patchNickname(nickname: String) /* 닉네임 변경 */
     case postServeyCategory(categories: [String]) /* 취향 설문 카테고리 저장 */
     case postServeyStyleTime(styleTime: StepThirdRequest) /* 취향 설문 스타일 저장 */
@@ -18,6 +19,8 @@ enum MemeberAPITarget {
 extension MemeberAPITarget: APITargetType {
     var path: String {
         switch self {
+        case .postNickname:
+            return "/member/mypage/nickname"
         case .patchNickname:
             return "/member/mypage/nickname"
         case .postServeyCategory:
@@ -32,14 +35,16 @@ extension MemeberAPITarget: APITargetType {
     var method: Moya.Method {
         switch self {
         case .patchNickname:
-            return .get
-        case .postServeyCategory, .postServeyStyleTime, .postLocation:
+            return .patch
+        case .postServeyCategory, .postServeyStyleTime, .postLocation, .postNickname:
             return .post
         }
     }
     
     var task: Task {
         switch self {
+        case .postNickname(let nickname):
+            return .requestParameters(parameters: ["nickname": nickname], encoding: JSONEncoding.default)
         case .patchNickname(let nickname):
             return .requestParameters(parameters: ["nickname": nickname], encoding: JSONEncoding.default)
         case .postServeyCategory(let categories):
@@ -57,6 +62,15 @@ extension MemeberAPITarget: APITargetType {
     
     var sampleData: Data {
         switch self {
+        case .postNickname:
+            return """
+                        {
+                          "isSuccess": true,
+                          "code": "string",
+                          "message": "string",
+                          "result": {}
+                        }
+            """.data(using: .utf8)!
         case .patchNickname:
             return """
             {

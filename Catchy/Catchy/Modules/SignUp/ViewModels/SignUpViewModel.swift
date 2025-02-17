@@ -145,7 +145,7 @@ extension SignUpViewModel {
     /// 닉네임 중복 체크 함수
     /// - Parameter nickname: 사용자가 입력한 닉네임
     private func checkNicknameAvailability(nickname: String) {
-        container.useCaseProvider.memberUseCase.executePatchNickname(nickname: nickname)
+        container.useCaseProvider.memberUseCase.executePostNickname(nickname: nickname)
             .tryMap { respopnseData -> ResponseData<EmptyResponse> in
                 if !respopnseData.isSuccess && respopnseData.code == "COMMON401" {
                     throw APIError.serverError(message: respopnseData.message, code: respopnseData.code)

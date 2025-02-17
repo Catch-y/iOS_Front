@@ -10,8 +10,12 @@ import Moya
 import Combine
 
 protocol MemberRepositoryProtocol {
-    /* 닉네임 수정 */
-    func patchNicknameData(nickname: String) -> AnyPublisher<ResponseData<EmptyResponse>, MoyaError>
+    
+    /* 닉네임 중복 체크 */
+    func postNickname(nickname: String) -> AnyPublisher<ResponseData<EmptyResponse>, MoyaError>
+    
+    /* 닉네임 변경 */
+    func patchNicknameData(nickname: String) -> AnyPublisher<ResponseData<PatchNicknameResponse>, MoyaError>
     
     /* 카테고리 전달 */
     func postServeyCategoryData(categories: [String]) -> AnyPublisher<ResponseData<StepOneResponse>, MoyaError>
