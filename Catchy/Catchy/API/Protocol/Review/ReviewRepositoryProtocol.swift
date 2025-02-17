@@ -11,6 +11,10 @@ import CombineMoya
 import Moya
 
 protocol ReviewRepositoryProtocol {
-    // 리뷰 정보 가져오기
-    func getReviewInfoData(reviewData: GetReviewRequest) -> AnyPublisher<ResponseData<ReviewResponse>, MoyaError>
+    
+    /// 장소 리뷰 전체보기 API
+    func getPlaceReviewInfoData(placeId: Int, request: PlaceReviewRequest) -> AnyPublisher<ResponseData<PlaceReviewInfoResponse>, MoyaError>
+    
+    /// 코스 리뷰 전체보기 API
+    func getCourseReviewInfoData(courseId: Int, pageSize: Int, lastReviewId: Int?) -> AnyPublisher<ResponseData<CourseReviewInfoResponse>, MoyaError>
 }

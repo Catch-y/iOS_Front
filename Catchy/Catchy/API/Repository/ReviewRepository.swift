@@ -11,13 +11,19 @@ import CombineMoya
 import Moya
 
 class ReviewRepository: ReviewRepositoryProtocol {
+    
+    
     let service: ReviewServiceProtocol
     
     init(service: ReviewServiceProtocol = ReviewService()) {
         self.service = service
     }
     
-    func getReviewInfoData(reviewData: GetReviewRequest) -> AnyPublisher<ResponseData<ReviewResponse>, MoyaError> {
-        return service.getReviewInfo(reviewData: reviewData)
+    func getPlaceReviewInfoData(placeId: Int, request: PlaceReviewRequest) -> AnyPublisher<ResponseData<PlaceReviewInfoResponse>, Moya.MoyaError> {
+        return service.getPlaceReviewInfo(placeId: placeId, request: request)
+    }
+    
+    func getCourseReviewInfoData(courseId: Int, pageSize: Int, lastReviewId: Int?) -> AnyPublisher<ResponseData<CourseReviewInfoResponse>, Moya.MoyaError> {
+        return service.getCourseReviewInfo(courseId: courseId, pageSize: pageSize, lastReviewId: lastReviewId)
     }
 }

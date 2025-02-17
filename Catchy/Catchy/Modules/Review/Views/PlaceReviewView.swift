@@ -8,9 +8,9 @@
 import SwiftUI
 import Kingfisher
 
-struct ReviewView: View {
+struct PlaceReviewView: View {
     
-    @StateObject var viewModel: ReviewsViewModel
+    @StateObject var viewModel: PlaceReviewViewModel
     
     // MARK: - 장소 리뷰, 평점 화면 Propertes
     /// 현재 장소 ID
@@ -35,7 +35,7 @@ struct ReviewView: View {
                     isPresented.toggle()
                 }, title: "평점, 리뷰 보기", leftNaviIcon: nil, isShadow: true)
                 
-                if let data = viewModel.reviewData {
+                if let data = viewModel.placeReviewData {
                     ScrollView(.vertical, content: {
                         topReviewInfo(data: data)
                         
@@ -57,7 +57,7 @@ struct ReviewView: View {
         })
         .ignoresSafeArea(.all)
         .task {
-            viewModel.getReviewData(reviewData: GetReviewRequest(placeId: placeId, page: 2))
+            viewModel.getReviewData(placeId: 123, request: PlaceReviewRequest(pageSize: 10, lastPlaceReviewDate: "12312321", lastPlaceReviewId: 123))
         }
     }
     
@@ -80,13 +80,13 @@ struct ReviewView: View {
     /// 상단 리뷰 평점 정보
     /// - Parameter data: 리뷰 데이터를 담고 있는 ReviewResponse
     /// - Returns: 리뷰 평점과 총 리뷰 개수를 보여주는 상단 뷰
-    private func topReviewInfo(data: ReviewResponse) -> some View {
+    private func topReviewInfo(data: PlaceReviewInfoResponse) -> some View {
         VStack(spacing: 27, content: {
             reviewTotalCount(totalCount: data.totalCount)
             
             HStack(alignment: .center, content: {
                 
-                reviewTotalStar(totalRating: data.totalRating)
+                reviewTotalStar(totalRating: data.averageRating)
                 
                 Spacer()
                 /* 세로선 */
@@ -96,7 +96,7 @@ struct ReviewView: View {
                 
                 Spacer()
                 
-                reviewGraphSection(reviewCount: data.reviewCount, totalPersonCount: data.totalCount)
+                reviewGraphSection(reviewCount: data.ratingList, totalPersonCount: data.totalCount)
                 
             })
             .frame(height: 74)
@@ -207,7 +207,7 @@ struct ReviewView_Preview: PreviewProvider {
     
     static var previews: some View {
         ForEach(devices, id: \.self) { device in
-            ReviewView(container: DIContainer(), placeId: 1, isPresented: .constant(true))
+            PlaceReviewView(container: DIContainer(), placeId: 1, isPresented: .constant(true))
                 .environmentObject(DIContainer())
                 .previewDevice(PreviewDevice(rawValue: device))
                 .previewDisplayName(device)

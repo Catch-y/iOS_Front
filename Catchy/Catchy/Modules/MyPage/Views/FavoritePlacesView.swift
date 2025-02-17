@@ -56,7 +56,7 @@ struct FavoritePlacesView: View {
         }
         .fullScreenCover(isPresented: $viewModel.isPresented) {
             if let placeId = viewModel.selectedPlaceId {
-                ReviewView(container: container, placeId: placeId, isPresented: $viewModel.isPresented)
+                PlaceReviewView(container: container, placeId: placeId, isPresented: $viewModel.isPresented)
             }
             
         }

@@ -11,6 +11,7 @@ import Combine
 import CombineMoya
 
 class ReviewService: ReviewServiceProtocol {
+
     
     let provider: MoyaProvider<ReviewAPITarget>
     
@@ -18,9 +19,16 @@ class ReviewService: ReviewServiceProtocol {
         self.provider = provider
     }
     
-    func getReviewInfo(reviewData: GetReviewRequest) -> AnyPublisher<ResponseData<ReviewResponse>, Moya.MoyaError> {
-        return provider.requestPublisher(.getReviewInfo(placeId: reviewData.placeId, page: reviewData.page))
-            .map(ResponseData<ReviewResponse>.self)
+    func getPlaceReviewInfo(placeId: Int, request: PlaceReviewRequest) -> AnyPublisher<ResponseData<PlaceReviewInfoResponse>, Moya.MoyaError> {
+        return provider.requestPublisher(.getPlaceReviewInfo(placeId: placeId, request: request))
+            .map(ResponseData<PlaceReviewInfoResponse>.self)
             .eraseToAnyPublisher()
     }
+    
+    func getCourseReviewInfo(courseId: Int, pageSize: Int, lastReviewId: Int?) -> AnyPublisher<ResponseData<CourseReviewInfoResponse>, Moya.MoyaError> {
+        return provider.requestPublisher(.getCourseReviewInfo(courseId: courseId, pageSize: pageSize, lastReviewId: lastReviewId))
+            .map(ResponseData<CourseReviewInfoResponse>.self)
+            .eraseToAnyPublisher()
+    }
+    
 }

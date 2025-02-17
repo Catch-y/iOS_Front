@@ -8,9 +8,9 @@
 import Foundation
 import Combine
 
-class ReviewsViewModel: ObservableObject {
+class PlaceReviewViewModel: ObservableObject {
     
-    @Published var reviewData: ReviewResponse?
+    @Published var placeReviewData: PlaceReviewInfoResponse?
     @Published var isLoading: Bool = false
     
     let container: DIContainer
@@ -21,12 +21,12 @@ class ReviewsViewModel: ObservableObject {
     }
 }
 
-extension ReviewsViewModel {
-    func getReviewData(reviewData: GetReviewRequest) {
+extension PlaceReviewViewModel {
+    func getReviewData(placeId: Int, request: PlaceReviewRequest) {
         isLoading = true
         
-        container.useCaseProvider.reviewUseCase.executeReviewResponse(reviewData: reviewData)
-            .tryMap { responseData -> ResponseData<ReviewResponse> in
+        container.useCaseProvider.reviewUseCase.executePlaceReviewResponse(placeId: placeId, request: request)
+            .tryMap { responseData -> ResponseData<PlaceReviewInfoResponse> in
                 if !responseData.isSuccess {
                     throw APIError.serverError(message: responseData.message, code: responseData.code)
                 }
@@ -50,7 +50,7 @@ extension ReviewsViewModel {
                 
                 if let response = response.result {
                     print("🎯 Parsed Response Data: \(response)")
-                    self.reviewData = response
+                    self.placeReviewData = response
                 }
             })
             .store(in: &cancellables)
