@@ -89,7 +89,7 @@ extension PlaceCourseAPITarget: APITargetType {
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
             
         case .getPlaceSearchByCurrent(let place):
-            var parameters: [String: Any] = ["searchKeyword" : place.searchKeyword, "page" : place.page, "longtide" : place.longitude, "latitude" : place.latitude]
+            let parameters: [String: Any] = ["searchKeyword" : place.searchKeyword, "page" : place.page, "longtide" : place.longitude, "latitude" : place.latitude]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
         }
     }

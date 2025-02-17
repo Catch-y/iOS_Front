@@ -72,6 +72,8 @@ enum Icon: String {
     
     case trash = "trash"
     
+    case addPhoto = "addPhoto"
+    
     //MARK: - Category
     case breaks = "breaks"
     case cafe = "cafe"

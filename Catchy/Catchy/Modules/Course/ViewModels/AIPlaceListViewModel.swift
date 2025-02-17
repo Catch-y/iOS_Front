@@ -34,6 +34,7 @@ class AIPlaceListViewModel: ObservableObject {
 // MARK: - Extension
 extension AIPlaceListViewModel {
     
+    // MARK: - API 호출 함수
     /// 코스 북마크 API
     func patchCourseBookmark() {
         
@@ -73,6 +74,6 @@ extension AIPlaceListViewModel {
             ).store(in: &cancellables)
     }
     
-    // MARK: - API 요청 없는 함수
+    // MARK: - API 호출 없는 함수
                   
 }
