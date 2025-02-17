@@ -29,7 +29,7 @@ struct CourseReviewView: View {
     var body: some View {
         
         
-        VStack(alignment: .center, spacing: 20, content: {
+        VStack(alignment: .center, spacing: 28, content: {
             if !viewModel.isLoading {
                 CustomNavigation(action: {
                     isPresented.toggle()
@@ -38,16 +38,16 @@ struct CourseReviewView: View {
                 if let data = viewModel.courseReviewData {
                     ScrollView(.vertical, content: {
                         topReviewInfo(data: data)
-                        
+                            .padding(.horizontal, 16)
                         if !data.content.isEmpty {
                             reviewTableSection(content: data.content)
-                                .padding(.top, 7)
+                                .padding(.top, 15)
+                                .padding(.horizontal, 16)
                         } else {
                             infoView()
                                 .padding(.top, 107)
                         }
                     })
-                    .padding(.horizontal, 16)
                 } else {
                     LoadingView()
                 }
@@ -57,7 +57,7 @@ struct CourseReviewView: View {
         })
         .ignoresSafeArea(.all)
         .task {
-            
+            viewModel.getCourseReviewData(courseId: courseId, lastReviewId: nil)
         }
     }
     
@@ -81,17 +81,18 @@ struct CourseReviewView: View {
     /// - Parameter data: 리뷰 데이터를 담고 있는 ReviewResponse
     /// - Returns: 리뷰 평점과 총 리뷰 개수를 보여주는 상단 뷰
     private func topReviewInfo(data: CourseReviewInfoResponse) -> some View {
-        VStack(spacing: 11, content: {
+        VStack(alignment: .leading, spacing: 11, content: {
             reviewTotalCount(totalCount: data.totalCount)
             reviewTotalRating(averageRating: data.courseRating)
         })
         
-        .padding(.top, 16)
-        .padding(.bottom, 32)
-        .padding(.leading, 29)
-        .padding(.trailing, 16)
+        .padding(.top, 19)
+        .padding(.bottom, 19)
+        .padding(.leading, 20)
+        .padding(.trailing, 176)
+        .frame(maxWidth: .infinity)
         .overlay(content: {
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 15)
                 .fill(Color.clear)
                 .stroke(Color.g3, lineWidth: 1)
         })
@@ -118,7 +119,7 @@ struct CourseReviewView: View {
     /// - Parameter totalRating: 평균 평점 값 (소수점 한 자리까지)
     /// - Returns: 평균 평점과 별점 표시, 별점 그래프 포함
     private func reviewTotalRating(averageRating: Double) -> some View {
-        return HStack(spacing: 8,content: {
+        return HStack(alignment: .center, spacing: 8, content: {
             StarRating(rating: averageRating)
             
             Text(String(format: "%.1f", averageRating))
@@ -145,7 +146,7 @@ struct CourseReviewView: View {
             ForEach(content, id: \.reviewId) { review in
                 ReviewCard(
                     cardType: .ratingReview,
-                    reviewType: .place,
+                    reviewType: .course,
                     reviewId: review.reviewId,
                     comment: review.comment,
                     images: review.reviewImages,
@@ -155,8 +156,11 @@ struct CourseReviewView: View {
                     userName: review.creatorNickname,
                     date: review.createdAt
                     )
-                Divider()
-                    .background(.g3)
+                .padding(.vertical, 30)
+                if review.reviewId != content.last?.reviewId {
+                    Divider()
+                        .background(Color.g3)
+                }
             }
         })
     }

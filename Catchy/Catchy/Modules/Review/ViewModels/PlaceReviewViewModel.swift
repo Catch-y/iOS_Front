@@ -22,7 +22,7 @@ class PlaceReviewViewModel: ObservableObject {
 }
 
 extension PlaceReviewViewModel {
-    func getReviewData(placeId: Int, request: PlaceReviewRequest) {
+    func getPlaceReviewData(placeId: Int, request: PlaceReviewRequest) {
         isLoading = true
         
         container.useCaseProvider.reviewUseCase.executePlaceReviewResponse(placeId: placeId, request: request)
@@ -40,9 +40,9 @@ extension PlaceReviewViewModel {
                 
                 switch completion {
                 case .finished:
-                    print("✅ Get ReviewInfo Server Completed")
+                    print("✅ Get Place Review Server Completed")
                 case .failure(let failure):
-                    print("❌ Get ReviewInfo Failed: \(failure)")
+                    print("❌ Get Place Review Failed: \(failure)")
                 }
                 
             }, receiveValue: { [weak self] response in
