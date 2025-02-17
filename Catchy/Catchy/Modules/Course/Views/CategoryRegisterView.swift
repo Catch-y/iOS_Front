@@ -89,7 +89,7 @@ struct CategoryRegisterView: View {
                     action: {
                         viewModel.postPlaceCategoryRegister()
                     },
-                    width: UIScreen.screenWidth,
+                    width: UIScreen.screenWidth - 32,
                     height: 60,
                     onoff: viewModel.selectedCategory.isEmpty ? .off : .on
                 )
