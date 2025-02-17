@@ -10,24 +10,14 @@ import SwiftUI
 struct SubLocationSelectView: View {
     @StateObject private var viewModel: SubLocationSelectViewModel
     let selectedLocation: String //  상위 지역 저장
+    let provinceCode: String // 서버 요청에 사용할 지역 코드
 
     // MARK: - 초기화
-    init(container: DIContainer, selectedLocation: String) {
+    init(container: DIContainer, selectedLocation: String, provinceCode: String) {
         _viewModel = StateObject(wrappedValue: .init(container: container))
-        self.selectedLocation = selectedLocation //  선택된 상위 지역 저장
+        self.selectedLocation = selectedLocation
+        self.provinceCode = provinceCode
     }
-
-    let sublocations = [
-        "강남구", "종로구", "중구",
-        "용산구", "성동구", "광진구",
-        "동대문구", "중랑구", "성북구",
-        "강북구", "도봉구", "노원구",
-        "은평구", "서대문구", "마포구",
-        "양천구", "강서구", "구로구",
-        "금천구", "영등포구", "동작구",
-        "관악구", "서초구", "송파구",
-        "강동구"
-    ] //  나중에 지역 api 받아오기
 
     var body: some View {
         VStack {
@@ -49,8 +39,14 @@ struct SubLocationSelectView: View {
                             .padding(.top, 20)
                     }
 
-                    locationGridView()
-                        .padding(.top, 20)
+                    if viewModel.sublocations.isEmpty {
+                        ProgressView()
+                            .frame(height: 100)
+                            .padding(.top, 20)
+                    } else {
+                        locationGridView()
+                            .padding(.top, 20)
+                    }
 
                     MainBtn(
                         text: "다음",
@@ -67,12 +63,15 @@ struct SubLocationSelectView: View {
                 .padding(.bottom, 110)
             }
         }
+        .task {
+            viewModel.fetchSubLocations(for: provinceCode)
+        }
     }
 
     // MARK: - 지역 선택 그리드
     private func locationGridView() -> some View {
         LazyVStack(alignment: .leading, spacing: 16) {
-            ForEach(sublocations.chunked(into: 3), id: \.self) { row in
+            ForEach(viewModel.sublocations.chunked(into: 3), id: \.self) { row in
                 HStack(spacing: 10) {
                     ForEach(row, id: \.self) { location in
                         LocationButton(
@@ -82,7 +81,7 @@ struct SubLocationSelectView: View {
                                 viewModel.selectedSubLocation = location
                             }
                         )
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(width: (UIScreen.main.bounds.width - 52) / 3, height: 55) // 3등분하여 버튼 크기 고정
                     }
                 }
             }
@@ -132,16 +131,15 @@ struct SubLocationSelectView: View {
                     .opacity(viewModel.selectedSubLocation == nil ? 0 : 1) // 선택되지 않으면 숨김
                     .padding(.leading , 23)
             }
-           
         }
     }
 }
 
 // MARK: - Preview
-struct SubLocationSelectView_Preview: PreviewProvider {
+struct SubLocationSelectView_Previews: PreviewProvider {
     static var previews: some View {
         let container = DIContainer()
-        return SubLocationSelectView(container: container, selectedLocation: "서울시")
+        return SubLocationSelectView(container: container, selectedLocation: "서울시", provinceCode: "11")
             .previewLayout(.sizeThatFits)
     }
 }

@@ -112,14 +112,52 @@ extension VoteAPITarget: APITargetType {
         case .getVoteInProgress:
             return """
             {
-                "isSuccess": true,
-                "code": "VOTE200",
-                "message": "투표 진행 중",
-                "result": {
-                    "voteId": 123,
-                    "category": "음식"
-                }
+              "isSuccess": true,
+              "code": "VOTE200",
+              "message": "투표 결과 조회 성공",
+              "result": {
+                "status": "진행 중",
+                "totalMembers": 50,
+                "results": [
+                  {
+                    "category": "카페",
+                    "voteCount": 20,
+                    "votedMembers": [
+                      {
+                        "memberId": 1,
+                        "nickname": "사용자1",
+                        "profileImage": "https://example.com/profiles/user1.jpg"
+                      },
+                      {
+                        "memberId": 2,
+                        "nickname": "사용자2",
+                        "profileImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzcuyqyeHVLRqBSbkeun30Louq9iSNuV4UTQ&s"
+                      }
+                    ],
+                    "rank": 1
+                  },
+                  {
+                    "category": "음식점",
+                    "voteCount": 15,
+                    "votedMembers": [
+                      {
+                        "memberId": 3,
+                        "nickname": "사용자3",
+                        "profileImage": "https://example.com/profiles/user3.jpg"
+                      }
+                    ],
+                    "rank": 2
+                  },
+                  {
+                    "category": "바",
+                    "voteCount": 10,
+                    "votedMembers": [],
+                    "rank": 3
+                  }
+                ]
+              }
             }
+
             """.data(using: .utf8)!
             
         case .postCategoryVote:
@@ -210,7 +248,7 @@ extension VoteAPITarget: APITargetType {
                 {
                   "memberId": 1,
                   "nickname": "John Doe",
-                  "profileImage": "avatar1",
+                  "profileImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzcuyqyeHVLRqBSbkeun30Louq9iSNuV4UTQ&s",
                   "hasVoted": true
                 },
                 {

@@ -15,12 +15,6 @@ struct LocationSelectView: View {
         _viewModel = StateObject(wrappedValue: .init(container: container))
     }
 
-    let locations = [
-        "서울시", "경기도", "인천", "울산", "부산", "대구",
-        "광주", "대전", "세종시", "강원도", "충청북도", "충청남도",
-        "전북", "전남", "경북", "경남", "제주도"
-    ] // 버튼 목록 - 후에 API 연동할 때 데이터 받아올 것
-
     var body: some View {
         VStack {
             GroupNavigation(title: "새 그룹 만들기") {
@@ -42,8 +36,14 @@ struct LocationSelectView: View {
                             .font(.body2)
                     }
 
-                    locationGridView()
-                        .padding(.top, 20)
+                    if viewModel.locations.isEmpty {
+                        ProgressView() // 로딩 인디케이터
+                            .frame(height: 100)
+                            .padding(.top, 20)
+                    } else {
+                        locationGridView()
+                            .padding(.top, 20)
+                    }
 
                     MainBtn(
                         text: "다음",
@@ -55,10 +55,13 @@ struct LocationSelectView: View {
                         onoff: (viewModel.selectedLocation ?? "").isEmpty ? .off : .on
                     )
                     .padding(.top, 38)
-
-
                 }
                 .padding(.horizontal, 16)
+            }
+        }
+        .task {
+            if viewModel.locations.isEmpty {
+                viewModel.fetchLocations() // 비동기 작업 실행
             }
         }
     }
@@ -68,14 +71,13 @@ struct LocationSelectView: View {
         Text(viewModel.selectedLocation ?? " ")
             .font(.caption)
             .foregroundStyle(.m5)
-
             .opacity(viewModel.selectedLocation == nil ? 0 : 1) // 선택되지 않으면 숨김
     }
 
     // MARK: - 지역 선택 그리드
     private func locationGridView() -> some View {
         LazyVStack(alignment: .leading, spacing: 16) {
-            ForEach(locations.chunked(into: 3), id: \.self) { row in
+            ForEach(viewModel.locations.chunked(into: 3), id: \.self) { row in
                 HStack(spacing: 10) {
                     ForEach(row, id: \.self) { location in
                         LocationButton(
@@ -85,11 +87,11 @@ struct LocationSelectView: View {
                                 viewModel.selectedLocation = location
                             }
                         )
+                        .frame(width: (UIScreen.main.bounds.width - 52) / 3, height: 55) // 버튼 크기 균등하게 조정
                     }
                 }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: - 상단 1 .. 2 뷰
@@ -118,12 +120,13 @@ struct LocationSelectView: View {
                     .frame(width: 26, height: 26)
                 Text("2")
                     .font(.Subtitle2)
-                    .foregroundStyle(Color("g2")) 
+                    .foregroundStyle(Color("g2"))
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
+
 
 // MARK: - Chunked
 extension Array {

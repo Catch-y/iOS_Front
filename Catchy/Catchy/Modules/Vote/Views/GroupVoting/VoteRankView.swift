@@ -63,7 +63,7 @@ struct VoteRankView: View {
 
     // MARK: - 1~3위 (막대그래프 아이템)
     private func categoryTabItem(
-        for rankData: (name: String, count: Int, totalCount: Int, avatars: [String]),
+        for rankData: (name: String, count: Int, totalMembers: Int, avatars: [String]),
         category: VoteCategory,
         rank: Int,
         backgroundColor: Color
@@ -125,7 +125,7 @@ struct VoteRankView: View {
     }
 
     // MARK: - 4~7위 (카드 아이템)
-    private func rankRow(for rankData: (name: String, count: Int, totalCount: Int, avatars: [String]), rankIndex: Int) -> some View {
+    private func rankRow(for rankData: (name: String, count: Int, totalMembers: Int, avatars: [String]), rankIndex: Int) -> some View {
         HStack(spacing: 12) {
             Circle()
                 .fill(Color.m3)
@@ -141,7 +141,7 @@ struct VoteRankView: View {
                     .font(.Body1_2)
                     .foregroundStyle(.g7)
 
-                Text("\(rankData.count)명 / \(rankData.totalCount)개 투표")
+                Text("\(rankData.count)명 / \(rankData.totalMembers)명 참여")
                     .font(.caption)
                     .foregroundStyle(.g5)
             }
@@ -166,7 +166,6 @@ struct VoteRankView: View {
         .background(
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.white)
-               
         )
         .overlay(
             RoundedRectangle(cornerRadius: 20)

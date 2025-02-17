@@ -53,7 +53,7 @@ struct GroupTabView: View {
 struct GroupTabView_Previews: PreviewProvider {
     static var previews: some View {
         let container = DIContainer()
-        return ForEach(["iPhone 16 Pro", "iPhone SE"], id: \.self) { deviceName in
+        return ForEach(["iPhone 16 Pro Max", "iPhone SE"], id: \.self) { deviceName in
             GroupTabView(container: container)
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)

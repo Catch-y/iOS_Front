@@ -66,7 +66,7 @@ struct VoteBarChartView: View {
             .background(
                 Color.white
                     .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .padding(.horizontal, 20)
+                    
             
             )
             
