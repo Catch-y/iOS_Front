@@ -10,30 +10,69 @@ import SwiftUI
 /// 코스 생성하기 화면
 struct DIYCourseCreateView: View {
     
+    // MARK: - 뷰 모댈
     @StateObject var viewModel: DIYCourseCreateViewModel
     
-    init(container: DIContainer) {
+    // MARK: - 코스 생성하기 화면 Properties
+    /// 담은 장소의 ID
+    let selectedPlaceIds: [Int]
+    
+    // MARK: - Init
+    init(container: DIContainer, placeIds: [Int]) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
+        self.selectedPlaceIds = placeIds
     }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 35) {
-            courseNameSection
             
-            courseDescriptionSection
+            CustomNavigation(action: {}, title: "코스 생성하기", leftNaviIcon: nil, isShadow: true)
+                        
+            scrollView
             
-            activeTimeSection
-            
-            imageSection
-            
-            MainBtn(text: "코스 생성하기", action: {
-                // TODO: - 코스 생성히기 구현
-            }, width: UIScreen.screenWidth - 32, height: 55, onoff: .on)
         }
-        .padding(.horizontal, 16)
+        .ignoresSafeArea(.all)
+        .sheet(isPresented: $viewModel.isImagePickerPresented) {
+            ImagePicker(
+                imageHandler: viewModel,
+                selectedLimit: 1 - viewModel.selectedImageCount
+            )
+        }
+        .onAppear {
+            UIApplication.shared.hideKeyboard()
+        }
         
     }
     
+    /// 스크롤 뷰
+    private var scrollView: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 35) {
+                
+                courseNameSection
+                
+                courseDescriptionSection
+                
+                activeTimeSection
+                
+                imageSection
+                
+                MainBtn(
+                    text: "코스 생성하기",
+                    action: {
+                    // TODO: - 코스 생성히기 구현
+                    },
+                    width: UIScreen.screenWidth - 32,
+                    height: 55,
+                    onoff: viewModel.canCreateCourse() ? .on : .off
+                )
+                .disabled(!viewModel.canCreateCourse())
+            }
+            .padding(.horizontal, 16)
+        }
+    }
     
+    /// 코스 이름 섹션
     private var courseNameSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("코스 이름")
@@ -52,7 +91,11 @@ struct DIYCourseCreateView: View {
                     .foregroundColor(.g6)
                     .padding(.horizontal, 20)
                     .font(.body3)
-
+                    .onChange(of: viewModel.courseName) { (_, newValue) in
+                        if newValue.count > 15 {
+                                viewModel.courseName = String(newValue.prefix(15))
+                        }
+                    }
                 }
                 .frame(height: 52)
                 .overlay(
@@ -64,6 +107,7 @@ struct DIYCourseCreateView: View {
         }
     }
     
+    /// 코스 상세 설명 섹션
     private var courseDescriptionSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("코스 상세 설명")
@@ -77,6 +121,7 @@ struct DIYCourseCreateView: View {
         }
     }
     
+    /// 추천 시간대 섹션
     private var activeTimeSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("추천 시간대")
@@ -87,6 +132,7 @@ struct DIYCourseCreateView: View {
         }
     }
     
+    /// 추천 시간대 버튼
     private var activeTimeButton: some View {
         VStack{
             
@@ -134,30 +180,62 @@ struct DIYCourseCreateView: View {
         }
     }
     
+    /// 대표 이미지 섹션 
     private var imageSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("대표 이미지")
                 .font(.body3_SM)
                 .foregroundStyle(.g7)
             
-            Button(action: {
-                // TODO: 사진 넣기
-            }) {
-                ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 30)
-                        .stroke(.g3)
-                        .foregroundStyle(.black)
-                        .frame(width: 193, height: 42)
-    
-                    HStack(spacing: 25) {
-                        Icon.addPhoto.image
-                        
-                        Text("사진 첨부하기")
-                            .font(.body3_SM)
-                            .foregroundStyle(.g4)
-                    }
-                    .padding(.leading, 30)
+            
+            if let image = viewModel.courseImage.first {
+                
+                ZStack(alignment: .topTrailing) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .frame(width: 214, height: 137)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                    
+                    Icon.close.image
+                        .resizable()
+                        .frame(width: 12, height: 12)
+                        .background(
+                            Circle()
+                                .fill(Color.white)
+                                .frame(width: 22, height: 22)
+                        )
+                        .foregroundStyle(.g7)
+                        .offset(x: -12, y: 12)
+                        .onTapGesture {
+                            withAnimation {
+                                viewModel.removeImage(at: 0)
+                            }
+                        }
+                    
                 }
+                
+            } else {
+                
+                Button(action: {
+                    viewModel.showImagePicker()
+                }) {
+                    ZStack(alignment: .leading) {
+                        RoundedRectangle(cornerRadius: 30)
+                            .stroke(.g3)
+                            .foregroundStyle(.black)
+                            .frame(width: 193, height: 42)
+                        
+                        HStack(spacing: 25) {
+                            Icon.addPhoto.image
+                            
+                            Text("사진 첨부하기")
+                                .foregroundStyle(.g4)
+                                .font(.body3_SM)
+                        }
+                        .padding(.leading, 30)
+                    }
+                }
+                
             }
         }
     }
@@ -197,5 +275,5 @@ extension DIYCourseCreateView {
 
 
 #Preview{
-    DIYCourseCreateView(container: DIContainer())
+    DIYCourseCreateView(container: DIContainer(), placeIds: [1])
 }
