@@ -112,9 +112,26 @@ struct ReviewCard: View {
                 })
             )
             
+        case (.ratingReview, .course):
+            return AnyView (
+                
+                HStack(content: {
+                    
+                    Text(userName ?? "")
+                        .font(.caption)
+                        .foregroundStyle(Color.g5)
+                    
+                    Spacer()
+                    
+                    /* 신고하기 버튼 */
+                    Text("신고하기")
+                        .font(.caption)
+                        .foregroundStyle(Color.g5)
+                        .underline()
+                })
+            )
             
-            
-        case (.ratingReview, .course), (.ratingReview , .place):
+        case (.ratingReview, .place):
             return AnyView (
                 HStack(content: {
                     // 별점 표시
@@ -199,13 +216,9 @@ struct ReviewCard: View {
                         .foregroundStyle(Color.g5)
                 })
             )
-        
+            
         case (.ratingReview, .course):
-            return AnyView(
-                Text(userName ?? "")
-                    .font(.caption)
-                    .foregroundColor(.g5)
-            )
+            return AnyView(EmptyView())
             
         case (.ratingReview, .place):
             return AnyView(
@@ -234,7 +247,7 @@ struct ReviewCard: View {
 
 #Preview {
     ReviewCard(
-        cardType: .myReview,
+        cardType: .ratingReview,
         reviewType: .course,
         reviewId: 1,
         comment: "스타벅스 너무 좋았어요!",

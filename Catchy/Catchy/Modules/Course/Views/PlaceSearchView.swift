@@ -43,7 +43,7 @@ struct PlaceSearchView: View {
         }
         .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
             if let placeId = viewModel.selectedPlaceId {
-                ReviewView(container: container, placeId: placeId, isPresented: $viewModel.isReviewPresented)
+                PlaceReviewView(container: container, placeId: placeId, isPresented: $viewModel.isReviewPresented)
             }
         }
     }

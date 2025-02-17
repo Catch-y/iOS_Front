@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct ReviewResponse: Codable {
+struct PlaceReviewInfoResponse: Codable {
     
     /// 전체 평균 평점
-    let totalRating: Double
+    let averageRating: Double
     
     /// 평점 별 리뷰 수
-    let reviewCount: [ScoreCount]
+    let ratingList: [ScoreCount]
     
     /// 전체 리뷰 수
     let totalCount: Int
@@ -35,12 +35,24 @@ struct ScoreCount: Codable {
 }
 
 struct ReviewContents: Codable, Hashable {
+    
+    /// 리뷰 ID
     let reviewId: Int
+    
+    /// 리뷰 내용
     let comment: String
+    
+    /// 별점
     let rating: Int
+    
+    /// 리뷰 이미지
     let reviewImages: [ReviewImageData]
-    let creatorNickname: String
+    
+    /// 방문일
     let visitedDate: String
+    
+    /// 작성자 닉네임
+    let creatorNickname: String
 }
 
 /// 리뷰 이미지 데이터를 담는 구조체
