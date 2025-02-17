@@ -10,16 +10,18 @@ import SwiftUI
 /// 코스 생성하기 화면
 struct DIYCourseCreateView: View {
     
+    @EnvironmentObject var container: DIContainer
+    
     // MARK: - 뷰 모댈
     @StateObject var viewModel: DIYCourseCreateViewModel
     
     // MARK: - 코스 생성하기 화면 Properties
     /// 담은 장소의 ID
     let selectedPlaceIds: [Int]
-    
+
     // MARK: - Init
-    init(container: DIContainer, placeIds: [Int]) {
-        self._viewModel = StateObject(wrappedValue: .init(container: container))
+    init(container: DIContainer, placeIds: [Int], isPresented: Binding<Bool>) {
+        self._viewModel = StateObject(wrappedValue: .init(container: container, isPresented: isPresented))
         self.selectedPlaceIds = placeIds
     }
     
@@ -29,9 +31,12 @@ struct DIYCourseCreateView: View {
             CustomNavigation(action: {}, title: "코스 생성하기", leftNaviIcon: nil, isShadow: true)
                         
             scrollView
+    
+            
+            Spacer()
             
         }
-        .ignoresSafeArea(.all)
+        .ignoresSafeArea(edges: [.top, .bottom])
         .sheet(isPresented: $viewModel.isImagePickerPresented) {
             ImagePicker(
                 imageHandler: viewModel,
@@ -60,7 +65,7 @@ struct DIYCourseCreateView: View {
                 MainBtn(
                     text: "코스 생성하기",
                     action: {
-                    // TODO: - 코스 생성히기 구현
+                        viewModel.postCreateDIYCourse(placeIds: selectedPlaceIds)
                     },
                     width: UIScreen.screenWidth - 32,
                     height: 55,
@@ -246,8 +251,14 @@ struct DIYCourseCreateView: View {
     
 }
 
+// MARK: - Extension
 extension DIYCourseCreateView {
     
+    
+    /// 날짜 선택 피커를 여는 함수
+    /// - Parameters:
+    ///   - index: 선택한 날짜의 인덱스
+    ///   - newValue: 새로 선택한 날짜의 인덱스
     private func togglePicker(index: Int, newValue: Bool) {
         if newValue {
             if viewModel.isExpand.values.allSatisfy({ !$0 }) {
@@ -275,5 +286,5 @@ extension DIYCourseCreateView {
 
 
 #Preview{
-    DIYCourseCreateView(container: DIContainer(), placeIds: [1])
+    DIYCourseCreateView(container: DIContainer(), placeIds: [1], isPresented: .constant(true))
 }

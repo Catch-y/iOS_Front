@@ -25,7 +25,7 @@ enum CourseAPITarget {
     /// 코스 생성(DIY) API
     /// HTTP 메소드 : POST
     /// API Path : /course/in-person
-    case postCreateCourseDIY(course: CourseDIYCreateRequest, courseImage: UIImage)
+    case postCreateCourseDIY(course: CourseDIYCreateRequest, courseImage: [UIImage])
     
     /// 코스 생성(AI) API
     /// HTTP 메소드 : POST
@@ -641,9 +641,14 @@ extension CourseAPITarget: APITargetType {
 
     
 }
-
+// MARK: - Extension
 extension CourseAPITarget {
     
+    /// 코스 평점/리뷰 달기 API
+    /// - Parameters:
+    ///   - reviewRequest: Reqeust 모델
+    ///   - reviewImages: 업로드한 리뷰 이미지 배열
+    /// - Returns: 멀티파트폼 데이터
     private func encodeReviewData(reviewRequest: CourseReviewRequest, reviewImages: [UIImage]) -> [MultipartFormData] {
         
         var formData: [MultipartFormData] = []
@@ -667,7 +672,12 @@ extension CourseAPITarget {
         return formData
     }
     
-    private func encodeCourseData(courseRequest: CourseDIYCreateRequest, courseImage: UIImage) -> [MultipartFormData] {
+    /// 코스 DIY 생성 API
+    /// - Parameters:
+    ///   - courseRequest: Request 모델
+    ///   - courseImage: 업로드한 코스 이미지 배열
+    /// - Returns: 멀티파트폼 데이터
+    private func encodeCourseData(courseRequest: CourseDIYCreateRequest, courseImage: [UIImage]) -> [MultipartFormData] {
         
         var formData: [MultipartFormData] = []
         
@@ -689,17 +699,25 @@ extension CourseAPITarget {
             formData.append(startTimeFormData)
             formData.append(endTimeFormData)
         }
-                
-        if let image = courseImage.jpegData(compressionQuality: 0.8) {
-            let multipartData = MultipartFormData(provider: .data(image), name: "courseImage", fileName: "courseImage.jpg", mimeType: "images/jpeg")
-            formData.append(multipartData)
-
+         
+        for (_, image) in courseImage.enumerated() {
+            if let image = image.jpegData(compressionQuality: 0.8) {
+                let multipartData = MultipartFormData(provider: .data(image), name: "courseImage", fileName: "courseImage.jpg", mimeType: "images/jpeg")
+                formData.append(multipartData)
+            
+            }
         }
+
         
         
         return formData
     }
     
+    /// 코스 수정 API
+    /// - Parameters:
+    ///   - courseRequest: Request 모델
+    ///   - courseImage: 코스 이미지 배열
+    /// - Returns: 멀티파트폼 데이타
     private func encodeCourseEditData(courseRequest: CourseEditRequest, courseImage: UIImage) -> [MultipartFormData] {
         
         var formData: [MultipartFormData] = []

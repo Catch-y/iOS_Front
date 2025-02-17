@@ -31,7 +31,7 @@ class CourseRepository: CourseRepositoryProtocol {
     }
     
     /// 코스 생성(DIY) API
-    func postCreateCourseDIYData(course: CourseDIYCreateRequest, courseImage: UIImage) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError> {
+    func postCreateCourseDIYData(course: CourseDIYCreateRequest, courseImage: [UIImage]) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError> {
         return service.postCreateCourseDIY(course: course, courseImage: courseImage)
     }
     

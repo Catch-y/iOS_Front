@@ -35,7 +35,7 @@ class CourseService: CourseServiceProtocol {
     }
     
     /// 코스 생성(DIY) API
-    func postCreateCourseDIY(course: CourseDIYCreateRequest, courseImage: UIImage) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError> {
+    func postCreateCourseDIY(course: CourseDIYCreateRequest, courseImage: [UIImage]) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError> {
         return provider.requestPublisher(.postCreateCourseDIY(course: course, courseImage: courseImage))
             .map(ResponseData<CourseDIYCreateResponse>.self)
             .eraseToAnyPublisher()
