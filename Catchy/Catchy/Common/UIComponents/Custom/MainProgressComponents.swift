@@ -8,11 +8,19 @@
 import SwiftUI
 
 struct MainProgressComponents: View {
+    
+    let text: String
+    
+    init(text: String = "로딩중입니다.") {
+        self.text = text
+    }
+    
+    
     var body: some View {
         Spacer()
         
         ProgressView(label: {
-            Text("로딩중입니다.")
+            Text(text)
                 .font(.body3)
                 .foregroundStyle(Color.g7)
         })

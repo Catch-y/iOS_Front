@@ -29,15 +29,10 @@ struct SimilarPlacesView: View {
             } else {
 
                 Spacer()
-                ProgressView(label: {
-                    Text("로딩중입니다.")
-                        .font(.body3)
-                        .foregroundStyle(Color.g7)
-                })
-                .controlSize(.regular)
+                
+                MainProgressComponents()
                 
                 Spacer()
-                MainProgressComponents()
             }
         })
         .ignoresSafeArea(.all)

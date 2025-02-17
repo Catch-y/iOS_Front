@@ -28,8 +28,7 @@ struct CatchyApp: App {
                     .environmentObject(container)
                     .environmentObject(appFlowViewModel)
             case .preferrenceSurvey:
-                PreferencePageView(container: container)
-                    .environmentObject(appFlowViewModel)
+                PreferencePageView(container: container, appFlowViewModel: appFlowViewModel)
             case .tabView:
                 CatchyTabView()
                     .environmentObject(container)
