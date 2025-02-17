@@ -39,6 +39,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         print("📩 포그라운드에서 푸시 수신: \(notification.request.content.userInfo)")
+        completionHandler([.banner, .sound])
     }
 }
 
