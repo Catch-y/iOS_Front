@@ -11,6 +11,12 @@ import SwiftUI
 
 enum Icon: String {
     
+    //MARK: - Tab
+    case home = "home"
+    case course = "course"
+    case group = "group"
+    case mypage = "mypage"
+    
     //MARK: - Onboarding
     case logo = "logo"
     
@@ -21,6 +27,8 @@ enum Icon: String {
     
     //MARK: - SignUp
     case signupProfile = "signupProfile"
+    case notCheckName = "notCheckName"
+    case checkName = "checkName"
     
     //MARK: - ETC
     case leftChevron = "leftChevron"
@@ -34,9 +42,11 @@ enum Icon: String {
     case empyHeart = "empyHeart"
     case location = "location"
     case star = "star"
+    case emptyStar = "emptyStar"
     case time = "time"
     case review = "review"
     case rightChevron = "rightChevron"
+    case emptyResult = "emptyResult"
     
     //MARK: - Course
     case courseAI = "courseAI"
@@ -45,6 +55,22 @@ enum Icon: String {
     case check = "check"
     case smileSearch = "smileSearch"
     case domain = "domain"
+
+    case loading = "loading"
+    case red_pin = "red_pin"
+    case blue_pin = "blue_pin"
+    case yellow_pin = "yellow_pin"
+    case purple_pin = "purple_pin"
+
+    case bookmark = "bookmark"
+    case bookMarkTrue = "bookMarkTrue"
+    case visitCheck = "visitCheck"
+    case visitStamp = "visitStamp"
+    case emptyStamp = "emptyStamp"
+    case colorReview = "colorReview"
+    case warningIntro = "warningIntro"
+    
+    case trash = "trash"
     
     //MARK: - Category
     case breaks = "breaks"
@@ -63,6 +89,15 @@ enum Icon: String {
     case retaurantBackground = "retaurantBackground"
     case sportBackground = "sportBackground"
     
+    //MARK: - MyPage
+    case pencil = "pencil"
+    case document = "document"
+    case myPageHeart = "myPageHeart"
+    case myPageReview = "myPageReview"
+    case settingIcon = "settingIcon"
+    //MARK: - Review
+    case checkBtnSelected = "checkBtnSelected"
+    case checkBtnUnselected = "checkBtnUnselected"
     
     //MARK: - Perference
     case couple = "couple"
@@ -71,6 +106,7 @@ enum Icon: String {
     case solo = "solo"
     case allCheckBtn = "allCheckBtn"
     case allSelectCheckBtn = "allSelectCheckBtn"
+    case provinceBtn = "provinceBtn"
     
     //MARK: - VoteCategory
     case voteBreaks = "voteBreaks"

@@ -7,13 +7,17 @@
 
 import SwiftUI
 
-// 장소 운영시간 텍스트
+/// 장소 운영시간 텍스트
 struct PlaceTimeText: View {
+    
+    // MARK: - Properties
     let timeText: String
     
+    // MARK: - Init
     init(timeText: String) {
         self.timeText = timeText
     }
+    
     var body: some View {
         HStack(spacing: 5) {
             Icon.time.image.resizable()

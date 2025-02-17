@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 제네릭타입으로 생성하는 세그먼트
 struct CustomSegment<T: SegmentProtocol & CaseIterable>: View {
     
     @State private var segmentWidth: [T: CGFloat] = [:]

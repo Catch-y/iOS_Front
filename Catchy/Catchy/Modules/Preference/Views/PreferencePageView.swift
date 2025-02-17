@@ -6,10 +6,17 @@
 //
 
 import SwiftUI
+import MapKit
+import CoreGraphics
 
 struct PreferencePageView: View {
     
     @StateObject var viewModel: PreferenceViewModel
+    @StateObject var provinceViewmodel: GetProvinceViewModel = .init()
+    @EnvironmentObject var appFlowViewModel: AppFlowViewModel
+    
+    @State var scaleFactor: CGFloat = 1.0
+    @State var tappedLocation: (latitude: Double, longitude: Double)? = nil
     
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
@@ -23,8 +30,10 @@ struct PreferencePageView: View {
             pageTwo
         case 2:
             pageThird
+        case 3:
+            pageFourthView
         default:
-            Text("11")
+            EmptyView()
         }
     }
     
@@ -63,8 +72,10 @@ struct PreferencePageView: View {
                 Spacer()
                 
                 MainBtn(text: "다음", action: {
-                    withAnimation(.easeInOut(duration: 0.5)) {
-                        viewModel.preferenceStep += 1
+                    if !viewModel.bigCategoryBtn.isEmpty {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            viewModel.preferenceStep += 1
+                        }
                     }
                 }, width: 366, height: 60, onoff: (viewModel.bigCategoryBtn.isEmpty ? .off : .on))
                 .disabled(viewModel.bigCategoryBtn.isEmpty)
@@ -111,9 +122,9 @@ struct PreferencePageView: View {
                                     Spacer()
                                     
                                     MainBtn(text: "다음", action: {
-                                        withAnimation(.easeIn(duration: 0.5)) {
-                                            viewModel.preferenceStep += 1
-                                        }
+                                            withAnimation(.easeIn(duration: 0.5)) {
+                                                viewModel.preferenceStep += 1
+                                            }
                                     }, width: 366, height: 60, onoff: (viewModel.smallCategoryBtn[viewModel.bigCategoryBtn.last!] ?? []).isEmpty ? .off : .on)
                                     .disabled((viewModel.smallCategoryBtn[viewModel.bigCategoryBtn.last!] ?? []).isEmpty)
                                     
@@ -243,7 +254,9 @@ struct PreferencePageView: View {
                     pageThirdActiveTime
                         .padding(.top, 56)
                     
-                    makeMainButton(false)
+                    makeMainButton(
+                        !(viewModel.selectedCompanion.isEmpty || viewModel.selectedWeekDay.isEmpty || viewModel.leftSelectedTime == nil || viewModel.rightSelectedTime == nil)
+                    )
                         .padding(.top, viewModel.isExpand.values.contains(true) ? 15 : 98)
                 }
             })
@@ -385,6 +398,112 @@ struct PreferencePageView: View {
             }
         })
     }
+    
+    // MARK: - Page 4
+    
+    private var pageFourthView: some View {
+        VStack(alignment: .leading) {
+            
+            CustomNavigation(action: {
+                viewModel.preferenceStep -= 1
+            }, title: nil, rightNaviIcon: nil)
+            
+            Text("마지막으로 관심 지역을\n선택해주세요")
+                .font(.Subtitle1)
+                .lineSpacing(3.3)
+                .foregroundStyle(Color.g7)
+                .padding(.top, 50)
+            
+            GeometryReader { geometry in
+                ZStack {
+                    Color.white.ignoresSafeArea(.all)
+                    
+                    ForEach(viewModel.polygons.filter { $0.regionName != "광주광역시" }, id: \.points) { polygon in
+                           if let _ = ProvinceType(rawValue: polygon.regionName) {
+                               PolygonShape(
+                                   points: polygon.points,
+                                   scale: polygon.scale * scaleFactor,
+                                   offset: polygon.offset
+                               )
+                               .fill(returnFillColor(for: polygon.regionName))
+                               .frame(width: geometry.size.width, height: geometry.size.height)
+                               .zIndex(1)
+                           }
+                       }
+
+                    
+                       ForEach(viewModel.polygons.filter { $0.regionName == "광주광역시" }, id: \.points) { polygon in
+                           PolygonShape(
+                               points: polygon.points,
+                               scale: polygon.scale * scaleFactor,
+                               offset: polygon.offset
+                           )
+                           .fill(returnFillColor(for: polygon.regionName))
+                           .frame(width: geometry.size.width, height: geometry.size.height)
+                           .zIndex(2)
+                       }
+                
+                    ForEach(Array(Set(viewModel.polygons.map { $0.regionName })), id: \.self) { regionName in
+                        if let polygon = viewModel.polygons.first(where: { $0.regionName == regionName }) {
+                            drawRegionName(polygon, geometry: geometry)
+                        }
+                    }
+                }
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onEnded { value in
+                            let location = value.location
+                            
+                            let latLon = viewModel.convertToLatLon(from: location, in: geometry.frame(in: .local))
+                            tappedLocation = latLon
+                            
+                            if let regionInfo = viewModel.getRegionInfo(at: location, in: geometry.frame(in: .local)) {
+                                viewModel.selectedRegion = regionInfo.name
+                                viewModel.selectedRegionCode = regionInfo.code
+                                provinceViewmodel.fetchDistricts(of: regionInfo.code) { result in
+                                    if result {
+                                        viewModel.regionDistricts[regionInfo.name] = provinceViewmodel.districts
+                                        viewModel.isDistrictsSheet = true
+                                    }
+                                }
+                            }
+                        }
+                )
+            }
+        }
+        .task {
+            viewModel.loadGeoJSON()
+            print(viewModel.polygons)
+        }
+        .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+        .sheet(isPresented: $viewModel.isDistrictsSheet, content: {
+            PreferenceDistrictsView(viewModel: viewModel, provinceViewmodel: provinceViewmodel)
+                .presentationDetents([.fraction(0.6)])
+                .presentationCornerRadius(30)
+        })
+    }
+    
+    
+    private func adjustTextOffset(for regionName: String) -> CGFloat {
+        switch regionName {
+        case "충청남도":
+            return 10
+        case "경기도":
+            return 15
+        case "인천광역시":
+            return 4
+        default:
+            return 0
+        }
+    }
+    
+    func returnFillColor(for provineName: String) -> Color {
+        if let province = ProvinceType(rawValue: provineName) {
+            return ProvinceType.returnFillColor(for: province)
+        } else {
+            return Color.gray.opacity(0.5)
+        }
+    }
 }
 
 extension PreferencePageView {
@@ -394,8 +513,8 @@ extension PreferencePageView {
             withAnimation(.easeInOut(duration: 0.5)) {
                 viewModel.preferenceStep += 1
             }
-        }, width:  366, height: 60, onoff: (conditional ? .off : .on))
-        .disabled(conditional)
+        }, width:  366, height: 60, onoff: (conditional ? .on : .off))
+        .disabled(!conditional)
     }
     
     private func togglePicker(index: Int, newValue: Bool) {
@@ -408,7 +527,7 @@ extension PreferencePageView {
                 withAnimation {
                     viewModel.isExpand = [0: false, 1: false]
                 }
-
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     withAnimation(.easeInOut(duration: 0.5)) {
                         viewModel.isExpand[index] = true
@@ -420,6 +539,22 @@ extension PreferencePageView {
                 viewModel.isExpand[index] = false
             }
         }
+    }
+    
+    private func drawRegionName(_ polygon: PolygonData, geometry: GeometryProxy) -> some View {
+        let transformedCenter = CGPoint(
+            x: (polygon.center.x - polygon.offset.x) * polygon.scale * scaleFactor + geometry.size.width / 2,
+            y: (polygon.center.y - polygon.offset.y) * polygon.scale * scaleFactor + geometry.size.height / 2
+        )
+
+        return Text(polygon.regionName)
+            .font(.caption_SM)
+            .foregroundStyle(Color.g7)
+            .offset(y: adjustTextOffset(for: polygon.regionName))
+            .position(x: transformedCenter.x, y: transformedCenter.y)
+            .alignmentGuide(.leading) { _ in transformedCenter.x }
+            .alignmentGuide(.top) { _ in transformedCenter.y }
+            .zIndex(3)
     }
 }
 

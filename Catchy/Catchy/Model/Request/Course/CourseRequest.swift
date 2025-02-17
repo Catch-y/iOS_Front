@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 내 코스 조회 API
 struct CourseRequest: Codable {
     
     /// 코스의 타입
@@ -23,6 +24,6 @@ struct CourseRequest: Codable {
     /// ex) 동작구
     let lowerLocation: String
     
-    
-    let lastId: Int
+    /// 코스 마지막 ID
+    let lastId: Int?
 }

@@ -7,17 +7,18 @@
 
 import Foundation
 
+/// 내 코스 조회 API
 struct CourseResponse: Codable {
     
     /// 데이터를 담고 있는 배열
-    let content: [CourseResponseData]
+    var content: [CourseResponseData]
     
     /// 마지막 데이터를 포함한 응답인지
     let isLast: Bool
     
 }
 
-struct CourseResponseData: Codable, Identifiable{
+struct CourseResponseData: Codable, Identifiable, Equatable {
     
     /// 고유 ID
     /// 뷰를 생성할 때만 사용, API와 관련 없음.
@@ -40,16 +41,16 @@ struct CourseResponseData: Codable, Identifiable{
     let courseDescription: String
     
     /// 코스 카테고리 (최대 5개)
-    let categorise: [CategoryType]
+    let categories: [CategoryType]
     
-    init(id: UUID = UUID(), courseId: Int, courseType: CourseType, courseImage: String, courseName: String, courseDescription: String, categorise: [CategoryType]) {
+    init(id: UUID = UUID(), courseId: Int, courseType: CourseType, courseImage: String, courseName: String, courseDescription: String, categories: [CategoryType]) {
         self.id = id
         self.courseId = courseId
         self.courseType = courseType
         self.courseImage = courseImage
         self.courseName = courseName
         self.courseDescription = courseDescription
-        self.categorise = categorise
+        self.categories = categories
     }
     
     enum CodingKeys : String, CodingKey {
@@ -58,7 +59,7 @@ struct CourseResponseData: Codable, Identifiable{
         case courseImage
         case courseName
         case courseDescription
-        case categorise
+        case categories
     }
     
 }

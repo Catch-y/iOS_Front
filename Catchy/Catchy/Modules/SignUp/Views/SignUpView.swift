@@ -49,6 +49,7 @@ struct SignUpView: View {
         .sheet(isPresented: $viewModel.isImagePickerPresented, content: {
             ImagePicker(imageHandler: viewModel, selectedLimit: 1)
         })
+        .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
         .ignoresSafeArea(.keyboard)
         .onAppear {
             UIApplication.shared.hideKeyboard()
@@ -86,17 +87,21 @@ struct SignUpView: View {
             
             Spacer()
         })
-        .frame(width: 370)
     }
     
     private var inputUserInfoGroup: some View {
-        VStack(alignment: .leading, spacing: 44, content: {
+        VStack(alignment: .leading, spacing: 0, content: {
             makeInputUserInfo("이메일", "", .constant(signUpNaviData.email))
                 .disabled(true)
             
             makeInputUserInfo("닉네임", "닉네임 8자까지 입력해주세요.", $viewModel.nickname)
+                .padding(.top, 44)
+            
+            if let nicknameAvail = viewModel.nicknameAvail {
+                makeCheckNameLabel(nicknameAvail: nicknameAvail)
+            }
+            
         })
-        .frame(width: 370, height: 172)
     }
     
     private func makeInputUserInfo(_ title: String, _ place: String, _ value: Binding<String>) -> some View {
@@ -125,8 +130,28 @@ extension SignUpView {
             
             Divider()
                 .frame(height: 1)
-                .background(Color.g2)
         })
+    }
+    
+    private func makeCheckNameLabel(nicknameAvail: Bool) -> some View {
+        Label(title: {
+            Text(viewModel.nicknameMessage)
+                .font(.courseTag)
+                .foregroundStyle(nicknameAvail ? Color.p1 : Color.m6)
+                .padding(.top, 3)
+        }, icon: {
+            returnCheckBox(nicknameAvail: nicknameAvail)
+                .fixedSize()
+        })
+    }
+    
+    
+    private func returnCheckBox(nicknameAvail: Bool) -> Image{
+        if nicknameAvail {
+            Icon.checkName.image
+        } else {
+            Icon.notCheckName.image
+        }
     }
 }
 

@@ -8,9 +8,12 @@
 import SwiftUI
 import Kingfisher
 
+/// 두 번째 섹션 인기 코스 카드
 struct PopularCourseCard: View {
     
     let data: PopularCourseResponse
+    
+    //MARK: - Init
     
     init(data: PopularCourseResponse) {
         self.data = data
@@ -24,9 +27,10 @@ struct PopularCourseCard: View {
                         ProgressView()
                             .controlSize(.regular)
                     }.retry(maxCount: 2, interval: .seconds(2))
+                    .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 261))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 356, height: 261)
+                    .frame(minWidth: 360,  maxWidth: 365, maxHeight: 261)
                     .overlay {
                         LinearGradient(
                             stops: [
@@ -41,9 +45,9 @@ struct PopularCourseCard: View {
             }
             
             Text(data.courseName)
-                .frame(width: 156)
+                .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
                 .font(.Subtitle3)
-                .lineLimit(nil)
+                .lineLimit(2)
                 .lineSpacing(2.5)
                 .foregroundStyle(Color.white)
                 .padding(.bottom, 35)
@@ -51,8 +55,4 @@ struct PopularCourseCard: View {
             
         })
     }
-}
-
-#Preview {
-    PopularCourseCard(data: PopularCourseResponse(courseName: "커플들을 위한 크리스마스 데이트 코스", courseImage: "https://i.namu.wiki/i/Q3ru_aVczQgaq1Z1Ptvhktl9fM57cRQkBtn0_DWXyPvXuP3jj8zanjgG_0Cvdim3fN4cXHQ-2QAD2U7opRL9KMb6eWQzo9zpAM9jZA7xxuaMbgF0y08EFC-jcOPgKE5CawVI5g_W_Ku4GmpIL7d5RA.webp"))
 }

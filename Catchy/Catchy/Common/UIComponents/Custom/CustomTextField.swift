@@ -39,7 +39,7 @@ struct CustomTextField: View {
             isTextFocused = false
         }
         .ignoresSafeArea(.keyboard)
-        .frame(width: searchTextField.textFieldWidth(), height: searchTextField.textFieldHeight(), alignment: .center)
+        .frame(minWidth: searchTextField.textFieldWidth(), maxHeight: searchTextField.textFieldHeight(), alignment: .center)
         .focused($isTextFocused)
         .background(searchTextField.textFieldBgColor())
         .clipShape(.rect(cornerRadius: 30))
@@ -47,7 +47,7 @@ struct CustomTextField: View {
             RoundedRectangle(cornerRadius: 30)
                 .inset(by: 0.5)
                 .stroke(searchTextField.textFieldBorderColor(), lineWidth: 1)
-                .frame(width: searchTextField.textFieldWidth())
+                .frame(minWidth: searchTextField.textFieldWidth())
         })
     }
     
@@ -66,7 +66,8 @@ struct CustomTextField: View {
             Icon.search.image
                 .fixedSize()
         })
-        .frame(width: searchTextField.placeholderWidth(), height: searchTextField.placeholderHeight(), alignment: .leading)
+        .frame(minWidth: searchTextField.placeholderWidth(), maxHeight: searchTextField.placeholderHeight(), alignment: .leading)
+        .padding(.horizontal, 15)
         .onTapGesture {
             isTextFocused = true
         }

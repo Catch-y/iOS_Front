@@ -8,65 +8,100 @@
 import SwiftUI
 import FloatingButton
 
+/// 코스 리스트 화면
 struct CourseView: View {
     
+    @EnvironmentObject var container: DIContainer
+
+    // MARK: - 뷰 모델
     @StateObject var viewModel: CourseViewModel
+        
+    /// 드랍 다운 메뉴의 뷰 모델
+    @StateObject var provinceViewModel: GetProvinceViewModel = .init()
     
-    init(container: DIContainer) {
+    // MARK: - 코스 리스트 화면 Properties
+    /// AI 코스 생성로딩 화면 상태
+    @Binding var isAILoadingPresented: Bool
+    
+    /// DIY 코스 생성 화면 상태
+    @Binding var isDIYPresented: Bool
+    
+    /// AI 코스 생성결과 화면 상태
+    @State var isAISheetPresented: Bool = false
+    
+    /// 코스 카드의 오프셋(코스 삭제 시 값 저장)
+    @State var courseOffsets: [Int: CGFloat] = [:]
+    
+    // MARK: - Init
+    init(container: DIContainer, isAILoadingPresented: Binding<Bool>, isDIYPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
+        self._isDIYPresented = isDIYPresented
+        self._isAILoadingPresented = isAILoadingPresented
     }
     
     var body: some View {
-        
         ZStack(alignment: .top) {
-            if let data = viewModel.courseResponse, !data.content.isEmpty {
-                DropDown(viewModel: viewModel).zIndex(1)
-            }
+            
+            DropDown(viewModel: viewModel, provinceViewModel: provinceViewModel).zIndex(1)
+                .padding(.top, 50)
+            
             VStack {
+                navigationGroup
+                
                 if !viewModel.isCourseListLoading {
                     
-                    navigationGroup
-                    if let data = viewModel.courseResponse {
-                        if data.content.isEmpty {
-                            infoView
-                        } else {
-                            scrollView
-                        }
+                    if viewModel.courseList.isEmpty {
+                        infoView
+                    } else {
+                        scrollView
                     }
                     
-                } else {    /// 데이터 로딩 중
-                    Spacer()
-                        
-                    ProgressView()
-                        
-                    Spacer()
+                } else {
+                    MainProgressComponents()
                 }
-                    
+                
             }
             .zIndex(0)
-            
-            if viewModel.isFloating {
-                Color.black
-                    .opacity(0.8)
-                    .ignoresSafeArea(.all)
-                    .zIndex(2)
-            }
-            AddFloatingButton(isOpen: $viewModel.isFloating).zIndex(3)
-            
         }.task{
-            viewModel
-                .getCourseList(
-                    courseRequest: .init(
-                        type: .ai,
-                        upperLocation: "",
-                        lowerLocation: "",
-                        lastId: 0
-                    )
-                )
+            viewModel.getCourseList()
+        }
+        .onChange(of: provinceViewModel.provinces){ (_ , provinces) in
+            viewModel.upperLocations = provinces
+        }
+        .onChange(of: viewModel.selectedUpperIndex) { (_, _) in
+            viewModel.resetAndGetCourseList()
+        }
+        .onChange(of: viewModel.selectedLowerIndex) { (_, lowerIndex) in
+            if lowerIndex != nil {
+                viewModel.resetAndGetCourseList()
+            }
+        }
+        .onChange(of: viewModel.segment) { (_, _) in
+            viewModel.resetAndGetCourseList()
+        }
+        .onChange(of: viewModel.isAICourseLoading) { (a, loading) in
+            
+            if !loading {
+                isAILoadingPresented.toggle()
+                isAISheetPresented.toggle()
+            }
         }
 
+        .fullScreenCover(isPresented: $isAILoadingPresented){
+            AILoadingView(viewModel: viewModel)
+        }
+        .fullScreenCover(isPresented: $isDIYPresented) {
+            PlaceSearchView(container: container)
+        }
+        .sheet(isPresented: $isAISheetPresented, onDismiss: {
+            viewModel.isAICourseLoading.toggle()
+            viewModel.resetAndGetCourseList()
+        }) {
+            AIPlaceListView(courseAIResponse: viewModel.courseAIResponse, container: container, isAISheetPresented: $isAISheetPresented)
+        }
+        
     }
-
+    
     /// 네비게이션 바와 세그먼트 그룹
     private var navigationGroup : some View {
         VStack(alignment: .center) {
@@ -78,29 +113,90 @@ struct CourseView: View {
                 })
         }
         .ignoresSafeArea(edges: .top)
-        .frame(height: 130)
     }
     
-    /// 스크롤 뷰 
+    /// 스크롤 뷰
     private var scrollView : some View {
+        
         ScrollView(.vertical, content: {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 18, content: {
-                if let content = viewModel.courseResponse?.content {
-                    ForEach(content, id: \.id) { course in
+                ForEach(viewModel.courseList, id: \.id) { course in
+    
+                    ZStack(alignment: .trailing) {
+                        trashView
+                            .frame(height: CourseCardType.course.cardHeight)
+                            .frame(
+                              width: (courseOffsets[course.courseId] != nil && abs(courseOffsets[course.courseId]!) > 30)
+                                  ? abs(courseOffsets[course.courseId]!) - 10
+                                  : 0
+                            )
+                            .opacity((courseOffsets[course.courseId] != nil && abs(courseOffsets[course.courseId]!) > 30) ? 1 : 0)
+
+                        
                         CourseGroupCard(course: course)
-                            
+                            .offset(x: courseOffsets[course.courseId] ?? 0)
+                            .gesture(
+                                DragGesture(minimumDistance: 20, coordinateSpace: .local)
+                                    .onChanged { value in
+                                        if value.translation.width < 0 {
+                                            courseOffsets[course.courseId] = value.translation.width
+                                        }
+                                        
+                                    }
+                                    .onEnded { value in
+                                        if value.translation.width < -UIScreen.screenWidth * 0.7 {
+                                            courseOffsets[course.courseId] = 0
+                                            withAnimation {
+                                                viewModel.courseList.removeAll { $0.id == course.id }
+                                            }
+                                            viewModel.deleteCourse(courseId: course.courseId)
+                                            
+                                            
+                                        } else {
+                                            withAnimation {
+                                                courseOffsets[course.courseId] = 0
+                                            }
+                                        }
+                                    }
+                            )
+                            .onTapGesture {
+                                container.navigationRouter.push(to: .courseDetailView(courseId: course.courseId))
+                            }
+                            .task {
+                                guard let lastId = viewModel.lastId else { return }
+                                if course.courseId >= lastId {
+                                    viewModel.getCourseList()
+                                }
+                            }
+                            .scrollTransition(axis: .vertical) { content, phase in
+                                content
+                                    .scaleEffect(
+                                        x: phase.isIdentity ? 1.0 : 0.94,
+                                        y: phase.isIdentity ? 1.0 : 0.94)
+                                
+                            }
                     }
+                       
+                        
+                    
                 }
+                
             })
             
             .padding(.horizontal, 16)
             .padding(.top, 10)
         })
-        .padding(.top, 70)
+        .padding(.top, 50)
         .padding(.bottom, 110)
         .frame(maxWidth: .infinity)
-        .scrollIndicators(.hidden)
-        .border(.red)
+        .refreshable {
+            await viewModel.refresh()
+        }
+        .onAppear {
+            UIRefreshControl.appearance().tintColor = .main
+        }
+        
+        
     }
     
     /// 코스가 없을 때 텍스트 뷰
@@ -117,15 +213,16 @@ struct CourseView: View {
         .ignoresSafeArea(edges: .all)
         .padding(.bottom, 110)
     }
-}
-
-struct CourseView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
-            CourseView(container: DIContainer())
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
+    
+    /// 코스 카드르 드래그할 때 나타나는 뷰
+    private var trashView: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.m5)
+            
+            Icon.trash.image
+                
         }
     }
-}
 
+}

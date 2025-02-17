@@ -8,13 +8,31 @@
 import Foundation
 
 struct RecommendPlaceResponse: Codable {
-    let placeId: Int
-    let placeImage: String
+    let content: [RecommendPlaceResponseData]
+    let isLast: Bool
+}
+
+struct RecommendPlaceResponseData: Codable, Identifiable, Likeable {
+    var id = UUID()
+    var placeId: Int
     let placeName: String
-    let subCategory: String
-    var isLike: Bool
-    let starPoint: Double
-    let reviewCnt: Int
-    let placeLocation: String
-    let placeOperTime: String
+    let placeImage: String
+    let category: String
+    let roadAddress: String
+    let activeTime: String?
+    let rating: Double
+    let reviewCount: Int
+    var liked: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case placeId
+        case placeName
+        case placeImage
+        case category
+        case roadAddress
+        case activeTime
+        case rating
+        case reviewCount
+        case liked
+    }
 }

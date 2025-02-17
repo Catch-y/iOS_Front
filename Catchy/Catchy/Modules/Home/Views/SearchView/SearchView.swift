@@ -16,49 +16,61 @@ struct SearchView: View {
     }
     
     var body: some View {
-        VStack(alignment: .center, content: {
+        VStack(alignment: .center, spacing: 0, content: {
             
             CustomNavigation(action: {
                 viewModel.container.navigationRouter.pop()
             }, title: nil, rightNaviIcon: nil)
+            .padding(.horizontal, 16)
             
             if viewModel.searchKeyword.isEmpty {
             Spacer().frame(height: 95)
                 topTitle
-                    .padding(.leading, 15)
+                    .padding(.leading, 25)
                     .transition(.opacity)
             }
             
-            CustomTextField(text: $viewModel.searchKeyword, searchTextField: .searchView)
+            CustomTextField(text: $viewModel.searchKeyword, onSubmit: {
+                viewModel.saveKeyword(viewModel.searchKeyword)
+            } , searchTextField: .searchView)
                 .padding(.top, 20)
+                .padding(.horizontal, 16)
                 .animation(.easeInOut(duration: 0.5), value: viewModel.searchKeyword)
+                .submitScope()
             
             if !viewModel.recentWords.isEmpty && viewModel.searchKeyword.isEmpty {
-                recenteKeywords
+                recentKeywords
                     .padding(.top, 38)
-                    .padding(.horizontal, 15)
+                    .padding(.leading, 25)
+                    .padding(.trailing, 20)
             }
             
-            if !viewModel.searchKeyword.isEmpty {
-                if let placeResult = viewModel.searchResult {
-                    placeLazy(placeResult: placeResult)
-                } else {
-                    if !viewModel.searchLoad {
-                        Text("검색된 데이터가 없습니다!")
-                            .font(.body2)
-                            .foregroundStyle(Color.g5)
-                            .overlay(content: {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color.g4, lineWidth: 1)
-                                    .frame(width: 370, height: 100)
-                            })
-                            .padding(.top, 60)
+            Spacer()
+            
+            if viewModel.showResult {
+                if !viewModel.searchKeyword.isEmpty {
+                    if let placeResult = viewModel.searchResult {
+                            placeLazy(placeResult: placeResult)
+                                .padding(.top, 5)
+                    } else {
+                        if !viewModel.searchLoad {
+                            emptyView
+                                .padding(.top, 114)
+                        }
                     }
                 }
             }
-            Spacer()
         })
+        .onAppear {
+            UIApplication.shared.hideKeyboard()
+        }
+        .onChange(of: viewModel.searchKeyword) { newValue, oldValue in
+            if newValue.isEmpty {
+                viewModel.showResult = false
+            }
+        }
         .animation(.easeInOut(duration: 0.5), value: viewModel.searchKeyword)
+        .navigationBarBackButtonHidden(true)
     }
     
     
@@ -77,10 +89,9 @@ struct SearchView: View {
             
             Spacer()
         }
-        .frame(width: 370)
     }
     
-    private var recenteKeywords: some View {
+    private var recentKeywords: some View {
         VStack(alignment: .leading, spacing: 14, content: {
             Text("최근 검색어")
                 .font(.body2)
@@ -89,30 +100,63 @@ struct SearchView: View {
                         makeButton(keyword)
                     }
         })
-        .frame(width: 352, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: 120)
     }
     
     private func placeLazy(placeResult: SearchPlaceResponse) -> some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.fixed(336)), count: 1), spacing: 30, content: {
-            ForEach(Array(placeResult.content.enumerated()), id: \.element.id) { index, result in
-                VStack(spacing: 19, content: {
-                    SearchRecommendPlaceCard(data: result)
-                    
-                    if index < placeResult.content.count - 1 {
-                        Divider()
-                            .background(Color.g2)
-                            .frame(height: 1)
-                    }
-                })
-            }
+        ScrollView(.vertical, content: {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 30, content: {
+                ForEach(Array(placeResult.placeInfoPreviews.enumerated()), id: \.element.id) { index, result in
+                    VStack(spacing: 19, content: {
+                        SearchRecommendPlaceCard(data: result)
+                            .onAppear {
+                                if index == placeResult.placeInfoPreviews.count - 1 {
+                                    viewModel.performSearch(for: viewModel.searchKeyword)
+                                }
+                            }
+                        
+                        if index < placeResult.placeInfoPreviews.count - 1 {
+                            Divider()
+                                .foregroundStyle(Color.g2)
+                                .frame(height: 1)
+                        }
+                    })
+                }
+            })
+            .padding(.horizontal, 16)
         })
+        .refreshable {
+            await viewModel.searchRefresh()
+        }
+        .onAppear {
+            UIRefreshControl.appearance().tintColor = .main
+        }
+    }
+    
+    private var emptyView: some View {
+        VStack(alignment: .center, spacing: 0, content: {
+            Icon.emptyResult.image
+                .fixedSize()
+            
+            Text("검색어와 일치하는 내용이 없어요!")
+                .font(.Subtitle2)
+                .foregroundStyle(Color.g7)
+                .padding(.top, 15)
+            
+            Text("확인 후 다시 검색해주세요.")
+                .font(.Body1_2)
+                .foregroundStyle(Color.g4)
+            
+            Spacer()
+        })
+        
     }
 }
 
 extension SearchView {
     func makeButton(_ text: String) -> some View {
         Button(action: {
-            print(text)
+            viewModel.searchKeyword = text
         }, label: {
             Text(text)
                 .font(.caption1)

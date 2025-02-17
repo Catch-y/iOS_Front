@@ -23,14 +23,17 @@ struct OnboardingView: View {
             onboardingLogo
         })
         .task {
-            viewModel.stateAppFlow { result, error in
-                if let error = error {
-                    print("최초 사용자 혹은 등록된 유저 아님: \(error)")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                viewModel.stateAppFlow { result, error in
+                    if let error = error {
+                        print("최초 사용자 혹은 등록된 유저 아님: \(error)")
+                    }
                 }
             }
         }
     }
     
+    /// 온보딩 로고
     private var onboardingLogo: some View {
         VStack(spacing: 7, content: {
             Icon.appIcon.image
