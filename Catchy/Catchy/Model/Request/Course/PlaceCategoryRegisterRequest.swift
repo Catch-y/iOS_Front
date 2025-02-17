@@ -10,9 +10,6 @@ import Foundation
 /// 장소 카테고리 선택 API
 struct PlaceCategoryRegisterRequest: Codable {
     
-    /// 장소 ID
-    let placeId: Int
-    
     /// 장소 카테고리
     /// ex) 음식점, 문화생활
     let bigCategory: CategoryType

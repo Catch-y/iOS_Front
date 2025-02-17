@@ -79,17 +79,18 @@ extension PlaceCourseAPITarget: APITargetType {
             return .requestPlain
             
             /// 좋아요한 장소 무한 스크롤 API
-        case .getMyPlace(let pageSize, let lastCourseId):
+        case .getMyPlace(let pageSize, let lastPlaceId):
             var parameters: [String: Any] = ["pageSize": pageSize]
             
-            if let lastCourseId = lastCourseId {
-                parameters["lastCourseId"] = lastCourseId
+            if let lastPlaceId = lastPlaceId {
+                parameters["lastPlaceId"] = lastPlaceId
             }
             
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
             
         case .getPlaceSearchByCurrent(let place):
-            return .requestParameters(parameters: ["searchKeyword" : place.searchKeyword, "page" : place.page, "longitude" : place.longitude, "latitude" : place.latitude], encoding: URLEncoding.default)
+            var parameters: [String: Any] = ["searchKeyword" : place.searchKeyword, "page" : place.page, "longtide" : place.longitude, "latitude" : place.latitude]
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
         }
     }
     

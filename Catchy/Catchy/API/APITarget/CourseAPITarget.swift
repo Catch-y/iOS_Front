@@ -7,6 +7,7 @@
 
 import Foundation
 import Moya
+import UIKit
 
 /// [Course] - 코스 관련 API Target
 enum CourseAPITarget {
@@ -14,17 +15,17 @@ enum CourseAPITarget {
     /// 장소 카테고리 선택 API
     /// HTTP 메소드 : POST
     /// API Path : /course/{placeId}
-    case postPlaceCategoryRegister(place: PlaceCategoryRegisterRequest)
+    case postPlaceCategoryRegister(placeId: Int, place: PlaceCategoryRegisterRequest)
     
     /// 코스 리뷰 작성 API
     /// HTTP 메소드 : POST
     /// API Path : /course/{courseId}/review
-    case postCourseReview(course: CourseReviewRequest)
+    case postCourseReview(courseId: Int, course: CourseReviewRequest, reviewImages: [UIImage])
     
     /// 코스 생성(DIY) API
     /// HTTP 메소드 : POST
     /// API Path : /course/in-person
-    case postCreateCourseDIY(course: CourseDIYCreateRequest)
+    case postCreateCourseDIY(course: CourseDIYCreateRequest, courseImage: UIImage)
     
     /// 코스 생성(AI) API
     /// HTTP 메소드 : POST
@@ -39,7 +40,7 @@ enum CourseAPITarget {
     /// 코스 수정 API
     /// HTTP 메소드 : PATCH
     /// API Path : /course/{courseId}
-    case patchCourseEdit(course: CourseEditRequest)
+    case patchCourseEdit(courseId: Int, course: CourseEditRequest, courseImage: UIImage)
     
     /// 코스 북마크 API
     /// HTTP 메소드 : PATCH
@@ -68,11 +69,11 @@ extension CourseAPITarget: APITargetType {
     
     var path: String {
         switch self {
-        case .postPlaceCategoryRegister(let place):
-            return "course/\(place.placeId)"
+        case .postPlaceCategoryRegister(let placeId, _):
+            return "course/\(placeId)"
             
-        case .postCourseReview(let course):
-            return "course/\(course.courseId)/review"
+        case .postCourseReview(let courseId, _, _):
+            return "course/\(courseId)/review"
             
         case .postCreateCourseDIY:
             return "course/in-person"
@@ -83,8 +84,8 @@ extension CourseAPITarget: APITargetType {
         case .deleteCourse(let courseId):
             return "course/\(courseId)"
             
-        case .patchCourseEdit(let course):
-            return "course/\(course.courseId)"
+        case .patchCourseEdit(let courseId, _, _):
+            return "course/\(courseId)"
             
         case .patchCourseBookmark(let courseId):
             return "course/\(courseId)/bookmark"
@@ -136,26 +137,29 @@ extension CourseAPITarget: APITargetType {
     
     var task: Task {
         switch self {
-        case .postPlaceCategoryRegister(let place):
-            return .requestJSONEncodable(place)
+        case .postPlaceCategoryRegister(_, let request):
+            return .requestJSONEncodable(request)
             
-        case .postCourseReview(let course):
-            return .requestJSONEncodable(course)
+        case .postCourseReview(_, let course, let reviewImages):
+            let formData = encodeReviewData(reviewRequest: course, reviewImages: reviewImages)
+            return .uploadMultipart(formData)
             
-        case .postCreateCourseDIY(let course):
-            return .requestJSONEncodable(course)
-            
+        case .postCreateCourseDIY(let course, let courseImage):
+            let formData = encodeCourseData(courseRequest: course, courseImage: courseImage)
+            return .uploadMultipart(formData)
+
         case .postCreateCourseAI:
             return .requestPlain
             
-        case .deleteCourse(let courseId):
-            return .requestJSONEncodable(courseId)
+        case .deleteCourse:
+            return .requestPlain
             
-        case .patchCourseEdit(let course):
-            return .requestJSONEncodable(course)
+        case .patchCourseEdit(_, let course, let courseImage):
+            let formData = encodeCourseEditData(courseRequest: course, courseImage: courseImage)
+            return .uploadMultipart(formData)
             
-        case .patchCourseBookmark(let courseId):
-            return .requestJSONEncodable(courseId)
+        case .patchCourseBookmark:
+            return .requestPlain
             
         case .postPlaceVisit:
             return .requestPlain
@@ -636,4 +640,97 @@ extension CourseAPITarget: APITargetType {
     
 
     
+}
+
+extension CourseAPITarget {
+    
+    private func encodeReviewData(reviewRequest: CourseReviewRequest, reviewImages: [UIImage]) -> [MultipartFormData] {
+        
+        var formData: [MultipartFormData] = []
+        
+        if let commentData = String(reviewRequest.comment).data(using: .utf8)
+        {
+            let commentFormData = MultipartFormData(provider: .data(commentData), name: "comment")
+            formData.append(commentFormData)
+        }
+        
+        for (index, reviewImage) in reviewImages.enumerated() {
+            
+            if let image = reviewImage.jpegData(compressionQuality: 0.8) {
+
+                let multipartData = MultipartFormData(provider: .data(image), name: "images", fileName: "images\(index).jpg", mimeType: "images/jpeg")
+                formData.append(multipartData)
+            }
+        }
+        
+        
+        return formData
+    }
+    
+    private func encodeCourseData(courseRequest: CourseDIYCreateRequest, courseImage: UIImage) -> [MultipartFormData] {
+        
+        var formData: [MultipartFormData] = []
+        
+        if let nameData = String(courseRequest.courseName).data(using: .utf8),
+           let descriptionData = String(courseRequest.courseDescription).data(using: .utf8),
+           let idDatas = courseRequest.placeIds.description.data(using: .utf8),
+           let timeStartData = String(courseRequest.recommendTimeStart).data(using: .utf8),
+           let timeEndData = String(courseRequest.recommendTimeEnd).data(using: .utf8)
+        {
+            let nameFormData = MultipartFormData(provider: .data(nameData), name: "courseName")
+            let descFormData = MultipartFormData(provider: .data(descriptionData), name: "courseDescription")
+            let idsFormData = MultipartFormData(provider: .data(idDatas), name: "placeIds")
+            let startTimeFormData = MultipartFormData(provider: .data(timeStartData), name: "recommendTimeStart")
+            let endTimeFormData = MultipartFormData(provider: .data(timeEndData), name: "recommendTimeEnd")
+            
+            formData.append(nameFormData)
+            formData.append(descFormData)
+            formData.append(idsFormData)
+            formData.append(startTimeFormData)
+            formData.append(endTimeFormData)
+        }
+                
+        if let image = courseImage.jpegData(compressionQuality: 0.8) {
+            let multipartData = MultipartFormData(provider: .data(image), name: "courseImage", fileName: "courseImage.jpg", mimeType: "images/jpeg")
+            formData.append(multipartData)
+
+        }
+        
+        
+        return formData
+    }
+    
+    private func encodeCourseEditData(courseRequest: CourseEditRequest, courseImage: UIImage) -> [MultipartFormData] {
+        
+        var formData: [MultipartFormData] = []
+        
+        if let nameData = String(courseRequest.courseName).data(using: .utf8),
+           let descriptionData = String(courseRequest.courseDescription).data(using: .utf8),
+           let idDatas = courseRequest.placeIds.description.data(using: .utf8),
+           let timeStartData = String(courseRequest.recommendTimeStart).data(using: .utf8),
+           let timeEndData = String(courseRequest.recommendTimeEnd).data(using: .utf8)
+        {
+            let nameFormData = MultipartFormData(provider: .data(nameData), name: "courseName")
+            let descFormData = MultipartFormData(provider: .data(descriptionData), name: "courseDescription")
+            let idsFormData = MultipartFormData(provider: .data(idDatas), name: "placeIds")
+            let startTimeFormData = MultipartFormData(provider: .data(timeStartData), name: "recommendTimeStart")
+            let endTimeFormData = MultipartFormData(provider: .data(timeEndData), name: "recommendTimeEnd")
+            
+            formData.append(nameFormData)
+            formData.append(descFormData)
+            formData.append(idsFormData)
+            formData.append(startTimeFormData)
+            formData.append(endTimeFormData)
+        }
+                
+        if let image = courseImage.jpegData(compressionQuality: 0.8) {
+            let multipartData = MultipartFormData(provider: .data(image), name: "courseImage", fileName: "courseImage.jpg", mimeType: "images/jpeg")
+            formData.append(multipartData)
+
+        }
+        
+        
+        return formData
+    }
+
 }
