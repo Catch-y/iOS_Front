@@ -120,11 +120,7 @@ extension SignUpViewModel {
                 return responseData
             }
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { [weak self] completion in
-                
-                guard let self = self else { return }
-                isLoading = false
-                
+            .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
                     print("✅ \(signUpNaviData.loginType) Signup Success")
@@ -137,6 +133,7 @@ extension SignUpViewModel {
                 print("🔵 ResponseData: \(response)")
                 
                 if let response = response.result {
+                    isLoading = false
                     saveUserInfo(response: response, loginType: signUpNaviData.loginType)
                     container.navigationRouter.pop()
                     appflowViewModel.onSignupSuccess()

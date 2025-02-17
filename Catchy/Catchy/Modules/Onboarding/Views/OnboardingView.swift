@@ -24,6 +24,7 @@ struct OnboardingView: View {
         })
         .task {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                print("기존 유저 판단 온보딩 2초 뒤 실행")
                 viewModel.stateAppFlow { result, error in
                     if let error = error {
                         print("최초 사용자 혹은 등록된 유저 아님: \(error)")
