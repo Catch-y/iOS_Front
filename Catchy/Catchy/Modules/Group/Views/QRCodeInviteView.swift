@@ -5,6 +5,8 @@
 //  Created by 임소은 on 2/12/25.
 //
 
+//FIXME: - QR sharing buttton 수정 
+
 import SwiftUI
 
 struct QRCodeInviteView: View {

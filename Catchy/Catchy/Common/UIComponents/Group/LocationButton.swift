@@ -24,8 +24,10 @@ struct LocationButton: View {
     
     var body: some View {
             Button(action: {
-                isSelected.toggle() // 선택 상태 변경
-                action() // 상위에서 전달된 액션 호출
+                withAnimation {
+                    isSelected.toggle() // 선택 상태 변경
+                    action() // 상위에서 전달된 액션 호출
+                }
             }) {
                 buttonContent() // 버튼 UI를 구성하는 메서드
             }
@@ -40,7 +42,8 @@ private extension LocationButton {
         Text(title)
             .font(.body2)
             .foregroundStyle(isSelected ? Color.m6 : Color.g4)//글씨 색깔
-            .frame(width: 118, height: 55) // 버튼 크기
+            .frame(maxWidth: .infinity)
+            .frame(height : 55) // 버튼 크기
             .background(
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(isSelected ? Color.m6 : Color.g3, lineWidth: 1) // 테두리 색상

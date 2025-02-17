@@ -45,18 +45,20 @@ struct LocationSelectView: View {
                     locationGridView()
                         .padding(.top, 20)
 
-                    NextButton(title: "다음") {
-                        print("다음 버튼 클릭")
-                    }
-                    .background(
-                        RoundedRectangle(cornerRadius: 35)
-                            .fill((viewModel.selectedLocation ?? "").isEmpty ? Color.g2 : Color.m4)
+                    MainBtn(
+                        text: "다음",
+                        action: {
+                            print("다음 버튼 클릭")
+                        },
+                        width: UIScreen.main.bounds.width - 32,
+                        height: 60,
+                        onoff: (viewModel.selectedLocation ?? "").isEmpty ? .off : .on
                     )
-                    .foregroundStyle((viewModel.selectedLocation ?? "").isEmpty ? .g4 : .white)
                     .padding(.top, 38)
+
+
                 }
                 .padding(.horizontal, 16)
-                .padding(.bottom, 110)
             }
         }
     }
@@ -83,7 +85,6 @@ struct LocationSelectView: View {
                                 viewModel.selectedLocation = location
                             }
                         )
-                        .frame(width: 118, height: 55)
                     }
                 }
             }
