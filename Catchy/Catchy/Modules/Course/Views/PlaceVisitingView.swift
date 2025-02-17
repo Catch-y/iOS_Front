@@ -37,8 +37,7 @@ struct PlaceVisitingView: View {
                     ), likeTap: {
                         viewModel.patchPlaceLike()
                     }, reviewTap: {
-                        // TODO: - 리뷰 남기기 화면으로 이동
-                        viewModel.show()
+                        viewModel.showReview(placeId: place.placeId)
                     })
 
                     buttonGroup
@@ -47,11 +46,10 @@ struct PlaceVisitingView: View {
                         text: "길 찾기",
                         action: {
                         },
-                        width: 370,
+                        width: UIScreen.screenWidth - 32,
                         height: 55,
                         onoff: .on
                     )
-                    .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
 
 
                     
@@ -67,8 +65,10 @@ struct PlaceVisitingView: View {
         .task {
             viewModel.getPlaceDetail(placeId: placeId)
         }
-        .fullScreenCover(isPresented: $viewModel.isPresented) {
-            PlaceReviewRegisterView(container: container, placeId: placeId, isPresented: $viewModel.isPresented)
+        .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
+            if let placeId = viewModel.selectedPlaceId {
+                ReviewView(container: container, placeId: placeId, isPresented: $viewModel.isReviewPresented)
+            }
         }
         .navigationBarBackButtonHidden()
     }
@@ -129,7 +129,7 @@ struct PlaceVisitingView: View {
 
         Button(action: {
             if isVisited {
-                viewModel.show()
+                viewModel.showReviewRegister()
             }
         },
                label: {

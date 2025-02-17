@@ -41,6 +41,13 @@ class DIYCourseViewModel: ObservableObject {
     /// 무한 스크롤 요청 중?
     var isPrefetching: Bool = false
     
+    // MARK: - 장소 리뷰 화면 Properties
+    /// 장소 리뷰 화면 상태
+    @Published var isReviewPresented: Bool = false
+    
+    /// 평점, 리뷰를 보고자하는 장소 ID
+    var selectedPlaceId: Int? = nil
+    
     // MARK: - Init
     init(container: DIContainer){
         self.container = container
@@ -120,6 +127,13 @@ extension DIYCourseViewModel {
             print("❌ Refresh 오류: \(error)")
         }
                 
+    }
+    
+    /// 장소 리뷰뷰를 보여줍니다
+    /// - Parameter placeId: 리뷰, 평점을 보고자 하는 장소 ID
+    func showReview(placeId: Int) {
+        self.selectedPlaceId = placeId
+        self.isReviewPresented.toggle()
     }
     
 }

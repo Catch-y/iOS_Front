@@ -70,6 +70,8 @@ enum Icon: String {
     case colorReview = "colorReview"
     case warningIntro = "warningIntro"
     
+    case trash = "trash"
+    
     //MARK: - Category
     case breaks = "breaks"
     case cafe = "cafe"

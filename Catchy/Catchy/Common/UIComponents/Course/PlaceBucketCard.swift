@@ -26,6 +26,9 @@ struct PlaceBucketCard: View {
     /// 지울 수 있는지
     let canDelete: Bool
     
+    // MARK: - 장소 리뷰, 평점 화면 Properties
+    // let reviewTap: (Int) -> Void
+    
     // MARK: - Init
     /// 클로즈 버튼이 없으면, 삭제 기능 X
     init(placeSearchResponseData: PlaceDataProtocol, index: Int, canDelete: Bool = true, closeButtonTap: @escaping ((Int) -> Void)) {
@@ -42,7 +45,7 @@ struct PlaceBucketCard: View {
             
             numberingLabel
             
-            if let url = URL(string: placeSearchResponseData.placeImage) {
+            if let url = URL(string: DataFormatter.shared.formattedImageUrl(placeImageURL: placeSearchResponseData.placeImage)) {
                 KFImage(url)
                     .placeholder{
                         ProgressView()
@@ -154,5 +157,7 @@ struct PlaceBucketCard: View {
         })
         .padding(.top, -6)
     }
+    
+    
 }
 

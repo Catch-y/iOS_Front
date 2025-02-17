@@ -21,10 +21,17 @@ class PlaceDetailViewModel: ObservableObject {
     @Published var placeDetailResponse: PlaceDetailResponse?
     
     /// 장소 카테고리 선택 뷰 상태
-    @Published var isPresented: Bool = false
+    @Published var isCategoryViewPresented: Bool = false
     
     /// 로딩중인가?
     @Published var isLoading: Bool = false
+    
+    // MARK: - 리뷰, 평점 보기 화면 Properties
+    /// 리뷰, 평점 화면 상태
+    @Published var isReviewPresented: Bool = false
+    
+    /// 리뷰, 평점을 보고자하는 장소 ID
+    var selectedPlaceId: Int? = nil
     
     init(container: DIContainer) {
         self.container = container
@@ -80,7 +87,14 @@ extension PlaceDetailViewModel {
     }
         
     /// 장소 카테고리 등록 화면을 보여줍니다
-    func show(){
-        isPresented.toggle()
+    func showCategoryView(){
+        isCategoryViewPresented.toggle()
+    }
+    
+    /// 리뷰, 평점 화면을 보여줍니다
+    /// - Parameter placeId: 리뷰, 평점을 보고자하는 장소 ID
+    func showReview(placeId: Int) {
+        self.selectedPlaceId = placeId
+        self.isReviewPresented.toggle()
     }
 }
