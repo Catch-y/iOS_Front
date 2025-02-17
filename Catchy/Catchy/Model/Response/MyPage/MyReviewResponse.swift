@@ -48,19 +48,3 @@ struct ReviewImage: Codable {
     let reviewImageId: Int
     let imageUrl: String
 }
-
-extension ReviewData: ReviewDataProtocol {
-    var images: [any ReviewImageProtocol] {
-        return reviewImages.map { $0 }
-    }
-    
-    var userName: String? {
-        return nil
-    }
-    
-    var placeOrCourseName: String? {
-        return name
-    }
-}
-
-extension ReviewImage: ReviewImageProtocol { }

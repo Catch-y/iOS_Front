@@ -11,7 +11,8 @@ import SwiftUI
 struct SettingView: View {
     
     @StateObject var viewModel: SettingViewModel
-    
+    @EnvironmentObject var container: DIContainer
+    @EnvironmentObject var appFlowViewMode: AppFlowViewModel
     
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
@@ -21,7 +22,7 @@ struct SettingView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 28, content: {
             CustomNavigation(action: {
-                print("hello")
+                container.navigationRouter.pop()
             }, title: "환경 설정", rightNaviIcon: nil, isShadow: true)
             .padding(.bottom, 8)
             
@@ -37,6 +38,7 @@ struct SettingView: View {
             
         })
         .ignoresSafeArea(.all)
+        .navigationBarBackButtonHidden(true)
         
     }
     

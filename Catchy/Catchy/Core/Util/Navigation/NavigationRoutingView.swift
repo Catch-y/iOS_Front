@@ -24,9 +24,15 @@ struct NavigationRoutingView: View {
         case .similarView:
             SimilarPlacesView(container: container)
                 .environmentObject(container)
-        case .courseDetailView(let courseId) :
+        case .courseDetailView(let courseId):
             CourseDetailView(container: container, courseId: courseId)
                 .environmentObject(container)
+            
+        case .mypageOption:
+            SettingView(container: container)
+                .environmentObject(container)
+                .environmentObject(appFlowViewModel)
+            
         }
     }
 }

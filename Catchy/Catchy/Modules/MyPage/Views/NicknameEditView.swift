@@ -50,6 +50,7 @@ struct NicknameEditView: View {
                     height: 36,
                     onoff: viewModel.isDuplicateChecked ? .on : .off
                 )
+                .disabled(!viewModel.isDuplicateChecked)
                 
             }
             .frame(height: 192)

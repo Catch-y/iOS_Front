@@ -14,4 +14,5 @@ enum NavigationDestination: Hashable {
     case searchView
     case similarView /* 비슷한 취향을 가진 장소 보기 */
     case courseDetailView(courseId: Int) /* 코스 상세화면 보기 */
+    case mypageOption
 }

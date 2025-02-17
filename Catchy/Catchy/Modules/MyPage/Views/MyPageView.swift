@@ -65,7 +65,7 @@ struct MyPageView: View {
     
     private func settingsButton() -> some View {
         Button(action: {
-            print("설정 버튼 클릭")
+            container.navigationRouter.push(to: .mypageOption)
         }) {
             Icon.settingIcon.image
                 .resizable()

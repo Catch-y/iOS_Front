@@ -67,10 +67,6 @@ extension NicknameEditViewModel {
                     throw APIError.serverError(message: responseData.message, code: responseData.code)
                 }
                 
-                if let _ = responseData.result {
-                    throw APIError.emptyResult
-                }
-                
                 print("Patchy Nickname")
                 return responseData
             }
@@ -80,9 +76,10 @@ extension NicknameEditViewModel {
                 case .finished:
                     print("✅ User Nickname Patch Completed")
                 case .failure(let failure):
-                    print("❌ User Nickname Patch Fialed: \(failure)")
+                    print("❌ User Nickname Patch Failed: \(failure)")
                 }
             }, receiveValue: { response in
+                print("닉네임 변경 결과: \(response)")
                 if let response = response.result {
                     UserState.shared.setUserNickname(response.nickname)
                     completion(true)

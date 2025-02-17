@@ -67,7 +67,7 @@ extension MemeberAPITarget: APITargetType {
                         {
                           "isSuccess": true,
                           "code": "string",
-                          "message": "string",
+                          "message": "사용가능한 닉네임입니다.",
                           "result": {}
                         }
             """.data(using: .utf8)!
