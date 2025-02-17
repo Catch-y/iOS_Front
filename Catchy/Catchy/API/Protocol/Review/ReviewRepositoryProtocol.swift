@@ -17,4 +17,7 @@ protocol ReviewRepositoryProtocol {
     
     /// 코스 리뷰 전체보기 API
     func getCourseReviewInfoData(courseId: Int, pageSize: Int, lastReviewId: Int?) -> AnyPublisher<ResponseData<CourseReviewInfoResponse>, MoyaError>
+    
+    /// 리뷰 신고하기
+    func postReviewReportData(reviewId: Int, request: ReviewReportRequest) -> AnyPublisher<ResponseData<ReviewReportResponse>, MoyaError>
 }

@@ -12,7 +12,6 @@ import Moya
 
 class ReviewRepository: ReviewRepositoryProtocol {
     
-    
     let service: ReviewServiceProtocol
     
     init(service: ReviewServiceProtocol = ReviewService()) {
@@ -25,5 +24,9 @@ class ReviewRepository: ReviewRepositoryProtocol {
     
     func getCourseReviewInfoData(courseId: Int, pageSize: Int, lastReviewId: Int?) -> AnyPublisher<ResponseData<CourseReviewInfoResponse>, Moya.MoyaError> {
         return service.getCourseReviewInfo(courseId: courseId, pageSize: pageSize, lastReviewId: lastReviewId)
+    }
+    
+    func postReviewReportData(reviewId: Int, request: ReviewReportRequest) -> AnyPublisher<ResponseData<ReviewReportResponse>, Moya.MoyaError> {
+        return service.postReviewReport(reviewId: reviewId, request: request)
     }
 }
