@@ -24,10 +24,10 @@ class ReviewReportViewModel: ObservableObject {
 }
 
 extension ReviewReportViewModel {
-    func postReviewReportInfo(reviewReportRequest: PostReviewReportRequest) {
+    func postReviewReportInfo(reviewId: Int, request: ReviewReportRequest) {
         isLoading = true
         
-        container.useCaseProvider.reviewReportUseCase.executePostReviewReportInfo(reviewReportRequest: reviewReportRequest)
+        container.useCaseProvider.reviewUseCase.executeReviewReport(reviewId: reviewId, request: request)
             .tryMap { responseData -> ResponseData<ReviewReportResponse> in
                 if !responseData.isSuccess {
                     throw APIError.serverError(message: responseData.message, code: responseData.code)

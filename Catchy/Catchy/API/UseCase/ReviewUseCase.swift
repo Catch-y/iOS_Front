@@ -11,7 +11,7 @@ import CombineMoya
 import Moya
 
 class ReviewUseCase: ReviewUseCaseProtocol {
-
+    
     let repository: ReviewRepositoryProtocol
     
     init(repository: ReviewRepositoryProtocol = ReviewRepository()) {
@@ -26,6 +26,12 @@ class ReviewUseCase: ReviewUseCaseProtocol {
     
     func executeCourseReviewResponse(courseId: Int, pageSize: Int, lastReviewId: Int?) -> AnyPublisher<ResponseData<CourseReviewInfoResponse>, Moya.MoyaError> {
         return repository.getCourseReviewInfoData(courseId: courseId, pageSize: pageSize, lastReviewId: lastReviewId)
+            .mapError { $0 as MoyaError }
+            .eraseToAnyPublisher()
+    }
+    
+    func executeReviewReport(reviewId: Int, request: ReviewReportRequest) -> AnyPublisher<ResponseData<ReviewReportResponse>, Moya.MoyaError> {
+        return repository.postReviewReportData(reviewId: reviewId, request: request)
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }

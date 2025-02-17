@@ -123,11 +123,16 @@ struct ReviewCard: View {
                     
                     Spacer()
                     
-                    /* 신고하기 버튼 */
-                    Text("신고하기")
-                        .font(.caption)
-                        .foregroundStyle(Color.g5)
-                        .underline()
+                    Button {
+                        withAnimation {
+                            // TODO: - 신고하기 로직
+                        }
+                    } label: {
+                        Text("신고하기")
+                            .font(.caption)
+                            .foregroundStyle(Color.g5)
+                            .underline()
+                    }
                 })
             )
             
@@ -140,10 +145,16 @@ struct ReviewCard: View {
                     Spacer()
                     
                     // 신고하기 버튼
-                    Text("신고하기")
-                        .font(.caption)
-                        .foregroundColor(.g5)
-                        .underline()
+                    Button {
+                        withAnimation {
+                            // TODO: - 신고하기 로직
+                        }
+                    } label: {
+                        Text("신고하기")
+                            .font(.caption)
+                            .foregroundStyle(Color.g5)
+                            .underline()
+                    }
                 })
             )
         }
