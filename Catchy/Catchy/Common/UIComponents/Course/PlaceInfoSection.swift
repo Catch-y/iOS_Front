@@ -97,10 +97,8 @@ struct PlaceInfoSection: View {
             PlaceTimeText(timeText: place.activeTime)
                 .padding(.bottom, 4)
             
-            Link(destination: URL(string: place.placeSite )!) {
-                PlaceDomainButton(domain: place.placeSite).padding(.leading, 1)
-            }
-            
+            PlaceDomainButton(domain: place.placeSite).padding(.leading, 1)
+
         }
         .padding(.horizontal, 11)
         
