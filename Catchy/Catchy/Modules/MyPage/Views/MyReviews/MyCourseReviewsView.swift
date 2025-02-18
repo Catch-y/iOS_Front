@@ -23,10 +23,19 @@ struct MyCourseReviewsView: View {
                 MainProgressComponents()
             } else {
                 if viewModel.myCourseReviews.isEmpty {
-                    CustomEmptyStateView(label: "작성하신 코스 리뷰가 없습니다.", subLabel: "내가 방문한 코스에 대한 리뷰를 적어주세요!")
-                        .padding(.top, 231)
-                    
+                    VStack(content: {
+                        HStack(content: {
+                            reviewCountSection(count: 0)
+                            
+                            Spacer()
+                        })
+                        
+                        CustomEmptyStateView(label: "작성하신 코스 리뷰가 없습니다.", subLabel: "내가 방문한 코스에 대한 리뷰를 적어주세요!")
+                            .padding(.top, 231)
+                        
+                    })
                     Spacer()
+                    
                 } else {
                     contentSection(data: viewModel.myCourseReviews)
                 }
@@ -51,7 +60,7 @@ struct MyCourseReviewsView: View {
             Text("작성한 리뷰")
                 .font(.body2)
                 .foregroundStyle(Color.g6)
-            Text("\(count)")
+            Text("\(count)개")
                 .font(.body2)
                 .foregroundStyle(Color.m6)
         }

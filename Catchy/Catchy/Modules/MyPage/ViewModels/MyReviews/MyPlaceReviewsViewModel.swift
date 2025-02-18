@@ -44,7 +44,9 @@ extension MyPlaceReviewsViewModel {
     func getMyPlaceReviews() {
         guard !isMyPlaceReviewsLoading, !isLast else { return }
         
-        isMyPlaceReviewsLoading = true
+        if isMyPlaceReviewsLoading {
+            isMyPlaceReviewsLoading = true
+        }
         
         let request = MyPlaceReviewRequest(
             pageSize: 10,

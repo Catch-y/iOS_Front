@@ -10,6 +10,7 @@ import SwiftUI
 struct CourseReviewView: View {
     
     @StateObject var viewModel: CourseReviewViewModel
+    @EnvironmentObject var container: DIContainer
     
     // MARK: - 장소 리뷰, 평점 화면 Propertes
     /// 현재 장소 ID
@@ -27,37 +28,30 @@ struct CourseReviewView: View {
     
     // MARK: - Body
     var body: some View {
-        
-        
         VStack(alignment: .center, spacing: 28, content: {
-            if !viewModel.isLoading {
                 CustomNavigation(action: {
-                    isPresented.toggle()
+                    container.navigationRouter.pop()
                 }, title: "평점, 리뷰 보기", leftNaviIcon: nil, isShadow: true)
-                
-                if let data = viewModel.courseReviewData {
+            if !viewModel.isLoading {
+                if !viewModel.courseReviewData.isEmpty {
                     ScrollView(.vertical, content: {
-                        topReviewInfo(data: data)
+                        topReviewInfo()
                             .padding(.horizontal, 16)
-                        if !data.content.isEmpty {
-                            reviewTableSection(content: data.content)
-                                .padding(.top, 15)
-                                .padding(.horizontal, 16)
-                        } else {
-                            infoView()
-                                .padding(.top, 107)
-                        }
+                        reviewTableSection()
+                            .padding(.top, 15)
+                            .padding(.horizontal, 16)
                     })
                 } else {
-                    LoadingView()
+                    infoView()
+                        .padding(.top, 107)
                 }
             } else {
-                LoadingView()
-            }
-        })
+                MainProgressComponents()
+                }
+            })
         .ignoresSafeArea(.all)
         .task {
-            viewModel.getCourseReviewData(courseId: courseId, lastReviewId: nil)
+            viewModel.getCourseReviewData(courseId: self.courseId)
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -81,10 +75,10 @@ struct CourseReviewView: View {
     /// 상단 리뷰 평점 정보
     /// - Parameter data: 리뷰 데이터를 담고 있는 ReviewResponse
     /// - Returns: 리뷰 평점과 총 리뷰 개수를 보여주는 상단 뷰
-    private func topReviewInfo(data: CourseReviewInfoResponse) -> some View {
+    private func topReviewInfo() -> some View {
         VStack(alignment: .leading, spacing: 11, content: {
-            reviewTotalCount(totalCount: data.totalCount)
-            reviewTotalRating(averageRating: data.courseRating)
+            reviewTotalCount(totalCount: viewModel.totalCount)
+            reviewTotalRating(averageRating: viewModel.courseRating)
         })
         
         .padding(.top, 19)
@@ -142,9 +136,9 @@ struct CourseReviewView: View {
     /// 하단 리뷰 테이블 섹션
     /// - Parameter content: 리뷰 데이터 배열
     /// - Returns: 리뷰 목록과 구분선을 포함하는 뷰
-    private func reviewTableSection(content: [CourseReviewContents]) -> some View {
+    private func reviewTableSection() -> some View {
         VStack(alignment: .center, spacing: 8, content: {
-            ForEach(content, id: \.reviewId) { review in
+            ForEach(viewModel.courseReviewData, id: \.id) { review in
                 ReviewCard(
                     cardType: .ratingReview,
                     reviewType: .course,
@@ -158,7 +152,13 @@ struct CourseReviewView: View {
                     date: review.createdAt
                     )
                 .padding(.vertical, 30)
-                if review.reviewId != content.last?.reviewId {
+                .task {
+                    if viewModel.courseReviewData.last?.reviewId == review.reviewId {
+                        viewModel.getCourseReviewData(courseId: courseId)
+                    }
+                }
+                
+                if review.reviewId != viewModel.courseReviewData.last?.reviewId {
                     Divider()
                         .background(Color.g3)
                 }

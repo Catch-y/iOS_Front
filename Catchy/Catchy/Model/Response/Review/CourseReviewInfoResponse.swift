@@ -21,7 +21,9 @@ struct CourseReviewInfoResponse: Codable {
     let last: Bool
 }
 
-struct CourseReviewContents: Codable, Hashable {
+struct CourseReviewContents: Codable, Identifiable {
+    
+    var id = UUID()
     
     /// 리뷰 ID
     let reviewId: Int
@@ -37,4 +39,12 @@ struct CourseReviewContents: Codable, Hashable {
     
     /// 작성자 닉네임
     let creatorNickname: String
+    
+    enum CodingKeys: String, CodingKey {
+        case reviewId
+        case comment
+        case reviewImages
+        case createdAt
+        case creatorNickname
+    }
 }

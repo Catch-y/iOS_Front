@@ -258,7 +258,7 @@ extension ReviewAPITarget: APITargetType {
                     },
                     {
                         "reviewId": 9,
-                        "comment": "청결 상태가 조금 아쉬웠어요.",
+                        "comment": "청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.",
                         "reviewImages": [],
                         "createdAt": "2025.01.12",
                         "creatorNickname": "CleanFreak"
@@ -280,7 +280,7 @@ extension ReviewAPITarget: APITargetType {
                         "creatorNickname": "PhotoLover"
                     },
                 ],
-                "last": true
+                "last": false
             }
         }
         

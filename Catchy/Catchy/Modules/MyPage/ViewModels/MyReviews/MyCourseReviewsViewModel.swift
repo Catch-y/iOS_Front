@@ -42,8 +42,10 @@ extension MyCourseReviewsViewModel {
         guard !isMyCourseReviewsLoading, !isLast else {
             return
         }
-        
-        isMyCourseReviewsLoading = true
+    
+        if myCourseReviews.isEmpty {
+            isMyCourseReviewsLoading = true
+        }
 
         let review = MyCourseReviewRequest(pageSize: 10, lastReviewId: lastReviewId)
         

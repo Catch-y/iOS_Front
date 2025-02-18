@@ -29,7 +29,7 @@ class SimilarPlacesViewModel: ObservableObject {
     func getMoreRecommendPlaceRespponse(isRefresh: Bool = false) {
         guard !isLoading, !isLastPage else { return }
         
-        if !isRefresh {
+        if !isRefresh  {
             self.isLoading = true
         }
 

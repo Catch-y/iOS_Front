@@ -481,7 +481,7 @@ extension MyPageAPITarget: APITargetType {
                     "visitedDate": "2025-01-10"
                   }
                 ],
-                "last": true
+                "last": false
               }
             }
             
