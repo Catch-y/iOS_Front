@@ -39,7 +39,7 @@ struct PlaceSearchView: View {
                 
         }
         .task {
-            viewModel.getPlaceList()
+            viewModel.getPlaceListByRegion()
         }
         .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
             if let placeId = viewModel.selectedPlaceId {

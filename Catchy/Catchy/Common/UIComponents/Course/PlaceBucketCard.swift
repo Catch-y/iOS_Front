@@ -10,6 +10,8 @@ import Kingfisher
 
 struct PlaceBucketCard: View {
     
+    @EnvironmentObject var container: DIContainer
+    
     // MARK: - Properties
     /// 애니메이션 변수
     @State private var isRemoved = false
@@ -21,17 +23,18 @@ struct PlaceBucketCard: View {
     let index: Int
     
     /// X 버튼 탭시 실행
-    var closeButtonTap: ((Int) -> Void)
+    var closeButtonTap: (() -> Void)
     
     /// 지울 수 있는지
     let canDelete: Bool
     
-    // MARK: - 장소 리뷰, 평점 화면 Properties
-    // let reviewTap: (Int) -> Void
-    
+    // MARK: - 장소 리뷰 화면 Properties
+    /// 장소 리뷰 보기 화면 상태
+    @State var isReviewPresented: Bool = false
+        
     // MARK: - Init
     /// 클로즈 버튼이 없으면, 삭제 기능 X
-    init(placeSearchResponseData: PlaceDataProtocol, index: Int, canDelete: Bool = true, closeButtonTap: @escaping ((Int) -> Void)) {
+    init(placeSearchResponseData: PlaceDataProtocol, index: Int, canDelete: Bool = true, closeButtonTap: @escaping () -> Void) {
         self.placeSearchResponseData = placeSearchResponseData
         self.index = index
         self.closeButtonTap = closeButtonTap
@@ -79,6 +82,10 @@ struct PlaceBucketCard: View {
         .frame(maxWidth: .infinity)
         .offset(x: isRemoved ? 1000 : 0)
         .animation(.easeInOut(duration: 0.5), value: isRemoved)
+        .fullScreenCover(isPresented: $isReviewPresented) {
+            PlaceReviewView(container: container, placeId: placeSearchResponseData.placeId, isPresented: $isReviewPresented)
+        }
+        
 
     }
     
@@ -112,7 +119,7 @@ struct PlaceBucketCard: View {
                 
                 PlaceRatingText(rating: placeSearchResponseData.rating)
                 
-                placeReviewButton(reviewCount: placeSearchResponseData.reviewCount)
+                reviewBtn
             }
             .padding(.top, 8)
         }
@@ -147,7 +154,7 @@ struct PlaceBucketCard: View {
         
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 withAnimation(.bouncy(extraBounce: 0.03)) {
-                    closeButtonTap(index)
+                    closeButtonTap()
 
                 }
             }
@@ -160,6 +167,26 @@ struct PlaceBucketCard: View {
         .padding(.top, -6)
     }
     
+    /// 장소 리뷰 버튼
+    private var reviewBtn: some View {
+        Button(action: {
+            isReviewPresented.toggle()
+        }, label: {
+            HStack(spacing: 6) {
+                Icon.review.image.fixedSize()
+                
+                Text("리뷰 \(placeSearchResponseData.reviewCount)개")
+                    .font(.caption)
+                    .foregroundStyle(.g5)
+                    .lineLimit(1)
+            
+                
+                Icon.rightChevron.image.resizable()
+                    .frame(width: 4, height: 8)
+            }
+
+        })
+    }
     
 }
 

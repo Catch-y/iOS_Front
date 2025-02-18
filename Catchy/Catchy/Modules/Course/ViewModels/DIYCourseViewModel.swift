@@ -60,7 +60,7 @@ extension DIYCourseViewModel {
     
     // MARK: - API 호출 함수
     /// 장소 검색 - 지역명 기반
-    func getPlaceList() {
+    func getPlaceListByRegion() {
         
         guard !isPrefetching, !isLast else { return }
         
@@ -122,7 +122,7 @@ extension DIYCourseViewModel {
         do {
             try await Task.sleep(nanoseconds: 1_500_000_000)
             self.placeSearchResponse = nil
-            self.getPlaceList()
+            self.getPlaceListByRegion()
         } catch {
             print("❌ Refresh 오류: \(error)")
         }
