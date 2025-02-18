@@ -11,7 +11,8 @@ import SwiftUI
 struct SettingView: View {
     
     @StateObject var viewModel: SettingViewModel
-    
+    @EnvironmentObject var container: DIContainer
+    @EnvironmentObject var appFlowViewMode: AppFlowViewModel
     
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
@@ -21,7 +22,7 @@ struct SettingView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 28, content: {
             CustomNavigation(action: {
-                print("hello")
+                container.navigationRouter.pop()
             }, title: "환경 설정", rightNaviIcon: nil, isShadow: true)
             .padding(.bottom, 8)
             
@@ -37,6 +38,7 @@ struct SettingView: View {
             
         })
         .ignoresSafeArea(.all)
+        .navigationBarBackButtonHidden(true)
         
     }
     
@@ -51,11 +53,11 @@ struct SettingView: View {
                 .foregroundStyle(Color.g7)
                 .padding(.bottom, 15)
             
-            ForEach(category.items.indices, id: \.self) { index in
-                settingItem(title: category.items[index].title, action: category.items[index].action)
+            ForEach(category.items(viewModel: viewModel), id: \.id) { item in
+                settingItem(title: item.title, action: item.action)
                 
                 /// 마지막 아이템이 아닐 경우 Divider 추가
-                if index != category.items.indices.last {
+                if item.title != category.items(viewModel: viewModel).last?.title {
                     Divider()
                 }
             }
@@ -74,7 +76,7 @@ struct SettingView: View {
             HStack {
                 Text(title)
                     .font(.Body1_2)
-                    .foregroundStyle(Color.g7)
+                    .foregroundStyle(title == "회원탈퇴" ? Color.red : Color.g7)
                 Spacer()
             }
         }

@@ -13,9 +13,13 @@ struct MyPageView: View {
     
     @StateObject var viewModel: MyPageViewModel
     @EnvironmentObject var container: DIContainer
+    @EnvironmentObject var appFlowViewModel: AppFlowViewModel
     
-    init(container: DIContainer) {
+    @Binding var isEditingNickname: Bool
+    
+    init(container: DIContainer, isEditingNickname: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: MyPageViewModel(container: container))
+        self._isEditingNickname = isEditingNickname
     }
     
     // MARK: - Body
@@ -36,6 +40,8 @@ struct MyPageView: View {
                     LoadingView()
                 }
             }
+            .padding(.top, 62)
+            .padding(.bottom, 110)
         }
         .background(Color(.g1))
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
@@ -43,13 +49,6 @@ struct MyPageView: View {
             viewModel.getProfile()
             viewModel.getBookmarkCourseList(lastCourseId: nil)
         }
-        .overlay(
-            Group {
-                if viewModel.isEditingNickname {
-                    NicknameEditView(isPresented: $viewModel.isEditingNickname, container: DIContainer())
-                }
-            }
-        )
     }
     
     // MARK: - 마이페이지 상단 섹션 함수
@@ -66,7 +65,7 @@ struct MyPageView: View {
     
     private func settingsButton() -> some View {
         Button(action: {
-            print("설정 버튼 클릭")
+            container.navigationRouter.push(to: .mypageOption)
         }) {
             Icon.settingIcon.image
                 .resizable()
@@ -84,13 +83,16 @@ struct MyPageView: View {
                 // TODO: - 프로필 수정 액션
                 print("프로필 수정 클릭")
             }
-            Text(data.nickname)
+            Text(UserState.shared.getUserNickname())
                 .font(.title3)
                 .fontWeight(.bold)
                 .foregroundColor(.black)
                 .padding(.leading, 9)
+            
             Button(action: {
-                viewModel.isEditingNickname = true
+                withAnimation {
+                    isEditingNickname.toggle()
+                }
             }) {
                 Text("닉네임 수정")
                     .font(.caption)
@@ -111,7 +113,7 @@ struct MyPageView: View {
     private func myPageMenuButtons() -> some View {
         let menuItems: [(icon: Image, title: String, action: () -> Void)] = [
             (Icon.document.image, "취향 설문", { print("취향 설문 클릭") }),
-            (Icon.myPageHeart.image, "선호 장소", { print("선호 장소 클릭") }),
+            (Icon.myPageHeart.image, "선호 장소", { container.navigationRouter.push(to: .favoritePlacesView) }),
             (Icon.myPageReview.image, "내 리뷰", { print("내 리뷰 클릭") })
         ]
         return HStack(spacing: 17) {
@@ -154,7 +156,7 @@ struct MyPageView: View {
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
-            MyPageView(container: DIContainer())
+            MyPageView(container: DIContainer(), isEditingNickname: .constant(true))
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
         }

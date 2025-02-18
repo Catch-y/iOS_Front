@@ -16,7 +16,13 @@ class MemberUseCase: MemberUseCaseProtocol {
         self.repository = repository
     }
     
-    func executePatchNickname(nickname: String) -> AnyPublisher<ResponseData<EmptyResponse>, MoyaError> {
+    func executePostNickname(nickname: String) -> AnyPublisher<ResponseData<EmptyResponse>, MoyaError> {
+        return repository.postNickname(nickname: nickname)
+            .mapError { $0 as MoyaError }
+            .eraseToAnyPublisher()
+    }
+    
+    func executePatchNickname(nickname: String) -> AnyPublisher<ResponseData<PatchNicknameResponse>, MoyaError> {
         return repository.patchNicknameData(nickname: nickname)
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()

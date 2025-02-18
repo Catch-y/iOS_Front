@@ -11,8 +11,10 @@ import Moya
 
 protocol MemberUseCaseProtocol {
     
-    /* 닉네임 수정 */
-    func executePatchNickname(nickname: String) -> AnyPublisher<ResponseData<EmptyResponse>, MoyaError>
+    func executePostNickname(nickname: String) -> AnyPublisher<ResponseData<EmptyResponse>, MoyaError>
+    
+    /* 닉네임 변경 */
+    func executePatchNickname(nickname: String) -> AnyPublisher<ResponseData<PatchNicknameResponse>, MoyaError>
     
     /* 카테고리 전달 */
     func executePostServeyCategory(categories: [String]) -> AnyPublisher<ResponseData<StepOneResponse>, MoyaError>

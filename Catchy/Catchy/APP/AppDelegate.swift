@@ -35,9 +35,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let tokenStriing = deviceToken.map { String(format: "%02x", $0)}.joined()
+        let tokenString = deviceToken.map { String(format: "%02x", $0)}.joined()
+        print("디바이스 토큰: \(tokenString)")
+        
         Messaging.messaging().apnsToken = deviceToken
-        NotificationCenter.default.post(name: .deviceTokenReceived, object: tokenStriing)
+        
+        NotificationCenter.default.post(name: .deviceTokenReceived, object: tokenString)
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: any Error) {

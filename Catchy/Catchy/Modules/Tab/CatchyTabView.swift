@@ -27,6 +27,8 @@ struct CatchyTabView: View {
     /// DIY 코스 생성화면 나온 상태
     @State private var isDIYPresented: Bool = false
     
+    @State private var showEditingNickname: Bool = false
+    
     
     @EnvironmentObject var container: DIContainer
     @EnvironmentObject var appFlowViewModel: AppFlowViewModel
@@ -43,6 +45,7 @@ struct CatchyTabView: View {
                         HomeView(container: container)
                     case .course:
                         CourseView(container: container, isAILoadingPresented: $isAILoadingPresented, isDIYPresented: $isDIYPresented)
+                        
                         AddFloatingButton(isOpen: $isFloating, onSubButtonTap: {
                             segment in
                             switch segment {
@@ -58,17 +61,22 @@ struct CatchyTabView: View {
                     case .group:
                         Text("11")
                     case .mypage:
-                        Text("11")
+                        MyPageView(container: container, isEditingNickname: $showEditingNickname)
+                            .environmentObject(container)
+                            .environmentObject(appFlowViewModel)
                     }
                     
                     CustomTab(selectedTab: $selectedTab)
                     
-                    if isFloating {
+                    if isFloating || showEditingNickname {
                         Color.black.opacity(0.8)
                             .ignoresSafeArea(.all)
                     }
-
                     
+                    if showEditingNickname {
+                        NicknameEditView(isPresented: $showEditingNickname, container: DIContainer())
+                            .zIndex(3)
+                    }
                     
                 })
                 .opacity(tabOpacity)

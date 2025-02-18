@@ -26,12 +26,12 @@ enum SettingCategory: CaseIterable {
         }
     }
     
-    var items: [SettingItem] {
+    func items(viewModel: SettingViewModel) -> [SettingItem] {
         switch self {
         case .profileSettings:
             return [
-                SettingItem(title: "로그아웃", action: { print("로그아웃 클릭") }),
-                SettingItem(title: "회원 탈퇴", action: { print("회원 탈퇴 클릭") })
+                SettingItem(title: "로그아웃", action: { viewModel.logout() } ),
+                SettingItem(title: "회원탈퇴", action: { viewModel.deleteUser() })
             ]
         case .termsAndPrivacy:
             return [
@@ -49,7 +49,8 @@ enum SettingCategory: CaseIterable {
     }
 }
 
-struct SettingItem {
+struct SettingItem: Identifiable {
+    let id = UUID()
     let title: String
     let action: () -> Void
 }

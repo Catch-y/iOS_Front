@@ -16,7 +16,11 @@ class MemberRepository: MemberRepositoryProtocol {
         self.service = service
     }
     
-    func patchNicknameData(nickname: String) -> AnyPublisher<ResponseData<EmptyResponse>, MoyaError> {
+    func postNickname(nickname: String) -> AnyPublisher<ResponseData<EmptyResponse>, MoyaError> {
+        return service.postNickname(nickname: nickname)
+    }
+    
+    func patchNicknameData(nickname: String) -> AnyPublisher<ResponseData<PatchNicknameResponse>, MoyaError> {
         return service.patchNickname(nickname: nickname)
     }
     
