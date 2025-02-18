@@ -20,7 +20,7 @@ struct MyCourseReviewsView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 22) {
             if viewModel.isMyCourseReviewsLoading {
-                LoadingView()
+                MainProgressComponents()
             } else if let data = viewModel.myCourseReviewsData {
                 contentSection(data: data)
                     .padding(.horizontal, 16)

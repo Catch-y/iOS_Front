@@ -11,9 +11,9 @@ class UserState: ObservableObject {
     
     static let shared = UserState()
     
-    private var userNickname: String
+    @Published private(set) var userNickname: String
     private var userEmail: String
-    private let loginType: SocialLoginType
+    private var loginType: SocialLoginType
     
     init(
         userNickname: String = "",
@@ -26,6 +26,7 @@ class UserState: ObservableObject {
     }
     
     public func setUserNickname(_ userNickname: String) {
+        objectWillChange.send()
         UserDefaults.standard.setValue(userNickname, forKey: "UserNickname")
     }
     
@@ -64,5 +65,6 @@ class UserState: ObservableObject {
     public func clearProfile() {
         self.userNickname = ""
         self.userEmail = ""
+        self.loginType = .none
     }
 }

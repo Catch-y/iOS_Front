@@ -29,11 +29,13 @@ struct NavigationRoutingView: View {
                 .environmentObject(container)
             
         case .mypageOption:
-            SettingView(container: container)
+            SettingView(container: container, appFlowViewModel: appFlowViewModel)
                 .environmentObject(container)
-                .environmentObject(appFlowViewModel)
         case .favoritePlacesView:
             FavoritePlacesView(container: container)
+                .environmentObject(container)
+        case .myReviewsView:
+            MyReviewsView(container: container)
                 .environmentObject(container)
         }
     }

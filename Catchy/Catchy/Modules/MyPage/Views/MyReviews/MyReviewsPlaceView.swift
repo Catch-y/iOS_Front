@@ -29,7 +29,7 @@ struct MyPlaceReviewsView: View {
                     Spacer()
                 }
             } else {
-                LoadingView()
+                MainProgressComponents()
             }
         })
         .onAppear {
