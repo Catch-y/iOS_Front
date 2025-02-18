@@ -8,17 +8,26 @@
 import SwiftUI
 import Combine
 
-/// ViewModel for MyPlaceReviewsView
+/// 내 장소 리뷰 조회 ViewModel
 class MyPlaceReviewsViewModel: ObservableObject {
     
-    /// 내 장소 리뷰 조회 Response
-    @Published var myPlaceReviewsData: MyPlaceReviewResponse?
+    /// 전체 장소 리뷰 목록
+    @Published var myPlaceReviews: [PlaceReviewData] = []
     
     /// API 로딩 상태
-    @Published var isLoading: Bool = false
+    @Published var isMyPlaceReviewsLoading: Bool = false
     
     /// 리뷰 개수
     @Published var reviewCount: Int = 0
+    
+    /// 마지막 페이지인지 여부
+    private var isLast: Bool = false
+    
+    /// 현재까지 불러온 마지막 리뷰의 방문일
+    private var lastPlaceReviewDate: String? = nil
+    
+    /// 현재까지 불러온 마지막 리뷰의 ID
+    private var lastReviewId: Int? = nil
     
     let container: DIContainer
     var cancellables = Set<AnyCancellable>()
@@ -28,32 +37,62 @@ class MyPlaceReviewsViewModel: ObservableObject {
     }
 }
 
+// MARK: - Functions
 extension MyPlaceReviewsViewModel {
-    func getMyPlaceReviews(review: MyPlaceReviewRequest) {
-        isLoading = true
-
-        container.useCaseProvider.myPageUseCase.executeGetMyPlaceReviews(review: review)
+    
+    /// 내 장소 리뷰 조회 API 함수
+    func getMyPlaceReviews() {
+        guard !isMyPlaceReviewsLoading, !isLast else { return }
+        
+        isMyPlaceReviewsLoading = true
+        
+        let request = MyPlaceReviewRequest(
+            pageSize: 10,
+            lastPlaceReviewDate: lastPlaceReviewDate,
+            lastReviewId: lastReviewId
+        )
+        
+        container.useCaseProvider.myPageUseCase
+            .executeGetMyPlaceReviews(review: request)
             .tryMap { responseData -> ResponseData<MyPlaceReviewResponse> in
                 if !responseData.isSuccess {
-                    throw APIError.serverError(message: responseData.message, code: responseData.code)
+                    throw APIError.serverError(message: responseData.message,
+                                               code: responseData.code)
                 }
                 return responseData
             }
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
                 guard let self = self else { return }
-                self.isLoading = false
+                self.isMyPlaceReviewsLoading = false
                 switch completion {
                 case .finished:
                     print("✅ Get My Place Reviews Completed")
-                case .failure(let error):
-                    print("❌ Get My Place Reviews Failed: \(error)")
+                case .failure(let failure):
+                    print("❌ Get My Place Reviews Failed: \(failure)")
                 }
+                
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
+                
                 if let result = response.result {
-                    self.myPlaceReviewsData = result
+                    if result.content.isEmpty {
+                        self.myPlaceReviews = []
+                    } else {
+                        myPlaceReviews.append(contentsOf: result.content)
+                    }
+                    
                     self.reviewCount = result.reviewCount
+                    
+                    self.isLast = result.last
+                    
+                    // 6) 다음 페이지 요청을 위해 마지막 리뷰의 date, id 저장
+                    if !self.isLast, let lastItem = self.myPlaceReviews.last {
+                        self.lastPlaceReviewDate = lastItem.visitedDate
+                        self.lastReviewId = lastItem.reviewId
+                    }
+                    
+                    print("🎯 Parsed Place Reviews Data: \(result)")
                 }
             })
             .store(in: &cancellables)

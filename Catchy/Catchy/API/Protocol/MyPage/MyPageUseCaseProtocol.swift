@@ -24,4 +24,7 @@ protocol MyPageUseCaseProtocol {
     
     /// 내 리뷰 조회 API
     func executeGetMyPlaceReviews(review: MyPlaceReviewRequest) -> AnyPublisher<ResponseData<MyPlaceReviewResponse>, MoyaError>
+    
+    /// 리뷰 삭제 API
+    func executeDeleteReview(reviewId: Int, reviewType: ReviewType) -> AnyPublisher<ResponseData<DeleteReviewResponse>, MoyaError>
 }

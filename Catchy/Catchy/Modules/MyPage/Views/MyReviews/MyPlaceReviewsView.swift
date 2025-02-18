@@ -19,29 +19,29 @@ struct MyPlaceReviewsView: View {
     // MARK: - Body
     var body: some View {
         VStack(alignment: .center, spacing: 22, content: {
-            if !viewModel.isLoading {
-                if let data = viewModel.myPlaceReviewsData {
-                    contentSection(data: data)
-                        .padding(.horizontal, 16)
-                } else {
+            if viewModel.isMyPlaceReviewsLoading {
+                MainProgressComponents()
+            } else {
+                if viewModel.myPlaceReviews.isEmpty {
                     CustomEmptyStateView(label: "작성하신 장소 리뷰가 없습니다.", subLabel: "내가 방문한 장소에 대한 리뷰를 적어주세요!")
                         .padding(.top, 231)
+                    
                     Spacer()
+                } else {
+                    contentSection(data: viewModel.myPlaceReviews)
                 }
-            } else {
-                LoadingView()
             }
         })
-        .onAppear {
-            viewModel.getMyPlaceReviews(review: .init(pageSize: 10, lastPlaceReviewDate: "1", lastReviewId: 1))
+        .task {
+            viewModel.getMyPlaceReviews()
         }
     }
     
     // MARK: - 리뷰 콘텐츠
-    private func contentSection(data: MyPlaceReviewResponse) -> some View {
+    private func contentSection(data: [PlaceReviewData]) -> some View {
         VStack(alignment: .leading, spacing: 22, content: {
-            reviewCountSection(count: data.reviewCount)
-            reviewTableSection(content: data.content)
+            reviewCountSection(count: viewModel.reviewCount)
+            reviewTableSection(content: data)
         })
     }
     
@@ -54,12 +54,13 @@ struct MyPlaceReviewsView: View {
                 .font(.body2)
                 .foregroundStyle(Color.m6)
         })
+        .padding(.horizontal, 16)
     }
     
     private func reviewTableSection(content: [PlaceReviewData]) -> some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 8) {
-                ForEach(content, id: \ .reviewId) { review in
+                ForEach(content, id: \.id) { review in
                     ReviewCard(
                         cardType: .myReview,
                         reviewType: .place,
@@ -73,6 +74,12 @@ struct MyPlaceReviewsView: View {
                         date: review.visitedDate
                     )
                     .padding(.bottom, 40)
+                    .onAppear {
+                        if content.last?.reviewId == review.reviewId {
+                            viewModel.getMyPlaceReviews()
+                        }
+                    }
+
                     if review.reviewId != content.last?.reviewId {
                         Divider()
                             .background(Color.g3)
@@ -80,6 +87,7 @@ struct MyPlaceReviewsView: View {
                     }
                 }
             }
+            .padding(.horizontal, 16)
         }
     }
 }

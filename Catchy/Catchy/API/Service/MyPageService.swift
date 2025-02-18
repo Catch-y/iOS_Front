@@ -46,4 +46,11 @@ class MyPageService: MyPageServiceProtocol {
             .map(ResponseData<MyPlaceReviewResponse>.self)
             .eraseToAnyPublisher()
     }
+    
+    /// 리뷰 삭제 API
+    func deleteReview(reviewId: Int, reviewType: ReviewType) -> AnyPublisher<ResponseData<DeleteReviewResponse>, Moya.MoyaError> {
+        return provider.requestPublisher(.deleteReview(reviewId: reviewId, reviewType: reviewType))
+            .map(ResponseData<DeleteReviewResponse>.self)
+            .eraseToAnyPublisher()
+    }
 }

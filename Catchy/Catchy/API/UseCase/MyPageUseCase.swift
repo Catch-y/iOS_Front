@@ -46,5 +46,13 @@ class MyPageUseCase: MyPageUseCaseProtocol {
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }
+    
+    /// 리뷰 삭제 API
+    func executeDeleteReview(reviewId: Int, reviewType: ReviewType) -> AnyPublisher<ResponseData<DeleteReviewResponse>, Moya.MoyaError> {
+        return repository.deleteReviewData(reviewId: reviewId, reviewType: reviewType)
+            .mapError { $0 as MoyaError }
+            .eraseToAnyPublisher()
+    }
+    
 }
 

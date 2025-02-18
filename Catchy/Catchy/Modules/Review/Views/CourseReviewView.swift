@@ -59,6 +59,7 @@ struct CourseReviewView: View {
         .task {
             viewModel.getCourseReviewData(courseId: courseId, lastReviewId: nil)
         }
+        .navigationBarBackButtonHidden(true)
     }
     
     // MARK: - 리뷰 없을 때, 보일 가이드 뷰

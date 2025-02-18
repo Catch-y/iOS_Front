@@ -86,6 +86,7 @@ class SimilarPlacesViewModel: ObservableObject {
                                 currentPage += 1
                             }
                         }
+                        
                     }
                     print("🔍 More Third Section updated: \(String(describing: response.result))")
                 })

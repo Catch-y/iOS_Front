@@ -38,4 +38,9 @@ class MyPageRepository: MyPageRepositoryProtocol {
     func getMyPlaceReviewsData(review: MyPlaceReviewRequest) -> AnyPublisher<ResponseData<MyPlaceReviewResponse>, Moya.MoyaError> {
         return service.getMyPlaceReviews(review: review)
     }
+    
+    /// 리뷰 삭제 API
+    func deleteReviewData(reviewId: Int, reviewType: ReviewType) -> AnyPublisher<ResponseData<DeleteReviewResponse>, Moya.MoyaError> {
+        return service.deleteReview(reviewId: reviewId, reviewType: reviewType)
+    }
 }

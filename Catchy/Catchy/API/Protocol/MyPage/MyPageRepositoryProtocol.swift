@@ -24,5 +24,8 @@ protocol MyPageRepositoryProtocol {
     
     /// 내 장소 리뷰 조회 API
     func getMyPlaceReviewsData(review: MyPlaceReviewRequest) -> AnyPublisher<ResponseData<MyPlaceReviewResponse>, MoyaError>
+    
+    /// 리뷰 삭제 API
+    func deleteReviewData(reviewId: Int, reviewType: ReviewType) -> AnyPublisher<ResponseData<DeleteReviewResponse>, MoyaError>
 }
 

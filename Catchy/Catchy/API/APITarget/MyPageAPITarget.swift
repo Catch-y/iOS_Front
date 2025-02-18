@@ -30,6 +30,11 @@ enum MyPageAPITarget {
     /// HTTP 메소드 : GET
     /// API Path : /mypage/placeReviews
     case getMyPlaceReviews(review: MyPlaceReviewRequest)
+    
+    /// 리뷰 삭제 API
+    /// HTTP 메소드 : DELETE
+    /// API Path :
+    case deleteReview(reviewId: Int, reviewType: ReviewType)
 }
 
 extension MyPageAPITarget: APITargetType {
@@ -53,6 +58,10 @@ extension MyPageAPITarget: APITargetType {
         /// 내 장소 리뷰 조회 API
         case .getMyPlaceReviews:
             return "/mypage/placeReviews"
+    
+        /// 리뷰 삭제 API
+        case .deleteReview(let reviewId, _):
+            return "/mypage/reviews/\(reviewId)"
         }
     }
     
@@ -74,6 +83,10 @@ extension MyPageAPITarget: APITargetType {
         /// 내 장소 리뷰 조회 API
         case .getMyPlaceReviews:
             return .get
+            
+        /// 리뷰 삭제 API
+        case .deleteReview:
+            return .delete
         }
     }
     
@@ -112,6 +125,9 @@ extension MyPageAPITarget: APITargetType {
                 parameters["lastReviewId"] = lastReviewId
             }
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
+        
+        case .deleteReview(_, let reviewType):
+            return .requestParameters(parameters: ["reviewType": reviewType.rawValue], encoding: URLEncoding.default)
         }
         
     }
@@ -352,7 +368,7 @@ extension MyPageAPITarget: APITargetType {
                     "createdDate": "2025-01-10"
                   }
                 ],
-                "last": true
+                "last": false
               }
             }
             
@@ -466,6 +482,22 @@ extension MyPageAPITarget: APITargetType {
                   }
                 ],
                 "last": true
+              }
+            }
+            
+            """
+            return json.data(using: .utf8)!
+            
+        case .deleteReview:
+            let json = """
+            {
+              "isSuccess": true,
+              "code": "COMMON200",
+              "message": "성공입니다.",
+              "result": {
+                "reviewId": 1,
+                "reviewType": "COURSE",
+                "message": "리뷰 삭제"
               }
             }
             
