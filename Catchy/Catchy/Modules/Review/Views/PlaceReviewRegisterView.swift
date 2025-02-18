@@ -62,7 +62,6 @@ struct PlaceReviewRegisterView: View {
         }
         .onChange(of: viewModel.hasRegister) { (_, registered) in
             if registered {
-                print("으악!!")
                 container.navigationRouter.pop()
             }
         }

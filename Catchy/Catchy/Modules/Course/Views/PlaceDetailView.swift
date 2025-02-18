@@ -35,7 +35,7 @@ struct PlaceDetailView: View {
         VStack(spacing: 36) {
             if !viewModel.isLoading {
                 if let place = viewModel.placeDetailResponse {
-            
+                    
                     PlaceInfoSection(place: Binding(
                         get: { place },
                         set: { viewModel.placeDetailResponse = $0 }
@@ -43,8 +43,12 @@ struct PlaceDetailView: View {
                         viewModel.showReview(placeId: place.placeId)
                     }
                     )
-                
-                    mainBtn(hasCategory: place.categoryName?.rawValue != "", hasSelected: selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId})
+                    
+                    mainBtn(
+                        hasCategory: place.categoryName != nil,
+                        hasSelected: selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId}
+                    )
+                    .disabled((place.categoryName != nil) && !selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId} && (selectedPlaceList.count < 5))
                     
                     Spacer()
                     
@@ -61,7 +65,7 @@ struct PlaceDetailView: View {
             viewModel.getPlaceDetail(placeId: placeSearchResponseData.placeId)
         }) {
 
-            CategoryRegisterView(placeSearchResponseData: $placeSearchResponseData, container: container, isPresented: $viewModel.isCategoryViewPresented)
+            CategoryRegisterView(placeId: placeSearchResponseData.placeId, container: container, isPresented: $viewModel.isCategoryViewPresented)
             
         }
         .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
@@ -81,16 +85,19 @@ struct PlaceDetailView: View {
     private func mainBtn(hasCategory: Bool, hasSelected: Bool) -> some View {
         
         if hasCategory {
+            
             MainBtn(
-                text: "코스에 담기",
+                text: hasSelected ? "이미 담은 장소입니다." : "코스에 담기",
                 action: {
                     selectedPlaceList.append(placeSearchResponseData)
-                    // TODO: - 이전화면으로 이동
+                    // TODO: - 이전 화면으로 이동
                 },
                 width: UIScreen.screenWidth - 32,
                 height: 55,
-                onoff: hasSelected || (selectedPlaceList.count > 4) ? .off : .on
+                onoff: !hasSelected && selectedPlaceList.count < 5 ? .on : .off
             )
+
+            
         } else {
             MainBtn(
                 text: "이 장소의 카테고리 선택하기",
