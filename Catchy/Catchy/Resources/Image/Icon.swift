@@ -28,6 +28,8 @@ enum Icon: String {
     case clickRestMark = "clickRestMark"
     case clickSportMark = "clickSportMark"
     
+    case zoomMap = "zoomMap"
+    
     //MARK: - Tab
     case home = "home"
     case course = "course"

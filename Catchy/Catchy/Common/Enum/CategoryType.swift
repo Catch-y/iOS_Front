@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UIKit
 
 /// 캐치 앱 카테고리 Enum
 enum CategoryType: String, Codable, CaseIterable {
@@ -136,6 +137,25 @@ enum CategoryType: String, Codable, CaseIterable {
             return Color.restaurant
         case .SPORT :
             return Color.sport
+        }
+    }
+    
+    func mapMarkerImage() -> UIImage {
+        switch self {
+        case .CAFE:
+            return UIImage(named: "notClickCafeMark") ?? UIImage(systemName: "cup.and.saucer.fill")!
+        case .BAR:
+            return UIImage(named: "notClickBarMark") ?? UIImage(systemName: "wineglass.fill")!
+        case .RESTAURANT:
+            return UIImage(named: "notClickRestaurantMark") ?? UIImage(systemName: "fork.knife.circle.fill")!
+        case .EXPERIENCE:
+            return UIImage(named: "notClickExperienceMark") ?? UIImage(systemName: "figure.walk")!
+        case .CULTURELIFE:
+            return UIImage(named: "notClickCultureLifeMark") ?? UIImage(systemName: "theatermasks.fill")!
+        case .SPORT:
+            return UIImage(named: "notClickSportMark") ?? UIImage(systemName: "sportscourt.fill")!
+        case .REST:
+            return UIImage(named: "notClickRestMark") ?? UIImage(systemName: "bed.double.fill")!
         }
     }
 }

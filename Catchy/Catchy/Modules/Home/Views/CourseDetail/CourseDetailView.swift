@@ -39,6 +39,7 @@ struct CourseDetailView: View {
                             .padding(.top, 14)
                     })
                     .padding(.top, 13)
+                    .padding(.bottom, 20)
                     .scrollIndicators(.hidden)
                     .refreshable {
                         viewModel.getCourseDetail()
@@ -180,14 +181,10 @@ struct CourseDetailView: View {
                 .padding(.leading, 20)
                 .padding(.trailing, 13)
             
-            Rectangle()
-                .fill(Color.white)
-                .stroke(Color.black, style: .init(lineWidth: 0.5))
-                .overlay(content: {
-                    Text("지도 들어갈 위치입니다")
-                })
-                .frame(height: 281)
-                .ignoresSafeArea()
+            if let placeInfos = viewModel.courseDetailResponse?.placeInfos {
+                AppleMapView(placeInfoData: placeInfos, container: container)
+                    .frame(height: 281)
+            }
         })
         .background(Color.white)
     }
@@ -277,6 +274,7 @@ extension CourseDetailView {
 struct CourseDetailView_Preview: PreviewProvider {
     static var previews: some View {
         CourseDetailView(container: DIContainer(), courseId: 1)
+            .environmentObject(DIContainer())
     }
 }
 
