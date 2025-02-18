@@ -44,6 +44,7 @@ struct AddFloatingButton : View {
             .ignoresSafeArea(.all)
         }
         .padding(.bottom, 130)
+        .padding(.trailing, -30)
 
         
     }

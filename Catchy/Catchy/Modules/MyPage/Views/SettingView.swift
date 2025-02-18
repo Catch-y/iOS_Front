@@ -12,10 +12,9 @@ struct SettingView: View {
     
     @StateObject var viewModel: SettingViewModel
     @EnvironmentObject var container: DIContainer
-    @EnvironmentObject var appFlowViewMode: AppFlowViewModel
     
-    init(container: DIContainer) {
-        self._viewModel = StateObject(wrappedValue: .init(container: container))
+    init(container: DIContainer, appFlowViewModel: AppFlowViewModel) {
+        self._viewModel = StateObject(wrappedValue: .init(container: container, appFlowViewModel: appFlowViewModel))
     }
     
     // MARK: - Body
@@ -100,7 +99,7 @@ struct SettingView_Preview: PreviewProvider {
     
     static var previews: some View {
         ForEach(devices, id: \.self) { device in
-            SettingView(container: DIContainer())
+            SettingView(container: DIContainer(), appFlowViewModel: AppFlowViewModel())
                 .environmentObject(DIContainer())
                 .previewDevice(PreviewDevice(rawValue: device))
                 .previewDisplayName(device)

@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import CombineMoya
 import Moya
+import SwiftUI
 
 /// 마이페이지 UseCaseProtocol
 protocol MyPageUseCaseProtocol {
@@ -24,6 +25,8 @@ protocol MyPageUseCaseProtocol {
     
     /// 내 리뷰 조회 API
     func executeGetMyPlaceReviews(review: MyPlaceReviewRequest) -> AnyPublisher<ResponseData<MyPlaceReviewResponse>, MoyaError>
+    
+    func executePatchProfileImage(profileImage: UIImage) -> AnyPublisher<ResponseData<EditProfileResponse>, MoyaError>
     
     /// 리뷰 삭제 API
     func executeDeleteReview(reviewId: Int, reviewType: ReviewType) -> AnyPublisher<ResponseData<DeleteReviewResponse>, MoyaError>

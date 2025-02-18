@@ -9,6 +9,8 @@ import Foundation
 import Combine
 import CombineMoya
 import Moya
+import SwiftUI
+
 
 /// [코스 관리] UseCase 객체
 class MyPageUseCase: MyPageUseCaseProtocol {
@@ -43,6 +45,12 @@ class MyPageUseCase: MyPageUseCaseProtocol {
     /// 내 장소 리뷰 조회 API
     func executeGetMyPlaceReviews(review: MyPlaceReviewRequest) -> AnyPublisher<ResponseData<MyPlaceReviewResponse>, Moya.MoyaError> {
         return repository.getMyPlaceReviewsData(review: review)
+            .mapError { $0 as MoyaError }
+            .eraseToAnyPublisher()
+    }
+    
+    func executePatchProfileImage(profileImage: UIImage) -> AnyPublisher<ResponseData<EditProfileResponse>, MoyaError> {
+        return repository.patchProfileImage(profileImage: profileImage)
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }

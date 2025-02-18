@@ -11,7 +11,9 @@ import Kingfisher
 /// 마이페이지 뷰
 struct MyPageView: View {
     
+    @State private var isVisible: Bool = false
     @StateObject var viewModel: MyPageViewModel
+    @ObservedObject private var userState = UserState.shared
     @EnvironmentObject var container: DIContainer
     @EnvironmentObject var appFlowViewModel: AppFlowViewModel
     
@@ -37,17 +39,26 @@ struct MyPageView: View {
                         Spacer()
                     }
                 } else {
-                    LoadingView()
+                    MainProgressComponents()
                 }
             }
             .padding(.top, 62)
             .padding(.bottom, 110)
         }
+        .opacity(isVisible ? 1 : 0)
         .background(Color(.g1))
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
         .task {
             viewModel.getProfile()
             viewModel.getBookmarkCourseList(lastCourseId: nil)
+        }
+        .sheet(isPresented: $viewModel.isImagePickerPresented, content: {
+            ImagePicker(imageHandler: viewModel, selectedLimit: 1)
+        })
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                isVisible = true
+            }
         }
     }
     
@@ -80,10 +91,9 @@ struct MyPageView: View {
                 imageURL: data.profileImage,
                 size: 104
             ) {
-                // TODO: - 프로필 수정 액션
-                print("프로필 수정 클릭")
+                viewModel.showImagePicker()
             }
-            Text(UserState.shared.getUserNickname())
+            Text(userState.getUserNickname())
                 .font(.title3)
                 .fontWeight(.bold)
                 .foregroundColor(.black)
@@ -114,7 +124,7 @@ struct MyPageView: View {
         let menuItems: [(icon: Image, title: String, action: () -> Void)] = [
             (Icon.document.image, "취향 설문", { print("취향 설문 클릭") }),
             (Icon.myPageHeart.image, "선호 장소", { container.navigationRouter.push(to: .favoritePlacesView) }),
-            (Icon.myPageReview.image, "내 리뷰", { print("내 리뷰 클릭") })
+            (Icon.myPageReview.image, "내 리뷰", { container.navigationRouter.push(to: .myReviewsView) })
         ]
         return HStack(spacing: 17) {
             ForEach(menuItems, id: \.title) { item in
@@ -139,6 +149,9 @@ struct MyPageView: View {
                                     if course.courseId == content.last?.courseId, !viewModel.isLastPage {
                                         viewModel.getBookmarkCourseList(lastCourseId: course.courseId)
                                     }
+                                }
+                                .onTapGesture {
+                                    container.navigationRouter.push(to: .courseDetailView(courseId: course.courseId))
                                 }
                         }
                     }

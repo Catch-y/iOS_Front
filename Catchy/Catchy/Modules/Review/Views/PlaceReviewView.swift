@@ -50,10 +50,10 @@ struct PlaceReviewView: View {
                     })
                     
                 } else {
-                    LoadingView()
+                    MainProgressComponents()
                 }
             } else {
-                LoadingView()
+                MainProgressComponents()
             }
         })
         .ignoresSafeArea(.all)
