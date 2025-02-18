@@ -11,6 +11,23 @@ import SwiftUI
 
 enum Icon: String {
     
+    //MARK: - Map
+    case notClickBarMark = "notClickBarMark"
+    case notClickCafeMark = "notClickCafeMark"
+    case notClickCultureLifeMark = "notClickCultureLifeMark"
+    case notClickExperienceMark = "notClickExperienceMark"
+    case notClickRestaurantMark = "notClickRestaurantMark"
+    case notClickRestMark = "notClickRestMark"
+    case notClickSportMark = "notClickSportMark"
+    
+    case clickBarMark = "clickBarMark"
+    case clickCafeMark = "clickCafeMark"
+    case clickCultureLifeMark = "clickCultureLifeMark"
+    case clickExperienceMark = "clickExperienceMark"
+    case clickRestaurantMark = "clickRestaurantMark"
+    case clickRestMark = "clickRestMark"
+    case clickSportMark = "clickSportMark"
+    
     //MARK: - Tab
     case home = "home"
     case course = "course"

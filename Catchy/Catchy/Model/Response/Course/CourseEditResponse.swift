@@ -61,6 +61,9 @@ struct PlaceInfoData: Codable, Identifiable {
     /// 장소 경도
     let placeLongitude: Double
     
+    
+    let category: CategoryType
+    
     /// 방문한 장소인가?
     let isVisited: Bool
     
