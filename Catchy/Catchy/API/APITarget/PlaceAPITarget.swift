@@ -167,11 +167,11 @@ extension PlaceAPITarget {
             formData.append(visitedDateFormData)
         }
         
-        for (index, reviewImage) in reviewImages.enumerated() {
+        for (_, reviewImage) in reviewImages.enumerated() {
             
             if let image = reviewImage.jpegData(compressionQuality: 0.8) {
 
-                let multipartData = MultipartFormData(provider: .data(image), name: "images", fileName: "images\(index).jpg", mimeType: "images/jpeg")
+                let multipartData = MultipartFormData(provider: .data(image), name: "images", fileName: "images.jpg", mimeType: "/")
                 formData.append(multipartData)
             }
         }

@@ -18,8 +18,8 @@ struct CategoryRegisterView: View {
     @Namespace var bottomID
     
     // MARK: - Init
-    init(placeSearchResponseData: Binding<PlaceSearchResponseData>, container: DIContainer, isPresented: Binding<Bool>) {
-        self._viewModel = StateObject(wrappedValue: .init(container: container, placeSearchResponseData: placeSearchResponseData, isPresented: isPresented))
+    init(placeId: Int, container: DIContainer, isPresented: Binding<Bool>) {
+        self._viewModel = StateObject(wrappedValue: .init(container: container, placeId: placeId, isPresented: isPresented))
     }
     
     var body: some View {
@@ -42,7 +42,11 @@ struct CategoryRegisterView: View {
 
         }
         .ignoresSafeArea(edges: .top)
-
+        .onChange(of: viewModel.hasRegister) { (_, registered) in
+            if registered {
+                viewModel.close()
+            }
+        }
         
     }
     

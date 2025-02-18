@@ -27,9 +27,6 @@ class PlaceVisitingViewModel: ObservableObject {
     /// 리뷰, 평점 화면 상태
     @Published var isReviewPresented: Bool = false
     
-    /// 리뷰, 평점을 보고자 하는 장소 ID
-    var selectedPlaceId: Int? = nil
-    
     // MARK: - Init
     init(container: DIContainer) {
         self.container = container
@@ -153,12 +150,12 @@ extension PlaceVisitingViewModel {
     }
     
     // MARK: - API 호출 없는 함수
-    /// 평점, 리뷰 남기기 뷰 보여줍니다
+    /// 장소 평점, 리뷰 화면  보여줍니다
     /// - Parameter placeId: 리뷰, 평점을 볼 장소 ID
-    func showReview(placeId: Int) {
-        self.selectedPlaceId = placeId
+    func showReview() {
         self.isReviewPresented.toggle()
     }
+    
     
     func showReviewRegister() {
         

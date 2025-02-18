@@ -115,7 +115,6 @@ extension PlaceCourseAPITarget: APITargetType {
                         "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
                         "category": "CAFE",
                         "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
-                        "activeTime": "[영업시간] 매일 09:00~22:00",
                         "rating": 4.3,
                         "reviewCount": 124,
                         "liked": true
@@ -159,7 +158,6 @@ extension PlaceCourseAPITarget: APITargetType {
                         "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
                         "category": "CULTURELIFE",
                         "roadAddress": "경기 남양주시 와부읍 덕소로2번길 90",
-                        "activeTime": "[영업시간] 10:00~18:00",
                         "rating": 3.5,
                         "reviewCount": 65,
                         "liked": true
@@ -170,7 +168,6 @@ extension PlaceCourseAPITarget: APITargetType {
                         "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
                         "category": "BAR",
                         "roadAddress": "경기 남양주시 와부읍 덕소로 89",
-                        "activeTime": "[영업시간] 22:00~05:00",
                         "rating": 3.9,
                         "reviewCount": 210,
                         "liked": true
@@ -189,7 +186,6 @@ extension PlaceCourseAPITarget: APITargetType {
                       {
                         "placeId": 8,
                         "placeName": "스크린골프",
-                        "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
                         "category": "SPORT",
                         "roadAddress": "경기 남양주시 와부읍 덕소로116번길 20",
                         "activeTime": "[영업시간] 09:00~22:00",
@@ -203,7 +199,6 @@ extension PlaceCourseAPITarget: APITargetType {
                         "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
                         "category": "EXPERIENCE",
                         "roadAddress": "경기 남양주시 와부읍 덕소로 94",
-                        "activeTime": "[영업시간] 10:00~19:00",
                         "rating": 4.7,
                         "reviewCount": 176,
                         "liked": true
@@ -236,7 +231,6 @@ extension PlaceCourseAPITarget: APITargetType {
                         "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
                         "category": "CULTURELIFE",
                         "roadAddress": "경기 남양주시 와부읍 덕소로 66",
-                        "activeTime": "[영업시간] 09:00~18:00",
                         "rating": 4.1,
                         "reviewCount": 134,
                         "liked": true
@@ -326,14 +320,13 @@ extension PlaceCourseAPITarget: APITargetType {
                     "placeId": 1,
                     "imageUrl": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
                     "placeName": "심퍼티쿠시 용산점",
-                    "placeDescription": "유러피언 요리를 아시안 스타일로 풀어내는 파인캐주얼 레스토랑",
                     "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
-                    "activeTime": "[영업시간] 매일 09:00~22:00",
                     "rating": 3,
                     "isVisited": false,
+                    "placeSite": "https://www.naver.com",
                     "reviewCount": 21,
-                    "placeSite": "www.naver.com",
                     "liked": false
+                    
                 }
             }
         """.data(using: .utf8)!
