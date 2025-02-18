@@ -20,10 +20,9 @@ struct CatchyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            PlaceVisitingView(container: container, placeId: 1)
-//            CatchyTabView()
-//                .environmentObject(DIContainer())
-//                .environmentObject(AppFlowViewModel())
+            CatchyTabView()
+                .environmentObject(DIContainer())
+                .environmentObject(AppFlowViewModel())
 //            switch appFlowViewModel.appState {
 //            case .onBoarding:
 //                OnboardingView(viewModel: appFlowViewModel)

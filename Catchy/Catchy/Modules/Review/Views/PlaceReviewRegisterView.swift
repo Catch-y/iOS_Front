@@ -16,9 +16,6 @@ struct PlaceReviewRegisterView: View {
     @EnvironmentObject var container: DIContainer
     
     // MARK: - 장소 리뷰 남기기 화면 Properties
-    /// 현재 화면이 나타난 상태
-    @Binding var isPresented: Bool
-    
     /// 리뷰 작성할 장소의 ID
     let placeId: Int
 
@@ -27,10 +24,9 @@ struct PlaceReviewRegisterView: View {
     let infoText: String = PlaceReviewInfoText.randomText
 
     // MARK: - Init
-    init(container: DIContainer, placeId: Int, isPresented: Binding<Bool>) {
+    init(container: DIContainer, placeId: Int) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
         self.placeId = placeId
-        self._isPresented = isPresented
     }
     
     var body: some View {
@@ -55,14 +51,14 @@ struct PlaceReviewRegisterView: View {
         .onAppear {
             UIApplication.shared.hideKeyboard()
         }
+        .navigationBarBackButtonHidden(true)
     }
     
     /// 네비게이션 바
     private var navigationGroup: some View {
         CustomNavigation(
             action: {
-                // TODO: - 뒤로 가기 구현
-                isPresented.toggle()
+                container.navigationRouter.pop()
             } ,
             title: "평점, 리뷰 남기기",
             leftNaviIcon: Icon.leftChevron.image,
