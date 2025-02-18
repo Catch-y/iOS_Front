@@ -19,17 +19,25 @@ struct PlaceDomainButton: View {
     }
     
     var body: some View {
-        HStack(spacing: 5) {
-            Icon.domain.image
-                .resizable()
-                .frame(width: 12, height: 12)
-            
-            Text(domain)
-                .underline(true, color: .black)
-                .lineLimit(1)
-                .foregroundStyle(.g5)
-                .font(.caption)
-        }
+        Button(action: {
+            if let url = URL(string: "https://" + domain) {
+                UIApplication.shared.open(url)
+            }
+        }, label: {
+            HStack(spacing: 5) {
+                Icon.domain.image
+                    .resizable()
+                    .frame(width: 12, height: 12)
+                
+                Text(domain)
+                    .underline(true, color: .black)
+                    .lineLimit(1)
+                    .foregroundStyle(.g5)
+                    .font(.caption)
+            }
+        })
+        
+        
     }
     
 }
