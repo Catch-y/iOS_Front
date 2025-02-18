@@ -60,6 +60,12 @@ struct PlaceReviewRegisterView: View {
         .onAppear {
             UIApplication.shared.hideKeyboard()
         }
+        .onChange(of: viewModel.hasRegister) { (_, registered) in
+            if registered {
+                print("으악!!")
+                container.navigationRouter.pop()
+            }
+        }
         .navigationBarBackButtonHidden(true)
     }
     
@@ -238,7 +244,7 @@ struct PlaceReviewRegisterView: View {
                                     .frame(width: 22, height: 22)
                                 )
                                 .foregroundStyle(.g7)
-                                .offset(x: -6, y: 7)
+                                .offset(x: -8, y: 8)
                                 .onTapGesture {
                                     withAnimation {
                                         viewModel.removeImage(at: index)
@@ -274,10 +280,9 @@ extension PlaceReviewRegisterView {
     
     /// 리뷰를 등록할 수 있는가
     private var canRegisterReview: Bool {
-        guard let comment = viewModel.comment, !comment.trimmingCharacters(in: .whitespaces).isEmpty else {
+        guard let comment = viewModel.comment, !comment.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return false
         }
-        print(viewModel.rating != nil && viewModel.visitedDate != nil)
         return viewModel.rating != nil && viewModel.visitedDate != nil
     }
 }
