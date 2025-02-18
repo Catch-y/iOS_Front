@@ -15,6 +15,9 @@ enum ReviewAPITarget {
     
     /// 코스 리뷰 전체보기 API
     case getCourseReviewInfo(courseId: Int, pageSize: Int, lastReviewId: Int?)
+    
+    /// 리뷰 신고 API
+    case postReviewReport(reviewId: Int, request: ReviewReportRequest)
 }
 
 extension ReviewAPITarget: APITargetType {
@@ -22,13 +25,17 @@ extension ReviewAPITarget: APITargetType {
     var path: String {
         switch self {
             
-            /// 장소 리뷰 전체보기 API
+        /// 장소 리뷰 전체보기 API
         case .getPlaceReviewInfo(let placeId, _):
             return "/place/\(placeId)/review/all"
             
-            /// 코스 리뷰 전체보기 API
+        /// 코스 리뷰 전체보기 API
         case .getCourseReviewInfo(let courseId, _, _):
             return "/course/\(courseId)/review/all"
+        
+        /// 리뷰 신고 API
+        case .postReviewReport(let reviewId, _):
+            return "/reviews/\(reviewId)/report"
         }
     }
     
@@ -38,6 +45,8 @@ extension ReviewAPITarget: APITargetType {
             return .get
         case .getCourseReviewInfo:
             return .get
+        case .postReviewReport:
+            return .post
         }
     }
     
@@ -64,6 +73,9 @@ extension ReviewAPITarget: APITargetType {
             }
             
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
+            
+        case .postReviewReport(_, let request):
+            return .requestJSONEncodable(request)
         }
     }
     
@@ -120,6 +132,18 @@ extension ReviewAPITarget: APITargetType {
                             },
                             {
                                 "reviewImageId": 2,
+                                "imageUrl": "https://i.namu.wiki/i/PagwakcE00JZaGpEvXym79-IMvKFBmdqOBlq778J-bvJMwz15lDLleTKc56S2wwcRcaEm3FZZ4EtniRa5bXdeQ.webp"
+                            },
+                            {
+                                "reviewImageId": 3,
+                                "imageUrl": "https://i.namu.wiki/i/PagwakcE00JZaGpEvXym79-IMvKFBmdqOBlq778J-bvJMwz15lDLleTKc56S2wwcRcaEm3FZZ4EtniRa5bXdeQ.webp"
+                            },
+                            {
+                                "reviewImageId": 4,
+                                "imageUrl": "https://i.namu.wiki/i/PagwakcE00JZaGpEvXym79-IMvKFBmdqOBlq778J-bvJMwz15lDLleTKc56S2wwcRcaEm3FZZ4EtniRa5bXdeQ.webp"
+                            },
+                            {
+                                "reviewImageId": 5,
                                 "imageUrl": "https://i.namu.wiki/i/PagwakcE00JZaGpEvXym79-IMvKFBmdqOBlq778J-bvJMwz15lDLleTKc56S2wwcRcaEm3FZZ4EtniRa5bXdeQ.webp"
                             }
                         ],
@@ -234,7 +258,7 @@ extension ReviewAPITarget: APITargetType {
                     },
                     {
                         "reviewId": 9,
-                        "comment": "청결 상태가 조금 아쉬웠어요.",
+                        "comment": "청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.청결 상태가 조금 아쉬웠어요.",
                         "reviewImages": [],
                         "createdAt": "2025.01.12",
                         "creatorNickname": "CleanFreak"
@@ -256,10 +280,25 @@ extension ReviewAPITarget: APITargetType {
                         "creatorNickname": "PhotoLover"
                     },
                 ],
-                "last": true
+                "last": false
             }
         }
         
+        """
+            return json.data(using: .utf8)!
+            
+        case .postReviewReport:
+            let json = """
+        {
+            "isSuccess": true,
+            "code": "COMMON200",
+            "message": "성공입니다.",
+            "result": {
+                "reportId": 0, 
+                "reviewType": "COURSE",
+                "message": "성공"
+            }
+        }
         """
             return json.data(using: .utf8)!
         }

@@ -136,7 +136,6 @@ extension MyPageViewModel {
                         }
                     }
                 }
-                print("🔍 More Third Section updated: \(String(describing: response.result))")
             }
             .store(in: &cancellables)
     }

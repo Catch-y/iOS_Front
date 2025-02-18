@@ -10,6 +10,7 @@ import SwiftUI
 struct CourseReviewView: View {
     
     @StateObject var viewModel: CourseReviewViewModel
+    @EnvironmentObject var container: DIContainer
     
     // MARK: - 장소 리뷰, 평점 화면 Propertes
     /// 현재 장소 ID
@@ -27,38 +28,32 @@ struct CourseReviewView: View {
     
     // MARK: - Body
     var body: some View {
-        
-        
-        VStack(alignment: .center, spacing: 20, content: {
-            if !viewModel.isLoading {
+        VStack(alignment: .center, spacing: 28, content: {
                 CustomNavigation(action: {
-                    isPresented.toggle()
+                    container.navigationRouter.pop()
                 }, title: "평점, 리뷰 보기", leftNaviIcon: nil, isShadow: true)
-                
-                if let data = viewModel.courseReviewData {
+            if !viewModel.isLoading {
+                if !viewModel.courseReviewData.isEmpty {
                     ScrollView(.vertical, content: {
-                        topReviewInfo(data: data)
-                        
-                        if !data.content.isEmpty {
-                            reviewTableSection(content: data.content)
-                                .padding(.top, 7)
-                        } else {
-                            infoView()
-                                .padding(.top, 107)
-                        }
+                        topReviewInfo()
+                            .padding(.horizontal, 16)
+                        reviewTableSection()
+                            .padding(.top, 15)
+                            .padding(.horizontal, 16)
                     })
-                    .padding(.horizontal, 16)
                 } else {
-                    MainProgressComponents()
+                    infoView()
+                        .padding(.top, 107)
                 }
             } else {
                 MainProgressComponents()
-            }
-        })
+                }
+            })
         .ignoresSafeArea(.all)
         .task {
-            
+            viewModel.getCourseReviewData(courseId: self.courseId)
         }
+        .navigationBarBackButtonHidden(true)
     }
     
     // MARK: - 리뷰 없을 때, 보일 가이드 뷰
@@ -80,18 +75,19 @@ struct CourseReviewView: View {
     /// 상단 리뷰 평점 정보
     /// - Parameter data: 리뷰 데이터를 담고 있는 ReviewResponse
     /// - Returns: 리뷰 평점과 총 리뷰 개수를 보여주는 상단 뷰
-    private func topReviewInfo(data: CourseReviewInfoResponse) -> some View {
-        VStack(spacing: 11, content: {
-            reviewTotalCount(totalCount: data.totalCount)
-            reviewTotalRating(averageRating: data.courseRating)
+    private func topReviewInfo() -> some View {
+        VStack(alignment: .leading, spacing: 11, content: {
+            reviewTotalCount(totalCount: viewModel.totalCount)
+            reviewTotalRating(averageRating: viewModel.courseRating)
         })
         
-        .padding(.top, 16)
-        .padding(.bottom, 32)
-        .padding(.leading, 29)
-        .padding(.trailing, 16)
+        .padding(.top, 19)
+        .padding(.bottom, 19)
+        .padding(.leading, 20)
+        .padding(.trailing, 176)
+        .frame(maxWidth: .infinity)
         .overlay(content: {
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 15)
                 .fill(Color.clear)
                 .stroke(Color.g3, lineWidth: 1)
         })
@@ -118,7 +114,7 @@ struct CourseReviewView: View {
     /// - Parameter totalRating: 평균 평점 값 (소수점 한 자리까지)
     /// - Returns: 평균 평점과 별점 표시, 별점 그래프 포함
     private func reviewTotalRating(averageRating: Double) -> some View {
-        return HStack(spacing: 8,content: {
+        return HStack(alignment: .center, spacing: 8, content: {
             StarRating(rating: averageRating)
             
             Text(String(format: "%.1f", averageRating))
@@ -140,12 +136,12 @@ struct CourseReviewView: View {
     /// 하단 리뷰 테이블 섹션
     /// - Parameter content: 리뷰 데이터 배열
     /// - Returns: 리뷰 목록과 구분선을 포함하는 뷰
-    private func reviewTableSection(content: [CourseReviewContents]) -> some View {
+    private func reviewTableSection() -> some View {
         VStack(alignment: .center, spacing: 8, content: {
-            ForEach(content, id: \.reviewId) { review in
+            ForEach(viewModel.courseReviewData, id: \.id) { review in
                 ReviewCard(
                     cardType: .ratingReview,
-                    reviewType: .place,
+                    reviewType: .course,
                     reviewId: review.reviewId,
                     comment: review.comment,
                     images: review.reviewImages,
@@ -155,8 +151,17 @@ struct CourseReviewView: View {
                     userName: review.creatorNickname,
                     date: review.createdAt
                     )
-                Divider()
-                    .background(.g3)
+                .padding(.vertical, 30)
+                .task {
+                    if viewModel.courseReviewData.last?.reviewId == review.reviewId {
+                        viewModel.getCourseReviewData(courseId: courseId)
+                    }
+                }
+                
+                if review.reviewId != viewModel.courseReviewData.last?.reviewId {
+                    Divider()
+                        .background(Color.g3)
+                }
             }
         })
     }

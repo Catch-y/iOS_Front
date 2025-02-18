@@ -11,14 +11,20 @@ import Combine
 /// MyCourseReviewsViewModel: 내 코스 리뷰 화면을 위한 ViewModel
 class MyCourseReviewsViewModel: ObservableObject {
     
-    /// 내 코스 리뷰 조회 Response
-    @Published var myCourseReviewsData: MyCourseReviewResponse?
+    /// 전체 코스 리뷰 목록을 담는 배열
+    @Published var myCourseReviews: [CourseReviewData] = []
     
-    /// 내 리뷰 조회 API 로딩 상태
+    /// 로딩 상태
     @Published var isMyCourseReviewsLoading: Bool = false
     
-    /// 내 리뷰 개수
+    /// 리뷰 전체 개수
     @Published var reviewCount: Int = 0
+    
+    /// 마지막 페이지인지 여부
+    private var isLast: Bool = false
+    
+    /// 현재까지 불러온 리뷰의 마지막 ID
+    private var lastReviewId: Int? = nil
     
     let container: DIContainer
     var cancellables = Set<AnyCancellable>()
@@ -30,8 +36,18 @@ class MyCourseReviewsViewModel: ObservableObject {
 
 extension MyCourseReviewsViewModel {
     /// 내 코스 리뷰 조회 API 호출
-    func getMyCourseReviews(review: MyCourseReviewRequest) {
-        isMyCourseReviewsLoading = true
+    func getMyCourseReviews() {
+        
+        /* 이미 로딩 중이거나 마지막 페이지라면 중단 */
+        guard !isMyCourseReviewsLoading, !isLast else {
+            return
+        }
+    
+        if myCourseReviews.isEmpty {
+            isMyCourseReviewsLoading = true
+        }
+
+        let review = MyCourseReviewRequest(pageSize: 10, lastReviewId: lastReviewId)
         
         container.useCaseProvider.myPageUseCase.executeGetMyCourseReviews(review: review)
             .tryMap { responseData -> ResponseData<MyCourseReviewResponse> in
@@ -47,20 +63,35 @@ extension MyCourseReviewsViewModel {
                 
                 switch completion {
                 case .finished:
-                    print("✅ Get My CourseReviews Completed")
+                    print("✅ Get My Course Reviews Completed")
                 case .failure(let failure):
-                    print("❌ Get My CourseReviews Failed: \(failure)")
+                    print("❌ Get My Course Reviews Failed: \(failure)")
                 }
                 
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 
-                if let response = response.result {
-                    print("🎯 Parsed Response Data: \(response)")
-                    self.myCourseReviewsData = response
-                    self.reviewCount = response.reviewCount
+                if let result = response.result {
+                    if result.content.isEmpty {
+                        self.myCourseReviews = []
+                    } else {
+                        myCourseReviews.append(contentsOf: result.content)
+                    }
+                    /* 리뷰 개수 갱신 */
+                    self.reviewCount = result.reviewCount
+                    
+                    /* 마지막 페이지 여부 */
+                    self.isLast = result.last
+                    
+                    /* next page를 위해 마지막 reviewId 기억 */
+                    if !self.isLast, let lastItem = self.myCourseReviews.last {
+                        self.lastReviewId = lastItem.reviewId
+                    }
+                    
+                    print("🎯 Parsed Response Data: \(result)")
                 }
             })
             .store(in: &cancellables)
     }
+    
 }

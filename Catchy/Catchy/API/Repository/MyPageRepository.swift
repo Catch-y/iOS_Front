@@ -43,4 +43,9 @@ class MyPageRepository: MyPageRepositoryProtocol {
     func patchProfileImage(profileImage: UIImage) -> AnyPublisher<ResponseData<EditProfileResponse>, MoyaError> {
         return service.patchProfileImage(profileImage: profileImage)
     }
+    
+    /// 리뷰 삭제 API
+    func deleteReviewData(reviewId: Int, reviewType: ReviewType) -> AnyPublisher<ResponseData<DeleteReviewResponse>, Moya.MoyaError> {
+        return service.deleteReview(reviewId: reviewId, reviewType: reviewType)
+    }
 }

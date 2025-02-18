@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct PostReviewReportRequest: Codable {
-    let reviewId: Int
+struct ReviewReportRequest: Codable {
     let reviewType: ReviewType
-    let reason: ReviewReportReason
+    let reason: String
 }

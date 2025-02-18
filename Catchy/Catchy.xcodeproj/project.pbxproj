@@ -52,6 +52,7 @@
 		48056DAA2D34EE970070FDAC /* Exceptions for "Catchy" folder in "Catchy" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Core/Util/Secret.xcconfig,
 				Info.plist,
 			);
 			target = 48F248672D2EB42C0079E120 /* Catchy */;
