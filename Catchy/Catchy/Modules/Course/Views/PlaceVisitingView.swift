@@ -132,7 +132,6 @@ struct PlaceVisitingView: View {
 
         Button(action: {
             if isVisited {
-                print("푸쉬")
                 container.navigationRouter.push(to: .placeReviewRegsiterView(placeId: placeId))
             }
         },
