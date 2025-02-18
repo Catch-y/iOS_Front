@@ -167,7 +167,7 @@ extension PlaceAPITarget {
             formData.append(visitedDateFormData)
         }
         
-        for (index, reviewImage) in reviewImages.enumerated() {
+        for (_, reviewImage) in reviewImages.enumerated() {
             
             if let image = reviewImage.jpegData(compressionQuality: 0.8) {
 
