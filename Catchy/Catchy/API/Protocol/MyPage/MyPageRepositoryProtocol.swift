@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import CombineMoya
 import Moya
+import SwiftUI
 
 /// 마이페이지 RepositoryProtocol
 protocol MyPageRepositoryProtocol {
@@ -24,5 +25,7 @@ protocol MyPageRepositoryProtocol {
     
     /// 내 장소 리뷰 조회 API
     func getMyPlaceReviewsData(review: MyPlaceReviewRequest) -> AnyPublisher<ResponseData<MyPlaceReviewResponse>, MoyaError>
+    
+    func patchProfileImage(profileImage: UIImage) -> AnyPublisher<ResponseData<EditProfileResponse>, MoyaError>
 }
 
