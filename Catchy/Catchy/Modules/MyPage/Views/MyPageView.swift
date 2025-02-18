@@ -39,7 +39,7 @@ struct MyPageView: View {
                         Spacer()
                     }
                 } else {
-                    LoadingView()
+                    MainProgressComponents()
                 }
             }
             .padding(.top, 62)
