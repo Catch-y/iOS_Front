@@ -12,6 +12,7 @@ import Kingfisher
 struct MyPageView: View {
     
     @StateObject var viewModel: MyPageViewModel
+    @ObservedObject private var userState = UserState.shared
     @EnvironmentObject var container: DIContainer
     @EnvironmentObject var appFlowViewModel: AppFlowViewModel
     
@@ -49,6 +50,9 @@ struct MyPageView: View {
             viewModel.getProfile()
             viewModel.getBookmarkCourseList(lastCourseId: nil)
         }
+        .sheet(isPresented: $viewModel.isImagePickerPresented, content: {
+            ImagePicker(imageHandler: viewModel, selectedLimit: 1)
+        })
     }
     
     // MARK: - 마이페이지 상단 섹션 함수
@@ -80,10 +84,9 @@ struct MyPageView: View {
                 imageURL: data.profileImage,
                 size: 104
             ) {
-                // TODO: - 프로필 수정 액션
-                print("프로필 수정 클릭")
+                viewModel.showImagePicker()
             }
-            Text(UserState.shared.getUserNickname())
+            Text(userState.getUserNickname())
                 .font(.title3)
                 .fontWeight(.bold)
                 .foregroundColor(.black)
@@ -114,7 +117,7 @@ struct MyPageView: View {
         let menuItems: [(icon: Image, title: String, action: () -> Void)] = [
             (Icon.document.image, "취향 설문", { print("취향 설문 클릭") }),
             (Icon.myPageHeart.image, "선호 장소", { container.navigationRouter.push(to: .favoritePlacesView) }),
-            (Icon.myPageReview.image, "내 리뷰", { print("내 리뷰 클릭") })
+            (Icon.myPageReview.image, "내 리뷰", { container.navigationRouter.push(to: .myReviewsView) })
         ]
         return HStack(spacing: 17) {
             ForEach(menuItems, id: \.title) { item in

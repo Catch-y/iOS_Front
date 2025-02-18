@@ -38,6 +38,7 @@ struct MyReviewsView: View {
         })
         .ignoresSafeArea()
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+        .navigationBarBackButtonHidden()
     }
     
     // MARK: - 세그먼트 UI

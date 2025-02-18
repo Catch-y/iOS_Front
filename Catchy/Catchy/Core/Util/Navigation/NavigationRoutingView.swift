@@ -35,6 +35,9 @@ struct NavigationRoutingView: View {
         case .favoritePlacesView:
             FavoritePlacesView(container: container)
                 .environmentObject(container)
+        case .myReviewsView:
+            MyReviewsView(container: container)
+                .environmentObject(container)
         }
     }
 }
