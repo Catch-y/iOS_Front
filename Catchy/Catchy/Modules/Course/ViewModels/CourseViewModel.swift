@@ -289,7 +289,7 @@ extension CourseViewModel {
     
     /// 현재 상태를 초기화하고 다시 코스 리스트를 요청합니다
     func resetAndGetCourseList() {
-        // self.courseList.removeAll()
+        self.courseList = []
         isCourseListLoading = false
         isLast = false
         lastId = nil

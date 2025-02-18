@@ -31,13 +31,22 @@ struct PlaceReviewRegisterView: View {
     
     var body: some View {
     
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(spacing: 0) {
             
             navigationGroup
+
+            if !viewModel.isDateLoading {
+                
+                scrollView
+                
+                Spacer()
+                
+            } else {
+                
+                MainProgressComponents()
+                
+            }
             
-            scrollView
-            
-            Spacer()
         }
         .task {
             viewModel.getPlaceVisitedDateList(placeId: placeId)
@@ -270,5 +279,22 @@ extension PlaceReviewRegisterView {
         }
         print(viewModel.rating != nil && viewModel.visitedDate != nil)
         return viewModel.rating != nil && viewModel.visitedDate != nil
+    }
+}
+
+
+
+struct PlaceReviewRegisterView_Previews: PreviewProvider {
+    static var previews: some View {
+        ForEach(
+            ["iPhone 16 Pro Max", "iPhone 11"],
+            id: \.self
+        ) { deviceName in
+            PlaceReviewRegisterView(container: DIContainer(), placeId: 1)
+                .previewDevice(PreviewDevice(rawValue: deviceName))
+                .previewDisplayName(deviceName)
+                .environmentObject(DIContainer())
+                
+        }
     }
 }
