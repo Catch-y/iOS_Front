@@ -13,7 +13,7 @@ class UserState: ObservableObject {
     
     @Published private(set) var userNickname: String
     private var userEmail: String
-    private let loginType: SocialLoginType
+    private var loginType: SocialLoginType
     
     init(
         userNickname: String = "",
@@ -65,5 +65,6 @@ class UserState: ObservableObject {
     public func clearProfile() {
         self.userNickname = ""
         self.userEmail = ""
+        self.loginType = .none
     }
 }
