@@ -117,7 +117,6 @@ struct PlaceVisitingView: View {
                         .font(.body3)
                         .padding(.trailing, 15)
 
-
                 }
             }
 
@@ -128,6 +127,8 @@ struct PlaceVisitingView: View {
 
     
     /// 리뷰 남기기 버튼
+    /// - Parameter isVisited: 방문한 장소인가?
+    /// - Returns: 리뷰 남기기 버튼 리턴
     private func reviewBtn(isVisited: Bool) -> some View {
 
         Button(action: {
@@ -143,26 +144,26 @@ struct PlaceVisitingView: View {
                     .frame(width: 108, height: 36)
 
                 HStack(spacing: 7) {
-                    
                     isVisited ? Icon.colorReview.image : Icon.review.image
-
+                        
                     Text("리뷰 남기기")
                         .foregroundStyle(isVisited ? .main : .g4)
                         .font(.body3)
-
                 }
             }
         }
         )
-        
+        .animation(.easeInOut(duration: 0.3), value: isVisited)
+
     }
     
     /// 방문 확인 스탬프
     private func stamp(isVisited: Bool) -> some View {
+        
+
         (isVisited ? Icon.visitStamp.image : Icon.emptyStamp.image)
             .padding(.leading, 10)
-            .transition(.opacity)
-            .animation(.easeInOut(duration: 0.5), value: isVisited)
+            .animation(.easeInOut(duration: 0.3), value: isVisited)
     }
 }
 

@@ -102,9 +102,14 @@ extension CourseViewModel {
     /// 내 코스 조회 API
     func getCourseList(){
         
-        guard !isPrefetching, !isLast else {
+        guard !isLast else {
             return
         }
+        
+        if !isPrefetching {
+            isCourseListLoading = true
+        }
+        
         let province = selectedUpperIndex == nil ? "" : upperLocations[selectedUpperIndex!].addrName
         let district = province == "" || selectedLowerIndex == nil ? "" : lowerLocations[selectedLowerIndex!]
         
@@ -291,6 +296,7 @@ extension CourseViewModel {
     func resetAndGetCourseList() {
         self.courseList = []
         isCourseListLoading = false
+        isPrefetching = false
         isLast = false
         lastId = nil
         isPrefetching = false

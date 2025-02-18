@@ -581,7 +581,7 @@ extension CourseAPITarget: APITargetType {
                         "categories": ["REST"]
                       }
                     ],
-                    "isLast": true
+                    "isLast": false
                   }
                 }
 

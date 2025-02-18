@@ -173,6 +173,7 @@ struct CourseView: View {
                             .task {
                                 guard let lastId = viewModel.lastId else { return }
                                 if course.courseId >= lastId {
+                                    viewModel.isPrefetching = true
                                     viewModel.getCourseList()
                                 }
                             }
