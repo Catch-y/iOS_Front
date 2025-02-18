@@ -46,7 +46,7 @@ struct PlaceDetailView: View {
                     
                     mainBtn(
                         hasCategory: place.categoryName != nil,
-                        hasSelected: selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId}
+                        hasSelected: selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId }
                     )
                     .disabled((place.categoryName != nil) && !selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId} && (selectedPlaceList.count < 5))
                     
