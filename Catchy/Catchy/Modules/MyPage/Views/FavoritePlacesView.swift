@@ -46,7 +46,7 @@ struct FavoritePlacesView: View {
                         Spacer()
                     }
                 } else {
-                    LoadingView()
+                    MainProgressComponents()
                 }
             }
         })

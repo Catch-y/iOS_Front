@@ -49,10 +49,10 @@ struct PlaceReviewView: View {
                     })
                     .padding(.horizontal, 16)
                 } else {
-                    LoadingView()
+                    MainProgressComponents()
                 }
             } else {
-                LoadingView()
+                MainProgressComponents()
             }
         })
         .ignoresSafeArea(.all)

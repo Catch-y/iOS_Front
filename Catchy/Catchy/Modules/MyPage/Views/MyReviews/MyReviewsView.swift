@@ -34,7 +34,7 @@ struct MyReviewsView: View {
                     MyPlaceReviewsView(container: DIContainer())
                 }
             } else {
-                LoadingView()
+                MainProgressComponents()
             }
         })
         .ignoresSafeArea()
