@@ -30,7 +30,7 @@ struct PlaceSearchResponseData: Codable, Identifiable{
     let placeName: String
     
     /// 장소 이미지 URL
-    let placeImage: String
+    var placeImage: String?
     
     /// 장소의 카테고리
     var category: CategoryType?
@@ -39,7 +39,7 @@ struct PlaceSearchResponseData: Codable, Identifiable{
     let roadAddress: String
     
     /// 장소 영업시간
-    let activeTime: String
+    var activeTime: String?
     
     /// 장소 평점
     let rating: Double
@@ -50,7 +50,7 @@ struct PlaceSearchResponseData: Codable, Identifiable{
     /// 장소 좋아요
     var liked: Bool?
     
-    init(placeId: Int, placeName: String, placeImage: String, category: CategoryType?, roadAddress: String, activeTime: String, rating: Double, reviewCount: Int, liked: Bool?) {
+    init(placeId: Int, placeName: String, placeImage: String?, category: CategoryType?, roadAddress: String, activeTime: String?, rating: Double, reviewCount: Int, liked: Bool?) {
         self.placeId = placeId
         self.placeName = placeName
         self.placeImage = placeImage

@@ -20,7 +20,7 @@ struct PlaceDomainButton: View {
     
     var body: some View {
         Button(action: {
-            if let url = URL(string: "https://" + domain) {
+            if let url = URL(string: domain) {
                 UIApplication.shared.open(url)
             }
         }, label: {

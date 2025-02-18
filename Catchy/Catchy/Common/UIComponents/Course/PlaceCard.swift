@@ -26,7 +26,7 @@ struct PlaceCard: View {
     var body: some View {
         
         HStack(spacing: 17) {
-            if let url = URL(string: place.placeImage) {
+            if let url = URL(string: place.placeImage ?? "") {
                 KFImage(url)
                     .placeholder{
                         ProgressView()
@@ -69,8 +69,11 @@ struct PlaceCard: View {
             PlaceAddressText(addressText: place.roadAddress)
                 .padding(.top, 6)
             
-            PlaceTimeText(timeText: place.activeTime)
-                .padding(.bottom, 8)
+            if let activeTime = place.activeTime {
+                PlaceTimeText(timeText: activeTime)
+                    .padding(.bottom, 8)
+            }
+            
             
             HStack(spacing: 12) {
                 PlaceRatingText(rating: place.rating)

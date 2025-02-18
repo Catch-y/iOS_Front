@@ -23,13 +23,13 @@ struct MyPageLikePlaceData: Codable {
     let placeId: Int
     
     /// 이미지 URL
-    let imageUrl: String
+    var imageUrl: String?
     
     /// 장소 이름
     let placeName: String
     
     /// 장소 설명
-    let placeDescription: String
+    var placeDescription: String?
     
     /// 장소 카테고리
     let categoryName: CategoryType
@@ -38,7 +38,7 @@ struct MyPageLikePlaceData: Codable {
     let roadAddress: String
     
     /// 장소 운영 시간
-    let activeTime: String
+    var activeTime: String?
     
     /// 장소 평점
     let rating: Double
@@ -50,11 +50,11 @@ struct MyPageLikePlaceData: Codable {
     let reviewCount: Int
     
     /// 장소 도메인 주소
-    let placeSite: String
+    var placeSite: String?
     
 }
 extension MyPageLikePlaceData: PlaceDataProtocol {
-    var placeImage: String { imageUrl }  // `imageUrl`을 `placeImage`로 매핑
+    var placeImage: String? { imageUrl }  // `imageUrl`을 `placeImage`로 매핑
         var category: CategoryType? { categoryName }  // `categoryName`을 `category`로 매핑
     
 }

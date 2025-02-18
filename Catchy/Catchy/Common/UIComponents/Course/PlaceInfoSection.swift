@@ -74,9 +74,11 @@ struct PlaceInfoSection: View {
             }
             .padding(.bottom, 8)
             
-            Text(place.placeDescription)
-                .font(.body3)
-                .foregroundStyle(.g4)
+            if let placeDescription = place.placeDescription {
+                Text(placeDescription)
+                    .font(.body3)
+                    .foregroundStyle(.g4)
+            }
                 
 
             HStack(spacing: 12) {
@@ -94,10 +96,14 @@ struct PlaceInfoSection: View {
             PlaceAddressText(addressText: place.roadAddress)
                 .padding(.bottom, 4)
             
-            PlaceTimeText(timeText: place.activeTime)
-                .padding(.bottom, 4)
+            if let activeTime = place.activeTime {
+                PlaceTimeText(timeText: activeTime)
+                    .padding(.bottom, 4)
+            }
             
-            PlaceDomainButton(domain: place.placeSite).padding(.leading, 1)
+            if let placeSite = place.placeSite {
+                PlaceDomainButton(domain: placeSite).padding(.leading, 1)
+            }
 
         }
         .padding(.horizontal, 11)
