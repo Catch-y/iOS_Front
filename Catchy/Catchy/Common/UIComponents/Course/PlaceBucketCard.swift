@@ -45,7 +45,7 @@ struct PlaceBucketCard: View {
             
             numberingLabel
             
-            if let url = URL(string: DataFormatter.shared.formattedImageUrl(placeImageURL: placeSearchResponseData.placeImage)) {
+            if let url = URL(string: DataFormatter.shared.formattedImageUrl(placeImageURL: placeSearchResponseData.placeImage ?? "")) {
                 KFImage(url)
                     .placeholder{
                         ProgressView()
@@ -104,7 +104,9 @@ struct PlaceBucketCard: View {
             
             PlaceAddressText(addressText: placeSearchResponseData.roadAddress)
                 
-            PlaceTimeText(timeText: placeSearchResponseData.activeTime)
+            if let activeTime = placeSearchResponseData.activeTime {
+                PlaceTimeText(timeText: activeTime)
+            }
             
             HStack(spacing: 12) {
                 
