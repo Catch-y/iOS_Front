@@ -32,6 +32,8 @@ struct CourseView: View {
     /// 코스 카드의 오프셋(코스 삭제 시 값 저장)
     @State var courseOffsets: [Int: CGFloat] = [:]
     
+    @State private var isVisible: Bool = false
+    
     // MARK: - Init
     init(container: DIContainer, isAILoadingPresented: Binding<Bool>, isDIYPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
@@ -98,6 +100,12 @@ struct CourseView: View {
             viewModel.resetAndGetCourseList()
         }) {
             AIPlaceListView(courseAIResponse: viewModel.courseAIResponse, container: container, isAISheetPresented: $isAISheetPresented)
+        }
+        .opacity(isVisible ? 1 : 0)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                isVisible = true
+            }
         }
         
     }

@@ -11,6 +11,7 @@ import Kingfisher
 /// 마이페이지 뷰
 struct MyPageView: View {
     
+    @State private var isVisible: Bool = false
     @StateObject var viewModel: MyPageViewModel
     @ObservedObject private var userState = UserState.shared
     @EnvironmentObject var container: DIContainer
@@ -44,6 +45,7 @@ struct MyPageView: View {
             .padding(.top, 62)
             .padding(.bottom, 110)
         }
+        .opacity(isVisible ? 1 : 0)
         .background(Color(.g1))
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
         .task {
@@ -53,6 +55,11 @@ struct MyPageView: View {
         .sheet(isPresented: $viewModel.isImagePickerPresented, content: {
             ImagePicker(imageHandler: viewModel, selectedLimit: 1)
         })
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                isVisible = true
+            }
+        }
     }
     
     // MARK: - 마이페이지 상단 섹션 함수
@@ -142,6 +149,9 @@ struct MyPageView: View {
                                     if course.courseId == content.last?.courseId, !viewModel.isLastPage {
                                         viewModel.getBookmarkCourseList(lastCourseId: course.courseId)
                                     }
+                                }
+                                .onTapGesture {
+                                    container.navigationRouter.push(to: .courseDetailView(courseId: course.courseId))
                                 }
                         }
                     }

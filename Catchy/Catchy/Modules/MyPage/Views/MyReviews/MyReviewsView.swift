@@ -11,6 +11,7 @@ import SwiftUI
 struct MyReviewsView: View {
     
     @StateObject var viewModel: MyReviewsViewModel
+    @EnvironmentObject var container: DIContainer
     @Namespace private var animationNamespace
     
     init(container: DIContainer) {
@@ -22,7 +23,7 @@ struct MyReviewsView: View {
         VStack(alignment: .center, spacing: 22, content: {
             if !viewModel.isMyReviewsLoading {
                 CustomNavigation(action: {
-                    print("hello")
+                    container.navigationRouter.pop()
                 }, title: "내 리뷰", rightNaviIcon: nil, isShadow: true)
                 segmentSection()
                     .padding(.bottom, 4)
