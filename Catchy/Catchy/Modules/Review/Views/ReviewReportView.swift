@@ -32,9 +32,9 @@ struct ReviewReportView: View {
                 MainBtn(
                     text: "신고하기",
                     action: {
-                        viewModel.postReviewReportInfo(reviewReportRequest: .init(reviewId: 1, reviewType: .course, reason: .copyrightViolation))
+                        viewModel.postReviewReportInfo(reviewId: 123, request: ReviewReportRequest(reviewType: .place, reason: "부적절한 내용입니다."))
                     },
-                    width: UIScreen.screenWidth,
+                    width: UIScreen.screenWidth-32,
                     height: 60,
                     onoff: viewModel.selectedReasons.isEmpty ? .off : .on
                 )

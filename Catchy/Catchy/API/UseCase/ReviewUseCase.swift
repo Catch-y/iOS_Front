@@ -17,9 +17,21 @@ class ReviewUseCase: ReviewUseCaseProtocol {
     init(repository: ReviewRepositoryProtocol = ReviewRepository()) {
         self.repository = repository
     }
+
+    func executePlaceReviewResponse(placeId: Int, request: PlaceReviewRequest) -> AnyPublisher<ResponseData<PlaceReviewInfoResponse>, Moya.MoyaError> {
+        return repository.getPlaceReviewInfoData(placeId: placeId, request: request)
+            .mapError { $0 as MoyaError }
+            .eraseToAnyPublisher()
+    }
     
-    func executeReviewResponse(reviewData: GetReviewRequest) -> AnyPublisher<ResponseData<ReviewResponse>, MoyaError> {
-        return repository.getReviewInfoData(reviewData: reviewData)
+    func executeCourseReviewResponse(courseId: Int, pageSize: Int, lastReviewId: Int?) -> AnyPublisher<ResponseData<CourseReviewInfoResponse>, Moya.MoyaError> {
+        return repository.getCourseReviewInfoData(courseId: courseId, pageSize: pageSize, lastReviewId: lastReviewId)
+            .mapError { $0 as MoyaError }
+            .eraseToAnyPublisher()
+    }
+    
+    func executeReviewReport(reviewId: Int, request: ReviewReportRequest) -> AnyPublisher<ResponseData<ReviewReportResponse>, Moya.MoyaError> {
+        return repository.postReviewReportData(reviewId: reviewId, request: request)
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }

@@ -25,7 +25,7 @@ struct FavoritePlacesView: View {
         VStack(alignment: .center, spacing: 20, content: {
             if !viewModel.isMyPlaceLoading {
                 CustomNavigation(action: {
-                    print("hello")
+                    container.navigationRouter.pop()
                 }, title: "선호 장소", rightNaviIcon: nil, isShadow: true)
                 
                 if let data = viewModel.myPlaceResponse {
@@ -46,7 +46,7 @@ struct FavoritePlacesView: View {
                         Spacer()
                     }
                 } else {
-                    LoadingView()
+                    MainProgressComponents()
                 }
             }
         })
@@ -56,10 +56,11 @@ struct FavoritePlacesView: View {
         }
         .fullScreenCover(isPresented: $viewModel.isPresented) {
             if let placeId = viewModel.selectedPlaceId {
-                ReviewView(container: container, placeId: placeId, isPresented: $viewModel.isPresented)
+                PlaceReviewView(container: container, placeId: placeId, isPresented: $viewModel.isPresented)
             }
             
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

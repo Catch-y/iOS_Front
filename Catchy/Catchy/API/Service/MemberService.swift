@@ -16,9 +16,15 @@ class MemberService: MemberServiceProtocol {
         self.provider = provider
     }
     
-    func patchNickname(nickname: String) -> AnyPublisher<ResponseData<EmptyResponse>, MoyaError> {
-        return provider.requestPublisher(.patchNickname(nickname: nickname))
+    func postNickname(nickname: String) -> AnyPublisher<ResponseData<EmptyResponse>, MoyaError> {
+        return provider.requestPublisher(.postNickname(nickname: nickname))
             .map(ResponseData<EmptyResponse>.self)
+            .eraseToAnyPublisher()
+    }
+    
+    func patchNickname(nickname: String) -> AnyPublisher<ResponseData<PatchNicknameResponse>, MoyaError> {
+        return provider.requestPublisher(.patchNickname(nickname: nickname))
+            .map(ResponseData<PatchNicknameResponse>.self)
             .eraseToAnyPublisher()
     }
     

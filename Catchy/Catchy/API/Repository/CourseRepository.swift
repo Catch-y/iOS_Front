@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import CombineMoya
 import Moya
+import UIKit
 
 /// [Course] Repository 객체
 class CourseRepository: CourseRepositoryProtocol {
@@ -20,18 +21,18 @@ class CourseRepository: CourseRepositoryProtocol {
     }
     
     /// 장소 카테고리 선택 API
-    func postPlaceCategoryRegisterData(place: PlaceCategoryRegisterRequest) -> AnyPublisher<ResponseData<PlaceCategoryRegisterResponse>, MoyaError> {
-        return service.postPlaceCategoryRegister(place: place)
+    func postPlaceCategoryRegisterData(placeId: Int, place: PlaceCategoryRegisterRequest) -> AnyPublisher<ResponseData<PlaceCategoryRegisterResponse>, MoyaError> {
+        return service.postPlaceCategoryRegister(placeId: placeId, place: place)
     }
     
     /// 코스 리뷰 작성 API
-    func postCourseReviewData(course: CourseReviewRequest) -> AnyPublisher<ResponseData<CourseReviewResponse>, MoyaError> {
-        return service.postCourseReview(course: course)
+    func postCourseReviewData(courseId: Int, course: CourseReviewRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<CourseReviewResponse>, MoyaError> {
+        return service.postCourseReview(courseId: courseId, course: course, reviewImages: reviewImages)
     }
     
     /// 코스 생성(DIY) API
-    func postCreateCourseDIYData(course: CourseDIYCreateRequest) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError> {
-        return service.postCreateCourseDIY(course: course)
+    func postCreateCourseDIYData(course: CourseDIYCreateRequest, courseImage: [UIImage]) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError> {
+        return service.postCreateCourseDIY(course: course, courseImage: courseImage)
     }
     
     /// 코스 생성(AI) API
@@ -45,8 +46,8 @@ class CourseRepository: CourseRepositoryProtocol {
     }
     
     /// 코스 수정 API
-    func patchCourseEditData(course: CourseEditRequest) -> AnyPublisher<ResponseData<CourseEditResponse>, MoyaError> {
-        return service.patchCourseEdit(course: course)
+    func patchCourseEditData(courseId: Int, course: CourseEditRequest, courseImage: UIImage) -> AnyPublisher<ResponseData<CourseEditResponse>, MoyaError> {
+        return service.patchCourseEdit(courseId: courseId, course: course, courseImage: courseImage)
     }
     
     /// 코스 북마크 API

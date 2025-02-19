@@ -142,8 +142,14 @@ extension PlaceAPITarget: APITargetType {
 
 }
 
+// MARK: - Extension
 extension PlaceAPITarget {
     
+    /// 장소 평점/리뷰 달기 API
+    /// - Parameters:
+    ///   - reviewRequest: Request 모델
+    ///   - reviewImages: 업로드한 리뷰 이미지 배열
+    /// - Returns: 멀티파트폼 데이터
     private func encodeReviewData(reviewRequest: PlaceReviewSubmissionRequest, reviewImages: [UIImage]) -> [MultipartFormData] {
         
         var formData: [MultipartFormData] = []
@@ -161,11 +167,11 @@ extension PlaceAPITarget {
             formData.append(visitedDateFormData)
         }
         
-        for (index, reviewImage) in reviewImages.enumerated() {
+        for (_, reviewImage) in reviewImages.enumerated() {
             
             if let image = reviewImage.jpegData(compressionQuality: 0.8) {
 
-                let multipartData = MultipartFormData(provider: .data(image), name: "images", fileName: "images\(index).jpg", mimeType: "images/jpeg")
+                let multipartData = MultipartFormData(provider: .data(image), name: "images", fileName: "images.jpg", mimeType: "/")
                 formData.append(multipartData)
             }
         }

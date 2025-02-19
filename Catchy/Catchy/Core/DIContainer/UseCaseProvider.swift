@@ -26,15 +26,14 @@ protocol UseCaseProtocol {
     /// 리뷰 전체보기
     var reviewUseCase: ReviewUseCase { get set }
     
-    /// 리뷰 신고하기
-    var reviewReportUseCase: ReviewReportUseCase { get set }
-    
     /// 유저 관련
     var memberUseCase: MemberUseCase { get set }
   
     var myPageUseCase: MyPageUseCase { get set }
     
     var homeUseCase: HomeUseCase { get set }
+    
+    var routeUseCase: RouteUseCase { get set }
 }
 
 class UseCaseProvider: UseCaseProtocol {
@@ -58,27 +57,26 @@ class UseCaseProvider: UseCaseProtocol {
     /// 리뷰 전체보기
     var reviewUseCase: ReviewUseCase
     
-    /// 리뷰 신고하기
-    var reviewReportUseCase: ReviewReportUseCase
-    
     var memberUseCase: MemberUseCase
     
     var homeUseCase: HomeUseCase
         
     var myPageUseCase: MyPageUseCase
+    
+    var routeUseCase: RouteUseCase
 
     init() {
         self.authUseCase = AuthUseCase()
         self.courseUseCase = CourseUseCase()
         self.placeCourseUseCase = PlaceCourseUseCase()
         self.reviewUseCase = ReviewUseCase()
-        self.reviewReportUseCase = ReviewReportUseCase()
         self.placeUseCase = PlaceUseCase()
         self.memberUseCase = MemberUseCase()
         self.myPageUseCase = MyPageUseCase()
         self.homeUseCase = HomeUseCase()
         self.groupUseCase = GroupUseCase()
         self.voteUseCase = VoteUseCase ()
+        self.routeUseCase = RouteUseCase()
     }
     
     

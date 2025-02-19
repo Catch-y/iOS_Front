@@ -13,16 +13,20 @@ import Combine
 class PreferenceViewModel: ObservableObject {
     
     let container: DIContainer
+    let appFlowViewModel: AppFlowViewModel
+    
     private var cancellalbes = Set<AnyCancellable>()
     
-    init(container: DIContainer) {
+    init(container: DIContainer, appFlowViewModel: AppFlowViewModel) {
         self.container = container
+        self.appFlowViewModel = appFlowViewModel
+        
     }
     
     @Published var isLoading: Bool = false
     
     //MARK: - 전체 스텝 관리
-    @Published var preferenceStep: Int = 3
+    @Published var preferenceStep: Int = 0
     
     //MARK: - 1번째, 2번째 스텝 관리
     @Published var pageCount: Int = 0
@@ -211,10 +215,14 @@ extension PreferenceViewModel {
     }
 }
 
+//MARK: - PreferenceAPI Extension
+
 extension PreferenceViewModel {
     
     /// 취향 1,2 단계 데이터 전송
     func postSurveyCategory() {
+        
+        isLoading = true
         
         let selectedCategories = smallCategoryBtn.values.flatMap { $0 }
         
@@ -240,7 +248,11 @@ extension PreferenceViewModel {
                 case .failure(let error):
                     print("❌ 모든 취향 데이터 전송 API 호출 실패: \(error)")
                 }
-            }, receiveValue: { _ in })
+            }, receiveValue: { response in
+                if let response = response.result {
+                    print("취향 1단계 및 2단계 response: \(response)")
+                }
+            })
             .store(in: &cancellalbes)
     }
     
@@ -279,7 +291,11 @@ extension PreferenceViewModel {
                 case .failure(let error):
                     print("❌ 모든 시간, 같이할 사람 전송 실패: \(error)")
                 }
-            }, receiveValue: { _ in })
+            }, receiveValue: { response in
+                if let response = response.result {
+                    print("취향 3단계 및 4단계 response: \(response)")
+                }
+            })
             .store(in: &cancellalbes)
     }
     
@@ -309,14 +325,23 @@ extension PreferenceViewModel {
                 
             }
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { [weak self] completion in
+                
+                guard let self = self else { return }
+                isLoading = false
+                
                 switch completion {
                 case .finished:
                     print("✅ 지역 전송 완료")
+                    appFlowViewModel.changeTabView()
                 case .failure(let failure):
                     print("❌ 지역 전송 실패 \(failure)")
                 }
-            }, receiveValue: { _ in })
+            }, receiveValue: { response in
+                if let response = response.result {
+                    print("취향 5단계 response: \(response)")
+                }
+            })
             .store(in: &cancellalbes)
     }
 }

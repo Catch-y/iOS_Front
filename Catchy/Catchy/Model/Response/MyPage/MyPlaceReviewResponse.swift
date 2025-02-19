@@ -24,7 +24,9 @@ struct MyPlaceReviewResponse: Codable {
 }
 
 /// 개별 장소 리뷰 데이터를 담는 구조체
-struct PlaceReviewData: Codable {
+struct PlaceReviewData: Codable, Identifiable {
+    
+    var id = UUID()
     
     /// 리뷰 ID
     let reviewId: Int
@@ -46,4 +48,14 @@ struct PlaceReviewData: Codable {
     
     /// 방문 날짜
     let visitedDate: String
+    
+    enum CodingKeys: String, CodingKey {
+        case reviewId
+        case name
+        case categories
+        case comment
+        case reviewImages
+        case rating
+        case visitedDate
+    }
 }

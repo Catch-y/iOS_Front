@@ -38,9 +38,9 @@ class DIYCourseViewModel: ObservableObject {
     /// 마지막 요청인가?
     var isLast: Bool = false
     
-    /// 무한 스크롤 요청 중?
+    /// 무한 스크롤 요청 중인가?
     var isPrefetching: Bool = false
-    
+        
     // MARK: - 장소 리뷰 화면 Properties
     /// 장소 리뷰 화면 상태
     @Published var isReviewPresented: Bool = false
@@ -60,13 +60,16 @@ extension DIYCourseViewModel {
     
     // MARK: - API 호출 함수
     /// 장소 검색 - 지역명 기반
-    func getPlaceList() {
+    func getPlaceListByRegion() {
         
-        guard !isPrefetching, !isLast else { return }
+        guard !isLast else { return }
         
-        isPlaceListLoading = true
+        if !isPrefetching {
+            isPlaceListLoading = true
+        }
         
-        let request = PlaceSearchByRegionRequest(searchKeyword: searchText, page: 1)
+        
+        let request = PlaceSearchByRegionRequest(searchKeyword: searchText, page: page)
         container.useCaseProvider.placeCourseUseCase.executeGetPlaceListByRegion(placeSearchRequest: request)
             .tryMap {
                 responseData ->
@@ -107,6 +110,7 @@ extension DIYCourseViewModel {
                     self.placeSearchResponse = response
                     self.isLast = response.isLast
                     self.page += 1
+
                 }
                 
             })
@@ -117,12 +121,12 @@ extension DIYCourseViewModel {
     /// 리프레시 함수
     func refresh() async {
         self.isLast = false
-        self.page = 1
+        self.page = 1 
         
         do {
             try await Task.sleep(nanoseconds: 1_500_000_000)
             self.placeSearchResponse = nil
-            self.getPlaceList()
+            self.getPlaceListByRegion()
         } catch {
             print("❌ Refresh 오류: \(error)")
         }

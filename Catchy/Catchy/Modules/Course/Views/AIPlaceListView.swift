@@ -112,10 +112,8 @@ struct AIPlaceListView: View {
                             place in
                             PlaceBucketCard(
                                 placeSearchResponseData: place,
-                                index: index,
-                                canDelete: false
-                            ) { (index) in
-                                print(index)
+                                index: index
+                            ) {
                             }
                         }
                     

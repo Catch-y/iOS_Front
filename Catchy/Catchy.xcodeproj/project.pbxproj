@@ -26,7 +26,23 @@
 		4886721F2D3159680047E94C /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 4886721E2D3159680047E94C /* RxMoya */; };
 		488672222D3159810047E94C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 488672212D3159810047E94C /* SnapKit */; };
 		488672252D3159BE0047E94C /* FloatingButton in Frameworks */ = {isa = PBXBuildFile; productRef = 488672242D3159BE0047E94C /* FloatingButton */; };
+		48DD48952D6305B6008E6595 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 48DD48942D6305B6008E6595 /* FirebaseCore */; };
+		48DD48972D6305B6008E6595 /* FirebaseInAppMessaging-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 48DD48962D6305B6008E6595 /* FirebaseInAppMessaging-Beta */; };
+		48DD48992D6305B6008E6595 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 48DD48982D6305B6008E6595 /* FirebaseMessaging */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		48DD48BC2D63226C008E6595 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		48F248682D2EB42C0079E120 /* Catchy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Catchy.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -36,6 +52,7 @@
 		48056DAA2D34EE970070FDAC /* Exceptions for "Catchy" folder in "Catchy" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Core/Util/Secret.xcconfig,
 				Info.plist,
 			);
 			target = 48F248672D2EB42C0079E120 /* Catchy */;
@@ -43,6 +60,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		48DD48B12D63226B008E6595 /* Notification */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Notification;
+			sourceTree = "<group>";
+		};
 		48F2486A2D2EB42C0079E120 /* Catchy */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -64,7 +86,9 @@
 				488672112D31593E0047E94C /* KakaoSDKTemplate in Frameworks */,
 				4886720B2D31593E0047E94C /* KakaoSDKNavi in Frameworks */,
 				4886721D2D3159680047E94C /* ReactiveMoya in Frameworks */,
+				48DD48952D6305B6008E6595 /* FirebaseCore in Frameworks */,
 				488671FD2D31593E0047E94C /* KakaoSDK in Frameworks */,
+				48DD48972D6305B6008E6595 /* FirebaseInAppMessaging-Beta in Frameworks */,
 				488672052D31593E0047E94C /* KakaoSDKCommon in Frameworks */,
 				488671FF2D31593E0047E94C /* KakaoSDKAuth in Frameworks */,
 				4886721B2D3159680047E94C /* Moya in Frameworks */,
@@ -76,6 +100,7 @@
 				4886720F2D31593E0047E94C /* KakaoSDKTalk in Frameworks */,
 				488672222D3159810047E94C /* SnapKit in Frameworks */,
 				488672072D31593E0047E94C /* KakaoSDKFriend in Frameworks */,
+				48DD48992D6305B6008E6595 /* FirebaseMessaging in Frameworks */,
 				4886720D2D31593E0047E94C /* KakaoSDKShare in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				48F2486A2D2EB42C0079E120 /* Catchy */,
+				48DD48B12D63226B008E6595 /* Notification */,
 				48F248692D2EB42C0079E120 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -109,6 +135,7 @@
 				48F248642D2EB42C0079E120 /* Sources */,
 				48F248652D2EB42C0079E120 /* Frameworks */,
 				48F248662D2EB42C0079E120 /* Resources */,
+				48DD48BC2D63226C008E6595 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -138,6 +165,9 @@
 				4886721E2D3159680047E94C /* RxMoya */,
 				488672212D3159810047E94C /* SnapKit */,
 				488672242D3159BE0047E94C /* FloatingButton */,
+				48DD48942D6305B6008E6595 /* FirebaseCore */,
+				48DD48962D6305B6008E6595 /* FirebaseInAppMessaging-Beta */,
+				48DD48982D6305B6008E6595 /* FirebaseMessaging */,
 			);
 			productName = Catchy;
 			productReference = 48F248682D2EB42C0079E120 /* Catchy.app */;
@@ -173,6 +203,7 @@
 				488672172D3159680047E94C /* XCRemoteSwiftPackageReference "Moya" */,
 				488672202D3159810047E94C /* XCRemoteSwiftPackageReference "SnapKit" */,
 				488672232D3159BE0047E94C /* XCRemoteSwiftPackageReference "FloatingButton" */,
+				48DD48932D6305B6008E6595 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 48F248692D2EB42C0079E120 /* Products */;
@@ -458,6 +489,14 @@
 				minimumVersion = 1.3.0;
 			};
 		};
+		48DD48932D6305B6008E6595 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.8.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -555,6 +594,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 488672232D3159BE0047E94C /* XCRemoteSwiftPackageReference "FloatingButton" */;
 			productName = FloatingButton;
+		};
+		48DD48942D6305B6008E6595 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 48DD48932D6305B6008E6595 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		48DD48962D6305B6008E6595 /* FirebaseInAppMessaging-Beta */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 48DD48932D6305B6008E6595 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseInAppMessaging-Beta";
+		};
+		48DD48982D6305B6008E6595 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 48DD48932D6305B6008E6595 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

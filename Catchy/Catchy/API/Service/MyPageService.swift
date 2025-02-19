@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import CombineMoya
 import Moya
+import SwiftUI
 
 /// 마이페이지 Service
 class MyPageService: MyPageServiceProtocol {
@@ -44,6 +45,19 @@ class MyPageService: MyPageServiceProtocol {
     func getMyPlaceReviews(review: MyPlaceReviewRequest) -> AnyPublisher<ResponseData<MyPlaceReviewResponse>, Moya.MoyaError> {
         return provider.requestPublisher(.getMyPlaceReviews(review: review))
             .map(ResponseData<MyPlaceReviewResponse>.self)
+            .eraseToAnyPublisher()
+    }
+    
+    func patchProfileImage(profileImage: UIImage) -> AnyPublisher<ResponseData<EditProfileResponse>, MoyaError> {
+        return provider.requestPublisher(.patchProfileImage(profileImage: profileImage))
+            .map(ResponseData<EditProfileResponse>.self)
+            .eraseToAnyPublisher()
+    }
+    
+    /// 리뷰 삭제 API
+    func deleteReview(reviewId: Int, reviewType: ReviewType) -> AnyPublisher<ResponseData<DeleteReviewResponse>, Moya.MoyaError> {
+        return provider.requestPublisher(.deleteReview(reviewId: reviewId, reviewType: reviewType))
+            .map(ResponseData<DeleteReviewResponse>.self)
             .eraseToAnyPublisher()
     }
 }

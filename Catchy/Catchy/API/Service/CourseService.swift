@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import CombineMoya
 import Moya
+import UIKit
 
 /// [Course] Service 객체
 class CourseService: CourseServiceProtocol {
@@ -20,22 +21,22 @@ class CourseService: CourseServiceProtocol {
     }
     
     /// 장소 카테고리 선택 API
-    func postPlaceCategoryRegister(place: PlaceCategoryRegisterRequest) -> AnyPublisher<ResponseData<PlaceCategoryRegisterResponse>, MoyaError> {
-        return provider.requestPublisher(.postPlaceCategoryRegister(place: place))
+    func postPlaceCategoryRegister(placeId: Int, place: PlaceCategoryRegisterRequest) -> AnyPublisher<ResponseData<PlaceCategoryRegisterResponse>, MoyaError> {
+        return provider.requestPublisher(.postPlaceCategoryRegister(placeId: placeId, place: place))
             .map(ResponseData<PlaceCategoryRegisterResponse>.self)
             .eraseToAnyPublisher()
     }
     
     /// 코스 리뷰 작성 API
-    func postCourseReview(course: CourseReviewRequest) -> AnyPublisher<ResponseData<CourseReviewResponse>, MoyaError> {
-        return provider.requestPublisher(.postCourseReview(course: course))
+    func postCourseReview(courseId: Int, course: CourseReviewRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<CourseReviewResponse>, MoyaError> {
+        return provider.requestPublisher(.postCourseReview(courseId: courseId, course: course, reviewImages: reviewImages))
             .map(ResponseData<CourseReviewResponse>.self)
             .eraseToAnyPublisher()
     }
     
     /// 코스 생성(DIY) API
-    func postCreateCourseDIY(course: CourseDIYCreateRequest) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError> {
-        return provider.requestPublisher(.postCreateCourseDIY(course: course))
+    func postCreateCourseDIY(course: CourseDIYCreateRequest, courseImage: [UIImage]) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError> {
+        return provider.requestPublisher(.postCreateCourseDIY(course: course, courseImage: courseImage))
             .map(ResponseData<CourseDIYCreateResponse>.self)
             .eraseToAnyPublisher()
     }
@@ -55,8 +56,8 @@ class CourseService: CourseServiceProtocol {
     }
     
     /// 코스 수정 API
-    func patchCourseEdit(course: CourseEditRequest) -> AnyPublisher<ResponseData<CourseEditResponse>, MoyaError> {
-        return provider.requestPublisher(.patchCourseEdit(course: course))
+    func patchCourseEdit(courseId: Int, course: CourseEditRequest, courseImage: UIImage) -> AnyPublisher<ResponseData<CourseEditResponse>, MoyaError> {
+        return provider.requestPublisher(.patchCourseEdit(courseId: courseId, course: course, courseImage: courseImage))
             .map(ResponseData<CourseEditResponse>.self)
             .eraseToAnyPublisher()
     }

@@ -37,7 +37,7 @@ struct PlaceVisitingView: View {
                     ), likeTap: {
                         viewModel.patchPlaceLike()
                     }, reviewTap: {
-                        viewModel.showReview(placeId: place.placeId)
+                        viewModel.showReview()
                     })
 
                     buttonGroup
@@ -45,6 +45,7 @@ struct PlaceVisitingView: View {
                     MainBtn(
                         text: "길 찾기",
                         action: {
+                            // TODO: - 길 찾기 구현
                         },
                         width: UIScreen.screenWidth - 32,
                         height: 55,
@@ -66,9 +67,8 @@ struct PlaceVisitingView: View {
             viewModel.getPlaceDetail(placeId: placeId)
         }
         .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
-            if let placeId = viewModel.selectedPlaceId {
-                ReviewView(container: container, placeId: placeId, isPresented: $viewModel.isReviewPresented)
-            }
+            PlaceReviewView(container: container, placeId: placeId, isPresented: $viewModel.isReviewPresented)
+
         }
         .navigationBarBackButtonHidden()
     }
@@ -79,6 +79,7 @@ struct PlaceVisitingView: View {
         HStack(spacing: 10) {
             
             visitCheckbtn
+                .disabled(viewModel.placeDetailResponse!.isVisited)
             
             reviewBtn(isVisited: viewModel.placeDetailResponse!.isVisited)
             
@@ -90,6 +91,7 @@ struct PlaceVisitingView: View {
         .padding(.bottom, 30)
     }
 
+    // TODO: - 방문이 가능한지에 따라 처리
     /// 방문 체크 버튼
     private var visitCheckbtn: some View {
 
@@ -100,6 +102,7 @@ struct PlaceVisitingView: View {
         }, label: {
 
             ZStack {
+                
                 RoundedRectangle(cornerRadius: 16.5)
                     .fill(.white)
                     .stroke(.main)
@@ -114,7 +117,6 @@ struct PlaceVisitingView: View {
                         .font(.body3)
                         .padding(.trailing, 15)
 
-
                 }
             }
 
@@ -125,11 +127,13 @@ struct PlaceVisitingView: View {
 
     
     /// 리뷰 남기기 버튼
+    /// - Parameter isVisited: 방문한 장소인가?
+    /// - Returns: 리뷰 남기기 버튼 리턴
     private func reviewBtn(isVisited: Bool) -> some View {
 
         Button(action: {
             if isVisited {
-                viewModel.showReviewRegister()
+                container.navigationRouter.push(to: .placeReviewRegsiterView(placeId: placeId))
             }
         },
                label: {
@@ -140,26 +144,26 @@ struct PlaceVisitingView: View {
                     .frame(width: 108, height: 36)
 
                 HStack(spacing: 7) {
-                    
                     isVisited ? Icon.colorReview.image : Icon.review.image
-
+                        
                     Text("리뷰 남기기")
                         .foregroundStyle(isVisited ? .main : .g4)
                         .font(.body3)
-
                 }
             }
         }
         )
-        
+        .animation(.easeInOut(duration: 0.3), value: isVisited)
+
     }
     
     /// 방문 확인 스탬프
     private func stamp(isVisited: Bool) -> some View {
-        isVisited ? Icon.visitStamp.image
+        
+
+        (isVisited ? Icon.visitStamp.image : Icon.emptyStamp.image)
             .padding(.leading, 10)
-                : Icon.emptyStamp.image
-            .padding(.leading, 10)
+            .animation(.easeInOut(duration: 0.3), value: isVisited)
     }
 }
 

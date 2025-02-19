@@ -22,7 +22,7 @@ struct PlaceDetailResponse: Codable, Identifiable, Likeable {
     let placeName: String
     
     /// 장소 상세 설명
-    let placeDescription: String
+    var placeDescription: String?
     
     /// 장소의 카테고리
     var categoryName: CategoryType?
@@ -31,7 +31,7 @@ struct PlaceDetailResponse: Codable, Identifiable, Likeable {
     let roadAddress: String
     
     /// 장소 영업시간
-    let activeTime: String
+    var activeTime: String?
     
     /// 장소 평점
     let rating: Double
@@ -43,7 +43,7 @@ struct PlaceDetailResponse: Codable, Identifiable, Likeable {
     let reviewCount: Int
     
     /// 장소의 도메인 주소
-    let placeSite: String
+    var placeSite: String?
     
     /// 장소 좋아요
     var liked: Bool

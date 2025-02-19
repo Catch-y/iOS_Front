@@ -27,6 +27,8 @@ struct ReviewCard: View {
     /// 리뷰 이미지
     let images: [ReviewImageData]
     
+    /// 버튼 액션
+    // let action: (Int) -> Void
     
     /* 필요 시 표시할 데이터 */
     
@@ -58,7 +60,7 @@ struct ReviewCard: View {
     /// - Parameter content: 리뷰 내용 데이터 모델
     /// - Returns: 리뷰 카드 뷰
     private func reviewTableSection() -> some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading) {
             cardTopSection()
             
             if !images.isEmpty {
@@ -99,7 +101,7 @@ struct ReviewCard: View {
                         
                         Button {
                             withAnimation {
-                                // TODO: - 신고하기 로직
+                                //action(reviewId)
                             }
                         } label: {
                             Text("삭제")
@@ -112,9 +114,31 @@ struct ReviewCard: View {
                 })
             )
             
+        case (.ratingReview, .course):
+            return AnyView (
+                
+                HStack(content: {
+                    
+                    Text(userName ?? "")
+                        .font(.caption)
+                        .foregroundStyle(Color.g5)
+                    
+                    Spacer()
+                    
+                    Button {
+                        withAnimation {
+                            // TODO: - 신고하기 로직
+                        }
+                    } label: {
+                        Text("신고하기")
+                            .font(.caption)
+                            .foregroundStyle(Color.g5)
+                            .underline()
+                    }
+                })
+            )
             
-            
-        case (.ratingReview, .course), (.ratingReview , .place):
+        case (.ratingReview, .place):
             return AnyView (
                 HStack(content: {
                     // 별점 표시
@@ -123,10 +147,16 @@ struct ReviewCard: View {
                     Spacer()
                     
                     // 신고하기 버튼
-                    Text("신고하기")
-                        .font(.caption)
-                        .foregroundColor(.g5)
-                        .underline()
+                    Button {
+                        withAnimation {
+                            // TODO: - 신고하기 로직
+                        }
+                    } label: {
+                        Text("신고하기")
+                            .font(.caption)
+                            .foregroundStyle(Color.g5)
+                            .underline()
+                    }
                 })
             )
         }
@@ -152,11 +182,10 @@ struct ReviewCard: View {
                             .clipShape(.rect(cornerRadius: 15))
                     }
                 }
-                
             })
-            .padding(.trailing, 10)
         }
         .frame(height: 85)
+        .padding(.top, 11)
     }
     
     /// 3. 리뷰 내용
@@ -167,6 +196,8 @@ struct ReviewCard: View {
             .foregroundColor(.g7)
             .lineLimit(nil)
             .lineSpacing(2)
+            .padding(.top, 22)
+            .padding(.bottom, 14)
     }
     
     
@@ -199,12 +230,18 @@ struct ReviewCard: View {
                         .foregroundStyle(Color.g5)
                 })
             )
-        
+            
         case (.ratingReview, .course):
             return AnyView(
-                Text(userName ?? "")
-                    .font(.caption)
-                    .foregroundColor(.g5)
+                HStack(spacing: 6, content: {
+                    Text("리뷰 작성일")
+                        .font(.caption)
+                        .foregroundStyle(Color.g4)
+                    
+                    Text(date ?? "")
+                        .font(.caption)
+                        .foregroundStyle(Color.g5)
+                })
             )
             
         case (.ratingReview, .place):
@@ -234,7 +271,7 @@ struct ReviewCard: View {
 
 #Preview {
     ReviewCard(
-        cardType: .myReview,
+        cardType: .ratingReview,
         reviewType: .course,
         reviewId: 1,
         comment: "스타벅스 너무 좋았어요!",
@@ -242,6 +279,8 @@ struct ReviewCard: View {
             ReviewImageData(reviewImageId: 101, imageUrl: "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp"),
             ReviewImageData(reviewImageId: 102, imageUrl: "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp")
         ],
+        //action: { reviewId in
+        //    print("리뷰 삭제 요청 with ID: \(reviewId)")},
         categories: [.CAFE, .BAR, .CULTURELIFE, .EXPERIENCE, .REST],
         rating: 5,
         placeOrCourseName: "스타벅스 용산점",

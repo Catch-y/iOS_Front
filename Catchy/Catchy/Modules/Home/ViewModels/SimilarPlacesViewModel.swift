@@ -29,7 +29,7 @@ class SimilarPlacesViewModel: ObservableObject {
     func getMoreRecommendPlaceRespponse(isRefresh: Bool = false) {
         guard !isLoading, !isLastPage else { return }
         
-        if !isRefresh {
+        if !isRefresh  {
             self.isLoading = true
         }
 
@@ -86,6 +86,7 @@ class SimilarPlacesViewModel: ObservableObject {
                                 currentPage += 1
                             }
                         }
+                        
                     }
                     print("🔍 More Third Section updated: \(String(describing: response.result))")
                 })

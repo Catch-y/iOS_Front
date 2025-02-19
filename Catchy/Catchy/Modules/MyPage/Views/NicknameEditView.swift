@@ -40,14 +40,17 @@ struct NicknameEditView: View {
                 MainBtn(
                     text: "변경하기",
                     action: {
-                        // TODO: - 닉네임 변경 API 구현
-                        // viewModel.updateNickname
-                        isPresented = false
+                        viewModel.changeNickname { result in
+                            if result {
+                                isPresented = false
+                            }
+                        }
                     },
                     width: 239,
                     height: 36,
                     onoff: viewModel.isDuplicateChecked ? .on : .off
                 )
+                .disabled(!viewModel.isDuplicateChecked)
                 
             }
             .frame(height: 192)
@@ -107,8 +110,7 @@ struct NicknameEditView: View {
             
             /* 중복확인 버튼 */
             Button(action: {
-                //TODO: - 중복확인 API 구현
-                // viewModel.checkNicknameDuplicate()
+                viewModel.checkNicknameAvailability()
             }) {
                 Text("중복확인")
                     .font(.caption_SM)

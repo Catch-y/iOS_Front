@@ -9,18 +9,19 @@ import Foundation
 import Combine
 import CombineMoya
 import Moya
+import UIKit
 
 /// [Course] ServiceProtocol
 protocol CourseServiceProtocol {
     
     /// 장소 카테고리 선택 API
-    func postPlaceCategoryRegister(place: PlaceCategoryRegisterRequest) -> AnyPublisher<ResponseData<PlaceCategoryRegisterResponse>, MoyaError>
+    func postPlaceCategoryRegister(placeId: Int, place: PlaceCategoryRegisterRequest) -> AnyPublisher<ResponseData<PlaceCategoryRegisterResponse>, MoyaError>
     
     /// 코스 리뷰 작성 API
-    func postCourseReview(course: CourseReviewRequest) -> AnyPublisher<ResponseData<CourseReviewResponse>, MoyaError>
+    func postCourseReview(courseId: Int, course: CourseReviewRequest, reviewImages: [UIImage]) -> AnyPublisher<ResponseData<CourseReviewResponse>, MoyaError>
     
     /// 코스 생성(DIY) API
-    func postCreateCourseDIY(course: CourseDIYCreateRequest) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError>
+    func postCreateCourseDIY(course: CourseDIYCreateRequest, courseImage: [UIImage]) -> AnyPublisher<ResponseData<CourseDIYCreateResponse>, MoyaError>
     
     /// 코스 생성(AI) API
     func postCreateCourseAI() -> AnyPublisher<ResponseData<CourseAICreateResponse>, MoyaError>
@@ -29,7 +30,7 @@ protocol CourseServiceProtocol {
     func deleteCourse(courseId: Int) -> AnyPublisher<ResponseData<CourseDeleteResponse>, MoyaError>
     
     /// 코스 수정 API
-    func patchCourseEdit(course: CourseEditRequest) -> AnyPublisher<ResponseData<CourseEditResponse>, MoyaError>
+    func patchCourseEdit(courseId: Int, course: CourseEditRequest, courseImage: UIImage) -> AnyPublisher<ResponseData<CourseEditResponse>, MoyaError>
     
     /// 코스 북마크 API
     func patchCourseBookmark(courseId: Int) -> AnyPublisher<ResponseData<CourseBookmarkResponse>, MoyaError>

@@ -19,10 +19,6 @@ struct CourseDIYCreateRequest: Codable {
     /// 장소의 ID 배열
     let placeIds: [Int]
     
-    /// 코스 이미지
-    // TODO: - 이미지 처리.
-    let courseImage: String
-    
     /// 추천 시작 시간
     /// HH:mm 형식
     let recommendTimeStart: String
