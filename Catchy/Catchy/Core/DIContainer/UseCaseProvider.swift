@@ -66,6 +66,7 @@ class UseCaseProvider: UseCaseProtocol {
     var homeUseCase: HomeUseCase
         
     var myPageUseCase: MyPageUseCase
+
     init() {
         self.authUseCase = AuthUseCase()
         self.courseUseCase = CourseUseCase()

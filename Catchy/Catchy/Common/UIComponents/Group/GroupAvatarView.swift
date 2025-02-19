@@ -32,19 +32,23 @@ struct GroupAvatarView: View {
                             if avatar.imageName.starts(with: "http") {  //  URL 이미지 (서버)
                                 KFImage(URL(string: avatar.imageName))
                                     .placeholder {
-                                        Circle()
-                                            .fill(Color.bg1) // 로딩 중 배경
+                                        Image("placeholder")
+                                            .resizable()
+                                            .scaledToFill()
                                             .frame(width: 63, height: 63)
+                                            .clipShape(Circle())
                                     }
-                                    .scaledToFit()
+                                    .resizable()
+                                    .scaledToFill()
                                     .frame(width: 63, height: 63)
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .clipShape(Circle())
+
                             } else {  //  로컬 에셋 이미지 (샘플 데이터)
                                 Image(avatar.imageName)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 63, height: 63)
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 63, height: 63)
+                                            .clipShape(Circle()) //  원형 크롭
                             }
                         }
                     }
@@ -57,7 +61,7 @@ struct GroupAvatarView: View {
 
             }
         }
-        .onAppear {
+        .task {
             viewModel.fetchGroupMembers(groupId: groupId)
         }
     }
@@ -67,6 +71,5 @@ struct GroupAvatarView: View {
 struct GroupAvatarView_Previews: PreviewProvider {
     static var previews: some View {
         GroupAvatarView(groupId: 1)
-            .background(.blue)
     }
 }

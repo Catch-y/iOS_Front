@@ -26,12 +26,12 @@ class GroupUseCase: GroupUseCaseProtocol {
     // MARK: - Methods
     
     func executePostCreateGroup(
-        createGroup: CreateGroupRequest
-    ) -> AnyPublisher<ResponseData<CreateGroupResponse>, MoyaError> {
-        return repository.postCreateGroup(createGroup: createGroup)
-            .mapError { $0 as MoyaError }
-            .eraseToAnyPublisher()
-    }
+            group: GroupInfo
+        ) -> AnyPublisher<ResponseData<CreateGroupResponse>, MoyaError> {
+            return repository.postCreateGroup(group: group)
+                .mapError { $0 as MoyaError }
+                .eraseToAnyPublisher()
+        }
     
     func executePostGroupJoin(
         groupJoinRequest: GroupJoinRequest
@@ -61,7 +61,7 @@ class GroupUseCase: GroupUseCaseProtocol {
         page: Int,
         size: Int
     ) -> AnyPublisher<ResponseData<[GroupCalendarResponse]>, MoyaError> {
-        return repository.getMyGroups(page: page, size: size)
+        return repository.getMyGroups(year: page, month: size)
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }

@@ -47,12 +47,13 @@ struct VotingBeforeMemberView: View {
                             .placeholder {
                                 Image("placeholder")
                                     .resizable()
-                                    .scaledToFit()
+                                    .scaledToFill()
                             }
                             .resizable()
                             .scaledToFit()
                             .frame(width: 63, height: 63)
-                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .clipShape(Circle())
+                            
                     } else {
                         Image(avatar.image)
                             .resizable()
@@ -88,7 +89,7 @@ struct VotingBeforeMemberView_Previews: PreviewProvider {
         VotingBeforeMemberView(container: DIContainer())
             .previewDevice(PreviewDevice(rawValue: "iPhone 16 Pro Max"))
             .previewDisplayName("iPhone 16 Pro Max")
-            .background(.blue)
+
     }
        
 }

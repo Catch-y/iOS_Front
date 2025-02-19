@@ -26,10 +26,10 @@ class GroupRepository: GroupRepositoryProtocol {
     // MARK: - Methods
     
     func postCreateGroup(
-        createGroup: CreateGroupRequest
-    ) -> AnyPublisher<ResponseData<CreateGroupResponse>, MoyaError> {
-        return provider.postCreateGroup(createGroup: createGroup)
-    }
+            group: GroupInfo
+        ) -> AnyPublisher<ResponseData<CreateGroupResponse>, MoyaError> {
+            return provider.postCreateGroup(group: group)
+        }
     
     func postGroupJoin(
         groupJoinRequest: GroupJoinRequest
@@ -50,11 +50,12 @@ class GroupRepository: GroupRepositoryProtocol {
     }
     
     func getMyGroups(
-        page: Int,
-        size: Int
+        year: Int,
+        month: Int
     ) -> AnyPublisher<ResponseData<[GroupCalendarResponse]>, MoyaError> {
-        return provider.getMyGroups(page: page, size: size)
+        return provider.getMyGroups(year: year, month: month)
     }
+
     
     func deleteGroupLeave(
         groupId: Int

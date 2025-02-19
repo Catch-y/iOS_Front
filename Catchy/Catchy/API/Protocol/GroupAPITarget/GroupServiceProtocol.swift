@@ -15,8 +15,8 @@ protocol GroupServiceProtocol {
     
     /// 그룹 생성
     func postCreateGroup(
-        createGroup: CreateGroupRequest
-    ) -> AnyPublisher<ResponseData<CreateGroupResponse>, MoyaError>
+        group: GroupInfo  
+        ) -> AnyPublisher<ResponseData<CreateGroupResponse>, MoyaError>
     
     /// 그룹 초대 코드로 가입
     func postGroupJoin(
@@ -35,10 +35,9 @@ protocol GroupServiceProtocol {
     
     /// 사용자가 속한 그룹 조회
     func getMyGroups(
-        page: Int,
-        size: Int
-    ) -> AnyPublisher<ResponseData<[GroupCalendarResponse]>, MoyaError>
-    
+            year: Int,
+            month: Int
+        ) -> AnyPublisher<ResponseData<[GroupCalendarResponse]>, MoyaError>
     /// 그룹 탈퇴
     func deleteGroupLeave(
         groupId: Int

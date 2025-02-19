@@ -10,6 +10,8 @@ import SwiftUI
 struct GroupVoteBeforeView: View {
     
     // MARK: - 속성
+    @EnvironmentObject var container: DIContainer
+    
     @StateObject private var viewModel: GroupVoteBeforeViewModel
     @ObservedObject private var voteStatusViewModel: VoteStatusListViewModel
     
@@ -25,7 +27,7 @@ struct GroupVoteBeforeView: View {
     var body: some View {
         VStack(spacing: 0) {
             GroupNavigation(title: "투표하기") {
-                print("뒤로가기 클릭")
+                container.navigationRouter.pop()
             }
             
             ScrollView {
@@ -40,19 +42,18 @@ struct GroupVoteBeforeView: View {
                     
                     if viewModel.isLoading {
                         ProgressView("데이터 로딩 중...")
-                    } else if voteStatusViewModel.voteStatus.isEmpty {  // ✅ @ObservedObject 사용
+                    } else if voteStatusViewModel.voteStatus.isEmpty {  
                         Text("현재 진행 중인 투표가 없습니다.")
                             .font(.body2)
                             .foregroundStyle(.g4)
                             .frame(maxWidth: .infinity, alignment: .center)
                             .task {
-                                viewModel.fetchCategories(groupId: 1)  // ✅ async 함수 호출에 await 추가
-                                print("🔄 [GroupVoteBeforeView] fetchCategories 실행 완료")
+                                viewModel.fetchCategories(groupId: 1)
                                 print("🔍 최종 voteStatusListViewModel.voteStatus:", voteStatusViewModel.voteStatus)
                             }
 
                     } else {
-                        VoteStatusListView(viewModel: voteStatusViewModel, voteId: voteId)  // ✅ @ObservedObject 적용
+                        VoteStatusListView(viewModel: voteStatusViewModel, voteId: voteId)  //  @ObservedObject 적용
                             .background(Color.white)
                             .clipShape(RoundedRectangle(cornerRadius: 20))
                             .task {
@@ -70,7 +71,7 @@ struct GroupVoteBeforeView: View {
             print("🔄 [GroupVoteBeforeView] fetchCategories 실행 완료")
             print("🔍 최종 voteStatusListViewModel.voteStatus:", voteStatusViewModel.voteStatus)
 
-            // ✅ UI 업데이트 확인을 위해 0.1초 후 다시 출력
+            // UI 업데이트 확인을 위해 0.1초 후 다시 출력
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 print("🔄 0.1초 후 최종 voteStatusListViewModel.voteStatus:", voteStatusViewModel.voteStatus)
             }

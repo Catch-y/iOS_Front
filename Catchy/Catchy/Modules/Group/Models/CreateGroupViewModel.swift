@@ -10,28 +10,43 @@ import Combine
 import Moya
 import PhotosUI
 
-/// 뷰 모델
-final class CreateGroupViewModel: ObservableObject {
+/// 그룹 생성 뷰 모델
+final class CreateGroupViewModel: ObservableObject, ImageHandling {
+    
+    // MARK: - Published Properties
+    @Published var isImagePickerPresented: Bool = false
+    @Published public var selectedImageCount: Int = 0
+    
     @Published var groupName: String = ""
     @Published var selectedDate: Date = Date()
     @Published var groupLocation: String = ""
     @Published var inviteCode: String = ""
-    @Published var groupImage: UIImage? = nil
+    @Published var promiseTime: String = ""
+    
+    @Published var groupImage: UIImage? = nil {
+        didSet {
+            selectedImageCount = groupImage != nil ? 1 : 0
+        }
+    }
     @Published var selectedItem: PhotosPickerItem? = nil {
         didSet { loadImage() }
     }
+    
     @Published var errorMessage: String = ""
     @Published var isLoading: Bool = false
+    @Published var createdGroup: GroupResult? // ✅ GroupResult로 변경
 
     let container: DIContainer
-    private let provider = MoyaProvider<GroupAPITarget>()
+    private let groupRepository: GroupRepositoryProtocol
     private var cancellables = Set<AnyCancellable>()
 
-    init(container: DIContainer) {
+    // MARK: - Initializer
+    init(container: DIContainer, groupRepository: GroupRepositoryProtocol = GroupRepository()) {
         self.container = container
+        self.groupRepository = groupRepository
     }
 
-    // MARK: - 그룹 생성 API 호출 (API Target의 샘플 데이터 활용)
+    // MARK: - 그룹 생성 API 호출
     func createGroup() {
         guard !groupName.isEmpty, !groupLocation.isEmpty else {
             errorMessage = "그룹 이름과 위치를 입력해주세요."
@@ -39,35 +54,37 @@ final class CreateGroupViewModel: ObservableObject {
         }
 
         isLoading = true
+        errorMessage = ""
 
-        let request = CreateGroupRequest(
+        // `GroupInfo` 객체 생성
+        let newGroup = GroupInfo(
             groupName: groupName,
             groupLocation: groupLocation,
             promiseTime: formatDate(selectedDate),
-            inviteCode: generateInviteCode(),
-            groupImage: groupImage?.jpegData(compressionQuality: 0.8)
+            groupImage: nil // ✅ 서버에서 반환되므로 nil
         )
 
-        provider.requestPublisher(.postCreateGroup(createGroup: request))
-            .map { response -> ResponseData<CreateGroupResponse>? in
-                return try? JSONDecoder().decode(ResponseData<CreateGroupResponse>.self, from: response.data)
-            }
+        groupRepository.postCreateGroup(group: newGroup)
             .receive(on: DispatchQueue.main)
-            .sink { completion in
-                self.isLoading = false
+            .sink { [weak self] completion in
+                self?.isLoading = false
                 if case let .failure(error) = completion {
-                    self.errorMessage = "❌ API 요청 실패: \(error.localizedDescription)"
-                    print("⚠️ 서버 응답 실패: API Target의 샘플 데이터 활용")
+                    self?.errorMessage = "❌ API 요청 실패: \(error.localizedDescription)"
+                    print("⚠️ 서버 응답 실패: \(error.localizedDescription)")
                 }
-            } receiveValue: { responseData in
-                if let responseData = responseData, responseData.isSuccess, let groupData = responseData.result {
-                    self.inviteCode = groupData.inviteCode
-                    UserDefaults.standard.set(try? JSONEncoder().encode(groupData), forKey: "createdGroupInfo")
-                    print("✅ 그룹 생성 성공: \(groupData)")
+            } receiveValue: { [weak self] responseData in
+                guard let self = self else { return }
+
+                if responseData.isSuccess, let groupResult = responseData.result?.result {
+                    self.inviteCode = groupResult.inviteCode
+                    self.createdGroup = groupResult // GroupResult로 저장
+                    UserDefaults.standard.set(try? JSONEncoder().encode(groupResult), forKey: "createdGroupInfo")
+                    print("✅ 그룹 생성 성공: \(groupResult)")
                 } else {
-                    self.errorMessage = responseData?.message ?? "서버 응답이 없습니다."
-                    print("⚠️ API Target의 샘플 데이터 활용")
+                    self.errorMessage = responseData.message
+                    print("⚠️ API 응답 오류")
                 }
+
             }
             .store(in: &cancellables)
     }
@@ -79,12 +96,7 @@ final class CreateGroupViewModel: ObservableObject {
         return formatter.string(from: date)
     }
 
-    // MARK: - 초대 코드 생성
-    private func generateInviteCode() -> String {
-        return UUID().uuidString.prefix(8).uppercased()
-    }
-
-    // MARK: - 이미지 로드 (Task 오류 해결: DispatchQueue 사용)
+    // MARK: - 이미지 로드
     private func loadImage() {
         guard let selectedItem = selectedItem else { return }
 
@@ -103,5 +115,27 @@ final class CreateGroupViewModel: ObservableObject {
             }
         }
     }
+}
 
+// MARK: - ImageHandling 프로토콜 구현
+extension CreateGroupViewModel {
+    
+    func addImage(_ images: UIImage) {
+        self.groupImage = images
+    }
+
+    func removeImage(at index: Int) {
+        self.groupImage = nil
+    }
+    
+    func showImagePicker() {
+        self.isImagePickerPresented.toggle()
+    }
+    
+    func getImages() -> [UIImage] {
+        guard let image = self.groupImage else {
+            return []
+        }
+        return [image]
+    }
 }

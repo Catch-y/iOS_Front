@@ -13,5 +13,5 @@ struct CreateGroupRequest: Codable {
     let groupLocation: String
     let promiseTime: String
     let inviteCode: String
-    let groupImage: Data?
+    let groupImage: String?
 }

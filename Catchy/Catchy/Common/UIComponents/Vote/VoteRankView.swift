@@ -6,24 +6,23 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct VoteRankView: View {
     @StateObject private var viewModel: VoteRankViewModel
 
     // MARK: - 초기화
-    init(groupId: Int, voteId: Int) {
-        _viewModel = StateObject(wrappedValue: VoteRankViewModel(groupId: groupId, voteId: voteId))
+    init(voteId: Int) {
+        _viewModel = StateObject(wrappedValue: VoteRankViewModel(voteId: voteId))
     }
 
     // MARK: - Body
     var body: some View {
         VStack(spacing: 16) {
-            // 1~3위: 막대그래프(단상) 형식
             categoryTabs
                 .padding(.bottom, 28)
                 .padding(.top, 32)
 
-            // 4~7위: 카드 형식
             if viewModel.ranks.count > 3 {
                 rankRows()
                     .padding(.bottom, 30)
@@ -37,20 +36,17 @@ struct VoteRankView: View {
         HStack(alignment: .bottom, spacing: 6) {
             Spacer()
             
-            // 2등
             if viewModel.ranks.indices.contains(1) {
                 let rankData = viewModel.ranks[1]
                 categoryTabItem(for: rankData, category: .voteCafe, rank: 2, backgroundColor: .g3)
             }
 
-            // 1등 (가운데, 높이를 더 키움)
             if viewModel.ranks.indices.contains(0) {
                 let rankData = viewModel.ranks[0]
                 categoryTabItem(for: rankData, category: .voteBreaks, rank: 1, backgroundColor: Color.m5)
                     .alignmentGuide(.bottom) { $0[.bottom] }
             }
 
-            // 3등
             if viewModel.ranks.indices.contains(2) {
                 let rankData = viewModel.ranks[2]
                 categoryTabItem(for: rankData, category: .voteCultureLife, rank: 3, backgroundColor: .g3)
@@ -61,14 +57,12 @@ struct VoteRankView: View {
         .frame(maxWidth: .infinity)
     }
 
-    // MARK: - 1~3위 (막대그래프 아이템)
     private func categoryTabItem(
         for rankData: (name: String, count: Int, totalMembers: Int, avatars: [String]),
         category: VoteCategory,
         rank: Int,
         backgroundColor: Color
     ) -> some View {
-        
         let backgroundHeight: CGFloat = {
             switch rank {
             case 1: return 80
@@ -83,7 +77,6 @@ struct VoteRankView: View {
                 Circle()
                     .fill(Color.white)
                     .frame(width: 55, height: 55)
-                    .s1w()
 
                 category.icon.image
                     .resizable()
@@ -112,10 +105,8 @@ struct VoteRankView: View {
                 .frame(height: backgroundHeight, alignment: .bottom)
             }
         }
-        .alignmentGuide(.bottom) { $0[.bottom] }
     }
 
-    // MARK: - 4~7위 (카드 스타일)
     private func rankRows() -> some View {
         VStack(spacing: 12) {
             ForEach(viewModel.ranks.indices.dropFirst(3).prefix(4), id: \.self) { index in
@@ -124,7 +115,6 @@ struct VoteRankView: View {
         }
     }
 
-    // MARK: - 4~7위 (카드 아이템)
     private func rankRow(for rankData: (name: String, count: Int, totalMembers: Int, avatars: [String]), rankIndex: Int) -> some View {
         HStack(spacing: 12) {
             Circle()
@@ -148,19 +138,26 @@ struct VoteRankView: View {
 
             Spacer()
 
-            // 아바타 리스트 (최대 4개)
+            // Kingfisher를 이용한 프로필 이미지 로딩
             HStack(spacing: -8) {
-                ForEach(rankData.avatars.prefix(4), id: \.self) { avatar in
-                    AsyncImage(url: URL(string: avatar)) { image in
-                        image.resizable()
-                    } placeholder: {
-                        Circle().fill(Color.g3)
+                ForEach(rankData.avatars.prefix(4), id: \.self) { avatarURL in
+                    ZStack {
+                        Circle()
+                            .fill(Color.bg1)
+                            .frame(width: 28, height: 28)
+
+                        KFImage(URL(string: avatarURL))
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 28, height: 28)
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle().stroke(Color.white, lineWidth: 1)
+                            )
                     }
-                    .scaledToFit()
-                    .frame(width: 28, height: 28)
-                    .clipShape(Circle())
                 }
             }
+
         }
         .padding()
         .background(
@@ -192,6 +189,6 @@ enum VoteCategory: String {
 // MARK: - Preview
 struct VoteRankView_Previews: PreviewProvider {
     static var previews: some View {
-        VoteRankView(groupId: 1, voteId: 1)
+        VoteRankView(voteId: 1)
     }
 }

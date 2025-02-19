@@ -84,7 +84,8 @@ struct CreateCalenderView: View {
                     date: calendarDay.date,
                     isCurrentMonthDay: calendarDay.isCurrentMonth,
                     isHoliday: calendarDay.isHoliday,
-                    selectedDate: $viewModel.selectedDate
+                    selectedDate: $viewModel.selectedDate,
+                    viewModel: viewModel
                 )
             }
         }

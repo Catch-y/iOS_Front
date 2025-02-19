@@ -15,8 +15,9 @@ protocol GroupUseCaseProtocol {
     
     /// 그룹 생성
     func executePostCreateGroup(
-        createGroup: CreateGroupRequest
+        group: GroupInfo
     ) -> AnyPublisher<ResponseData<CreateGroupResponse>, MoyaError>
+
     
     /// 그룹 초대 코드로 가입
     func executePostGroupJoin(

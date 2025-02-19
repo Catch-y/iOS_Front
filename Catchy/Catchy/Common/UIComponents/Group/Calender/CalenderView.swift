@@ -17,6 +17,7 @@ struct CalenderView: View {
     init(container: DIContainer) {
         _viewModel = StateObject(wrappedValue: CalenderViewModel(container: container)) 
     }
+    
 
     // MARK: - Body
     var body: some View {
@@ -34,12 +35,16 @@ struct CalenderView: View {
             }
             .background(Color.white)
 
-            //  CalendarSubView에 viewModel을 올바르게 전달
+            // CalendarSubView에 viewModel을 전달
             CalendarSubView(viewModel: viewModel)
                 .padding(.top, 29)
         }
+        .task {
+            viewModel.fetchGroupSchedules()
+        }
         .background(Color.bg1)
     }
+    
 
     // MARK: - 헤더 뷰
     /// 상단 헤더 구성: 이전/다음 월 이동 버튼 및 현재 월 표시
@@ -92,9 +97,11 @@ struct CalenderView: View {
                     date: calendarDay.date,
                     isCurrentMonthDay: calendarDay.isCurrentMonth,
                     isHoliday: calendarDay.isHoliday,
-                    selectedDate: $viewModel.selectedDate
+                    selectedDate: $viewModel.selectedDate,
+                    viewModel: viewModel 
                 )
             }
+
         }
     }
 
@@ -124,7 +131,9 @@ public struct CellView: View {
     var isHoliday: Bool
 
     @Binding var selectedDate: Date?
+    @ObservedObject var viewModel: CalenderViewModel  //  ViewModel 추가
 
+    
     /// 텍스트 색상 결정
     private var textColor: Color {
         if selectedDate == date {
@@ -138,39 +147,68 @@ public struct CellView: View {
         }
     }
 
+    /// 일정이 존재하는지 확인
+    private var scheduleCount: Int {
+        let targetDate = Calendar.current.startOfDay(for: date)
+        return viewModel.schedules[targetDate]?.count ?? 0
+    }
+
     /// 배경 및 텍스트 설정
     private var background: some View {
-        if selectedDate == date {
-            return AnyView(
-                ZStack {
-                    Circle()
-                        .fill(Color.m2)
-                        .frame(width: 27, height: 27)
+        ZStack {
+            //  선택된 날짜인 경우 분홍색 원 표시
+            if selectedDate == date {
+                Circle()
+                    .fill(Color.m2) // 분홍색 원
+                    .frame(width: 27, height: 27)
+            }
 
-                    Text("\(day)")
-                        .font(.body1)
-                        .foregroundStyle(.g5)
-                }
-            )
-        } else {
-            return AnyView(
-                Text("\(day)")
-                    .font(.body1)
-                    .foregroundStyle(.g5)
-            )
+            Text("\(day)")
+                .font(.body1)
+                .foregroundStyle(.g5)
         }
     }
 
     public var body: some View {
         VStack {
-            background
-                .onTapGesture {
-                    selectedDate = (selectedDate == date) ? nil : date
+            ZStack {
+                if selectedDate == date {
+                    Circle()
+                        .fill(Color.m2)
+                        .frame(width: 27, height: 27)
+                        .transition(.scale.combined(with: .opacity)) // 크기와 투명도 애니메이션
                 }
+
+                // 날짜 텍스트
+                Text("\(day)")
+                    .font(.body1)
+                    .foregroundStyle(.g5)
+                    .animation(.easeInOut(duration: 0.2), value: selectedDate) // 텍스트도 함께 부드럽게 변경
+            }
         }
         .frame(height: 50)
+        .onTapGesture {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.5, blendDuration: 0)) {
+                selectedDate = (selectedDate == date) ? nil : date
+            }
+            logDateClick()
+        }
+          
+        
+    }
+
+
+
+    private func logDateClick() {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "M월 d일"
+        let formattedDate = formatter.string(from: date)
+
+        print("📅 \(formattedDate) 클릭 - 일정 개수: \(scheduleCount)")
     }
 }
+
 
 // MARK: - Preview
 struct CalenderView_Previews: PreviewProvider {

@@ -7,6 +7,7 @@
 
 //FIXME: - QR sharing buttton 수정 
 
+
 import SwiftUI
 
 struct QRCodeInviteView: View {
@@ -14,7 +15,7 @@ struct QRCodeInviteView: View {
 
     // MARK: - 초기화
     init(container: DIContainer) {
-        _viewModel = StateObject(wrappedValue: QRCodeInviteViewModel(container: container)) 
+        _viewModel = StateObject(wrappedValue: QRCodeInviteViewModel(container: container))
     }
 
     var body: some View {

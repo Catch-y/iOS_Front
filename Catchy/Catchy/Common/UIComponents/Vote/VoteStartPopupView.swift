@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct VoteStartPopupView: View {
+    
     @Binding var isPresented: Bool
+    @EnvironmentObject var container: DIContainer
 
     // MARK: - Body
     var body: some View {
@@ -65,7 +67,10 @@ struct VoteStartPopupView: View {
 
     // MARK: - Action Button
     private var actionButton: some View {
-        Button(action: { print("투표 참여하기 클릭됨") }) {
+        Button(action: {
+            isPresented = false  // 팝업 닫기
+            container.navigationRouter.push(to: .groupVoteStartView) //  그룹 투표 시작 이동
+        }) {
             Text("투표 참여하기")
                 .font(.Subtitle3)
                 .foregroundStyle(.m5)
@@ -77,6 +82,7 @@ struct VoteStartPopupView: View {
                 )
         }
         .padding(.horizontal, 40)
+
     }
 }
 

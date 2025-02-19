@@ -18,9 +18,16 @@ struct ScheduleView: View {
         VStack(alignment: .leading, spacing: 10) {
             headerView
 
-            if let groupName = viewModel.schedules[date] {
-                scheduleButton(groupName: groupName) //  그룹명 표시
-                    .padding(.top, 16)
+            if let matchingDate = findMatchingDate(for: date),
+               let groupNames = viewModel.schedules[matchingDate] {
+                
+                VStack(spacing: 10) { // 여러 일정이 있을 경우, VStack으로 나열
+                    ForEach(groupNames, id: \.self) { groupName in
+                        scheduleButton(groupName: groupName)
+                            .padding(.top, 10)
+                    }
+                }
+                
             } else {
                 emptyScheduleButton
                     .padding(.top, 16)
@@ -30,6 +37,14 @@ struct ScheduleView: View {
         .padding(.top, 24)
         .padding(.bottom, 58)
         .background(Color.white)
+    }
+
+    //  날짜 비교를 위해 시간 제거
+    private func findMatchingDate(for date: Date) -> Date? {
+        let targetDate = Calendar.current.startOfDay(for: date)
+        return viewModel.schedules.keys.first { key in
+            Calendar.current.isDate(Calendar.current.startOfDay(for: key), inSameDayAs: targetDate)
+        }
     }
 
     // MARK: - 일정 헤더
@@ -47,7 +62,7 @@ struct ScheduleView: View {
                     .fill(Color.m3)
                     .frame(width: 30, height: 30)
 
-                Text(groupName) //  그룹명 표시
+                Text(groupName)
                     .font(.body1)
                     .foregroundStyle(.g7)
 
@@ -62,10 +77,9 @@ struct ScheduleView: View {
             .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             .overlay(
-                       RoundedRectangle(cornerRadius: 12)
-                           .stroke(Color.g3, lineWidth: 1)
-                   )
-            
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.g3, lineWidth: 1)
+            )
         }
         .buttonStyle(PlainButtonStyle())
     }
@@ -82,7 +96,7 @@ struct ScheduleView: View {
             .padding()
             .frame(maxWidth: .infinity)
             .padding(.vertical, 17)
-            .background(Color.g2)
+            .background(Color.g1)
             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
         .buttonStyle(PlainButtonStyle())
@@ -98,7 +112,7 @@ struct ScheduleView_Previews: PreviewProvider {
         let viewModelWithoutSchedule = CalenderViewModel(container: container)
 
         let sampleDate = Date()
-        viewModelWithSchedule.schedules[sampleDate] = "스터디 그룹" //  그룹명 추가
+        viewModelWithSchedule.schedules[sampleDate] = ["스터디 그룹", "운동 모임"] // ✅ 다중 일정 추가
 
         return Group {
             // 일정이 있는 경우 프리뷰

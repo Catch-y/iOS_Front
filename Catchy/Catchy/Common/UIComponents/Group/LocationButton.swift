@@ -32,18 +32,19 @@ struct LocationButton: View {
                 buttonContent() // 버튼 UI를 구성하는 메서드
             }
             .buttonStyle(PlainButtonStyle())
+            .animation(.easeInOut(duration: 0.3), value: isSelected) // 애니메이션 적용
         }
     }
 
-// MARK: - Private Extension
+// MARK: - 버튼 매서드
 private extension LocationButton {
     /// 버튼의 UI를 구성하는 메서드
     func buttonContent() -> some View {
         Text(title)
             .font(.body2)
-            .foregroundStyle(isSelected ? Color.m6 : Color.g4)//글씨 색깔
+            .foregroundStyle(isSelected ? Color.m6 : Color.g4) // 글씨 색깔
             .frame(maxWidth: .infinity)
-            .frame(height : 55) // 버튼 크기
+            .frame(height: 55) // 버튼 크기
             .background(
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(isSelected ? Color.m6 : Color.g3, lineWidth: 1) // 테두리 색상
@@ -51,6 +52,7 @@ private extension LocationButton {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(isSelected ? Color.m1 : Color.white) // 배경 색상
                     )
+                    .animation(.easeInOut(duration: 0.3), value: isSelected) // 애니메이션 적용
             )
     }
 }

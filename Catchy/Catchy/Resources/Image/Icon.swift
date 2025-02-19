@@ -128,6 +128,7 @@ enum Icon: String {
     case shareButton = "shareButton"
     case downButton = "downButton"
     
+    
     var image: Image {
         return Image(self.rawValue)
     }
