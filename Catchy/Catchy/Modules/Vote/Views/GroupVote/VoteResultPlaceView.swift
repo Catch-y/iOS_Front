@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct VoteResultPlaceView: View {
-    @StateObject var viewModel: VoteResultCategoryCardViewModel 
+    
+    @EnvironmentObject var container: DIContainer
+    
+    @StateObject var viewModel: VoteResultCategoryCardViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -26,7 +29,7 @@ struct VoteResultPlaceView: View {
     // MARK: - 네비게이션 바
     private var navigationBar: some View {
         GroupNavigation(title: "투표 결과") {
-            print("뒤로가기 버튼 클릭")
+            container.navigationRouter.pop() //뒤로가기
         }
     }
 
@@ -52,18 +55,19 @@ struct VoteResultPlaceView: View {
     private var placeList: some View {
         ScrollView {
             VStack(spacing: 23) {
-                ForEach(viewModel.places, id: \ .placeId) { place in
+                ForEach(viewModel.places, id: \.placeId) { place in
                     VoteResultCategoryCardContentView(
                         place: place,
-                        isBookmarked: viewModel.isBookmarked,
+                        isBookmarked: viewModel.isBookmarked(place.placeId),  // 개별 북마크 상태 반영
                         onBookmarkToggle: {
-                            viewModel.toggleBookmark()
+                            viewModel.toggleBookmark(for: place.placeId)  // 특정 장소의 북마크 상태만 변경
                         }
                     )
                 }
             }
         }
     }
+
 }
 
 // MARK: - Preview

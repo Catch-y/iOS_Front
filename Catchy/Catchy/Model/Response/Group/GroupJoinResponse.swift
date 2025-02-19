@@ -13,7 +13,7 @@ struct GroupJoinResponse: Codable {
     let message: String
 }
 
-/// BaseResponse 포함 (명세서 구조 기반)
+/// BaseResponse 포함
 struct BaseResponseGroupJoinResponse: Codable {
     let isSuccess: Bool
     let code: String

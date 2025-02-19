@@ -88,7 +88,7 @@ struct GroupRevoteView: View {
     
     // MARK: - 투표 현황
     private var voteRankingView: some View {
-        VoteRankView(groupId: viewModel.groupId, voteId: viewModel.voteId)
+        VoteRankView(voteId: viewModel.voteId)
             .background(Color.white)
             .mask(
                 RoundedRectangle(cornerRadius: 30)

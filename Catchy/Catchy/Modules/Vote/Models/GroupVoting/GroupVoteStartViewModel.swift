@@ -20,7 +20,7 @@ class GroupVoteStartViewModel: ObservableObject {
     @Published var voteId: Int
     
     // MARK: - Initializer
-    init(container: DIContainer, groupId: Int, voteId: Int) {
+    init(container: DIContainer, groupId: Int = 0, voteId: Int = 0) { 
         self.container = container
         self.groupId = groupId
         self.voteId = voteId

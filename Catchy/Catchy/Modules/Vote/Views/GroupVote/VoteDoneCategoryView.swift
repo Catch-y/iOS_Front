@@ -52,7 +52,8 @@ extension VoteDoneCategoryView {
                 .padding(.bottom, 44)
 
             if viewModel.isLoading {
-                ProgressView("로딩 중...")
+                ProgressView()
+                    .controlSize(.regular)
             } else if viewModel.categories.isEmpty {
                 Text("카테고리가 없습니다.")
                     .font(.body2)
@@ -67,7 +68,7 @@ extension VoteDoneCategoryView {
 
     private var headerText: some View {
         VStack(alignment: .leading) {
-            Text(viewModel.groupLocation.isEmpty ? "무슨구 무슨동" : viewModel.groupLocation) // ✅ 기본값 설정
+            Text(viewModel.groupLocation.isEmpty ? "무슨구 무슨동" : viewModel.groupLocation) //  기본값 설정
                 .font(.Subtitle2)
                 .foregroundStyle(.m6)
             Text("만날만한 장소를 알려드릴게요")
@@ -80,42 +81,63 @@ extension VoteDoneCategoryView {
 
     private var categoryList: some View {
         VStack(spacing: 50) {
-            ForEach(viewModel.categories, id: \.category) { category in
-                categoryRow(name: category.category, count: category.count, icon: getIcon(for: category.category))
+            ForEach(Array(viewModel.categories.enumerated()), id: \.element.category) { index, category in
+                        categoryRow(
+                            name: category.category,
+                            count: category.count,
+                            icon: getIcon(for: category.category),
+                            rank: index + 1
+                        )
             }
         }
     }
 
-    private func categoryRow(name: String, count: Int, icon: Image) -> some View {
-        HStack(spacing: 8) {
-            icon
-                .resizable()
-                .scaledToFit()
-                .frame(width: 35, height: 35)
-                .foregroundStyle(.m5)
+    private func categoryRow(name: String, count: Int, icon: Image, rank: Int) -> some View {
+        HStack(spacing: 23){
+            
+            ZStack {
+                //순위
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: 26, height: 26)
+                    .s1w()
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text(name)
-                    .font(.Subtitle3)
-                    .foregroundStyle(.g7)
-                Text("\(count)개")
-                    .font(.caption)
-                    .foregroundStyle(.g4)
-            }
-
-            Spacer()
-
-            Button(action: {
-                print("\(name) 버튼 클릭됨")
-            }) {
-                Icon.rightChevron.image
+                    Text("\(rank)")
+                           .font(.body3)
+                           .foregroundStyle(.m5)
+                   }
+            
+            HStack(spacing: 10) {
+                //카테고리 아이콘
+                icon
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 18, height: 18)
-                    .foregroundStyle(.g4)
+                    .frame(width: 35, height: 35)
+                    .foregroundStyle(.m5)
+                //카테고리 이름
+                    Text(name)
+                        .font(.Subtitle3)
+                        .foregroundStyle(.g7)
+                //카테고리 갯수
+                    Text("\(count)개")
+                        .font(.caption)
+                        .foregroundStyle(.g4)
+
+                Spacer()
+
+                Button(action: {
+                  //TODO: - 해당 카테고리 장소리스트로 이동
+                }) {
+                    Icon.rightChevron.image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 18, height: 18)
+                        .foregroundStyle(.g3)
+                }
+                
             }
-            .padding(.trailing, 16)
         }
+     
     }
 
     private func getIcon(for categoryName: String) -> Image {

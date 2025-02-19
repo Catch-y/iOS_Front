@@ -27,6 +27,24 @@ struct NavigationRoutingView: View {
         case .courseDetailView(let courseId) :
             CourseDetailView(container: container, courseId: courseId)
                 .environmentObject(container)
+            
+        case .groupVoteStartView:
+            GroupVoteStartView(container: container)
+                .environmentObject(container)
+            
+        case .locationSelectView: 
+                   LocationSelectView(container: container)
+                       .environmentObject(container)
+            
+        case .createGroupView:
+                    CreateGroupView(container: container)
+                        .environmentObject(container)
+            
+        case .groupVoteView(let groupId):
+            GroupVoteView(container: container, groupId: groupId)
+                        .environmentObject(container)
+            
+                
         }
     }
 }

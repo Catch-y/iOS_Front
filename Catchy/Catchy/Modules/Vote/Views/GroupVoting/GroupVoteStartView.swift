@@ -13,10 +13,10 @@ struct GroupVoteStartView: View {
     @StateObject private var viewModel: GroupVoteStartViewModel
     private let container: DIContainer
     
-    // MARK: - Initializer
-    init(container: DIContainer, groupId: Int, voteId: Int) {
+    // MARK: - 초기화
+    init(container: DIContainer) {
         self.container = container
-        self._viewModel = StateObject(wrappedValue: GroupVoteStartViewModel(container: container, groupId: groupId, voteId: voteId))
+        _viewModel = StateObject(wrappedValue: GroupVoteStartViewModel(container: container)) 
     }
     
     // MARK: - Body
@@ -52,7 +52,7 @@ struct GroupVoteStartView: View {
     
     // MARK: - 투표바차트
     private var voteBarChartView: some View {
-        VoteBarChartView(groupId: viewModel.groupId, voteId: viewModel.voteId)
+        VoteBarChartView(groupId: viewModel.groupId, voteId: viewModel.voteId) //  ViewModel에서 groupId, voteId 가져오기
     }
     
     // MARK: - 투표상태
@@ -60,25 +60,24 @@ struct GroupVoteStartView: View {
         Text("투표현황")
             .font(.Subtitle3)
             .foregroundStyle(.g5)
-            .frame(maxWidth: .infinity, alignment: .leading) // Left align
-            .padding(.leading, 16) // 16 padding from left
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, 16)
     }
     
     // MARK: - 투표 현황
     private var voteRankingView: some View {
-        VoteRankView(groupId: viewModel.groupId, voteId: viewModel.voteId)
+        VoteRankView(voteId: viewModel.voteId) //  ViewModel에서 voteId 가져오기
             .background(Color.white)
             .mask(
                 RoundedRectangle(cornerRadius: 30)
             )
             .padding(.bottom, 110)
-            
     }
 }
 
 // MARK: - Preview
 struct GroupVoteStartView_Previews: PreviewProvider {
     static var previews: some View {
-        GroupVoteStartView(container: DIContainer(), groupId: 1, voteId: 1)
+        GroupVoteStartView(container: DIContainer()) 
     }
 }

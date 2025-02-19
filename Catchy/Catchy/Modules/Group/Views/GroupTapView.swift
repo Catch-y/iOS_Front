@@ -9,21 +9,25 @@ import SwiftUI
 
 struct GroupTabView: View {
     private let container: DIContainer
+    @StateObject private var viewModel: GroupTabViewModel
 
     @State private var isBottomSheetPresented: Bool = false // 바텀시트 상태 변수
 
     // MARK: - 초기화
     init(container: DIContainer) {
-        self.container = container
-    }
+           self.container = container
+           _viewModel = StateObject(wrappedValue: GroupTabViewModel(groupUseCase: container.useCaseProvider.groupUseCase))
+       }
 
     // MARK: - body
     var body: some View {
         VStack(spacing: 0) {
+            
+            
             // 상단 네비게이션
             GroupLogoNavigation(
                 onHomeButtonTap: {
-                    print("홈 버튼 클릭")
+                   //TODO: - 홈화면으로 이동해야하나..?
                 },
                 onPlusButtonTap: {
                     isBottomSheetPresented.toggle() // 버튼 클릭 시 바텀시트 표시
@@ -32,7 +36,7 @@ struct GroupTabView: View {
 
             ScrollView {
                 VStack {
-                    //  CreateCalenderView에 container 전달
+                    // CalenderView에 viewModel 전달
                     CalenderView(container: container)
                         .padding(.top, 10)
 
@@ -43,9 +47,17 @@ struct GroupTabView: View {
         }
         .background(Color.bg1) // 배경 색상
         .padding(.bottom, 110)
-        .sheet(isPresented: $isBottomSheetPresented) { // 바텀시트 표시
+        .sheet(isPresented: $isBottomSheetPresented) {
             GroupPluseBottomSheet()
+                .presentationCornerRadius(21)
+                .presentationDragIndicator(.hidden)
         }
+        .task {
+            let currentYear = Calendar.current.component(.year, from: Date())
+            let currentMonth = Calendar.current.component(.month, from: Date())
+            viewModel.fetchGroupSchedules(year: currentYear, month: currentMonth)
+        }
+
     }
 }
 
@@ -53,10 +65,17 @@ struct GroupTabView: View {
 struct GroupTabView_Previews: PreviewProvider {
     static var previews: some View {
         let container = DIContainer()
-        return ForEach(["iPhone 16 Pro Max", "iPhone SE"], id: \.self) { deviceName in
+
+        return Group {
             GroupTabView(container: container)
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
+                .previewDisplayName("iPhone 16 Pro")
+                .previewDevice(PreviewDevice(rawValue: "iPhone 16 Pro"))
+
+            GroupTabView(container: container)
+                .previewDisplayName("iPhone SE")
+                .previewDevice(PreviewDevice(rawValue: "iPhone SE"))
+
+          
         }
     }
 }

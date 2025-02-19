@@ -12,34 +12,21 @@ import Moya
 enum GroupAPITarget {
     
     /// 그룹 생성
-    /// HTTP 메소드 : POST
-    /// API Path : /group
-    case postCreateGroup(createGroup: CreateGroupRequest)
+    case postCreateGroup(group: GroupInfo)
     
     /// 그룹 초대 코드로 가입
-    /// HTTP 메소드 : POST
-    /// API Path : /group/join
     case postGroupJoin(groupJoinRequest: GroupJoinRequest)
     
     /// 초대 코드로 그룹 정보 조회
-    /// HTTP 메소드 : GET
-    /// API Path : /group/invite/{inviteCode}
     case getGroupInvite(inviteCode: String)
     
     /// 그룹 멤버 조회
-    /// HTTP 메소드 : GET
-    /// API Path : /group/{groupId}/members
     case getGroupMembers(groupId: Int)
     
     /// 사용자가 속한 그룹 조회
-    /// HTTP 메소드 : GET
-    /// API Path : /group/my-groups
-    /// Query Parameters : page, size
-    case getMyGroups(page: Int, size: Int)
+    case getMyGroups(year: Int, month: Int)
     
     /// 그룹 탈퇴
-    /// HTTP 메소드 : DELETE
-    /// API Path : /group/{groupId}/leave
     case deleteGroupLeave(groupId: Int)
 }
 
@@ -75,14 +62,14 @@ extension GroupAPITarget: APITargetType {
     
     var task: Task {
         switch self {
-        case .postCreateGroup(let createGroup):
-            return .requestJSONEncodable(createGroup)
+        case .postCreateGroup(let group):
+            return .requestJSONEncodable(group)
         case .postGroupJoin(let groupJoinRequest):
             return .requestJSONEncodable(groupJoinRequest)
         case .getGroupInvite, .getGroupMembers:
             return .requestPlain
-        case .getMyGroups(let page, let size):
-            return .requestParameters(parameters: ["page": page, "size": size], encoding: URLEncoding.queryString)
+        case .getMyGroups(let year, let month):
+            return .requestParameters(parameters: ["year": year, "month": month], encoding: URLEncoding.queryString)
         case .deleteGroupLeave:
             return .requestPlain
         }
@@ -104,10 +91,10 @@ extension GroupAPITarget: APITargetType {
                     "groupId": 1,
                     "groupName": "Study Group",
                     "groupLocation": "Seoul",
-                    "groupImage": "https://example.com/images/group1.jpg",
+                    "groupImage": "https://i.pinimg.com/736x/1a/e2/8f/1ae28fe7bd5e3211be36f7a48b976226.jpg",
                     "inviteCode": "ABC123",
-                    "promiseTime": "2025-02-01T05:08:03.006Z",
-                    "creatorNickname": "JohnDoe"
+                    "promiseTime": "2025-02-20T05:08:03.006Z",
+                    "creatorNickname": "김캐치"
                 }
             }
             """.data(using: .utf8)!
@@ -135,11 +122,10 @@ extension GroupAPITarget: APITargetType {
                     "groupName": "샘플 그룹",
                     "groupLocation": "서울 강남구",
                     "promiseTime": "2025-02-20T12:00:00Z",  
-                    "groupImage": "groupImage"
+                    "groupImage": "https://i.pinimg.com/736x/1a/e2/8f/1ae28fe7bd5e3211be36f7a48b976226.jpg"
                 }
             }
             """.data(using: .utf8)!
-
 
         case .getGroupMembers:
             return """

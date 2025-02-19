@@ -7,17 +7,16 @@
 
 import Foundation
 import Combine
-import CombineMoya
 import Moya
 
 /// [그룹 관리] RepositoryProtocol
 protocol GroupRepositoryProtocol {
     
     /// 그룹 생성
-    /// - Parameter createGroup: 그룹 생성 요청 모델
+    /// - Parameter group: 그룹 생성 요청 모델
     /// - Returns: 그룹 생성 응답 (CreateGroupResponse)
     func postCreateGroup(
-        createGroup: CreateGroupRequest
+        group: GroupInfo
     ) -> AnyPublisher<ResponseData<CreateGroupResponse>, MoyaError>
     
     
@@ -47,14 +46,14 @@ protocol GroupRepositoryProtocol {
     
     /// 사용자가 속한 그룹 조회
     /// - Parameters:
-    ///   - page: 페이지 번호
-    ///   - size: 페이지 크기
+    ///   - year: 조회할 연도
+    ///   - month: 조회할 월
     /// - Returns: 그룹 목록 응답 ([GroupCalendarResponse])
     func getMyGroups(
-        page: Int,
-        size: Int
+        year: Int,
+        month: Int
     ) -> AnyPublisher<ResponseData<[GroupCalendarResponse]>, MoyaError>
-    
+
     
     /// 그룹 탈퇴
     /// - Parameter groupId: 그룹 고유 ID

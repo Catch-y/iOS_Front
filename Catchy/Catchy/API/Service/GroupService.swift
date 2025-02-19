@@ -26,12 +26,12 @@ class GroupService: GroupServiceProtocol {
     // MARK: - Methods
     
     func postCreateGroup(
-        createGroup: CreateGroupRequest
-    ) -> AnyPublisher<ResponseData<CreateGroupResponse>, MoyaError> {
-        return provider.requestPublisher(.postCreateGroup(createGroup: createGroup))
-            .map(ResponseData<CreateGroupResponse>.self)
-            .eraseToAnyPublisher()
-    }
+            group: GroupInfo  
+        ) -> AnyPublisher<ResponseData<CreateGroupResponse>, MoyaError> {
+            return provider.requestPublisher(.postCreateGroup(group: group))
+                .map(ResponseData<CreateGroupResponse>.self)
+                .eraseToAnyPublisher()
+        }
     
     func postGroupJoin(
         groupJoinRequest: GroupJoinRequest
@@ -58,13 +58,14 @@ class GroupService: GroupServiceProtocol {
     }
     
     func getMyGroups(
-        page: Int,
-        size: Int
+        year: Int,
+        month: Int
     ) -> AnyPublisher<ResponseData<[GroupCalendarResponse]>, MoyaError> {
-        return provider.requestPublisher(.getMyGroups(page: page, size: size))
+        return provider.requestPublisher(.getMyGroups(year: year, month: month))
             .map(ResponseData<[GroupCalendarResponse]>.self)
             .eraseToAnyPublisher()
     }
+
     
     func deleteGroupLeave(
         groupId: Int

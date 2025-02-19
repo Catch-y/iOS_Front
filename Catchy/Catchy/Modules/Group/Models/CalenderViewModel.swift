@@ -25,7 +25,7 @@ final class CalenderViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var currentMonth: Date
     @Published var selectedDate: Date?
-    @Published var schedules: [Date: String] = [:]
+    @Published var schedules: [Date: [String]] = [:] //  여러 개의 일정 저장 가능
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
 
@@ -51,54 +51,109 @@ final class CalenderViewModel: ObservableObject {
     }
 
     func fetchGroupSchedules() {
-        isLoading = true // 로딩 시작
+        print("🚀 fetchGroupSchedules() 호출됨")
+
+        let isServerDown = true  // 서버가 닫혀 있음을 표시
+
+        if isServerDown {
+            print("⚠️ 서버가 닫혀 있으므로 샘플 데이터를 사용합니다.")
+            loadSampleSchedulesFromAPI() // 🔥 API Target 샘플 데이터 사용
+            return
+        }
+
+        // 🔽 서버가 열려 있을 때만 실행되는 코드
+        isLoading = true
         let calendar = Calendar.current
         let year = calendar.component(.year, from: currentMonth)
         let month = calendar.component(.month, from: currentMonth)
 
-        provider.requestPublisher(.getMyGroups(page: year, size: month))
+        provider.requestPublisher(.getMyGroups(year: year, month: month))
             .map(ResponseData<[GroupCalendarResponse]>.self)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
                 guard let self = self else { return }
-                self.isLoading = false // 로딩 종료
+                self.isLoading = false
                 
                 switch completion {
                 case .failure(let error):
+                    print("❌ API 요청 실패: \(error.localizedDescription)")
                     self.errorMessage = "❌ API 요청 실패: \(error.localizedDescription)"
                 case .finished:
-                    break
+                    print("✅ API 요청 성공 (응답 수신 완료)")
                 }
             }, receiveValue: { [weak self] decodedResponse in
                 guard let self = self else { return }
                 
+                print("📥 응답 데이터 수신: \(decodedResponse)")
+                
                 if decodedResponse.isSuccess {
                     if let schedules = decodedResponse.result {
                         self.mapSchedules(from: schedules)
+                        print("✅ 그룹 일정 저장 완료: \(self.schedules)")
                     } else {
-                        self.errorMessage = "❌ 그룹 일정 데이터가 없습니다."
+                        print("⚠️ 그룹 일정 데이터가 없습니다.")
+                        self.errorMessage = "⚠️ 그룹 일정 데이터가 없습니다."
                     }
                 } else {
+                    print("❌ API 요청 실패: \(decodedResponse.message)")
                     self.errorMessage = decodedResponse.message
                 }
             })
             .store(in: &cancellables)
     }
-    
-    private func mapSchedules(from groupSchedules: [GroupCalendarResponse]) {
-        _ = Calendar.current
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        schedules = [:]
-        
-        for schedule in groupSchedules {
-            if let dateString = schedule.promiseTime,
-               let date = dateFormatter.date(from: dateString) {
-                schedules[date] = schedule.groupName
+
+    // MARK: -  API Target의 샘플 데이터에서 일정 로드
+    /// API Target의 샘플 데이터에서 일정 로드
+    private func loadSampleSchedulesFromAPI() {
+        let sampleData = GroupAPITarget.getMyGroups(year: 2025, month: 2).sampleData
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase  //  JSON key 변환 적용
+
+        do {
+            let decodedResponse = try decoder.decode(ResponseData<[GroupCalendarResponse]>.self, from: sampleData)
+
+            print("📥 디코딩된 응답: \(decodedResponse)")
+
+            if let schedules = decodedResponse.result {
+                self.mapSchedules(from: schedules)
+                print("✅ API Target 샘플 데이터 로드 완료: \(self.schedules)")
+            } else {
+                print("⚠️ 샘플 데이터에 일정이 없습니다.")
             }
+        } catch {
+            print("❌ 샘플 데이터 파싱 실패: \(error)")
         }
     }
+
+
+
+
+
+    // MARK: - 날짜 계산
+    private func mapSchedules(from groupSchedules: [GroupCalendarResponse]) {
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds] //  소수점 이하 초 처리
+        dateFormatter.timeZone = TimeZone.current
+
+        schedules = [:] //  기존 데이터 초기화
+
+        for schedule in groupSchedules {
+            if let date = dateFormatter.date(from: schedule.promiseTime) {
+                let normalizedDate = Calendar.current.startOfDay(for: date) //  날짜 정규화
+                if schedules[normalizedDate] != nil {
+                    schedules[normalizedDate]?.append(schedule.groupName)
+                } else {
+                    schedules[normalizedDate] = [schedule.groupName]
+                }
+                print("📌 변환된 날짜: \(normalizedDate) - 추가된 그룹: \(schedule.groupName)")
+            } else {
+                print("❌ 날짜 변환 실패: \(schedule.promiseTime)")
+            }
+        }
+        print("✅ 최종 일정 데이터: \(schedules)")
+    }
+
+
     
     // MARK: - 현재 월의 날짜 그리드 데이터
     func daysForCurrentGrid() -> [CalendarDay] {
@@ -158,6 +213,7 @@ final class CalenderViewModel: ObservableObject {
         return formatter.string(from: date)
     }
 }
+
 
 // MARK: - 공휴일
 extension Calendar {

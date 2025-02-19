@@ -70,30 +70,24 @@ struct VoteDoneView: View {
 // MARK: - 배경 뷰
 private var mainBackground: some View {
     ZStack {
-        // MARK: - 메인 컬러 그라데이션
+        // MARK: - 메인 컬러 그라데이션 배경
         LinearGradient(
             gradient: Gradient(colors: [Color.white, Color.white]),
             startPoint: .top,
             endPoint: .bottom
         )
-
-        // MARK: - 블러 처리된 타원형 배경
-        Ellipse()
-            .fill(
-                RadialGradient(
-                    gradient: Gradient(colors: [
-                        Color.main.opacity(0.3),
-                        Color.main.opacity(0.15),
-                        Color.main.opacity(0.0)
-                    ]),
-                    center: .center,
-                    startRadius: 0,
-                    endRadius: 400
-                )
-            )
+        
+        
+        // MARK: - 타원형 블러 배경
+        Rectangle()
+            .foregroundStyle(.clear)
             .frame(width: 625, height: 361)
-            .blur(radius: 50)
+            .background(Color(red: 1, green: 0.32, blue: 0.49).opacity(0.4))
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .blur(radius: 125)
+            .opacity(0.3)
     }
+    .padding(.top, 204)
     .edgesIgnoringSafeArea(.all)
 }
 

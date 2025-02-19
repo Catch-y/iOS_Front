@@ -11,8 +11,8 @@ import Combine
 import Moya
 
 class VoteResultCategoryCardViewModel: ObservableObject {
-    @Published var isBookmarked: Bool = false
     @Published var places: [PlaceResponse] = []
+    @Published var bookmarkedPlaces: Set<Int> = []  // ✅ 개별 북마크 상태 관리
     @Published var errorMessage: String?
 
     private let provider = MoyaProvider<VoteAPITarget>()
@@ -73,8 +73,18 @@ class VoteResultCategoryCardViewModel: ObservableObject {
         }
     }
 
-    // MARK: - 북마크 토글
-    func toggleBookmark() {
-        isBookmarked.toggle()
+    // MARK: - 북마크 토글 (장소 ID별로 저장)
+    func toggleBookmark(for placeId: Int) {
+        if bookmarkedPlaces.contains(placeId) {
+            bookmarkedPlaces.remove(placeId)
+        } else {
+            bookmarkedPlaces.insert(placeId)
+        }
+        objectWillChange.send()  //  뷰 업데이트
+    }
+
+    /// 특정 장소가 북마크 되어있는지 확인하는 함수
+    func isBookmarked(_ placeId: Int) -> Bool {
+        return bookmarkedPlaces.contains(placeId)
     }
 }

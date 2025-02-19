@@ -12,9 +12,5 @@ struct GroupLeaveResponse: Codable {
     let isSuccess: Bool
     let code: String
     let message: String
-    let result: [String: String] // Empty object in API response
-    
-    enum CodingKeys: String, CodingKey {
-        case isSuccess, code, message, result
-    }
+    let result: [String: String] 
 }

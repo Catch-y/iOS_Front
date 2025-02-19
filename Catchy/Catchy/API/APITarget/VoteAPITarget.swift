@@ -113,51 +113,18 @@ extension VoteAPITarget: APITargetType {
             return """
             {
               "isSuccess": true,
-              "code": "VOTE200",
-              "message": "투표 결과 조회 성공",
+              "code": "string",
+              "message": "string",
               "result": {
-                "status": "진행 중",
-                "totalMembers": 50,
-                "results": [
+                "voteId": 0,
+                "categories": [
                   {
-                    "category": "카페",
-                    "voteCount": 20,
-                    "votedMembers": [
-                      {
-                        "memberId": 1,
-                        "nickname": "사용자1",
-                        "profileImage": "https://example.com/profiles/user1.jpg"
-                      },
-                      {
-                        "memberId": 2,
-                        "nickname": "사용자2",
-                        "profileImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzcuyqyeHVLRqBSbkeun30Louq9iSNuV4UTQ&s"
-                      }
-                    ],
-                    "rank": 1
-                  },
-                  {
-                    "category": "음식점",
-                    "voteCount": 15,
-                    "votedMembers": [
-                      {
-                        "memberId": 3,
-                        "nickname": "사용자3",
-                        "profileImage": "https://example.com/profiles/user3.jpg"
-                      }
-                    ],
-                    "rank": 2
-                  },
-                  {
-                    "category": "바",
-                    "voteCount": 10,
-                    "votedMembers": [],
-                    "rank": 3
+                    "categoryId": 0,
+                    "name": "string"
                   }
                 ]
               }
             }
-
             """.data(using: .utf8)!
             
         case .postCategoryVote:
@@ -198,11 +165,56 @@ extension VoteAPITarget: APITargetType {
                 "message": "투표 진행 중",
                 "result": {
                     "voteId": 123,
-                    "status": "진행 중"
+                    "status": "진행 중",
+                    "totalMembers": 4,  
+                    "results": [  
+                        {
+                            "category": "카페",
+                            "voteCount": 20,
+                            "votedMembers": [
+                                {
+                                    "memberId": 1,
+                                    "nickname": "사용자1",
+                                    "profileImage": "https://i.pinimg.com/474x/e0/67/06/e06706b1cd5d92eee385e776d8d80e95.jpg"
+                                },
+                                {
+                                    "memberId": 2,
+                                    "nickname": "사용자2",
+                                    "profileImage": "https://i.pinimg.com/474x/c9/f4/63/c9f463542bbd33f0aa675fb3e203c503.jpg"
+                                }
+                            ],
+                            "rank": 1
+                        },
+                        {
+                            "category": "음식점",
+                            "voteCount": 15,
+                            "votedMembers": [],
+                            "rank": 2
+                        },
+                        {
+                            "category": "바",
+                            "voteCount": 10,
+                            "votedMembers": [],
+                            "rank": 3
+                        },
+                        {
+                            "category": "휴식",
+                            "voteCount": 5,
+                            "votedMembers": [
+                                { "memberId": 2,
+                                    "nickname": "사용자2",
+                                    "profileImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzcuyqyeHVLRqBSbkeun30Louq9iSNuV4UTQ&s"
+                                }
+            
+            
+                            ],
+                            "rank": 4
+                        }
+                    ]
                 }
             }
             """.data(using: .utf8)!
-            
+
         case .getVoteResults:
             return """
             {
@@ -248,13 +260,13 @@ extension VoteAPITarget: APITargetType {
                 {
                   "memberId": 1,
                   "nickname": "John Doe",
-                  "profileImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzcuyqyeHVLRqBSbkeun30Louq9iSNuV4UTQ&s",
+                  "profileImage": "https://i.pinimg.com/736x/7c/8f/7b/7c8f7b5cc46b8ba16be0492e3f69da10.jpg",
                   "hasVoted": true
                 },
                 {
                   "memberId": 2,
                   "nickname": "Jane Smith",
-                  "profileImage": "avatar2",
+                  "profileImage": "https://i.pinimg.com/474x/f2/8a/3b/f28a3b2afe1c6162b18ee08af55377e4.jpg",
                   "hasVoted": false
                 }
               ]
@@ -277,17 +289,17 @@ extension VoteAPITarget: APITargetType {
                     "roadAddress": "서울 강남구 테헤란로 123",
                     "rating": 4.5,
                     "reviewCount": 10,
-                    "imageUrl": "starbucksImage",
+                    "imageUrl": "https://cdn.aitimes.com/news/photo/202012/135037_133168_497.jpg",
                     "votedMembers": [
                       {
                         "memberId": 1,
                         "nickname": "John Doe",
-                        "profileImage": "avatar1"
+                        "profileImage": "https://i.pinimg.com/736x/9b/90/f9/9b90f9584979b1aed95332b1b5f084e6.jpg"
                       },
                       {
                         "memberId": 2,
                         "nickname": "Jane Smith",
-                        "profileImage": "avatar2"
+                        "profileImage": "https://i.pinimg.com/736x/9b/90/f9/9b90f9584979b1aed95332b1b5f084e6.jpg"
                       }
                     ]
                   },
@@ -297,7 +309,7 @@ extension VoteAPITarget: APITargetType {
                     "roadAddress": "서울 강남구 강남대로 456",
                     "rating": 4.2,
                     "reviewCount": 20,
-                    "imageUrl": "starbucksImage",
+                    "imageUrl": "https://cdn.aitimes.com/news/photo/202012/135037_133168_497.jpg",
                     "votedMembers": []
                   }
                 ]
