@@ -9,7 +9,11 @@ import Foundation
 
 protocol UseCaseProtocol {
     var authUseCase: AuthUseCase { get set }
-    
+    /// [투표 카테고리] UseCase
+    var voteUseCase : VoteUseCase {get set}
+    /// [그룹생성] UseCase
+    var groupUseCase : GroupUseCase { get set }
+   
     /// [Course] UseCase
     var courseUseCase: CourseUseCase { get set }
     
@@ -33,11 +37,17 @@ protocol UseCaseProtocol {
 }
 
 class UseCaseProvider: UseCaseProtocol {
+    
+    
     var authUseCase: AuthUseCase
     
+    /// [그룹 관리 ] UseCase
+    var groupUseCase : GroupUseCase
     /// [Course] UseCase
     var courseUseCase: CourseUseCase
     
+    /// [투표 관리] UseCase
+    var voteUseCase : VoteUseCase
     /// [PlaceCourse] UseCase
     var placeCourseUseCase: PlaceCourseUseCase
     
@@ -54,7 +64,7 @@ class UseCaseProvider: UseCaseProtocol {
     var myPageUseCase: MyPageUseCase
     
     var routeUseCase: RouteUseCase
-    
+
     init() {
         self.authUseCase = AuthUseCase()
         self.courseUseCase = CourseUseCase()
@@ -64,6 +74,10 @@ class UseCaseProvider: UseCaseProtocol {
         self.memberUseCase = MemberUseCase()
         self.myPageUseCase = MyPageUseCase()
         self.homeUseCase = HomeUseCase()
+        self.groupUseCase = GroupUseCase()
+        self.voteUseCase = VoteUseCase ()
         self.routeUseCase = RouteUseCase()
     }
+    
+    
 }
