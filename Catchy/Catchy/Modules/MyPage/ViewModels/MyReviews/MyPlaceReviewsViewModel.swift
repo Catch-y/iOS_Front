@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 /// 내 장소 리뷰 조회 ViewModel
-class MyPlaceReviewsViewModel: ObservableObject {
+class MyPlaceReviewsViewModel: ObservableObject, DeleteReviewPopupViewModelProtocol {
     
     /// 전체 장소 리뷰 목록
     @Published var myPlaceReviews: [PlaceReviewData] = []
@@ -19,6 +19,15 @@ class MyPlaceReviewsViewModel: ObservableObject {
     
     /// 리뷰 개수
     @Published var reviewCount: Int = 0
+    
+    /// 삭제 팝업 창 상태
+    @Published var showDeletePopup: Bool = false
+    
+    /// 삭제할 리뷰 ID
+    @Published var selectedReviewIdForDeletion: Int? = nil
+    
+    /// 리뷰 삭제 API 로딩 상태
+    @Published var isDeletingReview: Bool = false
     
     /// 마지막 페이지인지 여부
     private var isLast: Bool = false
@@ -88,7 +97,6 @@ extension MyPlaceReviewsViewModel {
                     
                     self.isLast = result.last
                     
-                    // 6) 다음 페이지 요청을 위해 마지막 리뷰의 date, id 저장
                     if !self.isLast, let lastItem = self.myPlaceReviews.last {
                         self.lastPlaceReviewDate = lastItem.visitedDate
                         self.lastReviewId = lastItem.reviewId
@@ -96,6 +104,58 @@ extension MyPlaceReviewsViewModel {
                     
                     print("🎯 Parsed Place Reviews Data: \(result)")
                 }
+            })
+            .store(in: &cancellables)
+    }
+    
+    /// 삭제 팝업 띄우기
+    func openDeletePopup(reviewId: Int) {
+        selectedReviewIdForDeletion = reviewId
+        showDeletePopup = true
+    }
+    
+    /// 삭제 취소 (팝업 닫기)
+    func cancelDeletePopup() {
+        showDeletePopup = false
+        selectedReviewIdForDeletion = nil
+    }
+    
+    /// 리뷰 삭제 API
+    func deleteReview() {
+        guard let reviewId = selectedReviewIdForDeletion, !isMyPlaceReviewsLoading else { return }
+        
+        isDeletingReview = true
+        
+        container.useCaseProvider.myPageUseCase.executeDeleteReview(reviewId: reviewId, reviewType: .place)
+            .tryMap { responseData -> ResponseData<DeleteReviewResponse> in
+                if !responseData.isSuccess {
+                    throw APIError.serverError(
+                        message: responseData.message,
+                        code: responseData.code
+                    )
+                }
+                return responseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self = self else { return }
+                self.isDeletingReview = false
+                
+                switch completion {
+                case .finished:
+                    print("✅ Delete Review Completed")
+                case .failure(let error):
+                    print("❌ Delete Review Failed: \(error)")
+                }
+            }, receiveValue: { [weak self] _ in
+                guard let self = self else { return }
+                
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    self.myPlaceReviews.removeAll { $0.reviewId == reviewId }
+                }
+                
+                self.reviewCount -= 1
+                self.cancelDeletePopup()
             })
             .store(in: &cancellables)
     }

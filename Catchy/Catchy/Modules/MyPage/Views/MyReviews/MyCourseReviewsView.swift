@@ -45,6 +45,13 @@ struct MyCourseReviewsView: View {
         .task {
             viewModel.getMyCourseReviews()
         }
+        
+        /* 삭제 팝업 오버레이: 뷰모델의 showDeletePopup 상태가 true면 DeleteReviewPopupView가 나타남 */
+        .overlay {
+            if viewModel.showDeletePopup {
+                DeleteReviewPopupView(viewModel: viewModel)
+            }
+        }
     }
 
     // MARK: - 리뷰 콘텐츠
@@ -77,6 +84,9 @@ struct MyCourseReviewsView: View {
                         reviewId: review.reviewId,
                         comment: review.comment,
                         images: review.reviewImages,
+                        action: { reviewId in
+                            viewModel.openDeletePopup(reviewId: reviewId)
+                        },
                         categories: review.categories,
                         rating: review.rating,
                         placeOrCourseName: review.name,

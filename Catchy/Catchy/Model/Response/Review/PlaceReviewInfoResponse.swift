@@ -34,7 +34,9 @@ struct ScoreCount: Codable {
     let count: Int
 }
 
-struct ReviewContents: Codable, Hashable {
+struct ReviewContents: Codable, Identifiable {
+    
+    var id = UUID()
     
     /// 리뷰 ID
     let reviewId: Int
@@ -53,6 +55,15 @@ struct ReviewContents: Codable, Hashable {
     
     /// 작성자 닉네임
     let creatorNickname: String
+    
+    enum CodingKeys: String, CodingKey {
+        case reviewId
+        case comment
+        case rating
+        case reviewImages
+        case visitedDate
+        case creatorNickname
+    }
 }
 
 /// 리뷰 이미지 데이터를 담는 구조체

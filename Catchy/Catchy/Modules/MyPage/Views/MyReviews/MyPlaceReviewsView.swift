@@ -43,6 +43,11 @@ struct MyPlaceReviewsView: View {
         .task {
             viewModel.getMyPlaceReviews()
         }
+        .overlay {
+                    if viewModel.showDeletePopup {
+                        DeleteReviewPopupView(viewModel: viewModel)
+                    }
+                }
     }
     
     // MARK: - 리뷰 콘텐츠
@@ -75,6 +80,9 @@ struct MyPlaceReviewsView: View {
                         reviewId: review.reviewId,
                         comment: review.comment,
                         images: review.reviewImages,
+                        action: { reviewId in
+                            viewModel.openDeletePopup(reviewId: reviewId)
+                        },
                         categories: review.categories,
                         rating: review.rating,
                         placeOrCourseName: review.name,
