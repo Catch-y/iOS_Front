@@ -18,28 +18,40 @@ struct MyCourseReviewsView: View {
     
     // MARK: - Body
     var body: some View {
-        VStack(alignment: .center, spacing: 22) {
+        VStack(alignment: .center, spacing: 22, content: {
             if viewModel.isMyCourseReviewsLoading {
-                LoadingView()
-            } else if let data = viewModel.myCourseReviewsData {
-                contentSection(data: data)
-                    .padding(.horizontal, 16)
+                MainProgressComponents()
             } else {
-                CustomEmptyStateView(label: "작성하신 코스 리뷰가 없습니다.", subLabel: "내가 방문한 코스에 대한 리뷰를 적어주세요!")
-                    .padding(.top, 231)
-                Spacer()
+                if viewModel.myCourseReviews.isEmpty {
+                    VStack(content: {
+                        HStack(content: {
+                            reviewCountSection(count: 0)
+                            
+                            Spacer()
+                        })
+                        
+                        CustomEmptyStateView(label: "작성하신 코스 리뷰가 없습니다.", subLabel: "내가 방문한 코스에 대한 리뷰를 적어주세요!")
+                            .padding(.top, 231)
+                        
+                    })
+                    Spacer()
+                    
+                } else {
+                    contentSection(data: viewModel.myCourseReviews)
+                }
+                
             }
-        }
-        .onAppear {
-            viewModel.getMyCourseReviews(review: .init(pageSize: 10, lastReviewId: 1))
+        })
+        .task {
+            viewModel.getMyCourseReviews()
         }
     }
 
     // MARK: - 리뷰 콘텐츠
-    private func contentSection(data: MyCourseReviewResponse) -> some View {
+    private func contentSection(data: [CourseReviewData]) -> some View {
         VStack(alignment: .leading, spacing: 22) {
-            reviewCountSection(count: data.reviewCount)
-            reviewTableSection(content: data.content)
+            reviewCountSection(count: viewModel.reviewCount)
+            reviewTableSection(content: data)
         }
     }
 
@@ -48,16 +60,17 @@ struct MyCourseReviewsView: View {
             Text("작성한 리뷰")
                 .font(.body2)
                 .foregroundStyle(Color.g6)
-            Text("\(count)")
+            Text("\(count)개")
                 .font(.body2)
                 .foregroundStyle(Color.m6)
         }
+        .padding(.horizontal, 16)
     }
 
     private func reviewTableSection(content: [CourseReviewData]) -> some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 8) {
-                ForEach(content, id: \.reviewId) { review in
+                ForEach(content, id: \.id) { review in
                     ReviewCard(
                         cardType: .myReview,
                         reviewType: .course,
@@ -71,6 +84,11 @@ struct MyCourseReviewsView: View {
                         date: review.createdDate
                     )
                     .padding(.bottom, 40)
+                    .onAppear {
+                        if content.last?.reviewId == review.reviewId {
+                            viewModel.getMyCourseReviews()
+                        }
+                    }
 
                     if review.reviewId != content.last?.reviewId {
                         Divider()
@@ -79,6 +97,7 @@ struct MyCourseReviewsView: View {
                     }
                 }
             }
+            .padding(.horizontal, 16)
         }
     }
 }

@@ -49,6 +49,7 @@ struct SimilarPlacesView: View {
                 Text(DataFormatter.shared.makeStyledText(for: "\(UserState.shared.getUserNickname())님과 비슷한 취향을 \n가진 사람들이 좋아하는 장소예요"))
                     .lineLimit(2)
                     .lineSpacing(2.5)
+                    .padding(.top, 35)
                 
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 10, content: {
                     ForEach(datas.indices, id: \.self) { index in

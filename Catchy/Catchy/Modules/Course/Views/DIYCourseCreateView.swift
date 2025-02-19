@@ -28,7 +28,9 @@ struct DIYCourseCreateView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 35) {
             
-            CustomNavigation(action: {}, title: "코스 생성하기", leftNaviIcon: nil, isShadow: true)
+            CustomNavigation(action: {
+                viewModel.close()
+            }, title: "코스 생성하기", leftNaviIcon: nil, isShadow: true)
                         
             scrollView
     
@@ -66,6 +68,7 @@ struct DIYCourseCreateView: View {
                     text: "코스 생성하기",
                     action: {
                         viewModel.postCreateDIYCourse(placeIds: selectedPlaceIds)
+                        // TODO: 코스 생성완료 후, 코스 탭으로 이동
                     },
                     width: UIScreen.screenWidth - 32,
                     height: 55,
@@ -86,7 +89,7 @@ struct DIYCourseCreateView: View {
             
             ZStack(alignment: .leading) {
                 if viewModel.courseName.isEmpty {
-                    Text("생성할 코스의 이름을 입력해주세요")
+                    Text("최대 15자까지 입력가능합니다.")
                         .foregroundColor(.g3)
                         .font(.body3)
                         .padding(.leading, 20)

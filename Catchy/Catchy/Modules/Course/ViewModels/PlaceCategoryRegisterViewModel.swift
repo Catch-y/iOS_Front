@@ -21,15 +21,18 @@ class PlaceCategoryRegisterViewModel: ObservableObject {
     @Published var selectedCategory: [CategoryType: String] = [:]
 
     /// 현재 카테고리를 등록하고자 하는 장소
-    @Binding var placeSearchResponseData: PlaceSearchResponseData
+    let placeId: Int
     
     /// 장소 카테고리 선택화면 샅애
     @Binding var isPresented: Bool
     
+    /// 카테고리 등록이 완료되었는가?
+    @Published var hasRegister: Bool = false
+    
     // MARK: - Init
-    init(container: DIContainer, placeSearchResponseData: Binding<PlaceSearchResponseData>, isPresented: Binding<Bool>) {
+    init(container: DIContainer, placeId: Int, isPresented: Binding<Bool>) {
         self.container = container
-        self._placeSearchResponseData = placeSearchResponseData
+        self.placeId = placeId
         self._isPresented = isPresented
     }
 }
@@ -46,7 +49,7 @@ extension PlaceCategoryRegisterViewModel {
         
         let request = PlaceCategoryRegisterRequest(bigCategory: bigCategory, smallCategory: smallCategory)
         
-        container.useCaseProvider.courseUseCase.executePostPlaceCategoryRegister(placeId: placeSearchResponseData.placeId, place: request)
+        container.useCaseProvider.courseUseCase.executePostPlaceCategoryRegister(placeId: placeId, place: request)
             .tryMap {
                 responseData ->
                 ResponseData<PlaceCategoryRegisterResponse> in
@@ -61,19 +64,22 @@ extension PlaceCategoryRegisterViewModel {
                 return responseData
             }
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: {
+            .sink(receiveCompletion: { [weak self]
                 completion in
-
+                
+                guard let self = self else { return }
+                
+                self.hasRegister = true
+                
                 switch completion {
                 case .finished:
                     print("✅ Post PlaceCategoryRegister Server Completed")
+                    
                 case .failure(let failure):
                     print("❌ Post PlaceCategoryRegister Failed: \(failure)")
                 }
-            },receiveValue: { [weak self] response in
-                guard let self = self else { return }
-                self.placeSearchResponseData.category = bigCategory
-                self.close()
+            },receiveValue: { response in
+                
             })
             .store(in: &cancellables)
         }

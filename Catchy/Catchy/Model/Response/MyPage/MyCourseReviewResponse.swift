@@ -24,7 +24,9 @@ struct MyCourseReviewResponse: Codable {
 }
 
 /// 코스 리뷰 데이터를 담는 구조체
-struct CourseReviewData: Codable {
+struct CourseReviewData: Codable, Identifiable {
+    
+    var id = UUID()
     
     /// 리뷰 ID
     let reviewId: Int
@@ -46,4 +48,14 @@ struct CourseReviewData: Codable {
     
     /// 리뷰 작성일
     let createdDate: String
+    
+    enum CodingKeys: String, CodingKey {
+        case reviewId
+        case name
+        case categories
+        case comment
+        case reviewImages
+        case rating
+        case createdDate
+    }
 }

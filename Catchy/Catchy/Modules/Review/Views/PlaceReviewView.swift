@@ -38,26 +38,27 @@ struct PlaceReviewView: View {
                 if let data = viewModel.placeReviewData {
                     ScrollView(.vertical, content: {
                         topReviewInfo(data: data)
-                        
+                            .padding(.horizontal, 16)
                         if !data.content.isEmpty {
                             reviewTableSection(content: data.content)
                                 .padding(.top, 7)
+                                .padding(.horizontal, 16)
                         } else {
                             infoView()
                                 .padding(.top, 107)
                         }
                     })
-                    .padding(.horizontal, 16)
+                    
                 } else {
-                    LoadingView()
+                    MainProgressComponents()
                 }
             } else {
-                LoadingView()
+                MainProgressComponents()
             }
         })
         .ignoresSafeArea(.all)
         .task {
-            viewModel.getReviewData(placeId: 123, request: PlaceReviewRequest(pageSize: 10, lastPlaceReviewDate: "12312321", lastPlaceReviewId: 123))
+            viewModel.getPlaceReviewData(placeId: 123, request: PlaceReviewRequest(pageSize: 10, lastPlaceReviewDate: "12312321", lastPlaceReviewId: 123))
         }
     }
     
@@ -193,8 +194,11 @@ struct PlaceReviewView: View {
                     userName: review.creatorNickname,
                     date: review.visitedDate
                     )
-                Divider()
-                    .background(.g3)
+                .padding(.vertical, 26)
+                if review.reviewId != content.last?.reviewId {
+                    Divider()
+                        .background(Color.g3)
+                }
             }
         })
     }

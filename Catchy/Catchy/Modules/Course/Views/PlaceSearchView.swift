@@ -24,14 +24,10 @@ struct PlaceSearchView: View {
         VStack {
             if !viewModel.isPlaceListLoading {
                     
-                if let data = viewModel.placeSearchResponse {
-                    if data.placeInfoPreviews.isEmpty {
-                        infoView
-                    } else {
-                        scrollView
-                    }
-                    
-                    Spacer()
+                if !viewModel.placeList.isEmpty {
+                    scrollView
+                } else {
+                    infoView
                 }
             } else {
                 MainProgressComponents()
@@ -39,7 +35,7 @@ struct PlaceSearchView: View {
                 
         }
         .task {
-            viewModel.getPlaceList()
+            viewModel.getPlaceListByRegion()
         }
         .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
             if let placeId = viewModel.selectedPlaceId {
@@ -63,6 +59,14 @@ struct PlaceSearchView: View {
                         PlaceCard(place: place, reviewTap: { viewModel.showReview(placeId: place.placeId)})
                             .onTapGesture {
                                 // TODO: - 장소 상세 화면으로 이동
+                            }
+                            .task {
+                                if let lastPlaceId = viewModel.placeList.last?.placeId {
+                                    if place.placeId >= lastPlaceId {
+                                        viewModel.isPrefetching = true
+                                        viewModel.getPlaceListByRegion()
+                                    }
+                                }
                             }
                         if index < viewModel.placeList.count - 1 {
                             Divider()

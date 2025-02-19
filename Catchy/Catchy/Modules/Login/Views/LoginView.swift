@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
     
+    @State private var isVisible: Bool = false
     @EnvironmentObject var container: DIContainer
     @EnvironmentObject var appFlowViewModel: AppFlowViewModel
     
@@ -27,7 +28,13 @@ struct LoginView: View {
             
             bottomBtnGroup
         })
+        .opacity(isVisible ? 1 : 0)
         .safeAreaPadding(EdgeInsets(top: 162, leading: 0, bottom: 62, trailing: 0))
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.5)) {
+                isVisible = true
+            }
+        }
     }
     
     private var topLogoGroup: some View {

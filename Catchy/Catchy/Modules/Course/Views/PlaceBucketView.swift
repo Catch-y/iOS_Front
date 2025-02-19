@@ -17,15 +17,15 @@ struct PlaceBucketView: View {
     @Binding var selectedPlaceList: [PlaceSearchResponseData]
     
     /// 담아둔 장소 화면 상태
-    @Binding var isPresented: Bool
+    @Binding var isBucketViewPresented: Bool
     
     // MARK: - 코스 생성하기 화면 Properties
-    /// 코스 생성하기 뷰 상태
+    /// 코스 생성하기 화면 상태
     @State var isCreateViewPresented: Bool = false
     
-    init(selectedPlaceList: Binding<[PlaceSearchResponseData]>, isPresented: Binding<Bool>) {
+    init(selectedPlaceList: Binding<[PlaceSearchResponseData]>, isBucketViewPresented: Binding<Bool>) {
         self._selectedPlaceList = selectedPlaceList
-        self._isPresented = isPresented
+        self._isBucketViewPresented = isBucketViewPresented
     }
     
     var body: some View {
@@ -33,18 +33,26 @@ struct PlaceBucketView: View {
         VStack(spacing: 0) {
             CustomNavigation(
                 
-                // TODO: - 화면 닫기 구현
-                action: { print("닫기 버튼 탭") },
+                action: {
+                    isBucketViewPresented.toggle()
+                },
                 title: "담아둔 장소",
                 leftNaviIcon: nil,
-                isShadow: true)
-            
-            scrollView
+                isShadow: true
+            )
+            if selectedPlaceList.isEmpty {
+                infoView
+                Spacer()
+
+            } else {
+                scrollView
+
+            }
         }
         .ignoresSafeArea(edges: .top)
         .background(.bg1)
         .fullScreenCover(isPresented: $isCreateViewPresented, onDismiss: {
-            isPresented.toggle()
+            isBucketViewPresented.toggle()
         }) {
             DIYCourseCreateView(container: container, placeIds: Array(selectedPlaceList.map(\.self.placeId)), isPresented: $isCreateViewPresented)
         }
@@ -61,10 +69,11 @@ struct PlaceBucketView: View {
                 ForEach(Array(selectedPlaceList.enumerated()), id: \.element.id) {(index, place) in
                     PlaceBucketCard(
                         placeSearchResponseData: place,
-                        index: index
-                    ) { index in
+                        index: index,
+                        canDelete: true
+                    ) {
                         self.selectedPlaceList.remove(at: index)
-                    }
+                    }.environmentObject(container)
                 }
                 
             }
@@ -73,7 +82,6 @@ struct PlaceBucketView: View {
             .safeAreaPadding(.horizontal, 16)
             .padding(.bottom, 30)
             
-            // TODO: - 코스 생성하기 API 구현
             MainBtn(text: "코스 생성하기" ,
                     action: {
                 isCreateViewPresented.toggle()
@@ -87,6 +95,24 @@ struct PlaceBucketView: View {
         }
     }
     
+    /// 담은 장소가 없을 때 뷰
+    private var infoView : some View {
+        VStack(spacing: 9){
+            Icon.smileSearch.image
+                .fixedSize()
+                .padding(.bottom, 6)
+            Text("담아둔 장소가 없어요!")
+                .font(.Subtitle2)
+                .foregroundStyle(.g7)
+            Text("마음에 드는 장소를 담아보세요.")
+                .font(.Body1_2)
+                .foregroundStyle(.g4)
+            
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .ignoresSafeArea(edges: .all)
+        
+    }
 }
 
 
@@ -130,7 +156,7 @@ struct PlaceBucketView_Previews: PreviewProvider {
                             reviewCount: 980,
                             liked: true
                         )
-            ]), isPresented: .constant(true))
+            ]), isBucketViewPresented: .constant(true))
             .environmentObject(DIContainer())
         }
     }

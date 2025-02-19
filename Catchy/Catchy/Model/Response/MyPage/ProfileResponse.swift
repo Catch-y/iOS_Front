@@ -17,5 +17,5 @@ struct ProfileResponse: Codable {
     let nickname: String
     
     /// 사용자 프로필 사진
-    let profileImage: String
+    var profileImage: String
 }

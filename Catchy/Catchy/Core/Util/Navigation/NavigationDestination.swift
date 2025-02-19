@@ -8,16 +8,17 @@
 import Foundation
 
 enum NavigationDestination: Equatable, Hashable {
-    
     case signUpView(signUpNaviData: SignUpNaviData)
     case searchView
-    case similarView /* 비슷한 취향을 가진 장소 보기 */
-    case courseDetailView(courseId: Int) /* 코스 상세화면 보기 */
-    case mypageOption /* 마이페이지 내 옵션 설정 */
-    case favoritePlacesView /* 마이페이지 내 선호 장소 */
-    case fullScreenMap(viewModel: AppleMapViewModel) // Hashable에서 직접 비교 불가
+    case similarView
+    case courseDetailView(courseId: Int)
+    case mypageOption
+    case favoritePlacesView
+    case fullScreenMap(viewModel: AppleMapViewModel)
+    case placeReviewRegisterView(placeId: Int)
+    case myReviewsView
     
-    // Equatable 수동 구현 (fullScreenMap은 비교 제외)
+    // Equatable 구현 (fullScreenMap 비교 제외)
     static func == (lhs: NavigationDestination, rhs: NavigationDestination) -> Bool {
         switch (lhs, rhs) {
         case (.signUpView(let lData), .signUpView(let rData)):
@@ -25,18 +26,21 @@ enum NavigationDestination: Equatable, Hashable {
         case (.searchView, .searchView),
              (.similarView, .similarView),
              (.mypageOption, .mypageOption),
-             (.favoritePlacesView, .favoritePlacesView):
+             (.favoritePlacesView, .favoritePlacesView),
+             (.myReviewsView, .myReviewsView):
             return true
         case (.courseDetailView(let lId), .courseDetailView(let rId)):
             return lId == rId
+        case (.placeReviewRegisterView(let lId), .placeReviewRegisterView(let rId)):
+            return lId == rId
         case (.fullScreenMap, .fullScreenMap):
-            return false // ✅ `fullScreenMap` 비교하지 않음
+            return false // `fullScreenMap` 비교 제외
         default:
             return false
         }
     }
     
-    // Hashable 수동 구현 (`fullScreenMap` 제외)
+    // Hashable 구현 (`fullScreenMap` 제외)
     func hash(into hasher: inout Hasher) {
         switch self {
         case .signUpView(let data):
@@ -53,6 +57,11 @@ enum NavigationDestination: Equatable, Hashable {
             hasher.combine("mypageOption")
         case .favoritePlacesView:
             hasher.combine("favoritePlacesView")
+        case .placeReviewRegisterView(let placeId):
+            hasher.combine("placeReviewRegisterView")
+            hasher.combine(placeId)
+        case .myReviewsView:
+            hasher.combine("myReviewsView")
         case .fullScreenMap:
             hasher.combine("fullScreenMap")
         }

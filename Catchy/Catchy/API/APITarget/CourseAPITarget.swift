@@ -581,7 +581,7 @@ extension CourseAPITarget: APITargetType {
                         "categories": ["REST"]
                       }
                     ],
-                    "isLast": true
+                    "isLast": false
                   }
                 }
 
@@ -705,7 +705,7 @@ extension CourseAPITarget {
          
         for (_, image) in courseImage.enumerated() {
             if let image = image.jpegData(compressionQuality: 0.8) {
-                let multipartData = MultipartFormData(provider: .data(image), name: "courseImage", fileName: "courseImage.jpg", mimeType: "images/jpeg")
+                let multipartData = MultipartFormData(provider: .data(image), name: "courseImage", fileName: "courseImage.jpg", mimeType: "/")
                 formData.append(multipartData)
             
             }
@@ -745,7 +745,7 @@ extension CourseAPITarget {
         }
                 
         if let image = courseImage.jpegData(compressionQuality: 0.8) {
-            let multipartData = MultipartFormData(provider: .data(image), name: "courseImage", fileName: "courseImage.jpg", mimeType: "images/jpeg")
+            let multipartData = MultipartFormData(provider: .data(image), name: "courseImage", fileName: "courseImage.jpg", mimeType: "/")
             formData.append(multipartData)
 
         }

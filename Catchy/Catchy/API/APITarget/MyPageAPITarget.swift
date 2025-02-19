@@ -7,6 +7,7 @@
 
 import Foundation
 import Moya
+import SwiftUI
 
 /// 마이페이지 APITarget
 enum MyPageAPITarget {
@@ -30,6 +31,14 @@ enum MyPageAPITarget {
     /// HTTP 메소드 : GET
     /// API Path : /mypage/placeReviews
     case getMyPlaceReviews(review: MyPlaceReviewRequest)
+    
+    /// 리뷰 삭제 API
+    /// HTTP 메소드 : DELETE
+    /// API Path :
+    case deleteReview(reviewId: Int, reviewType: ReviewType)
+    
+    /// 프로필 사진 변경 API
+    case patchProfileImage(profileImage: UIImage)
 }
 
 extension MyPageAPITarget: APITargetType {
@@ -53,6 +62,14 @@ extension MyPageAPITarget: APITargetType {
         /// 내 장소 리뷰 조회 API
         case .getMyPlaceReviews:
             return "/mypage/placeReviews"
+    
+        /// 리뷰 삭제 API
+        case .deleteReview(let reviewId, _):
+            return "/mypage/reviews/\(reviewId)"
+            
+        /// 프로필 사진 변경
+        case .patchProfileImage:
+            return "/member/mypage/profileImage"
         }
     }
     
@@ -74,6 +91,14 @@ extension MyPageAPITarget: APITargetType {
         /// 내 장소 리뷰 조회 API
         case .getMyPlaceReviews:
             return .get
+            
+        /// 리뷰 삭제 API
+        case .deleteReview:
+            return .delete
+            
+        /// 프로필 사진 변경
+        case .patchProfileImage:
+            return .patch
         }
     }
     
@@ -112,13 +137,29 @@ extension MyPageAPITarget: APITargetType {
                 parameters["lastReviewId"] = lastReviewId
             }
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
+        
+        case .deleteReview(_, let reviewType):
+            return .requestParameters(parameters: ["reviewType": reviewType.rawValue], encoding: URLEncoding.default)
+            
+        case .patchProfileImage(let image):
+            var multipartData = [MultipartFormData]()
+            
+            if let imageData = image.jpegData(compressionQuality: 0.8) {
+                multipartData.append(MultipartFormData(provider: .data(imageData), name: "profileImage", fileName: "profileImage.jpeg", mimeType: "profileImage/jpeg"))
+            }
+            
+            return .uploadMultipart(multipartData)
         }
         
     }
     
     var headers: [String : String]? {
-        let header = ["Content-Type" : "application/json"]
-        return header
+        switch self {
+        case .patchProfileImage:
+            return ["Content-Type": "multipart/form-data"]
+        default:
+            return ["Content-Type": "application/json"]
+        }
     }
     
     var sampleData: Data {
@@ -352,7 +393,7 @@ extension MyPageAPITarget: APITargetType {
                     "createdDate": "2025-01-10"
                   }
                 ],
-                "last": true
+                "last": false
               }
             }
             
@@ -465,12 +506,40 @@ extension MyPageAPITarget: APITargetType {
                     "visitedDate": "2025-01-10"
                   }
                 ],
-                "last": true
+                "last": false
               }
             }
             
             """
             return json.data(using: .utf8)!
+            
+        case .deleteReview:
+            let json = """
+            {
+              "isSuccess": true,
+              "code": "COMMON200",
+              "message": "성공입니다.",
+              "result": {
+                "reviewId": 1,
+                "reviewType": "COURSE",
+                "message": "리뷰 삭제"
+              }
+            }
+            
+            """
+            return json.data(using: .utf8)!
+        case .patchProfileImage:
+            return """
+            {
+              "isSuccess": true,
+              "code": "string",
+              "message": "string",
+              "result": {
+                "id": 1,
+                "profileImage": "예시 프로필 이미지 데이터 생성"
+              }
+            }
+            """.data(using: .utf8)!
         }
     }
 }
