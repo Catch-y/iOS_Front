@@ -97,8 +97,7 @@ struct PlaceVisitingView: View {
         .padding(.bottom, 30)
     }
 
-    // TODO: - 방문이 가능한지에 따라 처리
-    /// 방문 체크 버튼
+    
     /// 방문 체크 버튼
     private var visitCheckbtn: some View {
         Button(action: {
@@ -107,13 +106,13 @@ struct PlaceVisitingView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 16.5)
                     .fill(.white)
-                    .stroke(viewModel.isUserNear ? .main : .gray) // 100m 이내일 때만 활성화 색상 적용
+                    .stroke(viewModel.isUserActuallyVisiting ? .main : .gray) // 100m 이내일 때만 활성화 색상 적용
                     .frame(width: 108, height: 36)
 
                 HStack(spacing: 7) {
                     Icon.visitCheck.image
                     Text("방문 체크")
-                        .foregroundStyle(viewModel.isUserNear ? .main : .gray) // 100m 이내일 때만 활성화 색상 적용
+                        .foregroundStyle(viewModel.isUserActuallyVisiting ? .main : .gray) // 100m 이내일 때만 활성화 색상 적용
                         .font(.body3)
                 }
             }

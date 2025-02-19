@@ -30,30 +30,34 @@ class PlaceVisitingViewModel: ObservableObject {
     // MARK: - 장소 리뷰, 평점 화면 상태
     /// 리뷰, 평점 화면 상태
     @Published var isReviewPresented: Bool = false
+    @Published var isUserActuallyVisiting: Bool = false
     
     // MARK: - Init
     init(container: DIContainer) {
         self.container = container
+        MotionManager.shared.startMotionUpdates()
     }
-    
-    func checkUserDistance() {
-            BaseLocationManager.shared.getCurrentUserLocation { userLocation in
-                guard let userLocation = userLocation,
-                      let place = self.placeDetailResponse else {
-                    DispatchQueue.main.async {
-                        self.isUserNear = false
-                    }
-                    return
-                }
-
-                let placeLocation = CLLocation(latitude: place.placeLatitude, longitude: place.placeLongitude)
-                let distance = userLocation.distance(from: placeLocation)
-
+    /// GPS + IMU 데이터를 활용한 방문 여부 확인
+    func checkUserVisitStatus() {
+        BaseLocationManager.shared.getCurrentUserLocation { [weak self] userLocation in
+            guard let self = self, let userLocation = userLocation,
+                  let place = self.placeDetailResponse else {
                 DispatchQueue.main.async {
-                    self.isUserNear = distance <= 100
+                    self?.isUserNear = false
+                    self?.isUserActuallyVisiting = false
                 }
+                return
+            }
+            
+            let placeLocation = CLLocation(latitude: place.placeLatitude, longitude: place.placeLongitude)
+            let distance = userLocation.distance(from: placeLocation) // 미터 단위 거리 계산
+            
+            DispatchQueue.main.async {
+                self.isUserNear = distance <= 100 // GPS 거리 체크
+                self.isUserActuallyVisiting = self.isUserNear && MotionManager.shared.isUserMovingSlowly // GPS + IMU 데이터 결합
             }
         }
+    }
 
 }
 
