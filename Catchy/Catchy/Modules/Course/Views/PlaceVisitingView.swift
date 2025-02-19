@@ -63,10 +63,17 @@ struct PlaceVisitingView: View {
             }
 
         }
+        .padding(.top, 32)
         .task {
             viewModel.getPlaceDetail(placeId: placeId)
         }
-        .navigationBarBackButtonHidden()
+        .onChange(of: placeId) { oldValue, newValue in
+            viewModel.getPlaceDetail(placeId: newValue)
+        }
+        .background(Color.white)
+        .s1w()
+        .frame(height: 562, alignment: .bottom)
+        .clipShape(.rect(topLeadingRadius: 20, topTrailingRadius: 20))
     }
 
     /// 방문 체크 버튼 + 리뷰 버튼 + 방문 스탬프
@@ -165,14 +172,8 @@ struct PlaceVisitingView: View {
 
 struct PlaceVisitingView_Previews: PreviewProvider {
     static var previews: some View {
-        ForEach(
-            ["iPhone 16 Pro Max", "iPhone 11"],
-            id: \.self
-        ) { deviceName in
             PlaceVisitingView(container: DIContainer(), placeId: 1)
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
                 .environmentObject(DIContainer())
+                .previewLayout(.sizeThatFits)
         }
     }
-}
