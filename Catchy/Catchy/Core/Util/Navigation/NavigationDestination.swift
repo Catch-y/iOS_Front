@@ -10,8 +10,12 @@ import Foundation
 enum NavigationDestination: Equatable, Hashable {
     case signUpView(signUpNaviData: SignUpNaviData)
     case searchView
-    case similarView
-    case courseDetailView(courseId: Int)
+    case similarView /* 비슷한 취향을 가진 장소 보기 */
+    case courseDetailView(courseId: Int) /* 코스 상세화면 보기 */
+    case groupVoteStartView /* 투표 참여 화면 추가 */
+    case locationSelectView /* 지역 선택 뷰 화면 */
+    case createGroupView  /* 그룹 만들기 뷰 */
+    case groupVoteView(groupId: Int) /* 그룹 투표 시작 페이지 */
     case mypageOption
     case favoritePlacesView
     case fullScreenMap(viewModel: AppleMapViewModel)
@@ -27,11 +31,16 @@ enum NavigationDestination: Equatable, Hashable {
              (.similarView, .similarView),
              (.mypageOption, .mypageOption),
              (.favoritePlacesView, .favoritePlacesView),
-             (.myReviewsView, .myReviewsView):
+             (.myReviewsView, .myReviewsView),
+             (.groupVoteStartView, .groupVoteStartView),
+             (.locationSelectView, .locationSelectView),
+             (.createGroupView, .createGroupView):
             return true
         case (.courseDetailView(let lId), .courseDetailView(let rId)):
             return lId == rId
         case (.placeReviewRegisterView(let lId), .placeReviewRegisterView(let rId)):
+            return lId == rId
+        case (.groupVoteView(let lId), .groupVoteView(let rId)):
             return lId == rId
         case (.fullScreenMap, .fullScreenMap):
             return false // `fullScreenMap` 비교 제외
@@ -62,6 +71,15 @@ enum NavigationDestination: Equatable, Hashable {
             hasher.combine(placeId)
         case .myReviewsView:
             hasher.combine("myReviewsView")
+        case .groupVoteStartView:
+            hasher.combine("groupVoteStartView")
+        case .locationSelectView:
+            hasher.combine("locationSelectView")
+        case .createGroupView:
+            hasher.combine("createGroupView")
+        case .groupVoteView(let groupId):
+            hasher.combine("groupVoteView")
+            hasher.combine(groupId)
         case .fullScreenMap:
             hasher.combine("fullScreenMap")
         }
