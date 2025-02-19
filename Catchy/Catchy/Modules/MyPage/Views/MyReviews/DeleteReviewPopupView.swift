@@ -7,9 +7,13 @@
 
 import SwiftUI
 
-struct DeleteReviewPopupView<ViewModel: DeleteReviewPopupViewModelProtocol>: View {
+struct DeleteReviewPopupView: View {
     
-    @ObservedObject var viewModel: ViewModel
+    @ObservedObject var viewModel: MyReviewsViewModel
+    @ObservedObject var courseReviewsViewModel: MyCourseReviewsViewModel
+    @ObservedObject var placeReviewsViewModel: MyPlaceReviewsViewModel
+    
+    @EnvironmentObject var container: DIContainer
     
     var body: some View {
         ZStack {
@@ -64,7 +68,7 @@ struct DeleteReviewPopupView<ViewModel: DeleteReviewPopupViewModelProtocol>: Vie
                     .clipShape(RoundedRectangle(cornerRadius: 21))
             }
             Button(action: {
-                viewModel.deleteReview()
+                deleteReview()
             }) {
                 Text("확인")
                     .font(.body3)
@@ -77,12 +81,25 @@ struct DeleteReviewPopupView<ViewModel: DeleteReviewPopupViewModelProtocol>: Vie
     }
 }
 
-struct DeleteReViewPopupView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
-            DeleteReviewPopupView(viewModel: MyCourseReviewsViewModel(container: DIContainer()))
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
+extension DeleteReviewPopupView {
+    func deleteReview() {
+        guard let reviewId = viewModel.selectedReviewIdForDeletion else {
+            return
+        }
+        viewModel.isDeletingReview = true
+        
+        if viewModel.selectedSegment == .course {
+            courseReviewsViewModel.deleteReview(reviewId: reviewId) { result in
+                if result {
+                    viewModel.cancelDeletePopup()
+                    viewModel.isDeletingReview = false
+                }
+            }
+        } else {
+            placeReviewsViewModel.deleteReview(reviewId: reviewId) {
+                viewModel.cancelDeletePopup()
+                viewModel.isDeletingReview = false
+            }
         }
     }
 }

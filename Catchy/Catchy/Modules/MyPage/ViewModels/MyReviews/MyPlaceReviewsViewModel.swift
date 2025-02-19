@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 /// 내 장소 리뷰 조회 ViewModel
-class MyPlaceReviewsViewModel: ObservableObject, DeleteReviewPopupViewModelProtocol {
+class MyPlaceReviewsViewModel: ObservableObject{
     
     /// 전체 장소 리뷰 목록
     @Published var myPlaceReviews: [PlaceReviewData] = []
@@ -19,9 +19,6 @@ class MyPlaceReviewsViewModel: ObservableObject, DeleteReviewPopupViewModelProto
     
     /// 리뷰 개수
     @Published var reviewCount: Int = 0
-    
-    /// 삭제 팝업 창 상태
-    @Published var showDeletePopup: Bool = false
     
     /// 삭제할 리뷰 ID
     @Published var selectedReviewIdForDeletion: Int? = nil
@@ -108,21 +105,9 @@ extension MyPlaceReviewsViewModel {
             .store(in: &cancellables)
     }
     
-    /// 삭제 팝업 띄우기
-    func openDeletePopup(reviewId: Int) {
-        selectedReviewIdForDeletion = reviewId
-        showDeletePopup = true
-    }
-    
-    /// 삭제 취소 (팝업 닫기)
-    func cancelDeletePopup() {
-        showDeletePopup = false
-        selectedReviewIdForDeletion = nil
-    }
-    
     /// 리뷰 삭제 API
-    func deleteReview() {
-        guard let reviewId = selectedReviewIdForDeletion, !isMyPlaceReviewsLoading else { return }
+    func deleteReview(reviewId: Int, completion: @escaping () -> Void) {
+        guard !isDeletingReview else { return }
         
         isDeletingReview = true
         
@@ -155,7 +140,7 @@ extension MyPlaceReviewsViewModel {
                 }
                 
                 self.reviewCount -= 1
-                self.cancelDeletePopup()
+                completion()
             })
             .store(in: &cancellables)
     }

@@ -10,10 +10,11 @@ import SwiftUI
 /// 사용자가 작성한 코스 리뷰 목록을 보여주는 화면
 struct MyCourseReviewsView: View {
     
-    @StateObject var viewModel: MyCourseReviewsViewModel
-
-    init(container: DIContainer) {
-        self._viewModel = StateObject(wrappedValue: .init(container: container))
+    @ObservedObject var viewModel: MyCourseReviewsViewModel
+    @EnvironmentObject var parentViewModel: MyReviewsViewModel
+    
+    init(viewModel: MyCourseReviewsViewModel) {
+        self.viewModel = viewModel
     }
     
     // MARK: - Body
@@ -44,13 +45,6 @@ struct MyCourseReviewsView: View {
         })
         .task {
             viewModel.getMyCourseReviews()
-        }
-        
-        /* 삭제 팝업 오버레이: 뷰모델의 showDeletePopup 상태가 true면 DeleteReviewPopupView가 나타남 */
-        .overlay {
-            if viewModel.showDeletePopup {
-                DeleteReviewPopupView(viewModel: viewModel)
-            }
         }
     }
 
@@ -85,7 +79,7 @@ struct MyCourseReviewsView: View {
                         comment: review.comment,
                         images: review.reviewImages,
                         action: { reviewId in
-                            viewModel.openDeletePopup(reviewId: reviewId)
+                            parentViewModel.openDeletePopup(reviewId: reviewId)
                         },
                         categories: review.categories,
                         rating: review.rating,
@@ -115,9 +109,10 @@ struct MyCourseReviewsView: View {
 struct MyCourseReviewsView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(["iPhone 16 Pro", "iPhone 11"], id: \ .self) { deviceName in
-            MyCourseReviewsView(container: DIContainer())
+            MyCourseReviewsView(viewModel: .init(container: DIContainer()))
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
+                .environmentObject(MyReviewsViewModel(container: DIContainer()))
         }
     }
 }
