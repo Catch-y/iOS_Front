@@ -46,6 +46,7 @@ struct DIYCourseCreateView: View {
             )
         }
         .onAppear {
+            print("에바")
             UIApplication.shared.hideKeyboard()
         }
         .navigationBarBackButtonHidden(true)

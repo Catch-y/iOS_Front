@@ -24,8 +24,6 @@ struct CatchyTabView: View {
     /// AI 코스 생성 로딩화면 나온 상태
     @State private var isAILoadingPresented: Bool = false
     
-    /// DIY 코스 생성화면 나온 상태
-    @State private var isDIYPresented: Bool = false
     
     @State private var showEditingNickname: Bool = false
     
@@ -44,7 +42,7 @@ struct CatchyTabView: View {
                     case .home:
                         HomeView(container: container)
                     case .course:
-                        CourseView(container: container, isAILoadingPresented: $isAILoadingPresented, isDIYPresented: $isDIYPresented)
+                        CourseView(container: container, isAILoadingPresented: $isAILoadingPresented)
                         
                         AddFloatingButton(isOpen: $isFloating, onSubButtonTap: {
                             segment in
@@ -53,8 +51,8 @@ struct CatchyTabView: View {
                                 isAILoadingPresented.toggle()
                                 isFloating.toggle()
                             case .diy:
-                                isDIYPresented.toggle()
                                 isFloating.toggle()
+                                container.navigationRouter.push(to: .placeSearchView)
                             }
                         })
                             .zIndex(3)

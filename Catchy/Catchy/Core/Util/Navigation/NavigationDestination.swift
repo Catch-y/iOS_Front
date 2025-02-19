@@ -23,6 +23,9 @@ enum NavigationDestination: Equatable, Hashable {
     case myReviewsView
     case diyCourseCreateView(placeIds: [Int])
     case placeReviewView(placeId: Int)
+    case placeDetailView(viewModel: DIYCourseViewModel, placeSearchResponseData: PlaceSearchResponseData)
+    case placeSearchView
+    case placeBucketView(viewModel: DIYCourseViewModel)
 
     // Equatable 구현 (fullScreenMap 비교 제외)
     static func == (lhs: NavigationDestination, rhs: NavigationDestination) -> Bool {
@@ -48,6 +51,8 @@ enum NavigationDestination: Equatable, Hashable {
             return lIds == rIds
         case (.placeReviewView(let lId), .placeReviewView(let rId)):
             return lId == rId
+        case (.placeDetailView(_, let lId), .placeDetailView(_, let rId)):
+            return lId.placeId == rId.placeId
         case (.fullScreenMap, .fullScreenMap):
             return false // `fullScreenMap`은 항상 다르게 취급
         default:
@@ -92,6 +97,13 @@ enum NavigationDestination: Equatable, Hashable {
         case .placeReviewView(let placeId):
             hasher.combine("placeReviewView")
             hasher.combine(placeId)
+        case .placeDetailView(_, let placeSearchResponseData):
+            hasher.combine("placeDetailView")
+            hasher.combine(placeSearchResponseData.placeId)
+        case .placeSearchView:
+            hasher.combine("placeSearchView")
+        case .placeBucketView:
+            hasher.combine("placeBucketView")
         case .fullScreenMap:
             break // `fullScreenMap`은 해싱하지 않음
         }

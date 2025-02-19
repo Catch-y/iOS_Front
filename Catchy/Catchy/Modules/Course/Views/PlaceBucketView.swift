@@ -12,16 +12,18 @@ struct PlaceBucketView: View {
         
     @EnvironmentObject var container: DIContainer
     
-    // MARK: - 담아둔 장소 화면 Properties
-    /// 현재 담긴 장소 리스트
-    @Binding var selectedPlaceList: [PlaceSearchResponseData]
     
-    /// 담아둔 장소 화면 상태
-    @Binding var isBucketViewPresented: Bool
+    @ObservedObject var viewModel: DIYCourseViewModel
+    
+    // MARK: - 담아둔 장소 화면 Properties
+    
+//    @Binding var selectedPlaceList: [PlaceSearchResponseData]
+//    
+//    /// 담아둔 장소 화면 상태
+//    @Binding var isBucketViewPresented: Bool
         
-    init(selectedPlaceList: Binding<[PlaceSearchResponseData]>, isBucketViewPresented: Binding<Bool>) {
-        self._selectedPlaceList = selectedPlaceList
-        self._isBucketViewPresented = isBucketViewPresented
+    init(viewModel: DIYCourseViewModel) {
+        self.viewModel = viewModel
     }
     
     var body: some View {
@@ -30,13 +32,13 @@ struct PlaceBucketView: View {
             CustomNavigation(
                 
                 action: {
-                    isBucketViewPresented.toggle()
+                    container.navigationRouter.pop()
                 },
                 title: "담아둔 장소",
-                leftNaviIcon: nil,
+                rightNaviIcon: nil,
                 isShadow: true
             )
-            if selectedPlaceList.isEmpty {
+            if $viewModel.selectedPlaceList.isEmpty {
                 infoView
                 Spacer()
 
@@ -47,7 +49,7 @@ struct PlaceBucketView: View {
         }
         .ignoresSafeArea(edges: .top)
         .background(.bg1)
-            
+        .navigationBarBackButtonHidden(true)
         
         
     }
@@ -57,13 +59,13 @@ struct PlaceBucketView: View {
     private var scrollView: some View {
         ScrollView(.vertical) {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 20, content: {
-                ForEach(Array(selectedPlaceList.enumerated()), id: \.element.id) {(index, place) in
+                ForEach(Array(viewModel.selectedPlaceList.enumerated()), id: \.element.id) {(index, place) in
                     PlaceBucketCard(
                         placeSearchResponseData: place,
                         index: index,
                         canDelete: true
                     ) {
-                        self.selectedPlaceList.remove(at: index)
+                        viewModel.selectedPlaceList.remove(at: index)
                     }.environmentObject(container)
                 }
                 
@@ -75,13 +77,13 @@ struct PlaceBucketView: View {
             
             MainBtn(text: "코스 생성하기" ,
                     action: {
-                container.navigationRouter.push(to: .diyCourseCreateView(placeIds: Array(selectedPlaceList.map(\.self.placeId))))
+                container.navigationRouter.push(to: .diyCourseCreateView(placeIds: Array(viewModel.selectedPlaceList.map(\.self.placeId))))
             },
                     width: UIScreen.screenWidth - 32,
                     height: 60,
-                    onoff: !selectedPlaceList.isEmpty ? .custom : .off
+                    onoff: !$viewModel.selectedPlaceList.isEmpty ? .custom : .off
             )
-            .disabled(selectedPlaceList.isEmpty)
+            .disabled($viewModel.selectedPlaceList.isEmpty)
             
         }
     }
@@ -106,50 +108,4 @@ struct PlaceBucketView: View {
     }
 }
 
-
-struct PlaceBucketView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(
-            ["iPhone 16 Pro Max", "iPhone 11"],
-            id: \.self
-        ) { deviceName in
-            PlaceBucketView(selectedPlaceList: .constant([
-                PlaceSearchResponseData(
-                            placeId: 1,
-                            placeName: "스타벅스 강남점",
-                            placeImage: "https://example.com/starbucks.jpg",
-                            category: .CAFE,
-                            roadAddress: "서울특별시 강남구 테헤란로 123",
-                            activeTime: "08:00 - 22:00",
-                            rating: 4.5,
-                            reviewCount: 120,
-                            liked: true
-                        ),
-                        PlaceSearchResponseData(
-                            placeId: 2,
-                            placeName: "이태원 맛집",
-                            placeImage: "https://example.com/restaurant.jpg",
-                            category: .RESTAURANT,
-                            roadAddress: "서울특별시 용산구 이태원로 45",
-                            activeTime: "11:00 - 23:00",
-                            rating: 4.8,
-                            reviewCount: 340,
-                            liked: false
-                        ),
-                        PlaceSearchResponseData(
-                            placeId: 3,
-                            placeName: "N서울타워",
-                            placeImage: "https://example.com/nseoultower.jpg",
-                            category: .EXPERIENCE,
-                            roadAddress: "서울특별시 용산구 남산공원길 105",
-                            activeTime: "09:00 - 22:00",
-                            rating: 4.7,
-                            reviewCount: 980,
-                            liked: true
-                        )
-            ]), isBucketViewPresented: .constant(true))
-            .environmentObject(DIContainer())
-        }
-    }
-}
 

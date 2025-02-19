@@ -15,12 +15,14 @@ struct CatchyApp: App {
     @StateObject var container: DIContainer = .init()
     
     init() {
-        KakaoSDK.initSDK(appKey: Config.kakaoKey)
+        KakaoSDK.initSDK(appKey: Config.kakaoKey) 
     }
     
     var body: some Scene {
         WindowGroup {
-            SearchView(container: DIContainer())
+            CatchyTabView()
+                .environmentObject(container)
+                .environmentObject(appFlowViewModel)
 //            switch appFlowViewModel.appState {
 //            case .onBoarding:
 //                OnboardingView(viewModel: appFlowViewModel)

@@ -72,6 +72,15 @@ struct NavigationRoutingView: View {
         case .placeReviewView(let placeId):
             PlaceReviewView(container: container, placeId: placeId)
                 .environmentObject(container)
+            
+        case .placeDetailView(let viewModel, let placeSearchResponseData):
+            PlaceDetailView(viewModel: viewModel, placeSearchResponseData: placeSearchResponseData)
+            
+        case .placeSearchView:
+            PlaceSearchView(container: container)
+            
+        case .placeBucketView(let viewModel):
+            PlaceBucketView(viewModel: viewModel)
         }
     }
 }
