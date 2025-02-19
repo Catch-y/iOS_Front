@@ -20,8 +20,8 @@ struct DIYCourseCreateView: View {
     let selectedPlaceIds: [Int]
 
     // MARK: - Init
-    init(container: DIContainer, placeIds: [Int], isPresented: Binding<Bool>) {
-        self._viewModel = StateObject(wrappedValue: .init(container: container, isPresented: isPresented))
+    init(container: DIContainer, placeIds: [Int]) {
+        self._viewModel = StateObject(wrappedValue: .init(container: container))
         self.selectedPlaceIds = placeIds
     }
     
@@ -29,8 +29,8 @@ struct DIYCourseCreateView: View {
         VStack(alignment: .leading, spacing: 35) {
             
             CustomNavigation(action: {
-                viewModel.close()
-            }, title: "코스 생성하기", leftNaviIcon: nil, isShadow: true)
+                container.navigationRouter.pop()
+            }, title: "코스 생성하기", rightNaviIcon: nil, isShadow: true)
                         
             scrollView
     
@@ -48,6 +48,7 @@ struct DIYCourseCreateView: View {
         .onAppear {
             UIApplication.shared.hideKeyboard()
         }
+        .navigationBarBackButtonHidden(true)
         
     }
     
@@ -67,8 +68,11 @@ struct DIYCourseCreateView: View {
                 MainBtn(
                     text: "코스 생성하기",
                     action: {
+                        
                         viewModel.postCreateDIYCourse(placeIds: selectedPlaceIds)
-                        // TODO: 코스 생성완료 후, 코스 탭으로 이동
+                        
+                        container.navigationRouter.popToRootView()
+                        
                     },
                     width: UIScreen.screenWidth - 32,
                     height: 55,
@@ -289,5 +293,5 @@ extension DIYCourseCreateView {
 
 
 #Preview{
-    DIYCourseCreateView(container: DIContainer(), placeIds: [1], isPresented: .constant(true))
+    DIYCourseCreateView(container: DIContainer(), placeIds: [1])
 }

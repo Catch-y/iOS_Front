@@ -41,6 +41,10 @@ struct NavigationRoutingView: View {
         case .placeReviewRegsiterView(let placeId):
             PlaceReviewRegisterView(container: container, placeId: placeId)
                 .environmentObject(container)
+            
+        case .diyCourseCreateView(let placeIds):
+            DIYCourseCreateView(container: container, placeIds: placeIds)
+                .environmentObject(container)
         }
     }
 }

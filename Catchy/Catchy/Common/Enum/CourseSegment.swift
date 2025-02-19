@@ -25,7 +25,6 @@ enum CourseSegment: String, CaseIterable, SegmentProtocol {
         case .ai:
             return "담아둔 장소"
             
-        // TODO: - 피그마 나오면 수정
         case .diy:
             return "추천된 장소"
         }

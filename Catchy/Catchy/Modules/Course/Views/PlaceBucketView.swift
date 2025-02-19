@@ -18,11 +18,7 @@ struct PlaceBucketView: View {
     
     /// 담아둔 장소 화면 상태
     @Binding var isBucketViewPresented: Bool
-    
-    // MARK: - 코스 생성하기 화면 Properties
-    /// 코스 생성하기 화면 상태
-    @State var isCreateViewPresented: Bool = false
-    
+        
     init(selectedPlaceList: Binding<[PlaceSearchResponseData]>, isBucketViewPresented: Binding<Bool>) {
         self._selectedPlaceList = selectedPlaceList
         self._isBucketViewPresented = isBucketViewPresented
@@ -51,11 +47,6 @@ struct PlaceBucketView: View {
         }
         .ignoresSafeArea(edges: .top)
         .background(.bg1)
-        .fullScreenCover(isPresented: $isCreateViewPresented, onDismiss: {
-            isBucketViewPresented.toggle()
-        }) {
-            DIYCourseCreateView(container: container, placeIds: Array(selectedPlaceList.map(\.self.placeId)), isPresented: $isCreateViewPresented)
-        }
             
         
         
@@ -84,7 +75,7 @@ struct PlaceBucketView: View {
             
             MainBtn(text: "코스 생성하기" ,
                     action: {
-                isCreateViewPresented.toggle()
+                container.navigationRouter.push(to: .diyCourseCreateView(placeIds: Array(selectedPlaceList.map(\.self.placeId))))
             },
                     width: UIScreen.screenWidth - 32,
                     height: 60,
