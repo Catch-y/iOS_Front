@@ -40,7 +40,7 @@ struct PlaceDetailView: View {
                         get: { place },
                         set: { viewModel.placeDetailResponse = $0 }
                     ), reviewTap: {
-                        container.navigationRouter.push(to: .placeReviewRegsiterView(placeId: place.placeId))
+                        container.navigationRouter.push(to: .placeReviewRegisterView(placeId: place.placeId))
                     }
                     )
                     

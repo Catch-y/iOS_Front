@@ -10,21 +10,20 @@ import Foundation
 enum NavigationDestination: Equatable, Hashable {
     case signUpView(signUpNaviData: SignUpNaviData)
     case searchView
-    case similarView /* 비슷한 취향을 가진 장소 보기 */
-    case courseDetailView(courseId: Int) /* 코스 상세화면 보기 */
-    case groupVoteStartView /* 투표 참여 화면 추가 */
-    case locationSelectView /* 지역 선택 뷰 화면 */
-    case createGroupView  /* 그룹 만들기 뷰 */
-    case groupVoteView(groupId: Int) /* 그룹 투표 시작 페이지 */
+    case similarView
+    case courseDetailView(courseId: Int)
+    case groupVoteStartView
+    case locationSelectView
+    case createGroupView
+    case groupVoteView(groupId: Int)
     case mypageOption
     case favoritePlacesView
     case fullScreenMap(viewModel: AppleMapViewModel)
     case placeReviewRegisterView(placeId: Int)
     case myReviewsView
-    case diyCourseCreateView(placeIds: [Int]) /* 코스 생성하기 */
-    case placeReviewView(placeId: Int) /* 장소 평점, 리뷰 보기*/
-}
-    
+    case diyCourseCreateView(placeIds: [Int])
+    case placeReviewView(placeId: Int)
+
     // Equatable 구현 (fullScreenMap 비교 제외)
     static func == (lhs: NavigationDestination, rhs: NavigationDestination) -> Bool {
         switch (lhs, rhs) {
@@ -45,13 +44,17 @@ enum NavigationDestination: Equatable, Hashable {
             return lId == rId
         case (.groupVoteView(let lId), .groupVoteView(let rId)):
             return lId == rId
+        case (.diyCourseCreateView(let lIds), .diyCourseCreateView(let rIds)):
+            return lIds == rIds
+        case (.placeReviewView(let lId), .placeReviewView(let rId)):
+            return lId == rId
         case (.fullScreenMap, .fullScreenMap):
-            return false // `fullScreenMap` 비교 제외
+            return false // `fullScreenMap`은 항상 다르게 취급
         default:
             return false
         }
     }
-    
+
     // Hashable 구현 (`fullScreenMap` 제외)
     func hash(into hasher: inout Hasher) {
         switch self {
@@ -83,8 +86,14 @@ enum NavigationDestination: Equatable, Hashable {
         case .groupVoteView(let groupId):
             hasher.combine("groupVoteView")
             hasher.combine(groupId)
+        case .diyCourseCreateView(let placeIds):
+            hasher.combine("diyCourseCreateView")
+            hasher.combine(placeIds)
+        case .placeReviewView(let placeId):
+            hasher.combine("placeReviewView")
+            hasher.combine(placeId)
         case .fullScreenMap:
-            hasher.combine("fullScreenMap")
+            break // `fullScreenMap`은 해싱하지 않음
         }
     }
 }
