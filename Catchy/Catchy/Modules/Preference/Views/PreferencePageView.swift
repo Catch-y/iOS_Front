@@ -88,6 +88,7 @@ struct PreferencePageView: View {
             
         })
         .transition(.move(edge: .leading).combined(with: .opacity))
+        .background(Color.white)
     }
     
     // MARK: - Page 2
@@ -277,6 +278,7 @@ struct PreferencePageView: View {
                 }
             }
         })
+        .background(Color.white)
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
     }
     
@@ -502,6 +504,7 @@ struct PreferencePageView: View {
                 }
             }
         })
+        .background(Color.white)
     }
     
     

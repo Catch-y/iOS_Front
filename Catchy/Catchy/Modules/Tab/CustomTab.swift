@@ -30,7 +30,7 @@ struct CustomTab: View {
     
     private func makeTabButton(_ tab: TabCase) -> Button<some View> {
         return Button(action: {
-            withAnimation(.spring) {
+            withAnimation {
                 selectedTab = tab
             }
         }, label: {

@@ -63,8 +63,11 @@ struct CourseView: View {
                 }
                 
             }
+            .background(Color.white)
             .zIndex(0)
-        }.task{
+        }
+        .background(Color.white)
+        .task{
             viewModel.getCourseList()
         }
         .onChange(of: provinceViewModel.provinces){ (_ , provinces) in
