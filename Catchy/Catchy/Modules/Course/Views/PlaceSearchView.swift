@@ -23,8 +23,9 @@ struct PlaceSearchView: View {
     var body: some View {
         VStack {
             if !viewModel.isPlaceListLoading {
-                    
+                
                 if !viewModel.placeList.isEmpty {
+                    
                     scrollView
                 } else {
                     infoView
@@ -37,6 +38,7 @@ struct PlaceSearchView: View {
         .task {
             viewModel.getPlaceListByRegion()
         }
+        .navigationBarBackButtonHidden(true)
     }
             
     
@@ -52,10 +54,11 @@ struct PlaceSearchView: View {
                 ForEach(Array(viewModel.placeList.enumerated()), id: \.element.id) { (index, place) in
                     VStack(spacing: 0) {
                         PlaceCard(place: place, reviewTap: {
+                            viewModel.onAppearByPop = true
                             container.navigationRouter.push(to: .placeReviewView(placeId: place.placeId))
                         })
                             .onTapGesture {
-                                // TODO: - 장소 상세 화면으로 이동
+                                container.navigationRouter.push(to: .placeDetailView(viewModel: viewModel, placeSearchResponseData: place))
                             }
                             .task {
                                 if let lastPlaceId = viewModel.placeList.last?.placeId {

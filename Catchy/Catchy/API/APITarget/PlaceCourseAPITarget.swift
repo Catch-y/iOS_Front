@@ -89,7 +89,7 @@ extension PlaceCourseAPITarget: APITargetType {
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
             
         case .getPlaceSearchByCurrent(let place):
-            let parameters: [String: Any] = ["searchKeyword" : place.searchKeyword, "page" : place.page, "longtide" : place.longitude, "latitude" : place.latitude]
+            let parameters: [String: Any] = ["searchKeyword" : place.searchKeyword, "page" : place.page, "longitude" : place.longitude, "latitude" : place.latitude]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
         }
     }
@@ -145,7 +145,6 @@ extension PlaceCourseAPITarget: APITargetType {
                         "placeId": 4,
                         "placeName": "피자나라",
                         "placeImage": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
-                        "category": "RESTAURANT",
                         "roadAddress": "경기 남양주시 와부읍 덕소로 87-1",
                         "activeTime": "[영업시간] 11:00~23:00",
                         "rating": 4.2,
@@ -320,10 +319,14 @@ extension PlaceCourseAPITarget: APITargetType {
                     "placeId": 1,
                     "imageUrl": "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg",
                     "placeName": "심퍼티쿠시 용산점",
+                    "categoryName": "SPORT",
                     "roadAddress": "경기 남양주시 와부읍 덕소로2번길 84",
+                    "placeDescription": "분좋카",
                     "rating": 3,
                     "isVisited": false,
                     "placeSite": "https://www.naver.com",
+                    "placeLatitude": 37.583169,
+                    "placeLongitude": 127.209540,
                     "reviewCount": 21,
                     "liked": false
                     

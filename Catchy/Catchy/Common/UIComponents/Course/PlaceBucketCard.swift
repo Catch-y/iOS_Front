@@ -81,7 +81,7 @@ struct PlaceBucketCard: View {
         .frame(height: 168)
         .frame(maxWidth: .infinity)
         .offset(x: isRemoved ? 1000 : 0)
-        .animation(.easeInOut(duration: 0.5), value: isRemoved)
+        .animation(.linear(duration: 0.3), value: isRemoved)
         
         
 
