@@ -12,44 +12,44 @@ struct CustomAlert: View {
     @Binding var isShowAlert: Bool
     
     var body: some View {
-        VStack(alignment: .center, spacing: 0, content: {
-            Text("안내")
-                .font(.Subtitle3)
-                .foregroundStyle(Color.g7)
-            
-            Divider()
-                .frame(height: 1)
-                .foregroundStyle(Color.g2)
-                .padding(.top, 12)
-            
-            makeText("방문 체크하기 활성화", "방문 장소가 1km 이내에 있을 경우, \n방문체크 기능을 활성화 할 수 있습니다. \n\n해당 장소에 가까이 이동하여 방문 체크를 완료해보세요!")
-                .padding(.top, 34)
-                .padding(.leading, 34)
-                .padding(.trailing, 61)
-            
-            Divider()
-                .frame(height: 1)
-                .foregroundStyle(Color.g2)
-                .padding(.top, 29)
-                .padding(.horizontal, 27)
-            
-            makeText("방문하기 후 장소 색상", "방문 체크를 완료하면 지도에 표시된 마커 색상이 변경됩니다. \n변경된 마커는 방문한 지역임을 나타내며, \n탐방 기록을 쉽게 확인할 수 있습니다.", addDescrip: true)
-                .padding(.top, 34)
-                .padding(.leading, 34)
-                .padding(.trailing, 36)
-            
-            Spacer().frame(height: 30)
-            
-            MainBtn(text: "확인", action: {
-                isShowAlert.toggle()
-            }, width: 323, height: 52, onoff: .on)
-            .padding(.bottom, 24)
-        })
-        .frame(maxWidth: .infinity, maxHeight: 526)
-        .background {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white)
-        }
+            VStack(alignment: .center, spacing: 0, content: {
+                Text("안내")
+                    .font(.Subtitle3)
+                    .foregroundStyle(Color.g7)
+                
+                Divider()
+                    .frame(height: 1)
+                    .foregroundStyle(Color.g2)
+                    .padding(.top, 12)
+                
+                makeText("방문 체크하기 활성화", "방문 장소가 1km 이내에 있을 경우, \n방문체크 기능을 활성화 할 수 있습니다. \n\n해당 장소에 가까이 이동하여 방문 체크를 완료해보세요!")
+                    .padding(.top, 34)
+                    .padding(.leading, 34)
+                    .padding(.trailing, 61)
+                
+                Divider()
+                    .frame(height: 1)
+                    .foregroundStyle(Color.g2)
+                    .padding(.top, 29)
+                    .padding(.horizontal, 27)
+                
+                makeText("방문하기 후 장소 색상", "방문 체크를 완료하면 지도에 표시된 마커 색상이 변경됩니다. \n변경된 마커는 방문한 지역임을 나타내며, \n탐방 기록을 쉽게 확인할 수 있습니다.", addDescrip: true)
+                    .padding(.top, 34)
+                    .padding(.leading, 34)
+                    .padding(.trailing, 36)
+                
+                Spacer().frame(height: 30)
+                
+                MainBtn(text: "확인", action: {
+                    isShowAlert.toggle()
+                }, width: 323, height: 52, onoff: .on)
+                .padding(.bottom, 24)
+            })
+            .padding(.vertical, 15)
+            .background {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.white)
+            }
     }
     
     /// 반복되는 텍스트 생성
