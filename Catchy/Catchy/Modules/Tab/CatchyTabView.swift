@@ -44,21 +44,20 @@ struct CatchyTabView: View {
                     case .home:
                         HomeView(container: container)
                     case .course:
-                        PlaceBucketView(selectedPlaceList: .constant([PlaceSearchResponseData(placeId: 1, placeName: "dd", placeImage: "dd", category: .BAR, roadAddress: "dd", activeTime: "dd", rating: 4.2, reviewCount: 1, liked: true)]), isBucketViewPresented: .constant(true))
-//                        CourseView(container: container, isAILoadingPresented: $isAILoadingPresented, isDIYPresented: $isDIYPresented)
-//                        
-//                        AddFloatingButton(isOpen: $isFloating, onSubButtonTap: {
-//                            segment in
-//                            switch segment {
-//                            case .ai:
-//                                isAILoadingPresented.toggle()
-//                                isFloating.toggle()
-//                            case .diy:
-//                                isDIYPresented.toggle()
-//                                isFloating.toggle()
-//                            }
-//                        })
-//                            .zIndex(3)
+                        CourseView(container: container, isAILoadingPresented: $isAILoadingPresented, isDIYPresented: $isDIYPresented)
+                        
+                        AddFloatingButton(isOpen: $isFloating, onSubButtonTap: {
+                            segment in
+                            switch segment {
+                            case .ai:
+                                isAILoadingPresented.toggle()
+                                isFloating.toggle()
+                            case .diy:
+                                isDIYPresented.toggle()
+                                isFloating.toggle()
+                            }
+                        })
+                            .zIndex(3)
                     case .group:
                         Text("11")
                     case .mypage:
