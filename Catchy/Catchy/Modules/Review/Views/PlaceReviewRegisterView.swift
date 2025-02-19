@@ -31,22 +31,34 @@ struct PlaceReviewRegisterView: View {
     
     var body: some View {
     
-        VStack(spacing: 0) {
+        ZStack {
             
-            navigationGroup
-
-            if !viewModel.isDateLoading {
+            VStack(spacing: 0){
+                navigationGroup
                 
-                scrollView
-                
-                Spacer()
-                
-            } else {
-                
-                MainProgressComponents()
+                if !viewModel.isDateLoading {
+                    
+                    scrollView
+                    
+                    Spacer()
+                    
+                } else {
+                    
+                    MainProgressComponents()
+                    
+                }
                 
             }
             
+            if viewModel.showLoadingView {
+                
+                Color.black.opacity(0.7)
+                    .ignoresSafeArea(.all)
+                
+                LoadingView(loadingType: .reviewRegister)
+                    .animation(.easeInOut, value: viewModel.showLoadingView)
+                    .transition(.move(edge: .bottom))
+            }
         }
         .task {
             viewModel.getPlaceVisitedDateList(placeId: placeId)
@@ -59,11 +71,6 @@ struct PlaceReviewRegisterView: View {
         }
         .onAppear {
             UIApplication.shared.hideKeyboard()
-        }
-        .onChange(of: viewModel.hasRegister) { (_, registered) in
-            if registered {
-                container.navigationRouter.pop()
-            }
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -99,7 +106,6 @@ struct PlaceReviewRegisterView: View {
                 photoGroup
                     .padding(.bottom, 60)
                 
-                // TODO: - 리뷰 등록 성공 시 화면 전환 구현
                 MainBtn(
                     text: "리뷰 남기기",
                     action: {
@@ -111,6 +117,7 @@ struct PlaceReviewRegisterView: View {
                     height: 60,
                     onoff: canRegisterReview ? .on : .off
                 )
+                .disabled(!canRegisterReview)
                 
                 Spacer()
                 
@@ -271,7 +278,6 @@ struct PlaceReviewRegisterView: View {
         }
         .padding(.top, 3)
     }
-    
 }
 
 // MARK: - Extension

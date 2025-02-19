@@ -26,16 +26,29 @@ struct DIYCourseCreateView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 35) {
+        ZStack {
             
-            CustomNavigation(action: {
-                container.navigationRouter.pop()
-            }, title: "코스 생성하기", rightNaviIcon: nil, isShadow: true)
-                        
-            scrollView
-    
+            VStack(alignment: .leading, spacing: 35) {
+                
+                CustomNavigation(action: {
+                    container.navigationRouter.pop()
+                }, title: "코스 생성하기", rightNaviIcon: nil, isShadow: true)
+                
+                scrollView
+                
+                
+                Spacer()
+                
+            }
             
-            Spacer()
+            if viewModel.showLoadingView {
+                Color.black.opacity(0.7)
+                    .edgesIgnoringSafeArea(.all)
+                
+                LoadingView(loadingType: .courseCreate)
+                    .animation(.easeInOut, value: viewModel.showLoadingView)
+                    .transition(.move(edge: .bottom))
+            }
             
         }
         .ignoresSafeArea(edges: [.top, .bottom])
@@ -46,7 +59,6 @@ struct DIYCourseCreateView: View {
             )
         }
         .onAppear {
-            print("에바")
             UIApplication.shared.hideKeyboard()
         }
         .navigationBarBackButtonHidden(true)
@@ -71,9 +83,7 @@ struct DIYCourseCreateView: View {
                     action: {
                         
                         viewModel.postCreateDIYCourse(placeIds: selectedPlaceIds)
-                        
-                        container.navigationRouter.popToRootView()
-                        
+                                                
                     },
                     width: UIScreen.screenWidth - 32,
                     height: 55,
