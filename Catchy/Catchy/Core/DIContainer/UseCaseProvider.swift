@@ -28,6 +28,8 @@ protocol UseCaseProtocol {
     var myPageUseCase: MyPageUseCase { get set }
     
     var homeUseCase: HomeUseCase { get set }
+    
+    var routeUseCase: RouteUseCase { get set }
 }
 
 class UseCaseProvider: UseCaseProtocol {
@@ -50,6 +52,9 @@ class UseCaseProvider: UseCaseProtocol {
     var homeUseCase: HomeUseCase
         
     var myPageUseCase: MyPageUseCase
+    
+    var routeUseCase: RouteUseCase
+    
     init() {
         self.authUseCase = AuthUseCase()
         self.courseUseCase = CourseUseCase()
@@ -59,5 +64,6 @@ class UseCaseProvider: UseCaseProtocol {
         self.memberUseCase = MemberUseCase()
         self.myPageUseCase = MyPageUseCase()
         self.homeUseCase = HomeUseCase()
+        self.routeUseCase = RouteUseCase()
     }
 }

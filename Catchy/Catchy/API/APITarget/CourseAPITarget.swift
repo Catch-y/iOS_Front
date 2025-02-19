@@ -610,13 +610,15 @@ extension CourseAPITarget: APITargetType {
                     "placeName": "성산일출봉",
                     "placeLatitude": 33.45864,
                     "placeLongitude": 126.94225,
+                    "category": "CAFE",
                     "isVisited": true
                   },
                   {
                     "placeId": 202,
                     "placeName": "만장굴",
-                    "placeLatitude": 33.52723,
-                    "placeLongitude": 126.76948,
+                    "placeLatitude": 33.528226,
+                    "placeLongitude": 126.770367,
+                    "category": "BAR",
                     "isVisited": false
                   },
                   {
@@ -624,6 +626,7 @@ extension CourseAPITarget: APITargetType {
                     "placeName": "우도",
                     "placeLatitude": 33.50830,
                     "placeLongitude": 126.95163,
+                    "category": "EXPERIENCE",
                     "isVisited": true
                   }
                 ]
