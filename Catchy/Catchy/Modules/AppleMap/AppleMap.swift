@@ -18,6 +18,16 @@ struct AppleMap: UIViewRepresentable {
         mapView.delegate = context.coordinator
         mapView.setRegion(viewModel.initialRegion, animated: true)
         mapView.showsUserLocation = true
+        
+        let camera = MKMapCamera(
+            lookingAtCenter: viewModel.initialRegion.center,
+            fromDistance: 30000,
+            pitch: 30,
+            heading: 0
+        )
+        
+        mapView.camera = camera
+        
         return mapView
     }
     
@@ -29,7 +39,8 @@ struct AppleMap: UIViewRepresentable {
             let annotation = CustomAnnotation(
                 coordinate: place.coordinate,
                 title: place.placeName,
-                category: place.category
+                category: place.category,
+                isVisited: place.isVisited
             )
             return annotation
         }
@@ -66,7 +77,10 @@ struct AppleMap: UIViewRepresentable {
                 annotationView?.annotation = annotation
             }
             
-            annotationView?.image = annotation.category.mapMarkerImage()
+            let originalImage = annotation.category.mapMarkerImage(isVisited: annotation.isVisited)
+            let resizedImage = originalImage.resizeImage(to: CGSize(width: 24, height: 24))
+            
+            annotationView?.image = resizedImage
             return annotationView
         }
         
@@ -91,10 +105,12 @@ class CustomAnnotation: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
     var title: String?
     var category: CategoryType
+    var isVisited: Bool  // 방문 여부 추가
 
-    init(coordinate: CLLocationCoordinate2D, title: String, category: CategoryType) {
+    init(coordinate: CLLocationCoordinate2D, title: String, category: CategoryType, isVisited: Bool) {
         self.coordinate = coordinate
         self.title = title
         self.category = category
+        self.isVisited = isVisited
     }
 }

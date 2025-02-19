@@ -140,22 +140,22 @@ enum CategoryType: String, Codable, CaseIterable {
         }
     }
     
-    func mapMarkerImage() -> UIImage {
+    func mapMarkerImage(isVisited: Bool) -> UIImage {
         switch self {
         case .CAFE:
-            return UIImage(named: "notClickCafeMark") ?? UIImage(systemName: "cup.and.saucer.fill")!
+            return isVisited ? UIImage(named: "notClickCafeMark") ?? UIImage(systemName: "cup.and.saucer.fill")! : UIImage(named: "clickCafeMark") ?? UIImage(systemName: "cup.and.saucer.fill")!
         case .BAR:
-            return UIImage(named: "notClickBarMark") ?? UIImage(systemName: "wineglass.fill")!
+            return isVisited ? UIImage(named: "notClickBarMark") ?? UIImage(systemName: "wineglass.fill")! : UIImage(named: "clickBarMark") ?? UIImage(systemName: "wineglass.fill")!
         case .RESTAURANT:
-            return UIImage(named: "notClickRestaurantMark") ?? UIImage(systemName: "fork.knife.circle.fill")!
+            return isVisited ? UIImage(named: "notClickRestaurantMark") ?? UIImage(systemName: "fork.knife.circle.fill")! : UIImage(named: "clickRestaurantMark") ?? UIImage(systemName: "fork.knife.circle.fill")!
         case .EXPERIENCE:
-            return UIImage(named: "notClickExperienceMark") ?? UIImage(systemName: "figure.walk")!
+            return isVisited ? UIImage(named: "notClickExperienceMark") ?? UIImage(systemName: "figure.walk")! : UIImage(named: "clickExperienceMark") ?? UIImage(systemName: "figure.walk")!
         case .CULTURELIFE:
-            return UIImage(named: "notClickCultureLifeMark") ?? UIImage(systemName: "theatermasks.fill")!
+            return isVisited ? UIImage(named: "notClickCultureLifeMark") ?? UIImage(systemName: "theatermasks.fill")! : UIImage(named: "clickCultureLifeMark") ?? UIImage(systemName: "theatermasks.fill")!
         case .SPORT:
-            return UIImage(named: "notClickSportMark") ?? UIImage(systemName: "sportscourt.fill")!
+            return isVisited ? UIImage(named: "notClickSportMark") ?? UIImage(systemName: "sportscourt.fill")! : UIImage(named: "clickSportMark") ?? UIImage(systemName: "sportscourt.fill")!
         case .REST:
-            return UIImage(named: "notClickRestMark") ?? UIImage(systemName: "bed.double.fill")!
+            return isVisited ? UIImage(named: "notClickRestMark") ?? UIImage(systemName: "bed.double.fill")! : UIImage(named: "clickRestMark") ?? UIImage(systemName: "bed.double.fill")!
         }
     }
 }

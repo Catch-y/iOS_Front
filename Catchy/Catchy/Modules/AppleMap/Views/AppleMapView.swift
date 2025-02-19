@@ -18,29 +18,23 @@ struct AppleMapView: View {
     }
     
     var body: some View {
-        ZStack {
-            if viewModel.isFullScreenMap {
-                Text("11")
-            } else {
-                smallMapView
+        smallMapView
+            .task {
+                viewModel.fetchRoute()
             }
-        }
-        .task {
-            viewModel.fetchRoute()
-        }
-        .overlay(content: {
-            if viewModel.routerIsLoading {
-                ZStack {
-                    Color.black.opacity(0.3)
-                        .ignoresSafeArea()
-                    ProgressView(label: {
-                        Text("경로를 불러오는 중...")
-                            .font(.body3)
-                            .foregroundStyle(Color.g5)
-                    })
+            .overlay(content: {
+                if viewModel.routerIsLoading {
+                    ZStack {
+                        Color.black.opacity(0.3)
+                            .ignoresSafeArea()
+                        ProgressView(label: {
+                            Text("경로를 불러오는 중...")
+                                .font(.body3)
+                                .foregroundStyle(Color.g5)
+                        })
+                    }
                 }
-            }
-        })
+            })
     }
     
     var smallMapView: some View {
@@ -50,7 +44,9 @@ struct AppleMapView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             
             Button(action: {
-                viewModel.isFullScreenMap.toggle()
+                withAnimation {
+                    container.navigationRouter.push(to: .fullScreenMap(viewModel: viewModel))
+                }
             }, label: {
                 Icon.zoomMap.image
                     .fixedSize()
@@ -58,6 +54,19 @@ struct AppleMapView: View {
                     .padding(.trailing, 16)
             })
         })
+    }
+    
+    var fullScreenMapView: some View {
+        ZStack(alignment: .top, content: {
+            AppleMap(viewModel: viewModel)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            CustomNavigation(action: {
+                container.navigationRouter.pop()
+            }, title: "코스 경로", rightNaviIcon: nil)
+        })
+        .ignoresSafeArea(.all)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

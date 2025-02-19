@@ -35,6 +35,8 @@ struct NavigationRoutingView: View {
         case .favoritePlacesView:
             FavoritePlacesView(container: container)
                 .environmentObject(container)
+        case .fullScreenMap(let viewModel):
+            FullScreenMap(viewModel: viewModel)
         }
     }
 }

@@ -39,8 +39,6 @@ struct CourseDetailView: View {
                             .padding(.top, 14)
                     })
                     .padding(.top, 13)
-                    .padding(.bottom, 20)
-                    .scrollIndicators(.hidden)
                     .refreshable {
                         viewModel.getCourseDetail()
                     }
