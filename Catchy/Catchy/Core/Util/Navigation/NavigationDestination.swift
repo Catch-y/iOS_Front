@@ -19,4 +19,5 @@ enum NavigationDestination: Hashable {
     case placeReviewRegsiterView(placeId: Int) /* 장소 리뷰,평점 남기기 */
     case myReviewsView
     case diyCourseCreateView(placeIds: [Int]) /* 코스 생성하기 */
+    case placeReviewView(placeId: Int) /* 장소 평점, 리뷰 보기*/
 }

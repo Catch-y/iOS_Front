@@ -82,9 +82,7 @@ struct PlaceBucketCard: View {
         .frame(maxWidth: .infinity)
         .offset(x: isRemoved ? 1000 : 0)
         .animation(.easeInOut(duration: 0.5), value: isRemoved)
-        .fullScreenCover(isPresented: $isReviewPresented) {
-            PlaceReviewView(container: container, placeId: placeSearchResponseData.placeId, isPresented: $isReviewPresented)
-        }
+        
         
 
     }
@@ -170,7 +168,7 @@ struct PlaceBucketCard: View {
     /// 장소 리뷰 버튼
     private var reviewBtn: some View {
         Button(action: {
-            isReviewPresented.toggle()
+            container.navigationRouter.push(to: .placeReviewView(placeId: placeSearchResponseData.placeId))
         }, label: {
             HStack(spacing: 6) {
                 Icon.review.image.fixedSize()

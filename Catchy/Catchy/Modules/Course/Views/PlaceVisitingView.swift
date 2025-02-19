@@ -66,10 +66,6 @@ struct PlaceVisitingView: View {
         .task {
             viewModel.getPlaceDetail(placeId: placeId)
         }
-        .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
-            PlaceReviewView(container: container, placeId: placeId, isPresented: $viewModel.isReviewPresented)
-
-        }
         .navigationBarBackButtonHidden()
     }
 

@@ -40,7 +40,7 @@ struct PlaceDetailView: View {
                         get: { place },
                         set: { viewModel.placeDetailResponse = $0 }
                     ), reviewTap: {
-                        viewModel.showReview(placeId: place.placeId)
+                        container.navigationRouter.push(to: .placeReviewRegsiterView(placeId: place.placeId))
                     }
                     )
                     
@@ -67,11 +67,6 @@ struct PlaceDetailView: View {
 
             CategoryRegisterView(placeId: placeSearchResponseData.placeId, container: container, isPresented: $viewModel.isCategoryViewPresented)
             
-        }
-        .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
-            if let placeId = viewModel.placeDetailResponse?.placeId {
-                PlaceReviewView(container: container, placeId: placeId, isPresented: $viewModel.isReviewPresented)
-            }
         }
         .navigationBarBackButtonHidden()
         
