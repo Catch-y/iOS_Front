@@ -24,24 +24,23 @@ struct CompanionSelectionBtn: View {
                 isSelected.toggle()
             }
         }, label: {
-            VStack(spacing: 10, content: {
-                companionType.returnImage()
-                    .fixedSize()
-                
-                Text(companionType.toKorean())
-                    .font(.body2)
-                    .foregroundStyle(isSelected ? Color.m6 : Color.g6)
-                    .frame(minWidth: 60)
-                    .lineLimit(1)
-            })
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 15)
-            .padding(.horizontal, 59)
-            .background {
+            ZStack {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(isSelected ? Color.m1 : Color.white)
                     .stroke(isSelected ? Color.m6 : Color.clear, style: .init(lineWidth: 1))
+                    .frame(maxWidth: .infinity, minHeight: 90)
                     .s1w()
+                
+                VStack(spacing: 10, content: {
+                    companionType.returnImage()
+                        .fixedSize()
+                    
+                    Text(companionType.toKorean())
+                        .font(.body2)
+                        .foregroundStyle(isSelected ? Color.m6 : Color.g6)
+                        .frame(minWidth: 60)
+                        .lineLimit(1)
+                })
             }
         })
     }

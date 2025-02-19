@@ -58,8 +58,10 @@ struct CatchyTabView: View {
                             }
                         })
                             .zIndex(3)
+                        
                     case .group:
-                        Text("11")
+                        GroupTabView(container: container)
+                            .environmentObject(container)
                     case .mypage:
                         MyPageView(container: container, isEditingNickname: $showEditingNickname)
                             .environmentObject(container)

@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct GroupTabView: View {
-    private let container: DIContainer
     @StateObject private var viewModel: GroupTabViewModel
+    @EnvironmentObject var container: DIContainer
 
     @State private var isBottomSheetPresented: Bool = false // 바텀시트 상태 변수
 
     // MARK: - 초기화
     init(container: DIContainer) {
-           self.container = container
-           _viewModel = StateObject(wrappedValue: GroupTabViewModel(groupUseCase: container.useCaseProvider.groupUseCase))
+        _viewModel = StateObject(wrappedValue: .init(container: container))
        }
 
     // MARK: - body

@@ -44,10 +44,17 @@ class SearchViewModel: ObservableObject {
         $searchKeyword
             .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
             .removeDuplicates()
-            .filter { !$0.isEmpty }
             .sink { [weak self] keyword in
                 guard let self = self else { return }
                 print("🔄 realTimeSearch triggered: \(keyword)")
+                
+                if keyword.isEmpty {
+                    self.searchResult = nil
+                    isLast = false
+                    currentPage = 1
+                    return
+                }
+                
                 self.performSearch(for: keyword)
             }
             .store(in: &cancellables)
@@ -109,7 +116,7 @@ class SearchViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    /// 리프레시 
+    /// 리프레시
     func searchRefresh() async {
         self.isLast = false
         self.currentPage = 1

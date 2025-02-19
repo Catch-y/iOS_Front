@@ -108,13 +108,15 @@ struct PreferencePageView: View {
                 
                 TabView(selection: $viewModel.pageCount) {
                     ForEach(0..<viewModel.bigCategoryBtn.count, id: \.self) { index in
-                        VStack(alignment: .leading, content: {
+                        VStack(alignment: .leading, spacing: 0, content: {
                             pageTwoTitle(index)
                                 .padding(.top, 40)
                                 .padding(.leading, 35)
+                                .padding(.trailing, 33)
+                            
+                            Spacer()
                             
                             pageTwoContent(index)
-                                .padding(.top, 113)
                             
                             Spacer()
                             
@@ -186,7 +188,7 @@ struct PreferencePageView: View {
                 .padding(.top, 9)
                 .lineLimit(2)
                 .lineSpacing(2.5)
-                .frame(width: 335, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
         })
     }
     
@@ -398,20 +400,12 @@ struct PreferencePageView: View {
             
             if viewModel.isExpand[0] == true {
                 DatePicker("", selection: Binding(get: { viewModel.leftSelectedTime ?? Date() }, set: { viewModel.leftSelectedTime = $0 }), displayedComponents: .hourAndMinute)
-                    .datePickerStyle(.wheel)
-                    .labelsHidden()
-                    .frame(width: 370, height: 150)
-                    .clipped()
-                    .transition(.opacity)
+                    .customDatePickerStyle()
             }
             
             if viewModel.isExpand[1] == true {
                 DatePicker("", selection: Binding(get: { viewModel.rightSelectedTime ?? Date() }, set: { viewModel.rightSelectedTime = $0 }), displayedComponents: .hourAndMinute)
-                    .datePickerStyle(.wheel)
-                    .labelsHidden()
-                    .frame(width: 370, height: 150)
-                    .clipped()
-                    .transition(.opacity)
+                    .customDatePickerStyle()
             }
         })
         .id("activeTime")

@@ -26,13 +26,13 @@ class PreferenceViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     
     //MARK: - 전체 스텝 관리
-    @Published var preferenceStep: Int = 0
+    @Published var preferenceStep: Int = 2
     
     //MARK: - 1번째, 2번째 스텝 관리
     @Published var pageCount: Int = 0
     
     /* Request 저장 */
-    @Published var bigCategoryBtn: [CategoryType] = []
+    @Published var bigCategoryBtn: [CategoryType] = [.SPORT]
     @Published var smallCategoryBtn: [CategoryType: [String]] = [:]
     
     func getSmallCategory(category: CategoryType) -> [String] {

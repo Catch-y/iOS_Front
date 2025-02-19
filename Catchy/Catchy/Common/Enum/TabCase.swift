@@ -19,7 +19,7 @@ enum TabCase: String, CaseIterable {
         case .home:
             return "홈"
         case .course:
-            return "진단"
+            return "코스"
         case .group:
             return "그룹"
         case .mypage:

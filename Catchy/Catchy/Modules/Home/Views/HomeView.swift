@@ -195,12 +195,12 @@ struct HomeView: View {
             }
         } else {
             VStack(alignment: .leading, spacing: 25, content: {
-                HStack(content: {
-                    Text(DataFormatter.shared.makeStyledText(for: "\(UserState.shared.getUserNickname())님과 비슷한 취향을 \n가진 사람들이 좋아하는 장소예요"))
+                HStack(spacing: 0, content: {
+                    Text(DataFormatter.shared.makeStyledText(for: "\(UserState.shared.getUserNickname())님과 비슷한 취향을 가진 사람들이 좋아하는 장소예요"))
                         .font(.Subtitle2)
                         .foregroundStyle(Color.g7)
-                        .lineLimit(2)
                         .lineSpacing(2.5)
+                        .multilineTextAlignment(.leading)
                     
                     Spacer()
                     
@@ -217,7 +217,6 @@ struct HomeView: View {
                                 .frame(width: 4, height: 7)
                         }
                     })
-                    
                 })
                 
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 18, content: {

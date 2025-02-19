@@ -26,23 +26,30 @@ struct MainCategoryBtn: View {
         Button(action: {
             isSelected.toggle()
         }, label: {
-                HStack(spacing: 35, content: {
+            ZStack(alignment: .leading) {
+                
+                RoundedRectangle(cornerRadius: 29)
+                    .fill(isSelected ? Color.m1 : Color.white)
+                    .stroke(isSelected ? Color.m6 : Color.clear, lineWidth: 1)
+                    .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
+                    .s1w()
+                
+                HStack(spacing: 25, content: {
                     categoryType.reeturnIcon()
                         .fixedSize()
                     
                     Text(categoryType.rawValue)
-                        .font(.categoryBtn)
+                        .font(.body1)
                         .foregroundStyle(isSelected ? Color.m6 : Color.g7)
                 })
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 11)
-                .padding(.horizontal, 28)
-                .background(
-                    RoundedRectangle(cornerRadius: 29)
-                        .fill(isSelected ? Color.m1 : Color.white)
-                        .stroke(isSelected ? Color.m6 : Color.clear, lineWidth: 1)
-                        .s1w()
-                )
+                .offset(x: 28)
+            }
         })
+    }
+}
+
+struct MainCategoryBtn_Preview: PreviewProvider {
+    static var previews: some View {
+        MainCategoryBtn(isSelected: .constant(true), categoryType: .CULTURELIFE)
     }
 }

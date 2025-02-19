@@ -175,12 +175,12 @@ extension HomeAPITarget: APITargetType {
               "result": [
                 {
                   "courseId": 1,
-                  "courseImage": "https://i.namu.wiki/i/Ca6uA8jti6jQfstU5FzeSH6bnn9Ms8uoWBMROytYU606IZ0GLj4d8RWEAQpV3PUP1FjsuemL2y-QlMwp-m1JiQl-ZXmKvkKDfsFNK93VrWiFP9Tv7Yz71eOmMJnBKGHfQEFIfGODpVi3lwxEll8eAw.webp",
+                  "courseImage": "https://i.namu.wiki/i/PsAbvcWd3-b34riJb_5Eert_JxHr2DLLKBJdHxltjnd71xEgdS62jB64nl58t8GmThR0cpy52gYCAc83h2srIhrrcQx50vOz2thIJdWP7Yz7QpS62SqusN7YRVbWEOpxgYX3Wpdqb28pUJSrSwbHMQ.webp",
                   "courseName": "경복궁 코스"
                 },
                 {
                   "courseId": 2,
-                  "courseImage": "https://i.namu.wiki/i/CwZzuvgnOuMVncIFu39TcFeuHsBoDSC1ZvazkTJ6tadsStvmSxCofh0UjE_YR2zeNJ3HWWJjlVOJLiY7aHC87jrZ_5qAtQGVAjT5EPH4IO_OBrvm_1uE8a_bdSVLCPkGcENLj3pACG3KFbsaI6ZtHw.webp",
+                  "courseImage": "https://i.namu.wiki/i/Y0ct-pk-0QesZIcfe0WDD38Igs2LRwQaqCwF68KGDjlu_4VPcugTvUmV3VOWldjSkSRLK1aivMiJzNnlVTLlq5MpQ-c7qUVZvZOYYtdiGb14lPF3pqFcHTbvxNC968Kf3HqdcgPTzyC-CpE7xykb0w.webp",
                   "courseName": "숭례문 야경 투어"
                 },
                 {

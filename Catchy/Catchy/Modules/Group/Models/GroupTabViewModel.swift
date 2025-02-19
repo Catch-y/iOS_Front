@@ -12,17 +12,17 @@ class GroupTabViewModel: ObservableObject {
     @Published var isBottomSheetPresented: Bool = false
     @Published var schedules: [Date: String] = [:]
 
-    private let groupUseCase: GroupUseCase
+    private let container: DIContainer
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - 초기화
-    init(groupUseCase: GroupUseCase) {
-        self.groupUseCase = groupUseCase
+    init(container: DIContainer) {
+        self.container = container
     }
 
     // MARK: - 그룹 일정 조회
     func fetchGroupSchedules(year: Int, month: Int) {
-        groupUseCase.executeGetMyGroups(page: year, size: month)
+        container.useCaseProvider.groupUseCase.executeGetMyGroups(page: year, size: month)
             .sink(receiveCompletion: { completion in
                 if case .failure(let error) = completion {
                     print("❌ 그룹 일정 조회 실패: \(error.localizedDescription)")

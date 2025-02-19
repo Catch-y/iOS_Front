@@ -39,7 +39,7 @@ struct CustomTextField: View {
             isTextFocused = false
         }
         .ignoresSafeArea(.keyboard)
-        .frame(minWidth: searchTextField.textFieldWidth(), maxHeight: searchTextField.textFieldHeight(), alignment: .center)
+        .frame(maxWidth: .infinity, maxHeight: searchTextField.textFieldHeight(), alignment: .center)
         .focused($isTextFocused)
         .background(searchTextField.textFieldBgColor())
         .clipShape(.rect(cornerRadius: 30))
@@ -47,7 +47,7 @@ struct CustomTextField: View {
             RoundedRectangle(cornerRadius: 30)
                 .inset(by: 0.5)
                 .stroke(searchTextField.textFieldBorderColor(), lineWidth: 1)
-                .frame(minWidth: searchTextField.textFieldWidth())
+                .frame(maxWidth: .infinity)
         })
     }
     
@@ -94,7 +94,6 @@ struct CustomTextField: View {
             
             Spacer()
         })
-        
     }
 }
 

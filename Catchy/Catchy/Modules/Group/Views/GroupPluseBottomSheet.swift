@@ -10,6 +10,7 @@ import PhotosUI
 
 struct GroupPluseBottomSheet: View {
     // MARK: - Properties
+    
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var container: DIContainer
     @State private var isPhotoPickerPresented: Bool = false
