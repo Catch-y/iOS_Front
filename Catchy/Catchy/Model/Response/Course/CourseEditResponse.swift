@@ -14,7 +14,6 @@ struct CourseEditResponse: Codable {
     let courseId: Int
     
     /// 코스 이미지
-    // TODO: - 이미지 타입 처리
     let courseImage: String
     
     /// 코스 이름

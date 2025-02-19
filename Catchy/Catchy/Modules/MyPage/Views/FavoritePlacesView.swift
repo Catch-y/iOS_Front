@@ -34,7 +34,7 @@ struct FavoritePlacesView: View {
                             LazyVGrid(columns: [GridItem(.flexible())], spacing: 40) {
                                 ForEach(data.content, id: \.placeId) { place in
                                     PlaceCard(place: place, reviewTap: {
-                                        viewModel.showReview(placeId: place.placeId)
+                                        container.navigationRouter.push(to: .placeReviewView(placeId: place.placeId))
                                     })
                                 }
                             }
@@ -53,12 +53,6 @@ struct FavoritePlacesView: View {
         .ignoresSafeArea(.all)
         .task {
             viewModel.getMyPlaceList(pageSize: 10, lastPlaceId: 1)
-        }
-        .fullScreenCover(isPresented: $viewModel.isPresented) {
-            if let placeId = viewModel.selectedPlaceId {
-                PlaceReviewView(container: container, placeId: placeId, isPresented: $viewModel.isPresented)
-            }
-            
         }
         .navigationBarBackButtonHidden(true)
     }

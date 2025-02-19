@@ -9,6 +9,8 @@ import SwiftUI
 import Kingfisher
 
 struct PlaceReviewView: View {
+
+    @EnvironmentObject var container: DIContainer
     
     @StateObject var viewModel: PlaceReviewViewModel
     
@@ -16,14 +18,10 @@ struct PlaceReviewView: View {
     /// 현재 장소 ID
     let placeId: Int
     
-    /// 현재 화면의 상태
-    @Binding var isPresented: Bool
-    
     // MARK: - Init
-    init(container: DIContainer, placeId: Int, isPresented: Binding<Bool>) {
+    init(container: DIContainer, placeId: Int) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
         self.placeId = placeId
-        self._isPresented = isPresented
     }
     
     // MARK: - Body
@@ -32,8 +30,8 @@ struct PlaceReviewView: View {
         VStack(alignment: .center, spacing: 20, content: {
             if !viewModel.isLoading {
                 CustomNavigation(action: {
-                    isPresented.toggle()
-                }, title: "평점, 리뷰 보기", leftNaviIcon: nil, isShadow: true)
+                    container.navigationRouter.pop()
+                }, title: "평점, 리뷰 보기", rightNaviIcon: nil, isShadow: true)
                 
                 if let data = viewModel.placeReviewData {
                     ScrollView(.vertical, content: {
@@ -58,8 +56,9 @@ struct PlaceReviewView: View {
         })
         .ignoresSafeArea(.all)
         .task {
-            viewModel.getPlaceReviewData(placeId: 123, request: PlaceReviewRequest(pageSize: 10, lastPlaceReviewDate: "12312321", lastPlaceReviewId: 123))
+            viewModel.getPlaceReviewData(placeId: placeId, request: PlaceReviewRequest(pageSize: 10, lastPlaceReviewDate: "12312321", lastPlaceReviewId: 123))
         }
+        .navigationBarBackButtonHidden(true)
     }
     
     // MARK: - 리뷰 없을 때, 보일 가이드 뷰
@@ -211,7 +210,7 @@ struct ReviewView_Preview: PreviewProvider {
     
     static var previews: some View {
         ForEach(devices, id: \.self) { device in
-            PlaceReviewView(container: DIContainer(), placeId: 1, isPresented: .constant(true))
+            PlaceReviewView(container: DIContainer(), placeId: 1)
                 .environmentObject(DIContainer())
                 .previewDevice(PreviewDevice(rawValue: device))
                 .previewDisplayName(device)

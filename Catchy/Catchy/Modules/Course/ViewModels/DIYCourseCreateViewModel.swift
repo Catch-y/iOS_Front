@@ -17,9 +17,8 @@ class DIYCourseCreateViewModel: ObservableObject, ImageHandling {
     var cancellables = Set<AnyCancellable>()
     
     // MARK: - Init
-    init(container: DIContainer, isPresented: Binding<Bool>) {
+    init(container: DIContainer) {
         self.container = container
-        self._isPresented = isPresented
     }
     
     // MARK: - 코스 생성하기 화면 Properties
@@ -50,14 +49,9 @@ class DIYCourseCreateViewModel: ObservableObject, ImageHandling {
     /// 업로드한 이미지 개수
     @Published var selectedImageCount: Int = 0
     
-    /// 코스 생성 요청 중인가
-    @Published var isCreating: Bool = false
+    /// 코스 생성 완료?
+    @Published var isCreated: Bool = false
     
-    /// 코스 생성하기 화면의 상태
-    @Binding var isPresented: Bool
-    
-    
-
     
 }
 
@@ -90,9 +84,7 @@ extension DIYCourseCreateViewModel {
     /// 코스 DIY 생성 API
     /// - Parameter placeIds: 선택한 장소의 ID 리스트
     func postCreateDIYCourse(placeIds: [Int]) {
-        
-        self.isCreating = true
-        
+                
         guard leftSelectedTime != nil else { return }
         guard rightSelectedTime != nil else { return }
         
@@ -118,8 +110,7 @@ extension DIYCourseCreateViewModel {
                 [weak self] completion in
                 guard let self = self else { return }
 
-                self.isCreating = false
-                self.close()
+                self.isCreated = true
                 
                 switch completion {
                 case .finished:
@@ -149,8 +140,4 @@ extension DIYCourseCreateViewModel {
 
     }
     
-    /// 코스 생성하기 화면을 닫습니다
-    func close() {
-        isPresented.toggle()
-    }
 }

@@ -21,6 +21,9 @@ enum NavigationDestination: Equatable, Hashable {
     case fullScreenMap(viewModel: AppleMapViewModel)
     case placeReviewRegisterView(placeId: Int)
     case myReviewsView
+    case diyCourseCreateView(placeIds: [Int]) /* 코스 생성하기 */
+    case placeReviewView(placeId: Int) /* 장소 평점, 리뷰 보기*/
+}
     
     // Equatable 구현 (fullScreenMap 비교 제외)
     static func == (lhs: NavigationDestination, rhs: NavigationDestination) -> Bool {

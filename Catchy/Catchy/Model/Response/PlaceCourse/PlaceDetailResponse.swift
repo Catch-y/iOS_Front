@@ -36,6 +36,12 @@ struct PlaceDetailResponse: Codable, Identifiable, Likeable {
     /// 장소 평점
     let rating: Double
     
+    /// 장소 위도
+    let placeLatitude: Double
+    
+    /// 장소 경도
+    let placeLongitude: Double
+    
     /// 누군가 방문한 장소인지?
     var isVisited: Bool
     
@@ -57,6 +63,8 @@ struct PlaceDetailResponse: Codable, Identifiable, Likeable {
         case roadAddress
         case activeTime
         case rating
+        case placeLatitude
+        case placeLongitude
         case isVisited
         case reviewCount
         case placeSite
