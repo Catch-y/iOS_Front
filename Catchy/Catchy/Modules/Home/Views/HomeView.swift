@@ -56,6 +56,7 @@ struct HomeView: View {
                 viewModel.getSecondSection()
                 viewModel.getThirdSection()
             }
+            .background(Color.bg4)
     }
     
     @ViewBuilder
@@ -121,8 +122,8 @@ struct HomeView: View {
                         }
                     })
                     .scrollTargetLayout()
-                    .padding(.trailing, 30)
-                    .padding(.leading, 5)
+                    .padding(.top, 5)
+                    .padding(.trailing, 5)
                 })
                 .scrollTargetBehavior(.viewAligned)
             }
@@ -276,7 +277,7 @@ extension HomeView {
                 .scaleEffect(self.scaleValue(geometry: geometry, itemGeometry: item))
                 .animation(.bouncy, value: scaleValue(geometry: geometry, itemGeometry: item))
         }
-        .frame(minWidth: geometry.size.width - 32, maxHeight: 245)
+        .frame(minWidth: geometry.size.width - 5, maxHeight: 245)
     }
     
     private func progress(_ proxy: GeometryProxy, limit: CGFloat = 2) -> CGFloat {

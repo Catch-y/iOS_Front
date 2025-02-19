@@ -16,8 +16,9 @@ struct PreferenceDistrictsView: View {
     var body: some View {
         VStack {
             Capsule()
-                .fill(Color.g4)
-                .frame(width: 32, height: 6)
+                .fill(Color.g3)
+                .frame(width: 40, height: 5)
+            
             ScrollView(.vertical, content: {
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), alignment: .leading, spacing: 17, content: {
                     if let selectedRegion = viewModel.selectedRegion,
@@ -40,8 +41,9 @@ struct PreferenceDistrictsView: View {
                         }
                     }
                 })
-                .padding(.top, 10)
+                .padding(.top, 5)
             })
+            .padding(.top, 10)
             
             MainBtn(text: "홈으로 넘어가기", action: {
                 Task {
@@ -54,6 +56,7 @@ struct PreferenceDistrictsView: View {
             
             Spacer()
         }
+        .background(Color.white)
         .safeAreaPadding(EdgeInsets(top: 10, leading: 16, bottom: 0, trailing: 16))
     }
 }

@@ -21,13 +21,8 @@ struct GroupTabView: View {
     // MARK: - body
     var body: some View {
         VStack(spacing: 0) {
-            
-            
             // 상단 네비게이션
             GroupLogoNavigation(
-                onHomeButtonTap: {
-                   //TODO: - 홈화면으로 이동해야하나..?
-                },
                 onPlusButtonTap: {
                     isBottomSheetPresented.toggle() // 버튼 클릭 시 바텀시트 표시
                 }
@@ -44,8 +39,10 @@ struct GroupTabView: View {
                 .padding(.top, 16)
             }
         }
-        .background(Color.bg1) // 배경 색상
         .padding(.bottom, 110)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .ignoresSafeArea(.all)
+        .background(Color.bg1) // 배경 색상
         .sheet(isPresented: $isBottomSheetPresented) {
             GroupPluseBottomSheet()
                 .presentationCornerRadius(21)
@@ -69,11 +66,12 @@ struct GroupTabView_Previews: PreviewProvider {
             GroupTabView(container: container)
                 .previewDisplayName("iPhone 16 Pro")
                 .previewDevice(PreviewDevice(rawValue: "iPhone 16 Pro"))
+                .environmentObject(DIContainer())
 
             GroupTabView(container: container)
                 .previewDisplayName("iPhone SE")
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE"))
-
+                .environmentObject(DIContainer())
           
         }
     }

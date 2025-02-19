@@ -10,7 +10,7 @@ import Combine
 
 class SearchViewModel: ObservableObject {
     
-    @Published var recentWords: [String] = UserDefaults.standard.stringArray(forKey: "searchKeyword") ?? ["카페", "검색어 예시", "최대 글자수 이정도", "양식", "인도네시아"]
+    @Published var recentWords: [String] = UserDefaults.standard.stringArray(forKey: "searchKeyword") ?? []
     @Published var searchKeyword: String = ""
     @Published var searchResult: SearchPlaceResponse?
     @Published var searchLoad: Bool = false

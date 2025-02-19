@@ -48,7 +48,7 @@ struct SearchRecommendPlaceCard: View {
     }
     
     private var placeNameInfo: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 8, content: {
+        HStack(spacing: 8, content: {
             Text(data.placeName)
                 .font(.Subtitle3)
                 .foregroundStyle(Color.g7)
@@ -76,7 +76,7 @@ struct SearchRecommendPlaceCard: View {
         HStack(spacing: 12, content: {
             makeInfoTitle(Icon.star.image, "평점 \(data.rating)")
             
-            makeReview(Icon.time.image, "리뷰 \(data.reviewCount)개", Icon.rightChevron.image)
+            makeReview(Icon.review.image, "리뷰 \(data.reviewCount)개", Icon.rightChevron.image)
         })
     }
 }
