@@ -38,7 +38,10 @@ struct FullScreenMap: View {
                     }
 
                 if let selectedPlaceId = viewModel.selectedPlaceId {
-                    PlaceVisitingView(container: container, placeId: selectedPlaceId)
+                    PlaceVisitingView(container: container, placeId: selectedPlaceId, onFindRoute: {
+                        viewModel.findRouteToSelectedPlace()
+                    })
+                        .s1w()
                         .environmentObject(container)
                         .transition(.opacity.combined(with: .move(edge: .bottom)))
                         .onAppear {

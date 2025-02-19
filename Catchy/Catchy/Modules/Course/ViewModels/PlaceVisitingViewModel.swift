@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 import CombineMoya
+import CoreLocation
 
 class PlaceVisitingViewModel: ObservableObject {
 
@@ -22,6 +23,9 @@ class PlaceVisitingViewModel: ObservableObject {
 
     /// 로딩중인가?
     @Published var isLoading: Bool = false
+    
+    /// 100m 감지
+    @Published var isUserNear: Bool = false
 
     // MARK: - 장소 리뷰, 평점 화면 상태
     /// 리뷰, 평점 화면 상태
@@ -31,6 +35,25 @@ class PlaceVisitingViewModel: ObservableObject {
     init(container: DIContainer) {
         self.container = container
     }
+    
+    func checkUserDistance() {
+            BaseLocationManager.shared.getCurrentUserLocation { userLocation in
+                guard let userLocation = userLocation,
+                      let place = self.placeDetailResponse else {
+                    DispatchQueue.main.async {
+                        self.isUserNear = false
+                    }
+                    return
+                }
+
+                let placeLocation = CLLocation(latitude: place.placeLatitude, longitude: place.placeLongitude)
+                let distance = userLocation.distance(from: placeLocation)
+
+                DispatchQueue.main.async {
+                    self.isUserNear = distance <= 100
+                }
+            }
+        }
 
 }
 

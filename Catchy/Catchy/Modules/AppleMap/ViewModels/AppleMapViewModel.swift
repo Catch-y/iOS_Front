@@ -8,6 +8,7 @@
 import Foundation
 import MapKit
 import Combine
+import CoreLocation
 
 class AppleMapViewModel: ObservableObject {
     
@@ -187,4 +188,49 @@ extension AppleMapViewModel {
             })
             .store(in: &cancellables)
     }
+    
+    /// 현재 위치에서 선택된 장소 길 찾기
+    func findRouteToSelectedPlace() {
+            guard let selectedPlace = placeInfoData.first(where: { $0.placeId == selectedPlaceId }) else {
+                print("❌ 선택된 장소가 없습니다.")
+                return
+            }
+
+            BaseLocationManager.shared.getCurrentUserLocation { [weak self] userLocation in
+                guard let self = self, let userLocation = userLocation else {
+                    print("❌ 현재 위치를 가져올 수 없습니다.")
+                    return
+                }
+
+                let startCoordinate = OSRMCoordinate(longitude: userLocation.coordinate.longitude, latitude: userLocation.coordinate.latitude)
+                let destinationCoordinate = OSRMCoordinate(longitude: selectedPlace.placeLongitude, latitude: selectedPlace.placeLatitude)
+
+                let request = OSRMRequest(start: startCoordinate, routes: [], end: destinationCoordinate)
+
+                self.container.useCaseProvider.routeUseCase.executeOsrmRouter(locationData: request)
+                    .tryMap { responseData -> ResponseData<OSRMResponse> in
+                        if !responseData.isSuccess {
+                            throw APIError.serverError(message: responseData.message, code: responseData.code)
+                        }
+                        guard let _ = responseData.result else {
+                            throw APIError.emptyResult
+                        }
+                        return responseData
+                    }
+                    .receive(on: DispatchQueue.main)
+                    .sink(receiveCompletion: { completion in
+                        switch completion {
+                        case .finished:
+                            print("✅ 경로 찾기 완료")
+                        case .failure(let failure):
+                            print("❌ 경로 찾기 실패: \(failure)")
+                        }
+                    }, receiveValue: { response in
+                        if let response = response.result {
+                            self.updatePolyline(with: response)
+                        }
+                    })
+                    .store(in: &cancellables)
+            }
+        }
 }
