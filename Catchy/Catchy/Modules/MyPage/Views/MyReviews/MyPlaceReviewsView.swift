@@ -82,7 +82,7 @@ struct MyPlaceReviewsView: View {
                         date: review.visitedDate
                     )
                     .padding(.bottom, 40)
-                    .onAppear {
+                    .task {
                         if content.last?.reviewId == review.reviewId {
                             viewModel.getMyPlaceReviews()
                         }
