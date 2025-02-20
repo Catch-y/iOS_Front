@@ -174,53 +174,53 @@ extension HomeAPITarget: APITargetType {
               "message": "추천 장소 목록 조회 성공",
               "result": [
                 {
-                  "courseId": 1,
-                  "courseImage": "https://i.namu.wiki/i/PsAbvcWd3-b34riJb_5Eert_JxHr2DLLKBJdHxltjnd71xEgdS62jB64nl58t8GmThR0cpy52gYCAc83h2srIhrrcQx50vOz2thIJdWP7Yz7QpS62SqusN7YRVbWEOpxgYX3Wpdqb28pUJSrSwbHMQ.webp",
-                  "courseName": "경복궁 코스"
-                },
-                {
-                  "courseId": 2,
-                  "courseImage": "https://i.namu.wiki/i/Y0ct-pk-0QesZIcfe0WDD38Igs2LRwQaqCwF68KGDjlu_4VPcugTvUmV3VOWldjSkSRLK1aivMiJzNnlVTLlq5MpQ-c7qUVZvZOYYtdiGb14lPF3pqFcHTbvxNC968Kf3HqdcgPTzyC-CpE7xykb0w.webp",
-                  "courseName": "숭례문 야경 투어"
-                },
-                {
-                  "courseId": 3,
-                  "courseImage": "https://i.namu.wiki/i/IS7i8wmi-5dVMZoBm2inIIL83aNQOcp61Zp5z93AxAm6cDbCyjV8277WQBxG8JAOjzdtDtz14Qir0WWu1ccB4nMfnfMNUepNjcEzmruhazZeoOSFXvlMJiJYj3r7v_FHsPu60BqBoQ7o3YRd1rA6MA.webp",
-                  "courseName": "덕수궁 미치게 재밌느 코스"
-                },
-                {
-                  "courseId": 4,
-                  "courseImage": "https://i.namu.wiki/i/weAgIrSScXTmwtFhlw09cpqD_sbUIkOw4yq68Bl4N4oU1ZdDQhaxwtunO1c3gAf5nVyVv3dE02osHDJbRmAda_-NTY99gb6KAfKl5JKhDCpsQNar5IuJQhJqFuKuhMt6hUVMm8YhBjGZeKj9tIMLZg.webp",
-                  "courseName": "한라산 등산 가보자고~"
-                },
-                {
-                  "courseId": 5,
-                  "courseImage": "https://i.namu.wiki/i/rM1WrmcSNcqq1bAN2PxXXRAICDet0vO_Ef05nxH6Pe-m4FbzjP_dsfrFhLQJIgDa74zYU_ZLlROCB6Uw-9KGXybB9e-YYYdFPYY6MC3juv6t7A0IVaclsV0lh7T6-4SMPvFdp77OJAnoaDe2zSO7iA.webp",
-                  "courseName": "북촌 한옥마을 산책"
-                },
-                {
-                  "courseId": 6,
-                  "courseImage": "https://i.namu.wiki/i/Ca6uA8jti6jQfstU5FzeSH6bnn9Ms8uoWBMROytYU606IZ0GLj4d8RWEAQpV3PUP1FjsuemL2y-QlMwp-m1JiQl-ZXmKvkKDfsFNK93VrWiFP9Tv7Yz71eOmMJnBKGHfQEFIfGODpVi3lwxEll8eAw.webp",
-                  "courseName": "경복궁 야간 개장"
-                },
-                {
                   "courseId": 7,
-                  "courseImage": "https://i.namu.wiki/i/3gv2CckmpZNQ5C_99hKYqKIH5KIuCKau0OKTiEzK4Tep0ricAnGZMpIJYUvt855yIc8C9TTrHAS511knxDXePppDedmWPZ0PzufrNITUVhPEhAyN9kuWGaFHL3lXuNgrgIIvFEBFEvYWq47doqKb1A.webp",
-                  "courseName": "서울타워 전망대 투어"
+                  "courseImage": "https://i.namu.wiki/i/jDYl3xK8uotCA3p3dD-EFufHlRJPWbYLExnhfIp5YlewDm3FO0lggA4q1xyIpWkoQl-P-NkHuSQ5ZYDzgW_6Sg.webp",
+                  "courseName": "월미도 싹-다 깨부수기 코스"
                 },
                 {
                   "courseId": 8,
+                  "courseImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfDnd3ze146S8zAHweUxYqxiyh3MxPB3ttXg&s",
+                  "courseName": "교양 한 스푼, 미식 한 입"
+                },
+                {
+                  "courseId": 9,
+                  "courseImage": "https://i.pinimg.com/474x/31/a8/23/31a82399691863448075ae85980fb14a.jpg",
+                  "courseName": "자연과 힐링 코스"
+                },
+                {
+                  "courseId": 10,
+                  "courseImage": "https://i.pinimg.com/736x/82/3d/16/823d169d317196afbf0f31b43c954113.jpg",
+                  "courseName": "아이도 좋아하는 가족 여행"
+                },
+                {
+                  "courseId": 11,
+                  "courseImage": "https://i.pinimg.com/474x/62/f0/32/62f0324981ee60090bd1548da1473767.jpg",
+                  "courseName": "친구와 힙찔이 도전할 수 있는 코스"
+                },
+                {
+                  "courseId": 12,
+                  "courseImage": "https://i.pinimg.com/736x/6d/0a/dc/6d0adcd2d675349bc9092dd4c3cf9675.jpg",
+                  "courseName": "속초로 드라이브 떠나기 ~"
+                },
+                {
+                  "courseId": 13,
+                  "courseImage": "https://cdn.mindgil.com/news/photo/202311/78905_21835_147.jpg",
+                  "courseName": "실패없는 홍대 데이트 추천!"
+                },
+                {
+                  "courseId": 14,
                   "courseImage": "https://a.travel-assets.com/findyours-php/viewfinder/images/res70/249000/249996-Insadong.jpg",
                   "courseName": "인사동 전통 문화 체험"
                 },
                 {
-                  "courseId": 9,
-                  "courseImage": "https://blog-static.kkday.com/ko/blog/wp-content/uploads/korea_gangneung_beach_anmokbeach_1.jpg",
-                  "courseName": "강릉 바다 드라이브"
+                  "courseId": 15,
+                  "courseImage": "https://media.triple.guide/triple-cms/c_limit,f_auto,h_1024,w_1024/6287cec8-b327-463a-9fc6-2651c9e2cc57.jpeg",
+                  "courseName": "부산 감성 여행 – 바다와 핫플 제대로 즐기기"
                 },
                 {
-                  "courseId": 10,
-                  "courseImage": "https://i.namu.wiki/i/a6fOOb7VI-_0QoTSQ3N3IxWimD3ydoKg1y7higuSmkoU7p5BIstpjyVEdUqsrZrVHYfkoWgU38TUyQfORQkD66O6IE_nz1AkXO9jeaXtqKDZZ2wQV05JD0U1gcj74sHvgDjJ3PpzQmh_xN9FFuViJw.webp",
+                  "courseId": 16,
+                  "courseImage": "https://catchy-bucket.s3.ap-northeast-2.amazonaws.com/course-images/image+(5).png",
                   "courseName": "지리산 등반 코스"
                 }
               ]
