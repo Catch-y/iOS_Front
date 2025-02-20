@@ -10,13 +10,16 @@ import CoreImage.CIFilterBuiltins
 import Moya
 
 class QRCodeInviteViewModel: ObservableObject {
+    @Published var groupInfo: GroupInfo
     @Published var inviteCode: String?
     @Published var userNickname: String = "초대 보내는 사람 닉네임"
     @Published var isLoading: Bool = true
     @Published var qrCodeImage: UIImage?
 
     let container: DIContainer
-    private let groupInfo: GroupInfo
+    
+
+    
     private let filter = CIFilter.qrCodeGenerator()
     private let provider: MoyaProvider<GroupAPITarget>
     
@@ -33,7 +36,7 @@ class QRCodeInviteViewModel: ObservableObject {
     func setupInviteCode() {
         let group = GroupInfo(
             groupName: "Study Group",
-            groupLocation: "Seoul",
+            groupLocation: ["서울특별시", "광진구"],
             promiseTime: "2025-02-20T05:08:03.006Z",
             groupImage: "https://i.pinimg.com/474x/1a/e2/8f/1ae28fe7bd5e3211be36f7a48b976226.jpg"
         )
@@ -57,13 +60,23 @@ class QRCodeInviteViewModel: ObservableObject {
                     print("✅ 디코딩 성공: \(createGroupResponse)")
 
                     if let groupResult = createGroupResponse.result {
-                        DispatchQueue.main.async {
-                            self.inviteCode = groupResult.inviteCode
-                            self.userNickname = groupResult.creatorNickname
-                            self.qrCodeImage = self.generateQRCodeWithRepresentImage(from: self.inviteCode ?? "DEFAULT")
-                            self.isLoading = false
-                            print("✅ 그룹이 성공적으로 생성되었습니다. 초대 코드: \(groupResult.inviteCode)")
-                        }
+                                    DispatchQueue.main.async {
+                                        // ✅ 서버에서 받은 groupId로 업데이트
+                                        self.groupInfo = GroupInfo(
+                                            groupId: groupResult.groupId,
+                                            groupName: self.groupInfo.groupName,
+                                            groupLocation: self.groupInfo.groupLocation,
+                                            promiseTime: self.groupInfo.promiseTime,
+                                            groupImage: self.groupInfo.groupImage,
+                                            inviteCode: groupResult.inviteCode
+                                        )
+                                        self.inviteCode = groupResult.inviteCode
+                                        self.userNickname = groupResult.creatorNickname
+                                        self.qrCodeImage = self.generateQRCodeWithRepresentImage(from: self.inviteCode ?? "DEFAULT")
+                                        self.isLoading = false
+
+                                        print("✅ 그룹이 성공적으로 생성되었습니다. 그룹 ID: \(groupResult.groupId)")
+                                    }
                     } else {
                         DispatchQueue.main.async {
                             self.isLoading = false

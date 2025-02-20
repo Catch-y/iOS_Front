@@ -102,13 +102,28 @@ struct LocationSelectView: View {
                 print("✅ 선택된 하위 지역: \(selectedSubLocation)")
                 print("📌 그룹 생성 API 요청을 시작합니다.")
 
-                container.navigationRouter.push(to: .qrCodeInviteView)
+                // 🔹 UserDefaults에서 저장된 그룹 정보 가져오기
+                let groupName = UserDefaults.standard.string(forKey: "groupName") ?? "기본 그룹명"
+                let groupImage = UserDefaults.standard.string(forKey: "groupImage") ?? "https://i.pinimg.com/474x/1a/e2/8f/1ae28fe7bd5e3211be36f7a48b976226.jpg"
+                let promiseTime = UserDefaults.standard.string(forKey: "promiseTime") ?? ISO8601DateFormatter().string(from: Date())
+
+                
+
+                // 🔹 groupInfo를 생성하여 QRCodeInviteView에 전달
+                let groupInfo = GroupInfo(
+                    groupName: groupName,  // ✅ 저장된 그룹 이름 불러오기
+                    groupLocation: [viewModel.selectedLocation ?? "", viewModel.selectedSubLocation ?? ""],  // ✅ 지역 정보
+                    promiseTime: promiseTime, // ✅ 저장된 약속 날짜 불러오기
+                    groupImage: groupImage // ✅ 저장된 그룹 이미지 불러오기
+                )
+
+                // 🔹 groupInfo를 QRCodeInviteView로 전달하면서 push
+                container.navigationRouter.push(to: .qrCodeInviteView(groupInfo: groupInfo))
             } else {
-                print("⚠️ 하위 지역이 선택되지 않음.")
+                print("⚠️ 그룹 이름, 이미지 또는 날짜가 저장되지 않음.")
             }
         }
     }
-
 
 
     // MARK: - 지역 선택 그리드

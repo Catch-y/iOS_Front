@@ -85,9 +85,11 @@ struct NavigationRoutingView: View {
         case .voteResultPlaceView(let groupId, let category): 
             VoteResultPlaceView(viewModel: VoteResultCategoryCardViewModel(groupId: groupId, category: category))
                     .environmentObject(container)
-        case .qrCodeInviteView:
-                   QRCodeInviteView(container: container)
-                           .environmentObject(container)
+            
+        case .qrCodeInviteView(let groupInfo):
+            QRCodeInviteView(container: container, groupInfo: groupInfo)
+                .environmentObject(container)
+
         case .placeDetailView(let viewModel, let placeSearchResponseData):
             PlaceDetailView(viewModel: viewModel, placeSearchResponseData: placeSearchResponseData)
             
