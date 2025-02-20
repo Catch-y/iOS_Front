@@ -90,9 +90,21 @@ struct QRCodeInviteView: View {
     // MARK: - 외부공유, QR다운 버튼
     private func bottomButtons() -> some View {
         HStack(spacing: 15) {
-            Button(action: {
-                viewModel.shareQRCode() //쉐어링크 수정
-            }) {
+            if let inviteCode = viewModel.inviteCode {
+                ShareLink(
+                    item: URL(string: "https://초대링크.com/invite/\(inviteCode)")!,
+                    preview: SharePreview(Text("📎 초대 코드: \(inviteCode)"))
+                ) {
+                    VStack {
+                        Icon.shareButton.image
+                            .resizable()
+                            .frame(width: 42, height: 42)
+                        Text("외부공유")
+                            .font(.body3)
+                            .foregroundStyle(Color.g5)
+                    }
+                }
+            } else {
                 VStack {
                     Icon.shareButton.image
                         .resizable()
@@ -118,7 +130,8 @@ struct QRCodeInviteView: View {
         }
         .padding(.top, 12)
     }
-}
+
+    }
 
 // MARK: - Preview
 struct QRCodeInviteView_Previews: PreviewProvider {
@@ -127,3 +140,4 @@ struct QRCodeInviteView_Previews: PreviewProvider {
         return QRCodeInviteView(container: container)
     }
 }
+

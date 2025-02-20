@@ -12,7 +12,12 @@ import Moya
 /// [투표 관리] Service 구현체
 class VoteService: VoteServiceProtocol {
     
-    let provider = MoyaProvider<VoteAPITarget>()
+    let provider: MoyaProvider<VoteAPITarget>
+   
+    
+    init(provider: MoyaProvider<VoteAPITarget> = APIManager.shared.testProvider(for: VoteAPITarget.self)){
+        self.provider = provider
+    }
     
     func postCreateVote(createVoteRequest: CreateVoteRequest) -> AnyPublisher<ResponseData<CreateVoteResponse>, MoyaError> {
         return provider.requestPublisher(.postCreateVote(createVoteRequest: createVoteRequest))
