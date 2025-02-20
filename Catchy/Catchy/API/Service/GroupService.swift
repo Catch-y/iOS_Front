@@ -19,7 +19,7 @@ class GroupService: GroupServiceProtocol {
     
     // MARK: - Initializer
     
-    init(provider: MoyaProvider<GroupAPITarget> = APIManager.shared.testProvider(for: GroupAPITarget.self)) {
+    init(provider: MoyaProvider<GroupAPITarget> = APIManager.shared.createProvider(for: GroupAPITarget.self)) {
         self.provider = provider
     }
     
