@@ -18,8 +18,15 @@ struct QRCodeInviteView: View {
 
     // MARK: - 초기화
     init(container: DIContainer) {
-        _viewModel = StateObject(wrappedValue: QRCodeInviteViewModel(container: container))
+        let groupInfo = GroupInfo(
+            groupName: "Study Group",
+            groupLocation: "Seoul",
+            promiseTime: "2025-02-20T05:08:03.006Z",
+            groupImage: "https://i.pinimg.com/474x/1a/e2/8f/1ae28fe7bd5e3211be36f7a48b976226.jpg"
+        )
+        _viewModel = StateObject(wrappedValue: QRCodeInviteViewModel(container: container, groupInfo: groupInfo))
     }
+
 
     var body: some View {
         VStack(spacing: 0) {
