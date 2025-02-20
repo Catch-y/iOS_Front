@@ -13,7 +13,7 @@ import Moya
 class RouteService: RouteServiceProtocol {
     let provider: MoyaProvider<RouteAPITarget>
     
-    init(provider: MoyaProvider<RouteAPITarget> = APIManager.shared.testProvider(for: RouteAPITarget.self)) {
+    init(provider: MoyaProvider<RouteAPITarget> = APIManager.shared.createProvider(for: RouteAPITarget.self)) {
         self.provider = provider
     }
     

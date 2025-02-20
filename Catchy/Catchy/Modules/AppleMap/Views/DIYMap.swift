@@ -54,7 +54,8 @@ struct DIYMap: View {
         .sheet(isPresented: $isPlaceDetailPresented) {
             if let place = selectedPlace {
                 PlaceDetailView(viewModel: viewModel, placeSearchResponseData: place)
-                    .presentationDetents([.fraction(0.6)])
+                    .presentationDetents([.fraction(0.75)])
+                    .presentationCornerRadius(20)
             }
         }
     }
@@ -79,7 +80,7 @@ struct DIYMap: View {
                     .s2t()
             }
             .padding(.horizontal, 16)
-            .padding(.top, 26)
+            .padding(.top, 13)
         }
     }
     

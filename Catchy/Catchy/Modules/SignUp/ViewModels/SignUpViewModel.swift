@@ -109,6 +109,7 @@ extension SignUpViewModel {
     /// - Parameter signUpNaviData: 로그인 후, 받아온 데이터 전달받아 회원가입 뷰에서 사용
     
     public func signupAction(signUpNaviData: SignUpNaviData) {
+        
         isLoading = true
         
         container.useCaseProvider.authUseCase.executeSignup(socialSignup: signUpNaviData.loginType, signupRequest: .init(accessToken: signUpNaviData.accessToken, authorizationCode: signUpNaviData.authorizationCode, nickname: nickname), image: profileImage[0])
