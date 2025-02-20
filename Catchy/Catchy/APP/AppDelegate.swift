@@ -57,8 +57,16 @@ extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         guard let fcmToken = fcmToken else { return }
         print("✅ APNs를 위한 디바이스 토큰: \(fcmToken)")
-        UserState.shared.setFcmToken(fcmToken)
+        
+        let storedFcmToken = Catchy.UserState.shared.getFcmToken()
+        
+        if storedFcmToken != fcmToken {
+            print("🔄 FCM 토큰이 변경됨: \(storedFcmToken) → \(fcmToken)")
+            UserState.shared.setFcmToken(fcmToken)
+            FCMTokenAPI.shared.sendUpdatedFcmTokenToServer(fcmToken)
+        }
     }
+    
     
 }
 

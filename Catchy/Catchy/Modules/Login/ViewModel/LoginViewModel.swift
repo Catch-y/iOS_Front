@@ -116,6 +116,9 @@ extension LoginViewModel {
     /// 애플 로그인 시도 API
     /// - Parameter appleUserInfo: 애플 로그인 후 회원가입 시 필요한 데이터
     private func appleLoginAPI(appleUserInfo: AppleUserInfo) {
+        
+        KeychainManager.standard.deleteSession(for: "catchyUser")
+        
         isLoading = true
         container.useCaseProvider.authUseCase.executeSocialLogin(socialLoginType: .apple, socialToken: appleUserInfo.identityToken)
             .tryMap { responseData -> ResponseData<SocialLoginResponse> in

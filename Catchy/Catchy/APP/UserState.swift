@@ -29,7 +29,7 @@ class UserState: ObservableObject {
     }
     
     public func setFcmToken(_ fcm: String) {
-        self.fcmToken = fcm
+        UserDefaults.standard.set(fcm, forKey: "UserFCMToken")
     }
     
     public func setUserNickname(_ userNickname: String) {
@@ -50,7 +50,11 @@ class UserState: ObservableObject {
     }
     
     public func getFcmToken() -> String {
-        return fcmToken
+        guard let userFcmToken = UserDefaults.standard.string(forKey: "UserFCMToken") else {
+            return "FCMToken 없음"
+        }
+        
+        return userFcmToken
     }
     
     public func getUserEmail() -> String {

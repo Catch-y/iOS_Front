@@ -11,12 +11,14 @@ import SwiftUI
 struct PlaceSearchView: View {
     
     @EnvironmentObject var container: DIContainer
+    var onPlaceSelected: (PlaceSearchResponseData) -> Void
 
     // MARK: - 뷰 모델
     @ObservedObject var viewModel: DIYCourseViewModel
         
     // MARK: - Init
-    init(viewModel: DIYCourseViewModel) {
+    init(onPlaceSelected: @escaping (PlaceSearchResponseData) -> Void, viewModel: DIYCourseViewModel) {
+        self.onPlaceSelected = onPlaceSelected
         self.viewModel = viewModel
     }
     
@@ -71,7 +73,7 @@ struct PlaceSearchView: View {
                             container.navigationRouter.push(to: .placeReviewView(placeId: place.placeId))
                         })
                             .onTapGesture {
-                                container.navigationRouter.push(to: .placeDetailView(viewModel: viewModel, placeSearchResponseData: place))
+                                onPlaceSelected(place)
                             }
                             .task {
                                 if let lastPlaceId = viewModel.placeList.last?.placeId {
@@ -118,9 +120,4 @@ struct PlaceSearchView: View {
         
     }
     
-}
-
-#Preview {
-    PlaceSearchView(viewModel: DIYCourseViewModel(container: DIContainer()))
-        .environmentObject(DIContainer())
 }

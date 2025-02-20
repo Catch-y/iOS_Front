@@ -139,7 +139,7 @@ extension SignUpViewModel {
                 if let response = response.result {
                     isLoading = false
                     saveUserInfo(response: response, loginType: signUpNaviData.loginType)
-                    patchFCMToken()
+                    FCMTokenAPI.shared.sendUpdatedFcmTokenToServer(UserState.shared.getFcmToken())
                     container.navigationRouter.pop()
                     appflowViewModel.onSignupSuccess()
                 }
@@ -177,32 +177,6 @@ extension SignUpViewModel {
                     nicknameAvail = true
                     nicknameMessage = response.message
                 }
-                
-            })
-            .store(in: &cancellables)
-    }
-    
-    private func patchFCMToken() {
-        container.useCaseProvider.memberUseCase.executePatchFCMToken(token: UserState.shared.getFcmToken())
-            .tryMap { respopnseData -> ResponseData<EmptyResult> in
-                
-                if !respopnseData.isSuccess {
-                    throw APIError.serverError(message: respopnseData.message, code: respopnseData.code)
-                }
-                
-                print("FMCToken Check")
-                return respopnseData
-            }
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    print("✅ patchFCMToken Completed")
-                case .failure(let failure):
-                    print("❌ patchFCMToken Fialed: \(failure)")
-                }
-            }, receiveValue: { result in
-                print("FCMTOKEN: \(result.message)")
                 
             })
             .store(in: &cancellables)
