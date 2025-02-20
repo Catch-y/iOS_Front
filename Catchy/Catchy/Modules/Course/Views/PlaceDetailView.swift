@@ -26,71 +26,49 @@ struct PlaceDetailView: View {
     }
     
     var body: some View {
-        
-        VStack {
-            HStack {
-                backBtn
-                Spacer()
-                closeBtn
-            }
-            .padding(.horizontal, 16)
-            .padding(.bottom, 14)
-            
-            HStack{
-                Spacer()
-                bucketBtn
-            }
-            .padding(.horizontal, 16)
-            
-            Spacer()
-            
-            VStack(spacing: 36) {
-                if !viewModel.isPlaceDetailLoading {
-                    if let place = viewModel.placeDetailResponse {
-                        
-                        PlaceInfoSection(place: Binding(
-                            get: { place },
-                            set: { viewModel.placeDetailResponse = $0 }
-                        ), forDetailView: true,
-                                         reviewTap: {
-                            container.navigationRouter.push(to: .placeReviewView(placeId: place.placeId))
-                        }
-                        )
-                        .padding(.top, 40)
-                        
-                        Spacer()
-                        
-                        mainBtn(
-                            hasCategory: place.categoryName != nil,
-                            hasSelected: viewModel.selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId }
-                        )
-                        .disabled(viewModel.selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId } || !(viewModel.selectedPlaceList.count < 5))
-                                                
+        VStack(spacing: 36) {
+            if !viewModel.isPlaceDetailLoading {
+                if let place = viewModel.placeDetailResponse {
+                    
+                    PlaceInfoSection(place: Binding(
+                        get: { place },
+                        set: { viewModel.placeDetailResponse = $0 }
+                    ), forDetailView: true,
+                                     reviewTap: {
+                        container.navigationRouter.push(to: .placeReviewView(placeId: place.placeId))
                     }
-                } else {
-                    MainProgressComponents()
+                    )
+                    .padding(.top, 40)
+                    
+                    Spacer()
+                    
+                    mainBtn(
+                        hasCategory: place.categoryName != nil,
+                        hasSelected: viewModel.selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId }
+                    )
+                    .disabled(viewModel.selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId } || !(viewModel.selectedPlaceList.count < 5))
+                                            
                 }
-                
+            } else {
+                MainProgressComponents()
             }
-            .frame(height: 600)
-            .background(
-                UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .circular)
-                    .fill(Color.white)
-            )
+            
         }
+        .frame(height: 600)
+        .background(
+            UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .circular)
+                .fill(Color.white)
+        )
         .task {
             viewModel.getPlaceDetail(placeId: placeSearchResponseData.placeId)
         }
         .fullScreenCover(isPresented: $viewModel.isCategoryViewPresented, onDismiss: {
             viewModel.getPlaceDetail(placeId: placeSearchResponseData.placeId)
         }) {
-
+            
             CategoryRegisterView(placeId: placeSearchResponseData.placeId, container: container, isPresented: $viewModel.isCategoryViewPresented)
         }
         .navigationBarBackButtonHidden(true)
-
-    
-        
     }
     
     /// 현재 장소의 데이터에 따라 버튼 생성

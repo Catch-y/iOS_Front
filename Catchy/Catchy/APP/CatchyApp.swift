@@ -15,7 +15,9 @@ struct CatchyApp: App {
     @StateObject var container: DIContainer = .init()
     
     init() {
-        KakaoSDK.initSDK(appKey: Config.kakaoKey) 
+        KakaoSDK.initSDK(appKey: Config.kakaoKey)
+        BaseLocationManager.shared.requestLocationAuthorization()
+        
     }
     
     var body: some Scene {
