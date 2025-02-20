@@ -135,32 +135,46 @@ extension HomeAPITarget: APITargetType {
               "result": [
                 {
                   "courseId": 1,
-                  "courseName": "한강공원 산책 코스",
-                  "courseDescription": "한강을 따라 걷는 아름다운 산책 코스입니다.",
-                  "courseImage": "https://mediahub.seoul.go.kr/wp-content/uploads/2014/08/basic_img_000023760.jpg",
-                  "courseType": "DIY"
+                  "courseName": "한상차림 올려라 코스",
+                  "courseDescription": "한식을 제대로 즐기면서 든든하게 배를 채울 수 있는 정통 한정식 코스입니다. 전채 요리부터 메인, 후식까지 순서대로 나와서 하나하나 음미하면서 먹을 수 있습니다.",
+                  "courseImage": "https://catchy-bucket.s3.ap-northeast-2.amazonaws.com/7fd78244-f698-43fb-888c-15c9e0cd9aa5",
+                  "courseType": "AI"
                 },
                 {
                   "courseId": 2,
-                  "courseName": "남산 야경 투어",
-                  "courseDescription": "서울의 야경을 감상할 수 있는 대표적인 코스입니다.",
-                  "courseImage": "https://i.namu.wiki/i/3gv2CckmpZNQ5C_99hKYqKIH5KIuCKau0OKTiEzK4Tep0ricAnGZMpIJYUvt855yIc8C9TTrHAS511knxDXePppDedmWPZ0PzufrNITUVhPEhAyN9kuWGaFHL3lXuNgrgIIvFEBFEvYWq47doqKb1A.webp",
+                  "courseName": "시장 뿌수기 코스",
+                  "courseDescription": "전통시장, 재래시장, 야시장까지 싹 다 섭렵하는 리얼 먹방 & 쇼핑 코스!",
+                  "courseImage": "https://catchy-bucket.s3.ap-northeast-2.amazonaws.com/course-images/tlwkdQntnrl.png",
                   "courseType": "AI"
                 },
                 {
                   "courseId": 3,
-                  "courseName": "홍대 맛집 탐방",
-                  "courseDescription": "홍대에서 핫한 맛집들을 탐방하는 미식 코스입니다.",
-                  "courseImage": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FsgE1V%2FbtsI06vs2bl%2FtysnYBbORTcCCT9niOzEL1%2Fimg.jpg",
+                  "courseName": "분좋카 코스",
+                  "courseDescription": "이 코스는 커피 맛? 그런 거 안 중요함. 일단 조명 은은해야 하고, 음악은 재즈나 시티팝, 가구는 우드톤이면 갑니다.",
+                  "courseImage": "https://catchy-bucket.s3.ap-northeast-2.amazonaws.com/course-images/image+(1).png",
                   "courseType": "AI"
                 },
                 {
                   "courseId": 4,
-                  "courseName": "제주 올레길 7코스",
-                  "courseDescription": "제주의 자연을 만끽할 수 있는 대표적인 올레길 코스입니다.",
-                  "courseImage": "https://lh3.googleusercontent.com/p/AF1QipM1QxKKnGOYaD3DadUkr3fJrxTquvyGP2eRhjR2=s1360-w1360-h1020",
+                  "courseName": "골프치고 밥먹고 카페가고 술까지 코스",
+                  "courseDescription": "아침엔 골프, 점심엔 고기, 오후엔 감성 카페, 저녁엔 술… 이게 바로 인생이지.",
+                  "courseImage": "https://catchy-bucket.s3.ap-northeast-2.amazonaws.com/course-images/image+(3).png",
                   "courseType": "AI"
-                }
+                },
+                {
+                   "courseId": 5,
+                   "courseName": "카페갔다가 산책했다가 밥처먹기 풀코스",
+                   "courseDescription": "분위기 있게 커피 마시고, 산책으로 힐링하고, 밥으로 마무리하는 인생 코스.",
+                   "courseImage": "https://catchy-bucket.s3.ap-northeast-2.amazonaws.com/course-images/image+(3).png",
+                   "courseType": "AI"
+                }, 
+                {
+                   "courseId": 6,
+                   "courseName": "다이나믹한 놀이공원 풀코스",
+                   "courseDescription": "에버랜드에서 신나는 놀이기구를 즐긴 후, 카페에서 여유를 만끽하고, 박물관 감상후 밥까지!",
+                   "courseImage": "https://catchy-bucket.s3.ap-northeast-2.amazonaws.com/course-images/image+(4).png",
+                   "courseType": "AI"
+                }             
               ]
             }
             """
