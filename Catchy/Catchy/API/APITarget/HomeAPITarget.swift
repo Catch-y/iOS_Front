@@ -9,7 +9,7 @@ import Foundation
 import Moya
 
 enum HomeAPITarget {
-    case getSearch(keyword: String, page: Int) /* 검색 API */
+    case getSearch(keyword: String, page: Int, relevanceScore: Int?, lastPlaceId: Int?) /* 검색 API */
     case getHomePersonalCourses /* 홈화면 추천 코스 API */
     case getHomeCourseTopTen /* 홈 화면 인기 코스 조회 10 */
     case getRecommendPlaces(userLocation: UserLocation, page: Int) /* 사용자 장소 추천 API */
@@ -19,7 +19,7 @@ extension HomeAPITarget: APITargetType {
     var path: String {
         switch self {
         case .getSearch:
-            return "/course/place/region"
+            return "/place/home/search"
         case .getHomePersonalCourses:
             return "/course/home/personal-courses"
         case .getHomeCourseTopTen:
@@ -35,8 +35,16 @@ extension HomeAPITarget: APITargetType {
     
     var task: Task {
         switch self {
-        case .getSearch(let keyword, let page):
-            return .requestParameters(parameters: ["searchKeyword": keyword, "page": page], encoding: URLEncoding.default)
+        case .getSearch(let keyword, let page, let relevanceScore, let lastPlaceId):
+            var params: [String: Any] = ["searchKeyword": keyword, "page": page]
+            if let relevanceScore = relevanceScore {
+                params["relevanceScore"] = relevanceScore
+            }
+            if let lastPlaceId = lastPlaceId {
+                params["lastPlaceId"] = lastPlaceId
+            }
+            return .requestParameters(parameters: params, encoding: URLEncoding.default)
+
         case .getHomePersonalCourses:
             return .requestPlain
         case .getHomeCourseTopTen:
@@ -60,72 +68,85 @@ extension HomeAPITarget: APITargetType {
         case .getSearch:
             let json = """
             {
-                "isSuccess": true,
-                "code": "200",
-                "message": "응답 메세지",
-                "result": {
-            "placeInfoPreviews": [
-              {
-                "placeId": 1,
-                "placeName": "한강공원",
-                "placeImage": "https://media.triple.guide/triple-cms/c_limit,f_auto,h_1024,w_1024/99b67970-512c-4496-bf5c-59472590bcb9.jpeg",
-                "category": "BAR",
-                "roadAddress": "서울특별시 영등포구 여의도동",
-                "activeTime": "24시간",
-                "rating": 4.8,
-                "reviewCount": 320,
-                "liked": true
-              },
-              {
-                "placeId": 2,
-                "placeName": "남산 타워",
-                "placeImage": "https://parks.seoul.go.kr/images/egovframework/com/template/nam02.jpg",
-                "category": "BAR",
-                "roadAddress": "서울특별시 용산구 남산공원길",
-                "activeTime": "09:00-23:00",
-                "rating": 4.7,
-                "reviewCount": 410,
-                "liked": false
-              },
-              {
-                "placeId": 3,
-                "placeName": "홍대 맛집 거리",
-                "placeImage": "https://i.namu.wiki/i/-YrQWzgmgedzi-Zpdf6eGXA-NXRhHjGhx7pUsMhUHqfI4mqRv6deS8ZY6xkYYrRBptr5S1GD6iUOHgAGX6bHM0ljC7htlDQtzBMV-BSv5h12dCcD4IyjKCE4aBQR_RrLbFehAybcuJL5hKfE9V0XPg.webp",
-                "category": "BAR",
-                "roadAddress": "서울특별시 마포구 홍익로",
-                "activeTime": "11:00-23:00",
-                "rating": 4.6,
-                "reviewCount": 280,
-                "liked": true
-              },
-              {
-                "placeId": 4,
-                "placeName": "경복궁",
-                "placeImage": "https://example.com/images/gyeongbokgung.jpg",
-                "category": "BAR",
-                "roadAddress": "서울특별시 종로구 사직로",
-                "activeTime": "09:00-18:00",
-                "rating": 4.9,
-                "reviewCount": 500,
-                "liked": true
-              },
-              {
-                "placeId": 5,
-                "placeName": "강남 스타벅스 리저브",
-                "placeImage": "https://example.com/images/starbucks.jpg",
-                "category": "BAR",
-                "roadAddress": "서울특별시 강남구 테헤란로",
-                "activeTime": "07:00-22:00",
-                "rating": 4.5,
-                "reviewCount": 200,
-                "liked": false
+              "isSuccess": true,
+              "code": "200",
+              "message": "응답 메세지",
+              "result": {
+                "content": [
+                  {
+                    "placeInfoResponse": {
+                      "placeId": 1,
+                      "imageUrl": "https://media.triple.guide/triple-cms/c_limit,f_auto,h_1024,w_1024/99b67970-512c-4496-bf5c-59472590bcb9.jpeg",
+                      "placeName": "한강공원",
+                      "categoryName": "REST",
+                      "roadAddress": "서울특별시 영등포구 여의도동",
+                      "activeTime": "24시간",
+                      "rating": 4.8,
+                      "reviewCount": 320
+                    },
+                    "relevanceScore": 100
+                  },
+                  {
+                    "placeInfoResponse": {
+                      "placeId": 2,
+                      "imageUrl": "https://parks.seoul.go.kr/images/egovframework/com/template/nam02.jpg",
+                      "placeName": "남산 타워",
+                      "categoryName": "EXPERIENCE",
+                      "roadAddress": "서울특별시 용산구 남산공원길",
+                      "activeTime": "09:00-23:00",
+                      "rating": 4.7,
+                      "reviewCount": 410
+                    },
+                    "relevanceScore": 90
+                  },
+                  {
+                    "placeInfoResponse": {
+                      "placeId": 3,
+                      "imageUrl": "https://i.namu.wiki/i/-YrQWzgmgedzi-Zpdf6eGXA-NXRhHjGhx7pUsMhUHqfI4mqRv6deS8ZY6xkYYrRBptr5S1GD6iUOHgAGX6bHM0ljC7htlDQtzBMV-BSv5h12dCcD4IyjKCE4aBQR_RrLbFehAybcuJL5hKfE9V0XPg.webp",
+                      "placeName": "홍대 맛집 거리",
+                      "categoryName": "RESTAURANT",
+                      "roadAddress": "서울특별시 마포구 홍익로",
+                      "activeTime": "11:00-23:00",
+                      "rating": 4.6,
+                      "reviewCount": 280
+                    },
+                    "relevanceScore": 85
+                  },
+                  {
+                    "placeInfoResponse": {
+                      "placeId": 4,
+                      "imageUrl": "https://example.com/images/gyeongbokgung.jpg",
+                      "placeName": "경복궁",
+                      "categoryName": "EXPERIENCE",
+                      "roadAddress": "서울특별시 종로구 사직로",
+                      "activeTime": "09:00-18:00",
+                      "rating": 4.9,
+                      "reviewCount": 500
+                    },
+                    "relevanceScore": 95
+                  },
+                  {
+                    "placeInfoResponse": {
+                      "placeId": 5,
+                      "imageUrl": "https://example.com/images/starbucks.jpg",
+                      "placeName": "강남 스타벅스 리저브",
+                      "categoryName": "CAFE",
+                      "roadAddress": "서울특별시 강남구 테헤란로",
+                      "activeTime": "07:00-22:00",
+                      "rating": 4.5,
+                      "reviewCount": 200
+                    },
+                    "relevanceScore": 80
+                  }
+                ],
+                "last": false
               }
-            ],
-            "isLast": true
             }
-            }
+
             """
             return json.data(using: .utf8)!
+
+            
         case .getHomePersonalCourses:
             let json = """
             {

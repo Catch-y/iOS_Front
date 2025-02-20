@@ -16,8 +16,8 @@ class HomeRepository: HomeRepositoryProtocol {
         self.service = service
     }
     
-    func getSearchData(keyword: String, page: Int) -> AnyPublisher<ResponseData<SearchPlaceResponse>, MoyaError> {
-        return service.getSearch(keyword: keyword, page: page)
+    func getSearchData(keyword: String, page: Int, relevanceScore: Int?, lastPlaceId: Int?) -> AnyPublisher<ResponseData<SearchPlaceResponse>, MoyaError> {
+        return service.getSearch(keyword: keyword, page: page, relevanceScore: relevanceScore, lastPlaceId: lastPlaceId)
     }
     
     func getHomePersonalCoursesData() -> AnyPublisher<ResponseData<[CourseInfoResponse]>, MoyaError> {
