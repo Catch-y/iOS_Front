@@ -47,7 +47,7 @@ extension MyPlaceReviewsViewModel {
     func getMyPlaceReviews() {
         guard !isMyPlaceReviewsLoading, !isLast else { return }
         
-        if isMyPlaceReviewsLoading {
+        if myPlaceReviews.isEmpty {
             isMyPlaceReviewsLoading = true
         }
         
