@@ -14,49 +14,69 @@ struct PlaceDetailView: View {
     @EnvironmentObject var container: DIContainer
 
     // MARK: - 뷰 모델
-    @StateObject var viewModel: PlaceDetailViewModel
-
-    // MARK: - 장소 상세 화면 Properties
-    /// 장소 검색 화면에서 현재 사용자가 담은 장소의 리스트
-    @Binding var selectedPlaceList: [PlaceSearchResponseData]
+    @ObservedObject var viewModel: DIYCourseViewModel
+        
+    /// 현재 보고 있는 장소의 검색 데이터
+    let placeSearchResponseData: PlaceSearchResponseData
     
-    /// 현재 보고 있는 장소의 데이터 (현재 뷰에서 데이터 보여줄 때 사용 X)
-    @Binding var placeSearchResponseData: PlaceSearchResponseData
-
     // MARK: - Init
-    init(selectedPlaceList: Binding<[PlaceSearchResponseData]>, container: DIContainer, placeSearchResponseData: Binding<PlaceSearchResponseData>) {
-        self._viewModel = StateObject(wrappedValue: .init(container: container))
-        self._selectedPlaceList = selectedPlaceList
-        self._placeSearchResponseData = placeSearchResponseData
+    init(viewModel: DIYCourseViewModel, placeSearchResponseData: PlaceSearchResponseData) {
+        self.viewModel = viewModel
+        self.placeSearchResponseData = placeSearchResponseData
     }
     
     var body: some View {
         
-        VStack(spacing: 36) {
-            if !viewModel.isLoading {
-                if let place = viewModel.placeDetailResponse {
-                    
-                    PlaceInfoSection(place: Binding(
-                        get: { place },
-                        set: { viewModel.placeDetailResponse = $0 }
-                    ), reviewTap: {
-                        container.navigationRouter.push(to: .placeReviewRegisterView(placeId: place.placeId))
-                    }
-                    )
-                    
-                    mainBtn(
-                        hasCategory: place.categoryName != nil,
-                        hasSelected: selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId }
-                    )
-                    .disabled((place.categoryName != nil) && !selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId} && (selectedPlaceList.count < 5))
-                    
-                    Spacer()
-                    
-                }
-            } else {
-                MainProgressComponents()
+        VStack {
+            HStack {
+                backBtn
+                Spacer()
+                closeBtn
             }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 14)
             
+            HStack{
+                Spacer()
+                bucketBtn
+            }
+            .padding(.horizontal, 16)
+            
+            Spacer()
+            
+            VStack(spacing: 36) {
+                if !viewModel.isPlaceDetailLoading {
+                    if let place = viewModel.placeDetailResponse {
+                        
+                        PlaceInfoSection(place: Binding(
+                            get: { place },
+                            set: { viewModel.placeDetailResponse = $0 }
+                        ), forDetailView: true,
+                                         reviewTap: {
+                            container.navigationRouter.push(to: .placeReviewView(placeId: place.placeId))
+                        }
+                        )
+                        .padding(.top, 40)
+                        
+                        Spacer()
+                        
+                        mainBtn(
+                            hasCategory: place.categoryName != nil,
+                            hasSelected: viewModel.selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId }
+                        )
+                        .disabled(viewModel.selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId } || !(viewModel.selectedPlaceList.count < 5))
+                                                
+                    }
+                } else {
+                    MainProgressComponents()
+                }
+                
+            }
+            .frame(height: 600)
+            .background(
+                UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .circular)
+                    .fill(Color.white)
+            )
         }
         .task {
             viewModel.getPlaceDetail(placeId: placeSearchResponseData.placeId)
@@ -66,9 +86,10 @@ struct PlaceDetailView: View {
         }) {
 
             CategoryRegisterView(placeId: placeSearchResponseData.placeId, container: container, isPresented: $viewModel.isCategoryViewPresented)
-            
         }
-        .navigationBarBackButtonHidden()
+        .navigationBarBackButtonHidden(true)
+
+    
         
     }
     
@@ -84,12 +105,11 @@ struct PlaceDetailView: View {
             MainBtn(
                 text: hasSelected ? "이미 담은 장소입니다." : "코스에 담기",
                 action: {
-                    selectedPlaceList.append(placeSearchResponseData)
-                    // TODO: - 이전 화면으로 이동
+                    viewModel.selectedPlaceList.append(placeSearchResponseData)
                 },
                 width: UIScreen.screenWidth - 32,
                 height: 55,
-                onoff: !hasSelected && selectedPlaceList.count < 5 ? .on : .off
+                onoff: !hasSelected && viewModel.selectedPlaceList.count < 5 ? .on : .off
             )
 
             
@@ -107,18 +127,60 @@ struct PlaceDetailView: View {
         
     }
     
-}
-
-struct PlaceDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(
-            ["iPhone 16 Pro Max", "iPhone 11"],
-            id: \.self
-        ) { deviceName in
-            PlaceDetailView(selectedPlaceList: .constant([]), container: DIContainer(), placeSearchResponseData: .constant(.init(placeId: 1, placeName: "심퍼티쿠시 용산점", placeImage: "https://m.segyebiz.com/content/image/2023/11/10/20231110510421.jpg", category: .BAR, roadAddress: "경기 남양주시 와부읍 덕소로2번길 84", activeTime: "[영업시간] 매일 09:00 ~ 22:00", rating: 4.1, reviewCount: 32, liked: false)))
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-                .environmentObject(DIContainer())
-        }
+    private var backBtn: some View {
+        Button(action: {
+            viewModel.onAppearByPop = true
+            viewModel.placeDetailResponse = nil
+            viewModel.container.navigationRouter.pop()
+        }, label: {
+            ZStack {
+                
+                Circle()
+                    .frame(width: 40, height: 40)
+                    .foregroundStyle(.white)
+                
+                Icon.leftChevron.image
+            }
+        })
     }
+    
+    private var closeBtn: some View {
+        Button(action: {
+            viewModel.container.navigationRouter.popToRootView()
+            
+        }, label: {
+            ZStack {
+                
+                Circle()
+                    .frame(width: 40, height: 40)
+                    .foregroundStyle(.white)
+                
+                Icon.close.image
+            }
+            
+        })
+    }
+    
+    private var bucketBtn: some View {
+        Button(action: {
+            viewModel.container.navigationRouter.push(to: .placeBucketView(viewModel: viewModel))
+        }, label: {
+            ZStack {
+                
+                Circle()
+                    .frame(width: 40, height: 40)
+                    .foregroundStyle(.white)
+                
+                Text("\($viewModel.selectedPlaceList.count)")
+                    .font(.Body1_2)
+                    .foregroundStyle(.main)
+                    .padding(.bottom, 24)
+                    .padding(.leading, 24)
+                
+                
+                Icon.bucket.image
+            }
+        })
+    }
+    
 }

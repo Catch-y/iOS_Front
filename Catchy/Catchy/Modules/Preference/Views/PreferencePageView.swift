@@ -88,6 +88,7 @@ struct PreferencePageView: View {
             
         })
         .transition(.move(edge: .leading).combined(with: .opacity))
+        .background(Color.white)
     }
     
     // MARK: - Page 2
@@ -263,6 +264,8 @@ struct PreferencePageView: View {
                             !(viewModel.selectedCompanion.isEmpty || viewModel.selectedWeekDay.isEmpty || viewModel.leftSelectedTime == nil || viewModel.rightSelectedTime == nil)
                         )
                         .padding(.top, viewModel.isExpand.values.contains(true) ? 15 : 98)
+                        .id("Done")
+
                     }
                 })
                 .scrollIndicators(.hidden)
@@ -270,13 +273,14 @@ struct PreferencePageView: View {
                     if !oldValue.values.contains(true) && newValue.values.contains(true) {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                             withAnimation {
-                                proxy.scrollTo("activeTime", anchor: .bottom)
+                                proxy.scrollTo("Done", anchor: .bottom)
                             }
                         }
                     }
                 }
             }
         })
+        .background(Color.white)
         .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
     }
     
@@ -408,7 +412,6 @@ struct PreferencePageView: View {
                     .customDatePickerStyle()
             }
         })
-        .id("activeTime")
     }
     
     // MARK: - Page 4
@@ -502,6 +505,7 @@ struct PreferencePageView: View {
                 }
             }
         })
+        .background(Color.white)
     }
     
     

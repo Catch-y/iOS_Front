@@ -145,6 +145,8 @@ struct CourseReviewView: View {
                     reviewId: review.reviewId,
                     comment: review.comment,
                     images: review.reviewImages,
+                    //TODO: - 신고하기 액션 추가
+                    action: {reviewId in print("\(reviewId)신고하기")},
                     categories: nil,
                     rating: nil,
                     placeOrCourseName: nil,

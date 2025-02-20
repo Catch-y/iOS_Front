@@ -14,6 +14,9 @@ struct PlaceInfoSection: View {
     /// 장소 상세 정보 데이터
     @Binding var place: PlaceDetailResponse
     
+    /// 장소 상세 정보를 위한 컴포넌트인가?
+    let forDetailView: Bool
+    
     /// 좋아요 누를 때 액션
     /// nil인 경우 좋아요 못 누름
     let likeTap: (() -> Void)?
@@ -22,8 +25,9 @@ struct PlaceInfoSection: View {
     let reviewTap: () -> Void
     
     // MARK: - Init
-    init(place: Binding<PlaceDetailResponse>, likeTap: (() -> Void)? = nil, reviewTap: @escaping () -> Void) {
+    init(place: Binding<PlaceDetailResponse>, forDetailView: Bool = false, likeTap: (() -> Void)? = nil, reviewTap: @escaping () -> Void) {
         self._place = place
+        self.forDetailView = forDetailView
         self.likeTap = likeTap
         self.reviewTap = reviewTap
     }
@@ -40,7 +44,7 @@ struct PlaceInfoSection: View {
                     .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 103))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: .infinity, maxHeight: 144)
+                    .frame(maxWidth: .infinity, maxHeight: forDetailView ? 192 : 144)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
             }
             

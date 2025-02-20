@@ -83,6 +83,7 @@ enum Icon: String {
 
     case bookmark = "bookmark"
     case bookMarkTrue = "bookMarkTrue"
+    case emptyVisitCheck = "emptyVisitCheck"
     case visitCheck = "visitCheck"
     case visitStamp = "visitStamp"
     case emptyStamp = "emptyStamp"
@@ -92,6 +93,8 @@ enum Icon: String {
     case trash = "trash"
     
     case addPhoto = "addPhoto"
+    
+    case bucket = "bucket"
     
     //MARK: - Category
     case breaks = "breaks"

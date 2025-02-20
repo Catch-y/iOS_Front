@@ -11,35 +11,51 @@ import SwiftUI
 struct MyReviewsView: View {
     
     @StateObject var viewModel: MyReviewsViewModel
+    @StateObject var courseReviewsViewModel: MyCourseReviewsViewModel
+    @StateObject var placeReviewsViewModel: MyPlaceReviewsViewModel
+    
     @EnvironmentObject var container: DIContainer
     @Namespace private var animationNamespace
     
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: .init(container: container))
+        self._courseReviewsViewModel = StateObject(wrappedValue: .init(container: container))
+        self._placeReviewsViewModel = StateObject(wrappedValue: .init(container: container))
     }
     
     // MARK: - Body
     var body: some View {
-        VStack(alignment: .center, spacing: 22, content: {
-            if !viewModel.isMyReviewsLoading {
-                CustomNavigation(action: {
-                    container.navigationRouter.pop()
-                }, title: "내 리뷰", rightNaviIcon: nil, isShadow: true)
-                segmentSection()
-                    .padding(.bottom, 4)
-                
-                if viewModel.selectedSegment == .course {
-                    MyCourseReviewsView(container: DIContainer())
+        ZStack {
+            VStack(alignment: .center, spacing: 22, content: {
+                if !viewModel.isMyReviewsLoading {
+                    CustomNavigation(action: {
+                        container.navigationRouter.pop()
+                    }, title: "내 리뷰", rightNaviIcon: nil, isShadow: true)
+                    segmentSection()
+                        .padding(.bottom, 4)
+                    
+                    if viewModel.selectedSegment == .course {
+                        MyCourseReviewsView(viewModel: courseReviewsViewModel).environmentObject(viewModel)
+                    } else {
+                        MyPlaceReviewsView(viewModel: placeReviewsViewModel).environmentObject(viewModel)
+                    }
                 } else {
-                    MyPlaceReviewsView(container: DIContainer())
+                    MainProgressComponents()
                 }
-            } else {
-                MainProgressComponents()
+            })
+            .ignoresSafeArea()
+            .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+            .navigationBarBackButtonHidden()
+            
+            
+            if viewModel.showDeletePopup {
+                DeleteReviewPopupView(
+                    viewModel: viewModel,
+                    courseReviewsViewModel: courseReviewsViewModel,
+                    placeReviewsViewModel: placeReviewsViewModel
+                )
             }
-        })
-        .ignoresSafeArea()
-        .safeAreaPadding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
-        .navigationBarBackButtonHidden()
+        }
     }
     
     // MARK: - 세그먼트 UI
@@ -95,6 +111,7 @@ struct MyReviewsView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(["iPhone 16 Pro", "iPhone 11"], id: \.self) { deviceName in
             MyReviewsView(container: DIContainer())
+                .environmentObject(DIContainer())
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
         }

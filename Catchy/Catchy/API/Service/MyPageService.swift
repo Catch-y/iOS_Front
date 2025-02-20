@@ -16,7 +16,7 @@ class MyPageService: MyPageServiceProtocol {
     
     let provider: MoyaProvider<MyPageAPITarget>
     
-    init(provider: MoyaProvider<MyPageAPITarget> = APIManager.shared.testProvider(for: MyPageAPITarget.self)){
+    init(provider: MoyaProvider<MyPageAPITarget> = APIManager.shared.createProvider(for: MyPageAPITarget.self)){
         self.provider = provider
     }
     

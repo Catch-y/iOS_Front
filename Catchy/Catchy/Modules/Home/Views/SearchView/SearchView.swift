@@ -61,6 +61,7 @@ struct SearchView: View {
                 }
             }
         })
+        .background(Color.white)
         .onAppear {
             UIApplication.shared.hideKeyboard()
         }

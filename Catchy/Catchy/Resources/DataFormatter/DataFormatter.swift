@@ -49,6 +49,17 @@ class DataFormatter {
             attributedString[keywordRange].font = .Subtitle2
         }
         
+        if let keywordRange = attributedString.range(of: "리뷰를 등록 중") {
+            attributedString[keywordRange].foregroundColor = Color.main
+            attributedString[keywordRange].font = .Subtitle3_SM
+        }
+        
+        if let keywordRange = attributedString.range(of: "코스를 생성 중") {
+            attributedString[keywordRange].foregroundColor = Color.main
+            attributedString[keywordRange].font = .Subtitle3_SM
+        }
+
+        
         return attributedString
     }
     

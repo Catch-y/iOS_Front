@@ -33,7 +33,7 @@ struct NicknameEditView: View {
                 
                 Divider()
                     .frame(maxWidth: .infinity, maxHeight: 1)
-                    .foregroundStyle(.g2)
+                    .foregroundStyle(Color.g2)
                 
                 nicknameInputSection()
                 
@@ -105,7 +105,7 @@ struct NicknameEditView: View {
                 
                 Divider()
                     .frame(height: 1)
-                    .foregroundStyle(.g4)
+                    .foregroundStyle(Color.g4)
             })
             
             /* 중복확인 버튼 */
@@ -114,7 +114,7 @@ struct NicknameEditView: View {
             }) {
                 Text("중복확인")
                     .font(.caption_SM)
-                    .foregroundColor(.g4)
+                    .foregroundStyle(Color.g4)
                     .padding(.horizontal, 18)
                     .padding(.vertical, 8)
                     .frame(width: 75, height: 28)

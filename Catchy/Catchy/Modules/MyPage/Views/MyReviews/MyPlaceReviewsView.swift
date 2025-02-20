@@ -10,10 +10,11 @@ import SwiftUI
 /// 사용자가 작성한 장소 리뷰 목록을 보여주는 화면
 struct MyPlaceReviewsView: View {
     
-    @StateObject var viewModel: MyPlaceReviewsViewModel
+    @ObservedObject var viewModel: MyPlaceReviewsViewModel
+    @EnvironmentObject var parentViewModel: MyReviewsViewModel
     
-    init(container: DIContainer) {
-        self._viewModel = StateObject(wrappedValue: .init(container: container))
+    init(viewModel: MyPlaceReviewsViewModel) {
+        self.viewModel = viewModel
     }
     
     // MARK: - Body
@@ -75,6 +76,9 @@ struct MyPlaceReviewsView: View {
                         reviewId: review.reviewId,
                         comment: review.comment,
                         images: review.reviewImages,
+                        action: { reviewId in
+                            parentViewModel.openDeletePopup(reviewId: reviewId)
+                        },
                         categories: review.categories,
                         rating: review.rating,
                         placeOrCourseName: review.name,
@@ -82,7 +86,7 @@ struct MyPlaceReviewsView: View {
                         date: review.visitedDate
                     )
                     .padding(.bottom, 40)
-                    .onAppear {
+                    .task {
                         if content.last?.reviewId == review.reviewId {
                             viewModel.getMyPlaceReviews()
                         }
@@ -103,7 +107,7 @@ struct MyPlaceReviewsView: View {
 struct MyPlaceReviewsView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(["iPhone 16 Pro", "iPhone 11"], id: \ .self) { deviceName in
-            MyPlaceReviewsView(container: DIContainer())
+            MyPlaceReviewsView(viewModel: .init(container: DIContainer()))
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
         }

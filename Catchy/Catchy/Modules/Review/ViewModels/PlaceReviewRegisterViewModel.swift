@@ -44,8 +44,8 @@ class PlaceReviewRegisterViewModel: ObservableObject, ImageHandling {
     /// 장소 방문 날짜 로딩 중인가?
     @Published var isDateLoading: Bool = false
     
-    /// 리뷰 등록 완료 되었는가
-    @Published var hasRegister: Bool = false
+//    /// 리뷰 등록 완료 되었는가
+//    @Published var hasRegister: Bool = false
     
     /// 이미지 피커뷰가 나왔는기
     @Published var isImagePickerPresented: Bool = false
@@ -60,7 +60,10 @@ class PlaceReviewRegisterViewModel: ObservableObject, ImageHandling {
     
     /// 현재 선택된 이미지 수
     @Published var selectedImageCount = 0
-        
+    
+    /// 리뷰 등록 중인가?
+    @Published var showLoadingView: Bool = false
+    
     // MARK: - Init
     init(container: DIContainer) {
         self.container = container
@@ -135,6 +138,7 @@ extension PlaceReviewRegisterViewModel {
                 
                 if let response = response.result{
                     self.visitedDateListResponse = response
+                    container.navigationRouter.pop()
                 }
                 
             })
@@ -144,6 +148,8 @@ extension PlaceReviewRegisterViewModel {
     /// 장소 평점/리뷰 달기 API
     /// - Parameter placeId: 리뷰 등록할 장소 ID
     func postPlaceReviewSubmission(placeId: Int){
+        
+        self.showLoadingView = true
         
         let request = PlaceReviewSubmissionRequest(
             rating: rating!,
@@ -168,9 +174,9 @@ extension PlaceReviewRegisterViewModel {
             .sink(receiveCompletion: {
                 [weak self] completion in
                 guard let self = self else { return }
-                    
-                self.hasRegister = true
                 
+                self.container.navigationRouter.pop()
+
                 switch completion {
                 case .finished:
                     print("✅ Post PlaceReviewRegister Server Completed")

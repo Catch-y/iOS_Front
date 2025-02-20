@@ -73,8 +73,7 @@ struct NavigationRoutingView: View {
             
         case .placeReviewView(let placeId):
             PlaceReviewView(container: container, placeId: placeId)
-                .environmentObject(container)
-        
+                .environmentObject(container)        
         case .voteDoneView:
             VoteDoneView()
                 .environmentObject(container)
@@ -89,7 +88,14 @@ struct NavigationRoutingView: View {
         case .qrCodeInviteView:
                    QRCodeInviteView(container: container)
                            .environmentObject(container)
-
+        case .placeDetailView(let viewModel, let placeSearchResponseData):
+            PlaceDetailView(viewModel: viewModel, placeSearchResponseData: placeSearchResponseData)
+            
+        case .placeBucketView(let viewModel):
+            PlaceBucketView(viewModel: viewModel)
+        case .diyMap:
+            DIYMap(contaienr: container)
+                .environmentObject(container)
         }
     }
 }

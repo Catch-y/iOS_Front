@@ -56,6 +56,7 @@ struct HomeView: View {
                 viewModel.getSecondSection()
                 viewModel.getThirdSection()
             }
+            .background(Color.bg4)
     }
     
     @ViewBuilder

@@ -96,7 +96,7 @@ struct MyPageView: View {
             Text(userState.getUserNickname())
                 .font(.title3)
                 .fontWeight(.bold)
-                .foregroundColor(.black)
+                .foregroundStyle(Color.black)
                 .padding(.leading, 9)
             
             Button(action: {
@@ -106,7 +106,7 @@ struct MyPageView: View {
             }) {
                 Text("닉네임 수정")
                     .font(.caption)
-                    .foregroundColor(.g4)
+                    .foregroundStyle(Color.g4)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 16)
                     .frame(width: 84, height: 32)

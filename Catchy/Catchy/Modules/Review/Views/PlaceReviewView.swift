@@ -28,35 +28,28 @@ struct PlaceReviewView: View {
     var body: some View {
         
         VStack(alignment: .center, spacing: 20, content: {
-            if !viewModel.isLoading {
                 CustomNavigation(action: {
                     container.navigationRouter.pop()
-                }, title: "평점, 리뷰 보기", rightNaviIcon: nil, isShadow: true)
-                
-                if let data = viewModel.placeReviewData {
-                    ScrollView(.vertical, content: {
-                        topReviewInfo(data: data)
-                            .padding(.horizontal, 16)
-                        if !data.content.isEmpty {
-                            reviewTableSection(content: data.content)
-                                .padding(.top, 7)
+                }, title: "평점, 리뷰 보기", leftNaviIcon: nil, isShadow: true)
+                if !viewModel.isLoading {
+                    if !viewModel.placeReviewData.isEmpty {
+                        ScrollView(.vertical, content: {
+                            topReviewInfo()
                                 .padding(.horizontal, 16)
-                        } else {
-                            infoView()
-                                .padding(.top, 107)
-                        }
-                    })
-                    
+                            reviewTableSection()
+                                .padding(.horizontal, 16)
+                        })
+                    } else {
+                        infoView()
+                            .padding(.top, 107)
+                    }
                 } else {
                     MainProgressComponents()
                 }
-            } else {
-                MainProgressComponents()
-            }
-        })
+            })
         .ignoresSafeArea(.all)
         .task {
-            viewModel.getPlaceReviewData(placeId: placeId, request: PlaceReviewRequest(pageSize: 10, lastPlaceReviewDate: "12312321", lastPlaceReviewId: 123))
+            viewModel.getPlaceReviewData(placeId: placeId)
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -80,13 +73,13 @@ struct PlaceReviewView: View {
     /// 상단 리뷰 평점 정보
     /// - Parameter data: 리뷰 데이터를 담고 있는 ReviewResponse
     /// - Returns: 리뷰 평점과 총 리뷰 개수를 보여주는 상단 뷰
-    private func topReviewInfo(data: PlaceReviewInfoResponse) -> some View {
+    private func topReviewInfo() -> some View {
         VStack(spacing: 27, content: {
-            reviewTotalCount(totalCount: data.totalCount)
+            reviewTotalCount(totalCount: viewModel.totalCount)
             
             HStack(alignment: .center, content: {
                 
-                reviewTotalStar(totalRating: data.averageRating)
+                reviewTotalStar(totalRating: viewModel.averageRating)
                 
                 Spacer()
                 /* 세로선 */
@@ -96,7 +89,7 @@ struct PlaceReviewView: View {
                 
                 Spacer()
                 
-                reviewGraphSection(reviewCount: data.ratingList, totalPersonCount: data.totalCount)
+                reviewGraphSection(reviewCount: viewModel.ratingList, totalPersonCount: viewModel.totalCount)
                 
             })
             .frame(height: 74)
@@ -178,15 +171,16 @@ struct PlaceReviewView: View {
     /// 하단 리뷰 테이블 섹션
     /// - Parameter content: 리뷰 데이터 배열
     /// - Returns: 리뷰 목록과 구분선을 포함하는 뷰
-    private func reviewTableSection(content: [ReviewContents]) -> some View {
+    private func reviewTableSection() -> some View {
         VStack(alignment: .center, spacing: 8, content: {
-            ForEach(content, id: \.reviewId) { review in
+            ForEach(viewModel.placeReviewData, id: \.id) { review in
                 ReviewCard(
                     cardType: .ratingReview,
                     reviewType: .place,
                     reviewId: review.reviewId,
                     comment: review.comment,
                     images: review.reviewImages,
+                    action: {reviewId in print("\(reviewId) 신고하기")},
                     categories: nil,
                     rating: review.rating,
                     placeOrCourseName: nil,
@@ -194,7 +188,12 @@ struct PlaceReviewView: View {
                     date: review.visitedDate
                     )
                 .padding(.vertical, 26)
-                if review.reviewId != content.last?.reviewId {
+                .task {
+                    if viewModel.placeReviewData.last?.reviewId == review.reviewId {
+                        viewModel.getPlaceReviewData(placeId: placeId)
+                    }
+                }
+                if review.reviewId != viewModel.placeReviewData.last?.reviewId {
                     Divider()
                         .background(Color.g3)
                 }

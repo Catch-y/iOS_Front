@@ -13,18 +13,25 @@ struct PlaceSearchView: View {
     @EnvironmentObject var container: DIContainer
 
     // MARK: - 뷰 모델
-    @StateObject var viewModel: DIYCourseViewModel
+    @ObservedObject var viewModel: DIYCourseViewModel
         
     // MARK: - Init
-    init(container: DIContainer) {
-        self._viewModel = StateObject(wrappedValue: .init(container: container))
+    init(viewModel: DIYCourseViewModel) {
+        self.viewModel = viewModel
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: 15) {
+            
+            Capsule()
+                .fill(Color.g3)
+                .frame(width: 60, height: 5)
+                .padding(.top, 20)
+            
             if !viewModel.isPlaceListLoading {
-                    
+                
                 if !viewModel.placeList.isEmpty {
+                    
                     scrollView
                 } else {
                     infoView
@@ -34,9 +41,17 @@ struct PlaceSearchView: View {
             }
                 
         }
+        .clipShape(.rect(topLeadingRadius: 20, topTrailingRadius: 20))
         .task {
             viewModel.getPlaceListByRegion()
         }
+        .navigationBarBackButtonHidden(true)
+        .frame(height: 522)
+        .background {
+            UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20)
+                .fill(Color.white)
+        }
+        .ignoresSafeArea(.all)
     }
             
     
@@ -52,10 +67,11 @@ struct PlaceSearchView: View {
                 ForEach(Array(viewModel.placeList.enumerated()), id: \.element.id) { (index, place) in
                     VStack(spacing: 0) {
                         PlaceCard(place: place, reviewTap: {
+                            viewModel.onAppearByPop = true
                             container.navigationRouter.push(to: .placeReviewView(placeId: place.placeId))
                         })
                             .onTapGesture {
-                                // TODO: - 장소 상세 화면으로 이동
+                                container.navigationRouter.push(to: .placeDetailView(viewModel: viewModel, placeSearchResponseData: place))
                             }
                             .task {
                                 if let lastPlaceId = viewModel.placeList.last?.placeId {
@@ -73,8 +89,7 @@ struct PlaceSearchView: View {
                 }
             }
             .padding(.horizontal, 16)
-            .padding(.top, 43)
-            .padding(.bottom, 17)
+            .padding(.top, 10)
             
         }
         .refreshable {
@@ -105,18 +120,7 @@ struct PlaceSearchView: View {
     
 }
 
-struct PlaceView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(
-            ["iPhone 16 Pro Max", "iPhone 11"],
-            id: \.self
-        ) { deviceName in
-            PlaceSearchView(container: DIContainer())
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-                .environmentObject(DIContainer())
-        }
-    }
+#Preview {
+    PlaceSearchView(viewModel: DIYCourseViewModel(container: DIContainer()))
+        .environmentObject(DIContainer())
 }
-
-
