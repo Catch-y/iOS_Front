@@ -53,8 +53,8 @@ struct CreateGroupView: View {
             .padding(.horizontal, 16)
             .disabled(viewModel.isLoading)
         }
-        .navigationBarHidden(true)
-        .padding(.bottom, 110)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $viewModel.isImagePickerPresented) {
             ImagePicker(imageHandler: viewModel, selectedLimit: 1 - viewModel.selectedImageCount)
         }

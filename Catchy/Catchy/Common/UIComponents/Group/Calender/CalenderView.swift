@@ -40,7 +40,7 @@ struct CalenderView: View {
                 .padding(.top, 29)
         }
         .task {
-            viewModel.fetchGroupSchedules()
+            viewModel.loadLocalSchedules()
         }
         .background(Color.bg1)
     }
