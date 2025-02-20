@@ -49,8 +49,9 @@ class DIYCourseCreateViewModel: ObservableObject, ImageHandling {
     /// 업로드한 이미지 개수
     @Published var selectedImageCount: Int = 0
     
-    /// 코스 생성 완료?
-    @Published var isCreated: Bool = false
+    /// 코스 생성 중인가?
+    @Published var showLoadingView: Bool = false
+
     
     
 }
@@ -88,6 +89,8 @@ extension DIYCourseCreateViewModel {
         guard leftSelectedTime != nil else { return }
         guard rightSelectedTime != nil else { return }
         
+        self.showLoadingView = true
+        
         let startTime = DataFormatter.shared.timeString(from: leftSelectedTime!)
         
         let rightTime = DataFormatter.shared.timeString(from: rightSelectedTime!)
@@ -109,9 +112,9 @@ extension DIYCourseCreateViewModel {
             .sink(receiveCompletion: {
                 [weak self] completion in
                 guard let self = self else { return }
-
-                self.isCreated = true
                 
+                container.navigationRouter.popToRootView()
+
                 switch completion {
                 case .finished:
                     print("✅ Post CourseCreate Server Completed")
@@ -119,7 +122,7 @@ extension DIYCourseCreateViewModel {
                     print("❌ Post CourseCreate Failed: \(failure)")
                 }
             },receiveValue: { response in
-                                    
+                
             }
             ).store(in: &cancellables)
         
