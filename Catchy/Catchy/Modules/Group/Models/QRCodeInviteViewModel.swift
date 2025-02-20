@@ -10,74 +10,76 @@ import CoreImage.CIFilterBuiltins
 import Moya
 
 class QRCodeInviteViewModel: ObservableObject {
-    @Published var inviteCode: String = ""
+    @Published var inviteCode: String?
     @Published var userNickname: String = "초대 보내는 사람 닉네임"
     @Published var isLoading: Bool = true
     @Published var qrCodeImage: UIImage?
 
     let container: DIContainer
     private let filter = CIFilter.qrCodeGenerator()
+    private let provider: MoyaProvider<GroupAPITarget>
     
-    // Moya provider – stubClosure를 이용해 sampleData를 즉시 반환하도록 설정
-    private let provider = MoyaProvider<GroupAPITarget>(stubClosure: MoyaProvider.immediatelyStub)
-
     // MARK: - 초기화
-    init(container: DIContainer) {
-        self.container = container
-    }
-    
+       init(container: DIContainer, provider: MoyaProvider<GroupAPITarget> = MoyaProvider<GroupAPITarget>()) {
+           self.container = container
+           self.provider = provider
+       }
     // MARK: - 서버 연동: 그룹 생성 및 초대 URL, 그룹 정보 받아오기
     func setupInviteCode() {
-       
-        // 그룹 생성 시 필요한 정보 (필요에 따라 값을 동적으로 변경)
         let group = GroupInfo(
             groupName: "Study Group",
             groupLocation: "Seoul",
             promiseTime: "2025-02-20T05:08:03.006Z",
             groupImage: "https://i.pinimg.com/474x/1a/e2/8f/1ae28fe7bd5e3211be36f7a48b976226.jpg"
         )
-      
-        
+
+        // ✅ AccessToken 확인 (로그 추가)
+        let accessToken = UserDefaults.standard.string(forKey: "accessToken") ?? "없음"
+        print("📌 현재 AccessToken: \(accessToken)")
+
+        let headers: [String: String] = [
+            "Authorization": "Bearer \(accessToken)"
+        ]
+        print("📌 API 요청 헤더: \(headers)")
+
         provider.request(.postCreateGroup(group: group)) { result in
             switch result {
             case .success(let response):
-                print("서버 응답 수신됨: \(response.statusCode)")
+                print("✅ 서버 응답 수신됨: \(response.statusCode)")
                 do {
                     let decoder = JSONDecoder()
                     let createGroupResponse = try decoder.decode(CreateGroupResponse.self, from: response.data)
-                    print("디코딩 성공: \(createGroupResponse)")
-                    
-                    // 응답의 result가 존재하면 데이터를 업데이트
+                    print("✅ 디코딩 성공: \(createGroupResponse)")
+
                     if let groupResult = createGroupResponse.result {
                         DispatchQueue.main.async {
                             self.inviteCode = groupResult.inviteCode
                             self.userNickname = groupResult.creatorNickname
-                            // QR 코드 생성 (대표 이미지 삽입 함수 호출)
-                            self.qrCodeImage = self.generateQRCodeWithRepresentImage(from: self.inviteCode)
+                            self.qrCodeImage = self.generateQRCodeWithRepresentImage(from: self.inviteCode ?? "DEFAULT")
                             self.isLoading = false
-                            print("초대 코드: \(self.inviteCode), 생성자 닉네임: \(self.userNickname)")
-                            print("QR 코드 이미지 생성 완료")
+                            print("✅ 그룹이 성공적으로 생성되었습니다. 초대 코드: \(groupResult.inviteCode)")
                         }
                     } else {
                         DispatchQueue.main.async {
                             self.isLoading = false
-                            print("서버 응답에 result 값이 없습니다.")
+                            print("⚠️ 서버 응답에 result 값이 없습니다.")
                         }
                     }
                 } catch {
                     DispatchQueue.main.async {
                         self.isLoading = false
-                        print("디코딩 에러: \(error)")
+                        print("❌ 디코딩 에러: \(error)")
                     }
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
                     self.isLoading = false
-                    print("네트워크 에러: \(error)")
+                    print("❌ 네트워크 에러: \(error)")
                 }
             }
         }
     }
+
     
     // MARK: - QR 코드 생성 함수
     private func generateQRCode(from string: String) -> UIImage? {
@@ -137,27 +139,17 @@ class QRCodeInviteViewModel: ObservableObject {
         return combinedImage
     }
     
-    // MARK: - QR 코드 공유
-    func shareQRCode() {
-        guard let qrImage = qrCodeImage else { return }
-        let activityItems: [Any] = [qrImage]
-        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-        
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let rootViewController = windowScene.windows.first?.rootViewController {
-            rootViewController.present(activityViewController, animated: true)
-        }
-    }
     
     // MARK: - QR 코드 저장
     func saveQRCode() {
         guard let qrImage = qrCodeImage else { return }
-        UIImageWriteToSavedPhotosAlbum(qrImage, nil, nil, nil)
+        UIImageWriteToSavedPhotosAlbum(qrImage, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
     }
-    
-    // MARK: - 페이지 닫기
-    func closePage() {
-        // TODO: - 페이지 닫기 동작 구현
-       
+
+    // 저장 완료 여부 확인
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        if error == nil {
+            print("이미지 저장 성공!")
+        }
     }
 }

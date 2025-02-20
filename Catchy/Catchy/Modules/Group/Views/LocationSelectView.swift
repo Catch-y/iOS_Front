@@ -98,14 +98,17 @@ struct LocationSelectView: View {
                 }
             }
         } else {
-           
             if let selectedSubLocation = viewModel.selectedSubLocation, !selectedSubLocation.isEmpty {
-                   print("선택된 하위 지역: \(String(describing: viewModel.selectedSubLocation))")
-                   
-                   container.navigationRouter.push(to: .qrCodeInviteView)
+                print("✅ 선택된 하위 지역: \(selectedSubLocation)")
+                print("📌 그룹 생성 API 요청을 시작합니다.")
+
+                container.navigationRouter.push(to: .qrCodeInviteView)
+            } else {
+                print("⚠️ 하위 지역이 선택되지 않음.")
             }
         }
     }
+
 
 
     // MARK: - 지역 선택 그리드
