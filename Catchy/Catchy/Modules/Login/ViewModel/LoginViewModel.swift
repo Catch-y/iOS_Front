@@ -79,7 +79,7 @@ extension LoginViewModel {
         isLoading = true
         container.useCaseProvider.authUseCase.executeSocialLogin(socialLoginType: .kakao, socialToken: kakaoUserInfo.accessToken)
             .tryMap { responseData -> ResponseData<SocialLoginResponse> in
-                if responseData.code == "SOCIAL404" {
+                if responseData.code == "MEMBER404" {
                     self.handleSignUpFlow(signUpNaviData: .init(accessToken: kakaoUserInfo.accessToken, authorizationCode: nil, email: kakaoUserInfo.email, loginType: .kakao))
                     throw APIError.serverError(message: responseData.message, code: responseData.code)
                 }

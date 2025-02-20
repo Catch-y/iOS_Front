@@ -44,6 +44,7 @@ struct SignUpView: View {
             MainBtn(text: "확인", action: {
                 viewModel.signupAction(signUpNaviData: signUpNaviData)
             }, width: UIScreen.screenWidth - 32, height: 60, onoff: viewModel.checkMainBtn() ? .on : .off)
+            .disabled(!viewModel.checkMainBtn())
             
         })
         .navigationBarBackButtonHidden(true)

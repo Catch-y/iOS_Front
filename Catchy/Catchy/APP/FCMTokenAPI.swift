@@ -19,6 +19,7 @@ class FCMTokenAPI {
             .tryMap { respopnseData -> ResponseData<EmptyResult> in
                 
                 if !respopnseData.isSuccess {
+                    print(respopnseData)
                     throw APIError.serverError(message: respopnseData.message, code: respopnseData.code)
                 }
                 
