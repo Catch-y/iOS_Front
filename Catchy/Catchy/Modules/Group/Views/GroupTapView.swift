@@ -27,9 +27,6 @@ struct GroupTabView: View {
                             isBottomSheetPresented.toggle() // 버튼 클릭 시 바텀시트 표시
                         }
                     )
-                    .padding(.top, safeAreaInsets.top)
-            
-
 
             ScrollView {
                 VStack {
