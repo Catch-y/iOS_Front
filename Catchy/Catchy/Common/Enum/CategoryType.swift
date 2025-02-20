@@ -19,25 +19,33 @@ enum CategoryType: String, Codable, CaseIterable {
     case SPORT = "스포츠"
     case REST = "휴식"
     
+    // ✅ 영어 & 한글 모두 매핑
     private static let mapping: [String: CategoryType] = [
-        "CAFE": .CAFE,
-        "BAR": .BAR,
-        "RESTAURANT": .RESTAURANT,
-        "EXPERIENCE": .EXPERIENCE,
-        "CULTURELIFE": .CULTURELIFE,
-        "SPORT": .SPORT,
-        "REST": .REST
+        "CAFE": .CAFE, "카페": .CAFE,
+        "BAR": .BAR, "주류": .BAR,
+        "RESTAURANT": .RESTAURANT, "음식점": .RESTAURANT,
+        "EXPERIENCE": .EXPERIENCE, "체험": .EXPERIENCE,
+        "CULTURELIFE": .CULTURELIFE, "문화생활": .CULTURELIFE,
+        "SPORT": .SPORT, "스포츠": .SPORT,
+        "REST": .REST, "휴식": .REST
     ]
     
+    // ✅ JSON 디코딩 시 한글/영어 모두 지원
     init(from decoder: any Decoder) throws {
         let container = try decoder.singleValueContainer()
         let rawValue = try container.decode(String.self)
-        
+
         if let category = CategoryType.mapping[rawValue] {
             self = category
         } else {
-            throw DecodingError.dataCorruptedError(in: container, debugDescription: "영어 -> 한글 전환 불가 : \(rawValue)")
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "지원되지 않는 카테고리 값: \(rawValue)")
         }
+    }
+
+    // ✅ JSON 인코딩 시 영어로 변환 (기본값)
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(self.rawValue)
     }
     
     /// 소 카테고리 작성

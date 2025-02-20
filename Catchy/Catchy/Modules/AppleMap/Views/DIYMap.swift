@@ -88,7 +88,8 @@ struct DIYMap: View {
                     container.navigationRouter.pop()
                 }, label: {
                     Icon.leftChevron.image
-                        .fixedSize()
+                        .resizable()
+                        .frame(width: 13, height: 23)
                 })
                 
                 CustomTextField(text: $viewModel.searchText, searchTextField: .mapView)
