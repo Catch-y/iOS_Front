@@ -17,7 +17,7 @@ struct SearchPlaceData: Codable, Identifiable, Hashable, Likeable {
     var placeId: Int
     var placeName: String
     var placeImage: String
-    var category: CategoryType
+    var categoryName: CategoryType?
     var roadAddress: String
     var activeTime: String?
     var rating: Double
@@ -28,7 +28,7 @@ struct SearchPlaceData: Codable, Identifiable, Hashable, Likeable {
         case placeId
         case placeName
         case placeImage
-        case category
+        case categoryName
         case roadAddress
         case activeTime
         case rating

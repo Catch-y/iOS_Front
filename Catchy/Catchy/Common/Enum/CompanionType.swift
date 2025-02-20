@@ -10,7 +10,7 @@ import SwiftUI
 /// 같이 활동하는 유형
 enum CompanionType: String, CaseIterable, Codable {
     case alone = "ALONE"
-    case friends = "FFRIENDS"
+    case friends = "FRIENDS"
     case couple = "COUPLE"
     case family = "FAMILY"
     

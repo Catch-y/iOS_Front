@@ -19,7 +19,7 @@ extension HomeAPITarget: APITargetType {
     var path: String {
         switch self {
         case .getSearch:
-            return "/course/place/region"
+            return "/place/home/search"
         case .getHomePersonalCourses:
             return "/course/home/personal-courses"
         case .getHomeCourseTopTen:

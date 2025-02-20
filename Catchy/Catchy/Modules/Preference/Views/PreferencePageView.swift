@@ -340,6 +340,8 @@ struct PreferencePageView: View {
                     viewModel.selectedWeekDay = ActiveDate.allCases
                 }
             }
+            
+            print(viewModel.selectedWeekDay)
         }, label: {
             HStack(spacing: 5, content: {
                 if viewModel.selectedWeekDay.count == ActiveDate.allCases.count {
@@ -387,11 +389,13 @@ struct PreferencePageView: View {
                                     get: { viewModel.isExpand[0] ?? false },
                                     set: { newValue in
                                         togglePicker(index: 0, newValue: newValue)
+                                        print(newValue)
                                     }
                                  )
                 )
                 
                 Text("~")
+                
                     .font(.title2)
                     .foregroundStyle(.g3)
                 
@@ -400,6 +404,7 @@ struct PreferencePageView: View {
                                     get: { viewModel.isExpand[1] ?? false },
                                     set: { newValue in
                                         togglePicker(index: 1, newValue: newValue)
+                                        print(newValue)
                                     }
                                  )
                 )
