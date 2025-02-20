@@ -56,6 +56,7 @@ struct CourseView: View {
                     
                 } else {
                     MainProgressComponents()
+                        .padding(.bottom, 50)
                 }
                 
             }

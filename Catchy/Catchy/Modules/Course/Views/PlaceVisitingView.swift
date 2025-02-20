@@ -64,6 +64,7 @@ struct PlaceVisitingView: View {
             }
              else {
                  MainProgressComponents()
+                     .frame(maxWidth: .infinity)
             }
 
         }
