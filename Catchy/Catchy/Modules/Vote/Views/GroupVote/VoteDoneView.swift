@@ -9,13 +9,16 @@ import SwiftUI
 
 
 struct VoteDoneView: View {
+    @EnvironmentObject var container: DIContainer
+
+   
     
     // MARK: - Body
     var body: some View {
         VStack {
             // MARK: - 네비게이션 바
             GroupNavigation(title: "투표하기", onBackButtonTap: {
-                print("뒤로가기 버튼 클릭") // 뒤로가기 동작
+                container.navigationRouter.pop() //  이전 화면으로 이동
             })
             
             Spacer()
@@ -28,6 +31,8 @@ struct VoteDoneView: View {
             confirmButton
         }
         .background(mainBackground) // 전체 배경
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
     }
     
     // MARK: - 투표 완료 내용
@@ -50,7 +55,7 @@ struct VoteDoneView: View {
     // MARK: - 투표 결과 확인 버튼
     private var confirmButton: some View {
         Button(action: {
-            print("투표 결과 확인하기 버튼 클릭")
+            container.navigationRouter.push(to: .voteDoneCategoryView(groupId: 1, voteId: 123))
         }) {
             Text("투표 결과 확인하기")
                 .font(.Subtitle3)
@@ -95,5 +100,6 @@ private var mainBackground: some View {
 struct VoteDoneView_Previews: PreviewProvider {
     static var previews: some View {
         VoteDoneView()
+            .environmentObject(DIContainer())
     }
 }

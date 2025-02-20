@@ -11,6 +11,9 @@
 import SwiftUI
 
 struct QRCodeInviteView: View {
+    
+    @EnvironmentObject var container: DIContainer
+    
     @StateObject private var viewModel: QRCodeInviteViewModel
 
     // MARK: - 초기화
@@ -40,6 +43,8 @@ struct QRCodeInviteView: View {
 
             Spacer()
         }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
         .task {
             viewModel.setupInviteCode()
         }
@@ -52,7 +57,8 @@ struct QRCodeInviteView: View {
         HStack {
             Spacer()
             Button(action: {
-                viewModel.closePage()
+                    container.navigationRouter.popToRootView() //  네비게이션 스택 비우기
+
             }) {
                 Icon.close.image
                     .resizable()
@@ -85,7 +91,7 @@ struct QRCodeInviteView: View {
     private func bottomButtons() -> some View {
         HStack(spacing: 15) {
             Button(action: {
-                viewModel.shareQRCode()
+                viewModel.shareQRCode() //쉐어링크 수정
             }) {
                 VStack {
                     Icon.shareButton.image

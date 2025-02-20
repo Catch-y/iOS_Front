@@ -56,12 +56,12 @@ final class CalenderViewModel: ObservableObject {
         let isServerDown = true  // 서버가 닫혀 있음을 표시
 
         if isServerDown {
-            print("⚠️ 서버가 닫혀 있으므로 샘플 데이터를 사용합니다.")
+            print("⚠️  샘플 데이터를 사용합니다.")
             loadSampleSchedulesFromAPI() // 🔥 API Target 샘플 데이터 사용
             return
         }
 
-        // 🔽 서버가 열려 있을 때만 실행되는 코드
+        //  서버가 열려 있을 때만 실행되는 코드
         isLoading = true
         let calendar = Calendar.current
         let year = calendar.component(.year, from: currentMonth)
@@ -101,6 +101,26 @@ final class CalenderViewModel: ObservableObject {
             })
             .store(in: &cancellables)
     }
+    // MARK: - UserDefaults에서 일정 불러오기
+        private func loadLocalSchedules() {
+            if let savedData = UserDefaults.standard.data(forKey: "createdGroupInfo"),
+               let savedGroup = try? JSONDecoder().decode(GroupInfo.self, from: savedData) {
+                
+                let dateFormatter = ISO8601DateFormatter()
+                dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+                
+                if let date = dateFormatter.date(from: savedGroup.promiseTime) {
+                    let normalizedDate = Calendar.current.startOfDay(for: date)
+                    schedules[normalizedDate, default: []].append(savedGroup.groupName)
+                    print("✅ 로컬에서 일정 로드됨: \(savedGroup.groupName) on \(normalizedDate)")
+                } else {
+                    print("❌ 날짜 변환 실패: \(savedGroup.promiseTime)")
+                }
+            } else {
+                print("⚠️ 저장된 그룹 정보 없음")
+            }
+        }
+
 
     // MARK: -  API Target의 샘플 데이터에서 일정 로드
     /// API Target의 샘플 데이터에서 일정 로드
@@ -219,9 +239,10 @@ final class CalenderViewModel: ObservableObject {
 extension Calendar {
     var koreanHolidays: [String] {
         return [
-            "2025-01-01", "2025-02-10", "2025-02-11", "2025-03-01",
-            "2025-05-05", "2025-06-06", "2025-08-15", "2025-09-07",
-            "2025-09-08", "2025-09-09", "2025-10-03", "2025-10-09",
+            "2025-01-01", "2025-01-28", "2025-01-29", "2025-1-30",
+            "2025-03-01", "2025-03-03", "2025-05-05", "2025-05-06",
+            "2025-06-06", "2025-08-15", "2025-10-03", "2025-10-05",
+            "2025-10-06", "2025-10-07", "2025-10-08", "2025-10-09",
             "2025-12-25"
         ]
     }

@@ -67,6 +67,8 @@ struct LocationSelectView: View {
             )
             .padding(.bottom, 33)
         }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
         .task {
             if viewModel.locations.isEmpty {
                 viewModel.fetchLocations()
@@ -78,9 +80,9 @@ struct LocationSelectView: View {
     private func handleNextStep() {
         if step == 0 {
             if let selectedLocation = viewModel.selectedLocation, !selectedLocation.isEmpty {
-                        viewModel.fetchSubLocations()
-                        step = 1
-                    }
+                viewModel.fetchSubLocations()
+                step = 1
+            }
             activeDot = 0
             Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
                 if activeDot < 3 {
@@ -96,9 +98,15 @@ struct LocationSelectView: View {
                 }
             }
         } else {
-            print("하위 지역 선택 완료")
+           
+            if let selectedSubLocation = viewModel.selectedSubLocation, !selectedSubLocation.isEmpty {
+                   print("선택된 하위 지역: \(String(describing: viewModel.selectedSubLocation))")
+                   
+                   container.navigationRouter.push(to: .qrCodeInviteView)
+            }
         }
     }
+
 
     // MARK: - 지역 선택 그리드
     private func locationGridView() -> some View {

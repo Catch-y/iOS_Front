@@ -203,7 +203,7 @@ extension VoteAPITarget: APITargetType {
                             "votedMembers": [
                                 { "memberId": 2,
                                     "nickname": "사용자2",
-                                    "profileImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzcuyqyeHVLRqBSbkeun30Louq9iSNuV4UTQ&s"
+                                    "profileImage": "https://i.pinimg.com/474x/c9/f4/63/c9f463542bbd33f0aa675fb3e203c503.jpg"
                                 }
             
             
@@ -267,7 +267,7 @@ extension VoteAPITarget: APITargetType {
                   "memberId": 2,
                   "nickname": "Jane Smith",
                   "profileImage": "https://i.pinimg.com/474x/f2/8a/3b/f28a3b2afe1c6162b18ee08af55377e4.jpg",
-                  "hasVoted": false
+                  "hasVoted": true
                 }
               ]
             }

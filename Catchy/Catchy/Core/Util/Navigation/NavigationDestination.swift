@@ -23,6 +23,10 @@ enum NavigationDestination: Equatable, Hashable {
     case myReviewsView
     case diyCourseCreateView(placeIds: [Int])
     case placeReviewView(placeId: Int)
+    case voteDoneView
+    case voteDoneCategoryView(groupId : Int , voteId : Int)
+    case voteResultPlaceView(groupId : Int , category : String)
+    case qrCodeInviteView
     case placeDetailView(viewModel: DIYCourseViewModel, placeSearchResponseData: PlaceSearchResponseData)
     case placeBucketView(viewModel: DIYCourseViewModel)
     case diyMap
@@ -39,7 +43,11 @@ enum NavigationDestination: Equatable, Hashable {
              (.myReviewsView, .myReviewsView),
              (.groupVoteStartView, .groupVoteStartView),
              (.locationSelectView, .locationSelectView),
-             (.createGroupView, .createGroupView):
+             (.createGroupView, .createGroupView),
+            (.voteDoneView, .voteDoneView),
+            (.voteDoneCategoryView , voteDoneCategoryView),
+            (.qrCodeInviteView , qrCodeInviteView) :
+            
             return true
         case (.courseDetailView(let lId), .courseDetailView(let rId)):
             return lId == rId
@@ -97,6 +105,14 @@ enum NavigationDestination: Equatable, Hashable {
         case .placeReviewView(let placeId):
             hasher.combine("placeReviewView")
             hasher.combine(placeId)
+        case .voteDoneView:
+            hasher.combine("voteDoneView")
+        case .voteDoneCategoryView:
+            hasher.combine("voteDoneCategoryView")
+        case .voteResultPlaceView(_, _) :
+            hasher.combine("voteResultPlaceView")
+        case .qrCodeInviteView:
+            hasher.combine("qrCodeInviteView")
         case .placeDetailView(_, let placeSearchResponseData):
             hasher.combine("placeDetailView")
             hasher.combine(placeSearchResponseData.placeId)

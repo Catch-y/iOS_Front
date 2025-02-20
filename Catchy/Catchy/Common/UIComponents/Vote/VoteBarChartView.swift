@@ -62,7 +62,7 @@ struct VoteBarChartView: View {
                 .padding(.top, 33)
             }
             .frame(height: 333) //  흰색 배경 높이 고정
-            .padding(.horizontal, 20)
+            
             .background(
                 Color.white
                     .clipShape(RoundedRectangle(cornerRadius: 20))
@@ -70,7 +70,6 @@ struct VoteBarChartView: View {
             
             )
             
-            .frame(width: geometry.size.width) //  전체 배경이 좌우 16 여백을 제외하고 가득 차도록 설정
            
         }
         .frame(height: 333) //  전체 뷰의 높이 고정

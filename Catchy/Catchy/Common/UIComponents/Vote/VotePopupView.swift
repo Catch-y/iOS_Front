@@ -12,19 +12,24 @@ struct VotePopupView: View {
     var onComplete: ([String]) -> Void // 선택된 값 전달
 
     @State private var selectedCategories: [String] = [] // 선택된 카테고리 관리
+    
+    @EnvironmentObject var container: DIContainer
 
     var body: some View {
-        popupBackground {
-            VStack(spacing: 8) {
-                headerView
-                    .padding(.top , 30)
-                titleView
-                categoryListView
-                    .padding()
-                completeButton
+        ScrollView {
+            popupBackground {
+                VStack(spacing: 8) {
+                    headerView
+                        .padding(.top , 30)
+                    titleView
+                    categoryListView
+                        .padding()
+                   
+                }
             }
-            .padding()
+            completeButton
         }
+        .padding(.horizontal ,16)
     }
 }
 
@@ -36,7 +41,7 @@ extension VotePopupView {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.white)
-                .frame(width: .infinity, height: 783) // 팝업 크기
+                .frame(maxWidth: .infinity, maxHeight: 783)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
             content()
         }
@@ -95,6 +100,7 @@ extension VotePopupView {
         Button(action: {
             onComplete(selectedCategories)
             dismissAction()
+            container.navigationRouter.push(to: .groupVoteStartView)
         }) {
             Text("투표 완료")
                 .font(.Subtitle3)
@@ -108,6 +114,7 @@ extension VotePopupView {
         }
         .padding(.horizontal, 16)
         .disabled(selectedCategories.isEmpty)
+        .toolbar(.hidden, for: .navigationBar)
     }
 
     // MARK: - 카테고리 행

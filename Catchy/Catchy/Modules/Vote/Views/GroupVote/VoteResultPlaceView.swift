@@ -24,6 +24,8 @@ struct VoteResultPlaceView: View {
         }
         .background(Color(.white))
         .padding(.bottom , 110)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     // MARK: - 네비게이션 바

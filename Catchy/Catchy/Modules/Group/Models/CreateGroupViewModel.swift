@@ -13,6 +13,8 @@ import PhotosUI
 /// 그룹 생성 뷰 모델
 final class CreateGroupViewModel: ObservableObject, ImageHandling {
     
+    let calendarViewModel: CalenderViewModel
+    
     // MARK: - Published Properties
     @Published var isImagePickerPresented: Bool = false
     @Published public var selectedImageCount: Int = 0
@@ -34,15 +36,16 @@ final class CreateGroupViewModel: ObservableObject, ImageHandling {
     
     @Published var errorMessage: String = ""
     @Published var isLoading: Bool = false
-    @Published var createdGroup: GroupResult? // ✅ GroupResult로 변경
+    @Published var createdGroup: GroupResult? //  GroupResult로 변경
 
     let container: DIContainer
     private let groupRepository: GroupRepositoryProtocol
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Initializer
-    init(container: DIContainer, groupRepository: GroupRepositoryProtocol = GroupRepository()) {
+    init(container: DIContainer, calendarViewModel: CalenderViewModel, groupRepository: GroupRepositoryProtocol = GroupRepository()) {
         self.container = container
+        self.calendarViewModel = calendarViewModel
         self.groupRepository = groupRepository
     }
 
@@ -80,6 +83,7 @@ final class CreateGroupViewModel: ObservableObject, ImageHandling {
                     self.createdGroup = groupResult // GroupResult로 저장
                     UserDefaults.standard.set(try? JSONEncoder().encode(groupResult), forKey: "createdGroupInfo")
                     print("✅ 그룹 생성 성공: \(groupResult)")
+                    self.addGroupToCalendar(groupResult) // ✅ 캘린더에 추가
                 } else {
                     self.errorMessage = responseData.message
                     print("⚠️ API 응답 오류")
@@ -87,6 +91,20 @@ final class CreateGroupViewModel: ObservableObject, ImageHandling {
 
             }
             .store(in: &cancellables)
+    }
+
+    // MARK: - 캘린더에 그룹 추가
+    private func addGroupToCalendar(_ group: GroupResult) {
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        
+        if let date = dateFormatter.date(from: group.promiseTime) {
+            let normalizedDate = Calendar.current.startOfDay(for: date)
+            DispatchQueue.main.async {
+                self.calendarViewModel.schedules[normalizedDate, default: []].append(group.groupName)
+                print("📅 캘린더에 추가된 그룹: \(group.groupName) on \(normalizedDate)")
+            }
+        }
     }
 
     // MARK: - 날짜 포맷 변환

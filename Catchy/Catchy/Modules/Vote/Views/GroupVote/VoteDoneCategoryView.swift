@@ -9,11 +9,13 @@ import SwiftUI
 
 struct VoteDoneCategoryView: View {
     // MARK: - 속성
+    @EnvironmentObject var container : DIContainer
+    @StateObject private var viewModel: VoteDoneCategoryViewModel
+    
     let groupId: Int
     let voteId: Int
     let onBackButtonTap: () -> Void
-    @StateObject private var viewModel: VoteDoneCategoryViewModel
-
+    
     // MARK: - 초기화
     init(container: DIContainer, groupId: Int, voteId: Int, onBackButtonTap: @escaping () -> Void = {}) {
         self.groupId = groupId
@@ -64,6 +66,8 @@ extension VoteDoneCategoryView {
         }
         .padding(.horizontal, 16)
         .background(Color.white)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     private var headerText: some View {
@@ -126,7 +130,7 @@ extension VoteDoneCategoryView {
                 Spacer()
 
                 Button(action: {
-                  //TODO: - 해당 카테고리 장소리스트로 이동
+                    container.navigationRouter.push(to: .voteResultPlaceView(groupId: groupId, category: name))
                 }) {
                     Icon.rightChevron.image
                         .resizable()

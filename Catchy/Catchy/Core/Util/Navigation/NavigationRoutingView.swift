@@ -40,8 +40,10 @@ struct NavigationRoutingView: View {
                        .environmentObject(container)
             
         case .createGroupView:
-                    CreateGroupView(container: container)
-                        .environmentObject(container)
+            let calendarViewModel = CalenderViewModel(container: container)
+            CreateGroupView(container: container, calendarViewModel: calendarViewModel) 
+                .environmentObject(container)
+
           
         case .groupVoteView(let groupId):
             GroupVoteView(container: container, groupId: groupId)
@@ -71,8 +73,21 @@ struct NavigationRoutingView: View {
             
         case .placeReviewView(let placeId):
             PlaceReviewView(container: container, placeId: placeId)
+                .environmentObject(container)        
+        case .voteDoneView:
+            VoteDoneView()
                 .environmentObject(container)
+        
+        case .voteDoneCategoryView(let groupId, let voteId): 
+            VoteDoneCategoryView(container: container, groupId: groupId, voteId: voteId)
+                    .environmentObject(container)
             
+        case .voteResultPlaceView(let groupId, let category): 
+            VoteResultPlaceView(viewModel: VoteResultCategoryCardViewModel(groupId: groupId, category: category))
+                    .environmentObject(container)
+        case .qrCodeInviteView:
+                   QRCodeInviteView(container: container)
+                           .environmentObject(container)
         case .placeDetailView(let viewModel, let placeSearchResponseData):
             PlaceDetailView(viewModel: viewModel, placeSearchResponseData: placeSearchResponseData)
             

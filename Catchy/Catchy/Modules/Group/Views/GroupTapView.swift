@@ -23,10 +23,16 @@ struct GroupTabView: View {
         VStack(spacing: 0) {
             // 상단 네비게이션
             GroupLogoNavigation(
-                onPlusButtonTap: {
-                    isBottomSheetPresented.toggle() // 버튼 클릭 시 바텀시트 표시
-                }
-            )
+                        onHomeButtonTap: {
+                           isBottomSheetPresented.toggle() // 버튼 클릭 시 바텀시트 표시
+                        },
+                        onPlusButtonTap: {
+                            isBottomSheetPresented.toggle() // 버튼 클릭 시 바텀시트 표시
+                        }
+                    )
+                    .padding(.top, safeAreaInsets.top)
+            
+
 
             ScrollView {
                 VStack {
@@ -48,6 +54,8 @@ struct GroupTabView: View {
                 .presentationCornerRadius(21)
                 .presentationDragIndicator(.hidden)
         }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
         .task {
             let currentYear = Calendar.current.component(.year, from: Date())
             let currentMonth = Calendar.current.component(.month, from: Date())
@@ -57,21 +65,24 @@ struct GroupTabView: View {
     }
 }
 
+// Safe Area Insets 계산
+var safeAreaInsets: UIEdgeInsets {
+    (UIApplication.shared.connectedScenes.first as? UIWindowScene)?
+        .windows.first?.safeAreaInsets ?? .zero
+}
+
 // MARK: - Preview
 struct GroupTabView_Previews: PreviewProvider {
     static var previews: some View {
         let container = DIContainer()
 
         return Group {
-            GroupTabView(container: container)
-                .previewDisplayName("iPhone 16 Pro")
-                .previewDevice(PreviewDevice(rawValue: "iPhone 16 Pro"))
-                .environmentObject(DIContainer())
 
             GroupTabView(container: container)
                 .previewDisplayName("iPhone SE")
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE"))
                 .environmentObject(DIContainer())
+
           
         }
     }

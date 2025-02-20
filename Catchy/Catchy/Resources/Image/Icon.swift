@@ -143,6 +143,7 @@ enum Icon: String {
     
     case voteStartButton = "voteStartButton"
     case circleHeart = "circleHeart"
+    case votePlusButton = "votePlusButton"
 
     //MARK: - Group
     case plusGroup = "plusGroup"

@@ -74,10 +74,10 @@ struct VoteStatusListView: View {
     // MARK: - Vote Status Text
     private func voteStatusText(status: CategoryResultData) -> some View {
         HStack(spacing: 3) {
-            Text(status.category) // ✅ 변경된 모델 사용
+            Text(status.category) // 변경된 모델 사용
                 .font(.Body1_2)
                 .foregroundStyle(.g7)
-            Text("\(status.count)명")  // ✅ count 값 적용
+            Text("\(status.count)명")  //  count 값 적용
                 .font(.body3)
                 .foregroundStyle(.m5)
             Spacer()
