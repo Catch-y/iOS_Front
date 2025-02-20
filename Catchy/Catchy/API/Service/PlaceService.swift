@@ -15,7 +15,7 @@ class PlaceService: PlaceServiceProtocol {
     
     let provider: MoyaProvider<PlaceAPITarget>
     
-    init(provider: MoyaProvider<PlaceAPITarget> = APIManager.shared.testProvider(for: PlaceAPITarget.self)) {
+    init(provider: MoyaProvider<PlaceAPITarget> = APIManager.shared.createProvider(for: PlaceAPITarget.self)){
         self.provider = provider
     }
     

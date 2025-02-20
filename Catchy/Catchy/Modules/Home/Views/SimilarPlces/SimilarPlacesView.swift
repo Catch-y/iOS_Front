@@ -65,6 +65,7 @@ struct SimilarPlacesView: View {
                                 }
                                 .onAppear {
                                     if index == datas.count - 1 {
+                                        viewModel.isPrefetching = true
                                         viewModel.getMoreRecommendPlaceRespponse()
                                     }
                                 }

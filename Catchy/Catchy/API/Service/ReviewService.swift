@@ -14,7 +14,7 @@ class ReviewService: ReviewServiceProtocol {
     
     let provider: MoyaProvider<ReviewAPITarget>
     
-    init(provider: MoyaProvider<ReviewAPITarget> = APIManager.shared.testProvider(for: ReviewAPITarget.self)) {
+    init(provider: MoyaProvider<ReviewAPITarget> = APIManager.shared.createProvider(for: ReviewAPITarget.self)) {
         self.provider = provider
     }
     
