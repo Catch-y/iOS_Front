@@ -10,6 +10,9 @@ import SwiftUI
 // MARK: - ScheduleView
 /// 선택된 날짜에 해당하는 일정을 표시하는 뷰
 struct ScheduleView: View {
+    
+    @EnvironmentObject var container: DIContainer
+    
     @ObservedObject var viewModel: CalenderViewModel
     @Binding var isSheetPresented: Bool
     let date: Date
@@ -67,9 +70,15 @@ struct ScheduleView: View {
                     .foregroundStyle(.g7)
 
                 Spacer()
-
-                Icon.rightChevron.image
-                    .frame(width: 9, height: 16)
+                
+                Button(action : {
+                    container.navigationRouter.push(to: .groupVoteView(groupId: 1))
+                }){
+                    Icon.rightChevron.image
+                        .frame(width: 9, height: 16)
+                }
+                
+               
             }
             .padding()
             .frame(maxWidth: .infinity)

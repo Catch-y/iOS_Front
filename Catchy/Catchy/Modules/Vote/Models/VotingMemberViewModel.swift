@@ -16,9 +16,14 @@ class VotingMemberViewModel: ObservableObject {
     let container: DIContainer
     private var cancellables = Set<AnyCancellable>()
     
-    @Published var avatars: [(image: String, status: Bool)] = []
+    @Published var avatars: [(image: String, status: Bool)] = [] {
+        didSet {
+            checkVoteCompletion() // 아바타 상태변경체크
+        }
+    }
     @Published var isVoteMemberLoading: Bool = false
     @Published var errorMessage: String?
+    @Published var isVoteComplete: Bool = false
 
     let provider = MoyaProvider<VoteAPITarget>(stubClosure: MoyaProvider.immediatelyStub) // 샘플 데이터 사용
     
@@ -43,8 +48,9 @@ class VotingMemberViewModel: ObservableObject {
 
                         if decodedData.isSuccess {
                             self.avatars = decodedData.result.map { member in
-                                return (image: member.profileImage, status: member.hasVoted)
-                            }
+                                    return (image: member.profileImage, status: member.hasVoted)
+                                }
+                            self.checkVoteCompletion() // 모든 멤버가 투표했는지 확인
                         } else {
                             self.errorMessage = decodedData.message
                             self.loadSampleData() // 샘플 데이터 로드
@@ -81,4 +87,15 @@ class VotingMemberViewModel: ObservableObject {
             print("샘플 데이터 로드 성공")
         }
     }
+    // MARK: - 모든 멤버가 투표했는지 확인하는 함수
+    private func checkVoteCompletion() {
+        if avatars.allSatisfy({ $0.status }) { //  모든 멤버가 `status = true`이면
+            isVoteComplete = true
+            DispatchQueue.main.async {
+                self.isVoteComplete = true
+               
+            }
+        }
+    }
+
 }

@@ -67,6 +67,7 @@ struct LocationSelectView: View {
             )
             .padding(.bottom, 33)
         }
+        .toolbar(.hidden, for: .navigationBar)
         .task {
             if viewModel.locations.isEmpty {
                 viewModel.fetchLocations()

@@ -12,6 +12,7 @@ struct VotingMemberView: View {
     
     // MARK: - 속성
     @StateObject private var viewModel: VotingMemberViewModel
+    @EnvironmentObject var container: DIContainer
 
     init(container: DIContainer) {
         self._viewModel = StateObject(wrappedValue: VotingMemberViewModel(container: container))
@@ -32,9 +33,16 @@ struct VotingMemberView: View {
                 }
             }
         }
-        .task {
-            viewModel.loadSampleData() //  샘플 데이터 로드
+        .onAppear {
+                    viewModel.loadSampleData() // ✅ `task` 대신 `onAppear` 사용
+                }
+        .onChange(of: viewModel.isVoteComplete) { oldValue, newValue in
+            guard newValue else { return } //  두 번 실행 방지
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { //  3초 후 이동
+                container.navigationRouter.push(to: .voteDoneView)
+            }
         }
+
     }
     
     // MARK: - 투표 멤버 리스트가 로드된 경우의 View

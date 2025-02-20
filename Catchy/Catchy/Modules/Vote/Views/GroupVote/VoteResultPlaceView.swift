@@ -24,6 +24,7 @@ struct VoteResultPlaceView: View {
         }
         .background(Color(.white))
         .padding(.bottom , 110)
+        .toolbar(.hidden, for: .navigationBar).toolbar(.hidden, for: .navigationBar)
     }
 
     // MARK: - 네비게이션 바

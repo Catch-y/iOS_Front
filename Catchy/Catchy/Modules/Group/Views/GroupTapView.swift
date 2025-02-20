@@ -25,13 +25,15 @@ struct GroupTabView: View {
             
             // 상단 네비게이션
             GroupLogoNavigation(
-                onHomeButtonTap: {
-                   //TODO: - 홈화면으로 이동해야하나..?
-                },
-                onPlusButtonTap: {
-                    isBottomSheetPresented.toggle() // 버튼 클릭 시 바텀시트 표시
-                }
-            )
+                        onHomeButtonTap: {
+                            // TODO: - 홈화면으로 이동해야하나..?
+                        },
+                        onPlusButtonTap: {
+                            isBottomSheetPresented.toggle() // 버튼 클릭 시 바텀시트 표시
+                        }
+                    )
+                    .padding(.top, safeAreaInsets.top)
+            
 
             ScrollView {
                 VStack {
@@ -51,6 +53,7 @@ struct GroupTabView: View {
                 .presentationCornerRadius(21)
                 .presentationDragIndicator(.hidden)
         }
+        .toolbar(.hidden, for: .navigationBar)
         .task {
             let currentYear = Calendar.current.component(.year, from: Date())
             let currentMonth = Calendar.current.component(.month, from: Date())
@@ -58,6 +61,12 @@ struct GroupTabView: View {
         }
 
     }
+}
+
+// Safe Area Insets 계산
+var safeAreaInsets: UIEdgeInsets {
+    (UIApplication.shared.connectedScenes.first as? UIWindowScene)?
+        .windows.first?.safeAreaInsets ?? .zero
 }
 
 // MARK: - Preview
@@ -69,11 +78,6 @@ struct GroupTabView_Previews: PreviewProvider {
             GroupTabView(container: container)
                 .previewDisplayName("iPhone 16 Pro")
                 .previewDevice(PreviewDevice(rawValue: "iPhone 16 Pro"))
-
-            GroupTabView(container: container)
-                .previewDisplayName("iPhone SE")
-                .previewDevice(PreviewDevice(rawValue: "iPhone SE"))
-
           
         }
     }

@@ -39,7 +39,7 @@ struct VoteResultCategoryCardContentView: View {
             KFImage(URL(string: place.imageUrl))
                 .resizable()
                 .placeholder {
-                    Color.gray.opacity(0.3) // 이미지 로딩 중일 때 회색 배경 표시
+                    Color.g3 // 이미지 로딩 중일 때 회색 배경 표시
                 }
                 .scaledToFill()
                 .frame(width: 133, height: 99)

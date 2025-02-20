@@ -74,6 +74,7 @@ struct GroupVoteView: View {
                 .animation(.easeInOut, value: isPopupVisible)
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
     }
 
     // MARK: - Empty State
@@ -93,7 +94,7 @@ struct GroupVoteView: View {
             isPopupVisible = true // 팝업 표시
         }) {
             VStack(spacing : 8) {
-                Icon.voteStartButton.image
+                Icon.votePlusButton.image
                     .foregroundStyle(.g4)
                 Text("투표 시작하기")
                     .font(.body3)

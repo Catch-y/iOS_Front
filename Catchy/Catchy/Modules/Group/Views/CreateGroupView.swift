@@ -35,21 +35,26 @@ struct CreateGroupView: View {
                     
                     Spacer()
                     
-                    NextButton(title: "다음") {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            viewModel.createGroup()
-                            container.navigationRouter.push(to: .locationSelectView)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 50)
-                    .background(viewModel.isLoading ? Color.gray : Color.m5)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .foregroundStyle(.white)
-                    .disabled(viewModel.isLoading)
+                   
                 }
+                
             }
             .padding(.horizontal, 16)
+            
+            NextButton(title: "다음") {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    viewModel.createGroup()
+                    container.navigationRouter.push(to: .locationSelectView)
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: 50)
+            .background(viewModel.isLoading ? Color.gray : Color.m5)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 16)
+            .disabled(viewModel.isLoading)
         }
+        .navigationBarHidden(true)
         .padding(.bottom, 110)
         .sheet(isPresented: $viewModel.isImagePickerPresented) {
             ImagePicker(imageHandler: viewModel, selectedLimit: 1 - viewModel.selectedImageCount)
