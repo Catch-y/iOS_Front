@@ -44,7 +44,6 @@ class TokenProvider: TokenProviding {
     func refreshToken(completion: @escaping (String?, (any Error)?) -> Void) {
         guard let userInfo = keyChain.loadSession(for: userSession), let refreshToken = userInfo.refreshToken else {
             let error = NSError(domain: "catchy.com", code: -2, userInfo: [NSLocalizedDescriptionKey: "UserSession or refreshToken not found"])
-            print("유저 인증 탈출")
             completion(nil, error)
             return
         }

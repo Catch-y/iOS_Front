@@ -27,6 +27,12 @@ struct PlaceDetailView: View {
     
     var body: some View {
         VStack(spacing: 36) {
+            
+            Capsule()
+                .fill(Color.g3)
+                .frame(width: 60, height: 5)
+                .padding(.top, 20)
+            
             if !viewModel.isPlaceDetailLoading {
                 if let place = viewModel.placeDetailResponse {
                     
@@ -38,7 +44,7 @@ struct PlaceDetailView: View {
                         container.navigationRouter.push(to: .placeReviewView(placeId: place.placeId))
                     }
                     )
-                    .padding(.top, 40)
+                    .padding(.top, 5)
                     
                     Spacer()
                     

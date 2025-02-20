@@ -10,7 +10,7 @@ import Foundation
 class AppFlowViewModel: ObservableObject {
     private let tokenProvider: TokenProvider = TokenProvider()
     
-    @Published var appState: AppState = .tabView
+    @Published var appState: AppState = .onBoarding
     
     public func stateAppFlow(completion: @escaping (Bool, Error?) -> Void) {
         tokenProvider.refreshToken { [weak self] accessToken, error in
@@ -18,6 +18,7 @@ class AppFlowViewModel: ObservableObject {
             
             if let error = error {
                 self?.appState = .login
+                KeychainManager.standard.deleteSession(for: "catchyUser")
                 completion(false, error)
                 print("등록된 유저 정보 없음: \(error)")
             }

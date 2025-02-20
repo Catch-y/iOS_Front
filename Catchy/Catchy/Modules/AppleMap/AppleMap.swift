@@ -27,6 +27,7 @@ struct AppleMap: UIViewRepresentable {
         )
         
         mapView.camera = camera
+        mapView.showsCompass = false
         
         return mapView
     }

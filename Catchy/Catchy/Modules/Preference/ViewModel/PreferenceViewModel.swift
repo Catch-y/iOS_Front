@@ -310,6 +310,8 @@ extension PreferenceViewModel {
             StepFourStep(upperLocation: location.upperLocation, lowerLocation: location.lowerLocation)
         }
         
+        print("선택 지역 출력: \(location)")
+        
         container.useCaseProvider.memberUseCase.executePostLocation(locations: location)
             .tryMap { responseData -> ResponseData<StepThirdResponse> in
                 if !responseData.isSuccess {

@@ -17,25 +17,26 @@ struct CatchyApp: App {
     init() {
         KakaoSDK.initSDK(appKey: Config.kakaoKey)
         BaseLocationManager.shared.requestLocationAuthorization()
-        
     }
     
     var body: some Scene {
         WindowGroup {
-            switch appFlowViewModel.appState {
-            case .onBoarding:
-                OnboardingView(viewModel: appFlowViewModel)
-            case .login:
-                LoginView(container: container, appFlowViewModel: appFlowViewModel)
-                    .environmentObject(container)
-                    .environmentObject(appFlowViewModel)
-            case .preferrenceSurvey:
-                PreferencePageView(container: container, appFlowViewModel: appFlowViewModel)
-            case .tabView:
-                CatchyTabView()
-                    .environmentObject(container)
-                    .environmentObject(appFlowViewModel)
-            }
+            DIYMap(container: DIContainer())
+                .environmentObject(DIContainer())
+//            switch appFlowViewModel.appState {
+//            case .onBoarding:
+//                OnboardingView(viewModel: appFlowViewModel)
+//            case .login:
+//                LoginView(container: container, appFlowViewModel: appFlowViewModel)
+//                    .environmentObject(container)
+//                    .environmentObject(appFlowViewModel)
+//            case .preferrenceSurvey:
+//                PreferencePageView(container: container, appFlowViewModel: appFlowViewModel)
+//            case .tabView:
+//                CatchyTabView()
+//                    .environmentObject(container)
+//                    .environmentObject(appFlowViewModel)
+//            }
         }
     }
 }
