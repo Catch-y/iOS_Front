@@ -22,6 +22,7 @@ struct MyPlaceReviewsView: View {
         VStack(alignment: .center, spacing: 22, content: {
             if viewModel.isMyPlaceReviewsLoading {
                 MainProgressComponents()
+                    .frame(maxWidth: .infinity)
             } else {
                 if viewModel.myPlaceReviews.isEmpty {
                     VStack(content: {
@@ -47,6 +48,10 @@ struct MyPlaceReviewsView: View {
     }
     
     // MARK: - 리뷰 콘텐츠
+    
+    /// 리뷰 콘텐츠 섹션
+    /// - Parameter data: 장소 리뷰 response Data
+    /// - Returns: 장소 리뷰 뷰
     private func contentSection(data: [PlaceReviewData]) -> some View {
         VStack(alignment: .leading, spacing: 22, content: {
             reviewCountSection(count: viewModel.reviewCount)
@@ -54,6 +59,9 @@ struct MyPlaceReviewsView: View {
         })
     }
     
+    /// 리뷰 개수 섹션
+    /// - Parameter count: 리뷰 수
+    /// - Returns: 리뷰 개수 뷰
     private func reviewCountSection(count: Int) -> some View {
         HStack(spacing: 9, content: {
             Text("작성한 리뷰")
@@ -66,6 +74,9 @@ struct MyPlaceReviewsView: View {
         .padding(.horizontal, 16)
     }
     
+    /// 리뷰 테이블 섹션
+    /// - Parameter content: 장소 리뷰 response data
+    /// - Returns: 장소 리뷰 테이블 뷰
     private func reviewTableSection(content: [PlaceReviewData]) -> some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 8) {

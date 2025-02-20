@@ -11,7 +11,7 @@ import Moya
 
 protocol HomeServiceProtocol {
     /* 행동 데이터 반영 장소 검색 */
-    func getSearch(keyword: String, page: Int) -> AnyPublisher<ResponseData<SearchPlaceResponse>, MoyaError>
+    func getSearch(keyword: String, page: Int, relevanceScore: Int?, lastPlaceId: Int?) -> AnyPublisher<ResponseData<SearchPlaceResponse>, MoyaError>
     
     /* 홈화면 추천 코스 */
     func getHomePersonalCourses() -> AnyPublisher<ResponseData<[CourseInfoResponse]>, MoyaError>

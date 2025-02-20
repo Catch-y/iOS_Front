@@ -20,8 +20,8 @@ class HomeService: HomeServiceProtocol {
             self.testProvider = testProvider
         }
     
-    func getSearch(keyword: String, page: Int) -> AnyPublisher<ResponseData<SearchPlaceResponse>, MoyaError> {
-        return provider.requestPublisher(.getSearch(keyword: keyword, page: page))
+    func getSearch(keyword: String, page: Int, relevanceScore: Int?, lastPlaceId: Int?) -> AnyPublisher<ResponseData<SearchPlaceResponse>, MoyaError> {
+        return provider.requestPublisher(.getSearch(keyword: keyword, page: page, relevanceScore: relevanceScore, lastPlaceId: lastPlaceId))
             .map(ResponseData<SearchPlaceResponse>.self)
             .eraseToAnyPublisher()
     }

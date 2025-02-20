@@ -42,6 +42,7 @@ struct MyPageView: View {
                     }
                 } else {
                     MainProgressComponents()
+                        .frame(maxWidth: .infinity)
                 }
             }
             .padding(.top, 62)
@@ -68,6 +69,10 @@ struct MyPageView: View {
     }
     
     // MARK: - 마이페이지 상단 섹션 함수
+    
+    /// 마이페이지 상단 섹션 (설정버튼 + 프로필 뷰 + 마이페이지 버튼
+    /// - Parameter data: 프로필 정보
+    /// - Returns: 상단 뷰
     private func TopSectionView(data: ProfileResponse) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             settingsButton()
@@ -79,6 +84,9 @@ struct MyPageView: View {
         }
     }
     
+    
+    /// 설정버튼
+    /// - Returns: 설정버튼
     private func settingsButton() -> some View {
         Button(action: {
             container.navigationRouter.push(to: .mypageOption)
@@ -90,6 +98,9 @@ struct MyPageView: View {
         }
     }
     
+    /// 프로필섹션
+    /// - Parameter data: 프로필 데이터 response
+    /// - Returns: 프로필 섹션 뷰
     private func ProfileSectionView(data: ProfileResponse) -> some View {
         HStack(spacing: 10) {
             ProfileImage(
@@ -125,6 +136,8 @@ struct MyPageView: View {
         }
     }
     
+    /// 마이페이지 버튼
+    /// - Returns: 마이 페이지 버튼 뷰
     private func myPageMenuButtons() -> some View {
         let menuItems: [(icon: Image, title: String, action: () -> Void)] = [
             (Icon.document.image, "취향 설문", {
@@ -141,6 +154,11 @@ struct MyPageView: View {
         .frame(maxWidth: .infinity)
     }
     
+    // MARK: - 마이페이지 하단 섹션 함수
+    
+    /// 북마크한 코스 테이블 뷰
+    /// - Parameter content: 코스 정보 response data
+    /// - Returns: 북마크한 코스 테이블 뷰
     private func BookmarkedCoursesView(content: [CourseResponseData]?) -> some View {
         VStack(alignment: .leading, spacing: 15) {
             Text("북마크한 코스")

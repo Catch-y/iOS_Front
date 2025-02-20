@@ -41,6 +41,7 @@ struct MyReviewsView: View {
                     }
                 } else {
                     MainProgressComponents()
+                        .frame(maxWidth: .infinity)
                 }
             })
             .ignoresSafeArea()

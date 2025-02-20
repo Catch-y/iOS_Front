@@ -38,7 +38,7 @@ struct ReviewReportView: View {
                     height: 60,
                     onoff: viewModel.selectedReasons.isEmpty ? .off : .on
                 )
-                .padding(.bottom, 46) // 버튼과 화면 하단 간격
+                .padding(.bottom, 46)
             })
             .padding(.horizontal, 16)
         })
@@ -46,25 +46,25 @@ struct ReviewReportView: View {
     }
     // MARK: - 상단 리뷰 신고하기 항목들
     
+    /// 리뷰 신고 항목 뷰
+    /// - Returns: 리뷰 신고 항목 뷰
     private func reviewReportItems() -> some View {
         return VStack(alignment: .leading, spacing: 27,content: {
             ForEach(ReviewReportReason.allCases, id: \.self) { reason in
                 ReportItem(
                     reason: reason,
-                    isSelected: viewModel.selectedReasons.contains(reason), // 선택 여부 확인
+                    isSelected: viewModel.selectedReasons.contains(reason),
                     onSelect: {
                         if viewModel.selectedReasons.contains(reason) {
-                            // 이미 선택된 항목이면 선택 해제
                             viewModel.selectedReasons.removeAll { $0 == reason }
                         } else {
-                            // 선택되지 않은 항목이면 추가
                             viewModel.selectedReasons.append(reason)
                         }
                     }
                 )
             }
-            // 직접 입력 텍스트 칸
-            // 기존 TextEditor 코드 변경
+            /* 직접 입력 텍스트 칸 */
+            /* 기존 TextEditor 코드 변경 */
             TextEditor(text: $viewModel.customReasonText)
                 .customStyleTipsEditor(
                     text: $viewModel.customReasonText,
@@ -72,8 +72,8 @@ struct ReviewReportView: View {
                     maxTextCount: 300, border: .g1
                 )
                 .frame(height: 130)
-                .disabled(!viewModel.selectedReasons.contains(.customInput)) // 직접 입력이 선택되지 않으면 비활성화
-                .opacity(viewModel.selectedReasons.contains(.customInput) ? 1.0 : 0.5) // 비활성화 시 시각적 효과 추가
+                .disabled(!viewModel.selectedReasons.contains(.customInput)) /* 직접 입력이 선택되지 않으면 비활성화 */
+                .opacity(viewModel.selectedReasons.contains(.customInput) ? 1.0 : 0.5) /* 비활성화 시 시각적 효과 추가 */
         })
     }
 }

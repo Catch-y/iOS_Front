@@ -32,7 +32,7 @@ class MyPageService: MyPageServiceProtocol {
     
     /// 북마크된 코스 무한 스크롤 API
     func getBookmarkCourseList(pageSize: Int, lastCourseId: Int? = nil) -> AnyPublisher<ResponseData<CourseResponse>, Moya.MoyaError> {
-        return provider.requestPublisher(.getBookmarkCourseList(pageSize: pageSize, lastCourseId: lastCourseId))
+        return testProvider.requestPublisher(.getBookmarkCourseList(pageSize: pageSize, lastCourseId: lastCourseId))
             .map(ResponseData<CourseResponse>.self)
             .eraseToAnyPublisher()
     }
@@ -59,7 +59,7 @@ class MyPageService: MyPageServiceProtocol {
     
     /// 리뷰 삭제 API
     func deleteReview(reviewId: Int, reviewType: ReviewType) -> AnyPublisher<ResponseData<DeleteReviewResponse>, Moya.MoyaError> {
-        return provider.requestPublisher(.deleteReview(reviewId: reviewId, reviewType: reviewType))
+        return testProvider.requestPublisher(.deleteReview(reviewId: reviewId, reviewType: reviewType))
             .map(ResponseData<DeleteReviewResponse>.self)
             .eraseToAnyPublisher()
     }

@@ -7,12 +7,23 @@
 
 import Foundation
 
-struct SearchPlaceResponse: Codable, Hashable {
-    var placeInfoPreviews: [SearchPlaceData]
+struct SearchPlaceResponse: Codable {
+    var placeInfoPreviews: [PlaceInfoDataAndScore]
     var isLast: Bool
+    
+    enum CodingKeys: String, CodingKey {
+            case placeInfoPreviews = "content"
+            case isLast = "last"
+    }
+    
 }
 
-struct SearchPlaceData: Codable, Identifiable, Hashable, Likeable {
+struct PlaceInfoDataAndScore: Codable {
+    var placeInfoResponse: SearchPlaceData
+    var relevanceScore: Int
+}
+
+struct SearchPlaceData: Codable, Identifiable, Hashable {
     var id = UUID()
     var placeId: Int
     var placeName: String
@@ -22,17 +33,15 @@ struct SearchPlaceData: Codable, Identifiable, Hashable, Likeable {
     var activeTime: String?
     var rating: Double
     var reviewCount: Int
-    var liked: Bool
     
     enum CodingKeys: String, CodingKey {
         case placeId
         case placeName
-        case placeImage
-        case categoryName
+        case placeImage = "imageUrl"
+        case category = "categoryName"
         case roadAddress
         case activeTime
         case rating
         case reviewCount
-        case liked
     }
 }
