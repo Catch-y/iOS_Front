@@ -28,31 +28,36 @@ struct FavoritePlacesView: View {
                     container.navigationRouter.pop()
                 }, title: "선호 장소", rightNaviIcon: nil, isShadow: true)
                 
-                if let data = viewModel.myPlaceResponse {
-                    if !data.content.isEmpty {
-                        ScrollView {
-                            LazyVGrid(columns: [GridItem(.flexible())], spacing: 40) {
-                                ForEach(data.content, id: \.placeId) { place in
-                                    PlaceCard(place: place, reviewTap: {
-                                        container.navigationRouter.push(to: .placeReviewView(placeId: place.placeId))
-                                    })
+                if !viewModel.myPlaceResponse.isEmpty {
+                    ScrollView {
+                        LazyVGrid(columns: [GridItem(.flexible())], spacing: 40) {
+                            ForEach(viewModel.myPlaceResponse, id: \.id) { place in
+                                PlaceCard(place: place, reviewTap: {
+                                    container.navigationRouter.push(to: .placeReviewView(placeId: place.placeId))
+                                })
+                                .task {
+                                    if let lastPlaceId = viewModel.myPlaceResponse.last?.placeId,
+                                       place.placeId == lastPlaceId {
+                                        viewModel.getMyPlaceList()
+                                        
+                                    }
                                 }
                             }
                         }
                         .padding(.horizontal, 16)
-                    } else {
-                        CustomEmptyStateView(label: "좋아요 하신 장소가 없어요!", subLabel: "마음에 드는 장소를 담아주세요.")
-                            .padding(.top, 231)
-                        Spacer()
                     }
                 } else {
-                    MainProgressComponents()
+                    CustomEmptyStateView(label: "좋아요 하신 장소가 없어요!", subLabel: "마음에 드는 장소를 담아주세요.")
+                        .padding(.top, 231)
+                    Spacer()
                 }
+            } else {
+                MainProgressComponents()
             }
         })
         .ignoresSafeArea(.all)
         .task {
-            viewModel.getMyPlaceList(pageSize: 10, lastPlaceId: 1)
+            viewModel.getMyPlaceList()
         }
         .navigationBarBackButtonHidden(true)
     }

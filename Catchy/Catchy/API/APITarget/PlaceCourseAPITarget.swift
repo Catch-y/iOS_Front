@@ -382,7 +382,7 @@ extension PlaceCourseAPITarget: APITargetType {
                     "placeSite": "https://bukchon.seoul.go.kr"
                   }
                 ],
-                "last": true
+                "last": false
               }
             }
             

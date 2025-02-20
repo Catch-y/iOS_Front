@@ -20,9 +20,6 @@ class MyPlaceReviewsViewModel: ObservableObject{
     /// 리뷰 개수
     @Published var reviewCount: Int = 0
     
-    /// 삭제할 리뷰 ID
-    @Published var selectedReviewIdForDeletion: Int? = nil
-    
     /// 리뷰 삭제 API 로딩 상태
     @Published var isDeletingReview: Bool = false
     
