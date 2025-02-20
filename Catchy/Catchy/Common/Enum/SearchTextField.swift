@@ -41,7 +41,7 @@ enum SearchTextField {
         case .searchView:
             return 329
         case .mapView:
-            return 327
+            return 260
         }
     }
     
@@ -49,8 +49,10 @@ enum SearchTextField {
         switch self {
         case .homeView:
             return 23
-        case .searchView, .mapView:
+        case .searchView:
             return 26
+        case .mapView:
+            return 56
         }
     }
     
@@ -76,7 +78,9 @@ enum SearchTextField {
         switch self {
         case .homeView:
             return 230
-        case .searchView, .mapView:
+        case .mapView:
+            return 330
+        case .searchView:
             return 370
         }
     }

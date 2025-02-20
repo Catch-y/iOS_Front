@@ -24,7 +24,7 @@ enum NavigationDestination: Equatable, Hashable {
     case diyCourseCreateView(placeIds: [Int])
     case placeReviewView(placeId: Int)
     case placeDetailView(viewModel: DIYCourseViewModel, placeSearchResponseData: PlaceSearchResponseData)
-    case placeSearchView
+    case placeSearchView(viewModel: DIYCourseViewModel)
     case placeBucketView(viewModel: DIYCourseViewModel)
 
     // Equatable 구현 (fullScreenMap 비교 제외)
@@ -101,11 +101,11 @@ enum NavigationDestination: Equatable, Hashable {
             hasher.combine("placeDetailView")
             hasher.combine(placeSearchResponseData.placeId)
         case .placeSearchView:
-            hasher.combine("placeSearchView")
+            break
         case .placeBucketView:
-            hasher.combine("placeBucketView")
+            break
         case .fullScreenMap:
-            break // `fullScreenMap`은 해싱하지 않음
+            break
         }
     }
 }

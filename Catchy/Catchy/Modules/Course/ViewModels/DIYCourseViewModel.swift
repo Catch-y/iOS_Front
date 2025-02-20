@@ -67,7 +67,6 @@ extension DIYCourseViewModel {
     // MARK: - API 호출 함수
     /// 장소 검색 - 지역명 기반
     func getPlaceListByRegion() {
-        
         guard !isLast else { return }
         
         if onAppearByPop {
@@ -79,53 +78,56 @@ extension DIYCourseViewModel {
             isPlaceListLoading = true
         }
         
-        
-        let request = PlaceSearchByRegionRequest(searchKeyword: searchText, page: page)
-        container.useCaseProvider.placeCourseUseCase.executeGetPlaceListByRegion(placeSearchRequest: request)
-            .tryMap {
-                responseData ->
-                ResponseData<PlaceSearchResponse> in
-                if !responseData.isSuccess {
-                    throw APIError
-                        .serverError(message: responseData.message,
-                            code: responseData.code
-                        )
-                }
-                
-                return responseData
-            }
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: {
-                [weak self] completion in
-                guard let self = self else { return }
-                
-                self.isPlaceListLoading = false
-                self.isPrefetching = false
-                
-                switch completion {
-                case .finished:
-                    print("✅ Get PlaceSearchList Server Completed")
-                case .failure(let failure):
-                    print("❌ Get PlaceSearchList Failed: \(failure)")
-                }
-            },receiveValue: { [weak self] response in
-                guard let self = self else { return }
-                
-                if let response = response.result {
-                    
-                    if placeSearchResponse == nil {
-                        placeList = response.placeInfoPreviews
-                    } else {
-                        self.placeList.append(contentsOf: response.placeInfoPreviews)
+        // 현재 위치 가져오기
+////        BaseLocationManager.shared.getCurrentUserLocation { [weak self] userLocation in
+//            guard let self = self, let location = userLocation else {
+//                print("❌ 현재 위치를 가져올 수 없습니다.")
+//                self?.isPlaceListLoading = false
+//                return
+//            }
+            
+        let latitude = 1.1
+        let longitude = 1.1
+            
+            // 검색 요청 실행
+            let request = PlaceSearchByRegionRequest(searchKeyword: searchText, latitude: latitude, longitude: longitude, page: page)
+            
+            container.useCaseProvider.placeCourseUseCase.executeGetPlaceListByRegion(placeSearchRequest: request)
+                .tryMap { responseData -> ResponseData<PlaceSearchResponse> in
+                    if !responseData.isSuccess {
+                        throw APIError.serverError(message: responseData.message, code: responseData.code)
                     }
-                    self.placeSearchResponse = response
-                    self.isLast = response.isLast
-                    self.page += 1
-
+                    return responseData
                 }
-                
-            })
-            .store(in: &cancellables)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveCompletion: { [weak self] completion in
+                    guard let self = self else { return }
+                    
+                    self.isPlaceListLoading = false
+                    self.isPrefetching = false
+                    
+                    switch completion {
+                    case .finished:
+                        print("✅ Get PlaceSearchList Server Completed")
+                    case .failure(let failure):
+                        print("❌ Get PlaceSearchList Failed: \(failure)")
+                    }
+                }, receiveValue: { [weak self] response in
+                    guard let self = self else { return }
+                    
+                    if let response = response.result {
+                        if placeSearchResponse == nil {
+                            placeList = response.placeInfoPreviews
+                        } else {
+                            self.placeList.append(contentsOf: response.placeInfoPreviews)
+                        }
+                        self.placeSearchResponse = response
+                        self.isLast = response.isLast
+                        self.page += 1
+                    }
+                })
+                .store(in: &cancellables)
+//        }
     }
     
     /// 장소 상세 화면 API

@@ -13,11 +13,11 @@ struct PlaceSearchView: View {
     @EnvironmentObject var container: DIContainer
 
     // MARK: - 뷰 모델
-    @StateObject var viewModel: DIYCourseViewModel
+    @ObservedObject var viewModel: DIYCourseViewModel
         
     // MARK: - Init
-    init(container: DIContainer) {
-        self._viewModel = StateObject(wrappedValue: .init(container: container))
+    init(viewModel: DIYCourseViewModel) {
+        self.viewModel = viewModel
     }
     
     var body: some View {
@@ -107,19 +107,3 @@ struct PlaceSearchView: View {
     }
     
 }
-
-struct PlaceView_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(
-            ["iPhone 16 Pro Max", "iPhone 11"],
-            id: \.self
-        ) { deviceName in
-            PlaceSearchView(container: DIContainer())
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-                .environmentObject(DIContainer())
-        }
-    }
-}
-
-

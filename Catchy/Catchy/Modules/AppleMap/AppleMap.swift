@@ -35,6 +35,15 @@ struct AppleMap: UIViewRepresentable {
         mapView.removeAnnotations(mapView.annotations)
         mapView.removeOverlays(mapView.overlays)
         
+        // 사용자의 현재 위치를 지도 중심으로 설정
+        if let userLocation = viewModel.userLocation {
+            mapView.setRegion(MKCoordinateRegion(
+                center: userLocation,
+                span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
+            ), animated: true)
+        }
+        
+        // 검색된 장소의 마커를 추가
         let annotations = viewModel.placeInfoData.map { place -> CustomAnnotation in
             let annotation = CustomAnnotation(
                 coordinate: place.coordinate,
@@ -47,11 +56,27 @@ struct AppleMap: UIViewRepresentable {
         }
         mapView.addAnnotations(annotations)
         
+        // 지도 줌 수준에 따라 마커 크기 조정
+        let zoomScale = mapView.visibleMapRect.size.width / mapView.bounds.size.width
+        let minSize: CGFloat = 32
+        let maxSize: CGFloat = 80
+        let scaleFactor: CGFloat = 50
+        let iconSize = max(minSize, min(maxSize, maxSize / (zoomScale / scaleFactor)))
+        
+        for annotation in mapView.annotations {
+            if let annotationView = mapView.view(for: annotation),
+               let customAnnotation = annotation as? CustomAnnotation {
+                let originalImage = customAnnotation.category.mapMarkerImage(isVisited: customAnnotation.isVisited)
+                let resizedImage = originalImage.resizeImage(to: CGSize(width: iconSize, height: iconSize))
+                annotationView.image = resizedImage
+            }
+        }
+
+        // 4️⃣ 검색된 경로 추가
         if let route = viewModel.route {
             mapView.addOverlay(route)
         }
     }
-    
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }

@@ -15,6 +15,7 @@ class AppleMapViewModel: ObservableObject {
     @Published var route: MKPolyline?
     @Published var routerIsLoading: Bool = false
     @Published var selectedPlaceId: Int?
+    @Published var userLocation: CLLocationCoordinate2D?
     
     var placeInfoData: [PlaceInfoData]
     
@@ -100,7 +101,7 @@ class AppleMapViewModel: ObservableObject {
 
            let annotationCoordinate = selectedPlace.coordinate
 
-           // ✅ 지도 중심을 위로 이동 (현재 위치에서 위로 20% 정도 올림)
+           // 지도 중심을 위로 이동 (현재 위치에서 위로 20% 정도 올림)
            let offsetLatitude = annotationCoordinate.latitude + (mapView.region.span.latitudeDelta * 0.25)
            
            let newCenter = CLLocationCoordinate2D(latitude: offsetLatitude, longitude: annotationCoordinate.longitude)
@@ -112,6 +113,20 @@ class AppleMapViewModel: ObservableObject {
 
            mapView.setRegion(newRegion, animated: true)
        }
+    
+        /// 현재 위치를 지도 중심으로 설정
+        func setUserLocation(_ location: CLLocation) {
+            DispatchQueue.main.async {
+                self.userLocation = location.coordinate
+            }
+        }
+        
+        /// 특정 장소에 포커스
+        func focusOnPlace(_ place: PlaceInfoData) {
+            DispatchQueue.main.async {
+                self.userLocation = place.coordinate
+            }
+        }
   
   
 }
