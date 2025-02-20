@@ -16,7 +16,7 @@ class CourseService: CourseServiceProtocol {
     
     let provider: MoyaProvider<CourseAPITarget>
     
-    init(provider: MoyaProvider<CourseAPITarget> = APIManager.shared.testProvider(for: CourseAPITarget.self)){
+    init(provider: MoyaProvider<CourseAPITarget> = APIManager.shared.createProvider(for: CourseAPITarget.self)){
         self.provider = provider
     }
     

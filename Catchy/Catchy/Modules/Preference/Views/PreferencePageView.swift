@@ -17,8 +17,11 @@ struct PreferencePageView: View {
     @State var scaleFactor: CGFloat = 1.0
     @State var tappedLocation: (latitude: Double, longitude: Double)? = nil
     
-    init(container: DIContainer, appFlowViewModel: AppFlowViewModel) {
+    let fromMyPage: Bool
+    
+    init(container: DIContainer, appFlowViewModel: AppFlowViewModel, fromMyPage: Bool = false) {
         self._viewModel = StateObject(wrappedValue: .init(container: container, appFlowViewModel: appFlowViewModel))
+        self.fromMyPage = fromMyPage
     }
     
     var body: some View {

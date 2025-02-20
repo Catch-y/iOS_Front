@@ -27,6 +27,8 @@ class MyPageViewModel: ObservableObject, ImageHandling {
     /// 닉네임 수정 모달 상태 추가
     @Published var isEditingNickname: Bool = false
     
+    /// 취향설문 화면 상태
+    @Published var isPreferenceScreenView: Bool = false
     var profileImage: [UIImage] = [] {
         didSet {
             if let newValue = profileImage.first {

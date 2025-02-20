@@ -31,6 +31,7 @@ struct PlaceReviewView: View {
                 CustomNavigation(action: {
                     container.navigationRouter.pop()
                 }, title: "평점, 리뷰 보기", rightNaviIcon: nil, isShadow: true)
+                        
                 if !viewModel.isLoading {
                     if !viewModel.placeReviewData.isEmpty {
                         ScrollView(.vertical, content: {
@@ -40,11 +41,18 @@ struct PlaceReviewView: View {
                                 .padding(.horizontal, 16)
                         })
                     } else {
+                        Spacer()
+
                         infoView()
-                            .padding(.top, 107)
+                            .padding(.bottom, 70)
+                        
+                        Spacer()
+
                     }
                 } else {
                     MainProgressComponents()
+                        .padding(.bottom, 70)
+                        .frame(maxWidth: .infinity)
                 }
             })
         .ignoresSafeArea(.all)

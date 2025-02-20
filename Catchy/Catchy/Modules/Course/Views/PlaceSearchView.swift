@@ -30,7 +30,7 @@ struct PlaceSearchView: View {
                 .frame(width: 60, height: 5)
                 .padding(.top, 20)
             
-            if !viewModel.isPlaceListLoading {
+            if viewModel.isPlaceListLoading {
                 
                 if !viewModel.placeList.isEmpty {
                     
@@ -40,6 +40,7 @@ struct PlaceSearchView: View {
                 }
             } else {
                 MainProgressComponents()
+                    .frame(maxWidth: .infinity)
             }
                 
         }
@@ -114,6 +115,7 @@ struct PlaceSearchView: View {
             Text("확인 후 다시 검색해주세요.")
                 .font(.Body1_2)
                 .foregroundStyle(.g4)
+                .padding(.bottom, 60)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea(edges: .all)
