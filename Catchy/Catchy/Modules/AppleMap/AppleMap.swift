@@ -29,6 +29,16 @@ struct AppleMap: UIViewRepresentable {
         mapView.camera = camera
         mapView.showsCompass = false
         
+        mapView.userTrackingMode = .followWithHeading
+        
+        let trackingButton = MKUserTrackingButton(mapView: mapView)
+        trackingButton.frame = CGRect(x: 20, y: 50, width: 40, height: 40)
+        trackingButton.layer.cornerRadius = 8
+        trackingButton.backgroundColor = UIColor.white.withAlphaComponent(0.7)
+        trackingButton.autoresizingMask = [.flexibleRightMargin, .flexibleBottomMargin]
+        
+        mapView.addSubview(trackingButton)
+        
         return mapView
     }
     
