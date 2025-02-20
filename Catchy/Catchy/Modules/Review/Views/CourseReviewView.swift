@@ -32,6 +32,7 @@ struct CourseReviewView: View {
                 CustomNavigation(action: {
                     isPresented.toggle()
                 }, title: "평점, 리뷰 보기", leftNaviIcon: nil, isShadow: true)
+
             if !viewModel.isLoading {
                 if !viewModel.courseReviewData.isEmpty {
                     ScrollView(.vertical, content: {
@@ -42,12 +43,19 @@ struct CourseReviewView: View {
                             .padding(.horizontal, 16)
                     })
                 } else {
+                    Spacer()
+
                     infoView()
-                        .padding(.top, 107)
+                        .padding(.bottom, 70)
+                    
+                    Spacer()
+
                 }
             } else {
                 MainProgressComponents()
-                }
+                    .padding(.bottom, 70)
+
+            }
             })
         .ignoresSafeArea(.all)
         .task {
