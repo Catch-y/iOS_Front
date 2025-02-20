@@ -219,12 +219,14 @@ struct HomeView: View {
                         }
                     })
                 })
-                
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 1), spacing: 18, content: {
                     ForEach(datas.prefix(10), id: \.id) { data in
-                        RecommendPlaceCard(data: data) {
+                        RecommendPlaceCard(data: data, action: {
                             viewModel.patchLikePlace(placeId: data.placeId.wrappedValue)
+                        }) {
+                            container.navigationRouter.push(to: .placeReviewView(placeId: data.placeId.wrappedValue))
                         }
+
                     }
                 })
                 .padding(.top, 20)

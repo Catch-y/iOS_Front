@@ -30,7 +30,7 @@ struct PlaceReviewView: View {
         VStack(alignment: .center, spacing: 20, content: {
                 CustomNavigation(action: {
                     container.navigationRouter.pop()
-                }, title: "평점, 리뷰 보기", leftNaviIcon: nil, isShadow: true)
+                }, title: "평점, 리뷰 보기", rightNaviIcon: nil, isShadow: true)
                 if !viewModel.isLoading {
                     if !viewModel.placeReviewData.isEmpty {
                         ScrollView(.vertical, content: {

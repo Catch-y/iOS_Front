@@ -30,7 +30,7 @@ struct CourseReviewView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 28, content: {
                 CustomNavigation(action: {
-                    container.navigationRouter.pop()
+                    isPresented.toggle()
                 }, title: "평점, 리뷰 보기", leftNaviIcon: nil, isShadow: true)
             if !viewModel.isLoading {
                 if !viewModel.courseReviewData.isEmpty {

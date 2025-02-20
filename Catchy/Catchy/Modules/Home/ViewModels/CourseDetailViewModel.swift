@@ -17,6 +17,8 @@ class CourseDetailViewModel: ObservableObject {
     
     @Published var isLoading: Bool = true
     
+    @Published var isReviewPresented: Bool = false
+    
     var cancellables = Set<AnyCancellable>()
 
     let courseId: Int

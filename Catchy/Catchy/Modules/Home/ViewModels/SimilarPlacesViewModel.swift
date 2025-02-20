@@ -17,6 +17,7 @@ class SimilarPlacesViewModel: ObservableObject {
 
     var currentPage: Int = 1
     var isLastPage: Bool = false
+    var isNaviPop: Bool = false
     
     let container: DIContainer
     private var cancellables = Set<AnyCancellable>()
@@ -28,6 +29,11 @@ class SimilarPlacesViewModel: ObservableObject {
     /// 추가로 보기 클릭 시 데이터 조회
     func getMoreRecommendPlaceRespponse(isRefresh: Bool = false) {
         guard !isLoading, !isLastPage else { return }
+        
+        if isNaviPop {
+            isNaviPop = false
+            return
+        }
         
         if !isRefresh  {
             self.isLoading = true
