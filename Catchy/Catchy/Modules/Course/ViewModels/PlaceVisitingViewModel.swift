@@ -170,7 +170,7 @@ extension PlaceVisitingViewModel {
             },receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 if let response = response.result {
-                    self.placeDetailResponse?.isVisited = response.isVisited
+                    self.placeDetailResponse?.visited = response.isVisited
                 }
             })
             .store(in: &cancellables)

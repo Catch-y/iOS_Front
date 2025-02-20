@@ -16,7 +16,7 @@ struct PlaceDetailResponse: Codable, Identifiable, Likeable {
     let placeId: Int
     
     /// 장소 이미지 URL
-    let imageUrl: String
+    var imageUrl: String?
     
     /// 장소 이름
     let placeName: String
@@ -43,7 +43,7 @@ struct PlaceDetailResponse: Codable, Identifiable, Likeable {
     let placeLongitude: Double
     
     /// 누군가 방문한 장소인지?
-    var isVisited: Bool
+    var visited: Bool
     
     /// 장소 리뷰 개수
     let reviewCount: Int
@@ -65,7 +65,7 @@ struct PlaceDetailResponse: Codable, Identifiable, Likeable {
         case rating
         case placeLatitude
         case placeLongitude
-        case isVisited
+        case visited
         case reviewCount
         case placeSite
         case liked

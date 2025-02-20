@@ -30,7 +30,7 @@ struct PlaceSearchView: View {
                 .frame(width: 60, height: 5)
                 .padding(.top, 20)
             
-            if viewModel.isPlaceListLoading {
+            if !viewModel.isPlaceListLoading {
                 
                 if !viewModel.placeList.isEmpty {
                     

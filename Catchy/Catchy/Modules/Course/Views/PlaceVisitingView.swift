@@ -86,11 +86,11 @@ struct PlaceVisitingView: View {
         HStack(spacing: 10) {
             
             visitCheckbtn
-                .disabled(viewModel.placeDetailResponse!.isVisited)
+                .disabled(viewModel.placeDetailResponse!.visited)
             
-            reviewBtn(isVisited: viewModel.placeDetailResponse!.isVisited)
+            reviewBtn(isVisited: viewModel.placeDetailResponse!.visited)
             
-            stamp(isVisited: viewModel.placeDetailResponse!.isVisited)
+            stamp(isVisited: viewModel.placeDetailResponse!.visited)
             
             Spacer()
         }

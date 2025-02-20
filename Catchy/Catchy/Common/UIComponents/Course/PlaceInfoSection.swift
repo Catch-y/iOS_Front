@@ -34,19 +34,27 @@ struct PlaceInfoSection: View {
     
     var body: some View {
         VStack(spacing: 19) {
-            if let url = URL(string: DataFormatter.shared.formattedImageUrl(placeImageURL: place.imageUrl)) {
-                KFImage(url)
-                    .placeholder{
-                        ProgressView()
-                            .controlSize(.large)
-                    }
-                    .retry(maxCount: 2, interval: .seconds(2))
-                    .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 103))
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: .infinity, maxHeight: forDetailView ? 192 : 144)
+            if let imageUrl = place.imageUrl {
+                if let url = URL(string: DataFormatter.shared.formattedImageUrl(placeImageURL: imageUrl)) {
+                    KFImage(url)
+                        .placeholder{
+                            ProgressView()
+                                .controlSize(.large)
+                        }
+                        .retry(maxCount: 2, interval: .seconds(2))
+                        .downsampling(size: CGSize(width: UIScreen.screenWidth, height: 103))
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(maxWidth: .infinity, maxHeight: forDetailView ? 192 : 144)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                }
+            } else {
+                Icon.emptyPlaceImage.image
+                    frame(maxWidth: .infinity, maxHeight: forDetailView ? 192 : 144)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
+                    
             }
+           
             
             placeTextGroup
         }
