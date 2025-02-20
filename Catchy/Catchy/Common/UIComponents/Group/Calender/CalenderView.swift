@@ -137,7 +137,7 @@ public struct CellView: View {
     /// 텍스트 색상 결정
     private var textColor: Color {
            let calendar = Calendar.current
-           let weekday = calendar.component(.weekday, from: date)
+        _ = calendar.component(.weekday, from: date)
     
         if selectedDate == date {
             return .g5 // 강조된 날짜
