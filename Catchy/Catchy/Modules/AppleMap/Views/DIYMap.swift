@@ -84,7 +84,7 @@ struct DIYMap: View {
         }
     }
     
-    /// 🔹 장소 검색 결과 뷰
+    
     private var searchView: some View {
         GeometryReader { proxy in
             let screenHeight = proxy.size.height

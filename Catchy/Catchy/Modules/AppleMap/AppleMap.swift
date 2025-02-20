@@ -23,7 +23,7 @@ struct AppleMap: UIViewRepresentable {
             lookingAtCenter: viewModel.initialRegion.center,
             fromDistance: 30000,
             pitch: 30,
-            heading: 0
+            heading: viewModel.userHeading
         )
         
         mapView.camera = camera
@@ -38,10 +38,13 @@ struct AppleMap: UIViewRepresentable {
         
         // 사용자의 현재 위치를 지도 중심으로 설정
         if let userLocation = viewModel.userLocation {
-            mapView.setRegion(MKCoordinateRegion(
-                center: userLocation,
-                span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
-            ), animated: true)
+            let camera = MKMapCamera(
+                lookingAtCenter: userLocation,
+                fromDistance: 30000, // 줌 레벨 조정
+                pitch: 45,
+                heading: viewModel.userHeading // 사용자의 방향 반영
+            )
+            mapView.setCamera(camera, animated: true)
         }
         
         // 검색된 장소의 마커를 추가
@@ -72,7 +75,7 @@ struct AppleMap: UIViewRepresentable {
                 annotationView.image = resizedImage
             }
         }
-
+        
         // 4️⃣ 검색된 경로 추가
         if let route = viewModel.route {
             mapView.addOverlay(route)
@@ -93,7 +96,7 @@ struct AppleMap: UIViewRepresentable {
         
         func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
             guard let customAnnotation = annotation as? CustomAnnotation else { return }
-
+            
             DispatchQueue.main.async {
                 if self.parent.viewModel.selectedPlaceId == customAnnotation.placeId {
                     self.parent.viewModel.selectedPlaceId = nil

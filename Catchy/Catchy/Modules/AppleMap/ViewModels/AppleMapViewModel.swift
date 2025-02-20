@@ -15,7 +15,9 @@ class AppleMapViewModel: ObservableObject {
     @Published var route: MKPolyline?
     @Published var routerIsLoading: Bool = false
     @Published var selectedPlaceId: Int?
+    
     @Published var userLocation: CLLocationCoordinate2D?
+    @Published var userHeading: CLLocationDirection = 0
     
     var placeInfoData: [PlaceInfoData]
     
@@ -26,6 +28,16 @@ class AppleMapViewModel: ObservableObject {
         self.placeInfoData = placeInfoData
         self.container = container
     }
+    
+    private func observeLocationUpdates() {
+            BaseLocationManager.shared.$currentLocation
+                .compactMap { $0?.coordinate }
+                .assign(to: &$userLocation)
+
+            BaseLocationManager.shared.$currentHeading
+                .compactMap { $0?.trueHeading }
+                .assign(to: &$userHeading)
+        }
     
     /// 지도 초기 영역 설정
     var initialRegion: MKCoordinateRegion {

@@ -23,6 +23,8 @@ class BaseLocationManager: NSObject, CLLocationManagerDelegate, ObservableObject
     /// 현재 위치 저장
     @Published var currentLocation: CLLocation?
     
+    @Published var currentHeading: CLHeading?
+    
     /// 예상 이동 시간 저장
     @Published var estimatedTime: TimeInterval = 0
     
@@ -34,7 +36,14 @@ class BaseLocationManager: NSObject, CLLocationManagerDelegate, ObservableObject
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.startUpdatingLocation()
+        locationManager.startUpdatingHeading()
     }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+            DispatchQueue.main.async {
+                self.currentHeading = newHeading
+            }
+        }
     
     /// 위치 권한이 변경될 때 호출
     /// - Parameter manager: 위치 관리자 인스턴스
