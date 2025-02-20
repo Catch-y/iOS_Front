@@ -15,10 +15,13 @@ import SwiftUI
 class MyPageService: MyPageServiceProtocol {
     
     let provider: MoyaProvider<MyPageAPITarget>
+    let testProvider: MoyaProvider<MyPageAPITarget>
     
-    init(provider: MoyaProvider<MyPageAPITarget> = APIManager.shared.createProvider(for: MyPageAPITarget.self)){
-        self.provider = provider
-    }
+    init(provider: MoyaProvider<MyPageAPITarget> = APIManager.shared.createProvider(for: MyPageAPITarget.self),
+             testProvider: MoyaProvider<MyPageAPITarget> = APIManager.shared.testProvider(for: MyPageAPITarget.self)) {
+            self.provider = provider
+            self.testProvider = testProvider
+        }
     
     /// 프로필 조회
     func getProfile() -> AnyPublisher<ResponseData<ProfileResponse>, MoyaError> {
@@ -36,14 +39,14 @@ class MyPageService: MyPageServiceProtocol {
     
     /// 내 코스 리뷰 조회 API
     func getMyCourseReviews(review: MyCourseReviewRequest) -> AnyPublisher<ResponseData<MyCourseReviewResponse>, Moya.MoyaError> {
-        return provider.requestPublisher(.getMyCourseReviews(review: review))
+        return testProvider.requestPublisher(.getMyCourseReviews(review: review))
             .map(ResponseData<MyCourseReviewResponse>.self)
             .eraseToAnyPublisher()
     }
     
     /// 내 장소 리뷰 조회 API
     func getMyPlaceReviews(review: MyPlaceReviewRequest) -> AnyPublisher<ResponseData<MyPlaceReviewResponse>, Moya.MoyaError> {
-        return provider.requestPublisher(.getMyPlaceReviews(review: review))
+        return testProvider.requestPublisher(.getMyPlaceReviews(review: review))
             .map(ResponseData<MyPlaceReviewResponse>.self)
             .eraseToAnyPublisher()
     }

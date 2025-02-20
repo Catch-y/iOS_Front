@@ -12,9 +12,13 @@ import Moya
 class HomeService: HomeServiceProtocol {
     private let provider: MoyaProvider<HomeAPITarget>
     
-    init(provider: MoyaProvider<HomeAPITarget> = APIManager.shared.testProvider(for: HomeAPITarget.self)) {
-        self.provider = provider
-    }
+    let testProvider: MoyaProvider<HomeAPITarget>
+    
+    init(provider: MoyaProvider<HomeAPITarget> = APIManager.shared.createProvider(for: HomeAPITarget.self),
+             testProvider: MoyaProvider<HomeAPITarget> = APIManager.shared.testProvider(for: HomeAPITarget.self)) {
+            self.provider = provider
+            self.testProvider = testProvider
+        }
     
     func getSearch(keyword: String, page: Int) -> AnyPublisher<ResponseData<SearchPlaceResponse>, MoyaError> {
         return provider.requestPublisher(.getSearch(keyword: keyword, page: page))
@@ -23,19 +27,19 @@ class HomeService: HomeServiceProtocol {
     }
     
     func getHomePersonalCourses() -> AnyPublisher<ResponseData<[CourseInfoResponse]>, MoyaError> {
-        return provider.requestPublisher(.getHomePersonalCourses)
+        return testProvider.requestPublisher(.getHomePersonalCourses)
             .map(ResponseData<[CourseInfoResponse]>.self)
             .eraseToAnyPublisher()
     }
     
     func getHomeCourseTopTen() -> AnyPublisher<ResponseData<[PopularCourseResponse]>, MoyaError> {
-        return provider.requestPublisher(.getHomeCourseTopTen)
+        return testProvider.requestPublisher(.getHomeCourseTopTen)
             .map(ResponseData<[PopularCourseResponse]>.self)
             .eraseToAnyPublisher()
     }
     
     func getRecommendPlaces(userLocation: UserLocation, page: Int) -> AnyPublisher<ResponseData<RecommendPlaceResponse>, MoyaError> {
-        return provider.requestPublisher(.getRecommendPlaces(userLocation: userLocation, page: page))
+        return testProvider.requestPublisher(.getRecommendPlaces(userLocation: userLocation, page: page))
             .map(ResponseData<RecommendPlaceResponse>.self)
             .eraseToAnyPublisher()
     }
