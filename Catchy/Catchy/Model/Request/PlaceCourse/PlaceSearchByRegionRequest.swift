@@ -13,6 +13,10 @@ struct PlaceSearchByRegionRequest: Codable {
     /// 검색어
     let searchKeyword: String
     
+    let latitude: Double
+    
+    let longitude: Double
+    
     /// 요청하는 페이지
     let page: Int
 }

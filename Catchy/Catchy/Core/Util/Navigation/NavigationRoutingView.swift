@@ -76,8 +76,8 @@ struct NavigationRoutingView: View {
         case .placeDetailView(let viewModel, let placeSearchResponseData):
             PlaceDetailView(viewModel: viewModel, placeSearchResponseData: placeSearchResponseData)
             
-        case .placeSearchView:
-            PlaceSearchView(container: container)
+        case .placeSearchView(let viewModel):
+            PlaceSearchView(viewModel: viewModel)
             
         case .placeBucketView(let viewModel):
             PlaceBucketView(viewModel: viewModel)

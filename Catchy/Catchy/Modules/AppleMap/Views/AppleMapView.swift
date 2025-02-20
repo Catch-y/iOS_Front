@@ -38,7 +38,6 @@ struct AppleMapView: View {
     }
     
     var smallMapView: some View {
-        
         ZStack(alignment: .topTrailing, content: {
             AppleMap(viewModel: viewModel)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -54,19 +53,6 @@ struct AppleMapView: View {
                     .padding(.trailing, 16)
             })
         })
-    }
-    
-    var fullScreenMapView: some View {
-        ZStack(alignment: .top, content: {
-            AppleMap(viewModel: viewModel)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            CustomNavigation(action: {
-                container.navigationRouter.pop()
-            }, title: "코스 경로", rightNaviIcon: nil)
-        })
-        .ignoresSafeArea(.all)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
