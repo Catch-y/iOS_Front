@@ -17,7 +17,9 @@ struct MyPlaceResponse: Codable {
     let content: [MyPageLikePlaceData]
 }
 
-struct MyPageLikePlaceData: Codable {
+struct MyPageLikePlaceData: Codable, Identifiable {
+    
+    var id = UUID()
     
     /// 장소 ID
     let placeId: Int
@@ -51,6 +53,20 @@ struct MyPageLikePlaceData: Codable {
     
     /// 장소 도메인 주소
     var placeSite: String?
+    
+    enum CodingKeys : String, CodingKey {
+        case placeId
+        case imageUrl
+        case placeName
+        case placeDescription
+        case categoryName
+        case roadAddress
+        case activeTime
+        case rating
+        case isVisited
+        case reviewCount
+        case placeSite
+    }
     
 }
 extension MyPageLikePlaceData: PlaceDataProtocol {

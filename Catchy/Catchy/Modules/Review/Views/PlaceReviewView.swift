@@ -13,7 +13,6 @@ struct PlaceReviewView: View {
     @EnvironmentObject var container: DIContainer
     
     @StateObject var viewModel: PlaceReviewViewModel
-    @EnvironmentObject var container: DIContainer
     
     // MARK: - 장소 리뷰, 평점 화면 Propertes
     /// 현재 장소 ID
