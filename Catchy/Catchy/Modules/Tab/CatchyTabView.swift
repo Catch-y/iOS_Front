@@ -52,7 +52,6 @@ struct CatchyTabView: View {
                                 isFloating.toggle()
                             case .diy:
                                 isFloating.toggle()
-                                container.navigationRouter.push(to: .placeSearchView)
                             }
                         })
                             .zIndex(3)
