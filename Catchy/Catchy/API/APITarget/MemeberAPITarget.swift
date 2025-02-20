@@ -14,6 +14,7 @@ enum MemeberAPITarget {
     case postServeyCategory(categories: [String]) /* 취향 설문 카테고리 저장 */
     case postServeyStyleTime(styleTime: StepThirdRequest) /* 취향 설문 스타일 저장 */
     case postLocation(locations: [StepFourStep]) /* 취향 위치 저장 */
+    case patchFCMToken(token: String)
 }
 
 extension MemeberAPITarget: APITargetType {
@@ -29,12 +30,14 @@ extension MemeberAPITarget: APITargetType {
             return "/member/survey/styletime"
         case .postLocation:
             return "/member/survey/location"
+        case .patchFCMToken:
+            return "/member/fcm-token"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .patchNickname:
+        case .patchNickname, .patchFCMToken:
             return .patch
         case .postServeyCategory, .postServeyStyleTime, .postLocation, .postNickname:
             return .post
@@ -53,6 +56,8 @@ extension MemeberAPITarget: APITargetType {
             return .requestJSONEncodable(styleTime)
         case .postLocation(let locations):
             return .requestJSONEncodable(locations)
+        case .patchFCMToken(let token):
+            return .requestParameters(parameters: ["fcmToken": token], encoding: JSONEncoding.default)
         }
     }
     
@@ -113,6 +118,19 @@ extension MemeberAPITarget: APITargetType {
             }
             """.data(using: .utf8)!
         case .postLocation:
+            return """
+            {
+              "isSuccess": true,
+              "code": "string",
+              "message": "string",
+              "result": {
+                "memberLocationId": [
+                  1
+                ]
+              }
+            }
+            """.data(using: .utf8)!
+        case .patchFCMToken:
             return """
             {
               "isSuccess": true,

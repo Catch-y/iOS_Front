@@ -12,7 +12,7 @@ import Combine
 class MemberService: MemberServiceProtocol {
     private let provider: MoyaProvider<MemeberAPITarget>
     
-    init(provider: MoyaProvider<MemeberAPITarget> = APIManager.shared.testProvider(for: MemeberAPITarget.self)) {
+    init(provider: MoyaProvider<MemeberAPITarget> = APIManager.shared.createProvider(for: MemeberAPITarget.self)) {
         self.provider = provider
     }
     
@@ -43,6 +43,12 @@ class MemberService: MemberServiceProtocol {
     func postLocation(locations: [StepFourStep]) -> AnyPublisher<ResponseData<StepThirdResponse>, MoyaError> {
         return provider.requestPublisher(.postLocation(locations: locations))
             .map(ResponseData<StepThirdResponse>.self)
+            .eraseToAnyPublisher()
+    }
+    
+    func patchFCMToken(token: String) -> AnyPublisher<ResponseData<EmptyResult>, MoyaError> {
+        return provider.requestPublisher(.patchFCMToken(token: token))
+            .map(ResponseData<EmptyResult>.self)
             .eraseToAnyPublisher()
     }
 }

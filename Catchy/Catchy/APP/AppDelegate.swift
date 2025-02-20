@@ -19,7 +19,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         application.registerForRemoteNotifications()
         Messaging.messaging().delegate = self
         
-
+        
         return true
     }
     
@@ -55,10 +55,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 extension AppDelegate: MessagingDelegate {
     
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-           guard let fcmToken = fcmToken else { return }
-           print("✅ APNs를 위한 디바이스 토큰: \(fcmToken)")
-       }
-       
+        guard let fcmToken = fcmToken else { return }
+        print("✅ APNs를 위한 디바이스 토큰: \(fcmToken)")
+        UserState.shared.setFcmToken(fcmToken)
+    }
+    
 }
 
 extension Notification.Name {

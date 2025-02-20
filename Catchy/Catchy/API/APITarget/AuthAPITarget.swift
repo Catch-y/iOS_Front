@@ -53,7 +53,7 @@ extension AuthAPITarget: APITargetType {
         switch self {
         case .sendRefreshToken(let refresh):
             var headers = ["Content-Type": "application/json"]
-            headers["refreshToken"] = "Bearer \(refresh)"
+            headers["Refresh-Token"] = "\(refresh)"
             
             return headers
         case .signup:

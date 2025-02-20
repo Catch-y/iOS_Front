@@ -57,6 +57,7 @@ class LoginViewModel: ObservableObject {
     
     private func handleSignUpFlow(signUpNaviData: SignUpNaviData) {
         self.isLogin = false
+        print("실행")
         self.goToSignUpPage(signUpNaviData: signUpNaviData)
         
     }
@@ -83,9 +84,6 @@ extension LoginViewModel {
                     throw APIError.serverError(message: responseData.message, code: responseData.code)
                 }
                 
-                guard let _ = responseData.result else {
-                    throw APIError.emptyResult
-                }
                 print("✅ Kakao LoginServer: \(responseData)")
                 return responseData
             }
@@ -121,14 +119,12 @@ extension LoginViewModel {
         isLoading = true
         container.useCaseProvider.authUseCase.executeSocialLogin(socialLoginType: .apple, socialToken: appleUserInfo.identityToken)
             .tryMap { responseData -> ResponseData<SocialLoginResponse> in
-                if responseData.code == "SOCIAL404" {
+                if !responseData.isSuccess,responseData.code == "MEMBER404" {
+                    print("실행")
                     self.handleSignUpFlow(signUpNaviData: .init(accessToken: appleUserInfo.identityToken, authorizationCode: appleUserInfo.authorizationCode, email: appleUserInfo.email, loginType: .apple))
                     throw APIError.serverError(message: responseData.message, code: responseData.code)
                 }
                 
-                guard let _ = responseData.result else {
-                    throw APIError.emptyResult
-                }
                 print("Appple LoginServer: \(responseData)")
                 return responseData
             }
@@ -136,6 +132,8 @@ extension LoginViewModel {
             .sink(receiveCompletion: { [weak self] completion in
                 guard let self = self else { return }
                 self.isLoading = false
+                
+                print("completion:\(completion)")
                 
                 switch completion {
                 case .finished:

@@ -35,4 +35,8 @@ class MemberRepository: MemberRepositoryProtocol {
     func postLocationData(locations: [StepFourStep]) -> AnyPublisher<ResponseData<StepThirdResponse>, MoyaError> {
         return service.postLocation(locations: locations)
     }
+    
+    func patchFCMToken(token: String) -> AnyPublisher<ResponseData<EmptyResult>, MoyaError> {
+        return service.patchFCMToken(token: token)
+    }
 }

@@ -21,7 +21,7 @@ class AccessTokenRefresher: @unchecked Sendable, RequestInterceptor {
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, any Error>) -> Void) {
         var urlRequest = urlRequest
         if let accessToken = tokenProviding.accessToken {
-            urlRequest.setValue("Bear \(accessToken)", forHTTPHeaderField: "Authorization")
+            urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         }
         completion(.success(urlRequest))
     }

@@ -8,8 +8,10 @@
 import Foundation
 import SwiftUI
 import Combine
+import Moya
 
 class SignUpViewModel: ObservableObject, ImageHandling {
+    
     @Published var nickname: String = ""
     @Published var nicknameMessage: String = "이미 사용중인 닉네임입니다."
     @Published var nicknameAvail: Bool?
@@ -55,6 +57,7 @@ class SignUpViewModel: ObservableObject, ImageHandling {
     private func saveUserInfo(response: SocialLoginResponse, loginType: SocialLoginType) {
         let userInfo = UserInfo(accessToken: response.accessToken, refreshToken: response.refreshToken)
         let success = KeychainManager.standard.saveSession(userInfo, for: "catchyUser")
+        
         print("회원 가입 후 로그인 성공: \(success)")
         
         UserState.shared.setLoginType(loginType)
@@ -101,10 +104,11 @@ extension SignUpViewModel {
 //MARK: - API Extension
 
 extension SignUpViewModel {
+    
     /// 회원 가입 API 함수
     /// - Parameter signUpNaviData: 로그인 후, 받아온 데이터 전달받아 회원가입 뷰에서 사용
+    
     public func signupAction(signUpNaviData: SignUpNaviData) {
-        
         isLoading = true
         
         container.useCaseProvider.authUseCase.executeSignup(socialSignup: signUpNaviData.loginType, signupRequest: .init(accessToken: signUpNaviData.accessToken, authorizationCode: signUpNaviData.authorizationCode, nickname: nickname), image: profileImage[0])
@@ -135,6 +139,7 @@ extension SignUpViewModel {
                 if let response = response.result {
                     isLoading = false
                     saveUserInfo(response: response, loginType: signUpNaviData.loginType)
+                    patchFCMToken()
                     container.navigationRouter.pop()
                     appflowViewModel.onSignupSuccess()
                 }
@@ -172,6 +177,32 @@ extension SignUpViewModel {
                     nicknameAvail = true
                     nicknameMessage = response.message
                 }
+                
+            })
+            .store(in: &cancellables)
+    }
+    
+    private func patchFCMToken() {
+        container.useCaseProvider.memberUseCase.executePatchFCMToken(token: UserState.shared.getFcmToken())
+            .tryMap { respopnseData -> ResponseData<EmptyResult> in
+                
+                if !respopnseData.isSuccess {
+                    throw APIError.serverError(message: respopnseData.message, code: respopnseData.code)
+                }
+                
+                print("FMCToken Check")
+                return respopnseData
+            }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("✅ patchFCMToken Completed")
+                case .failure(let failure):
+                    print("❌ patchFCMToken Fialed: \(failure)")
+                }
+            }, receiveValue: { result in
+                print("FCMTOKEN: \(result.message)")
                 
             })
             .store(in: &cancellables)

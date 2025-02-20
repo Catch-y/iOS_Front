@@ -19,6 +19,7 @@ enum Config {
         guard let baseURL = Config.infoDictionary["BASE_URL"] as? String else {
             fatalError("BaseURL not found")
         }
+        print("baseURL:\(baseURL)")
         return baseURL
     }()
     

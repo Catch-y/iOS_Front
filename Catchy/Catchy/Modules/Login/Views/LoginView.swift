@@ -20,19 +20,26 @@ struct LoginView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, content: {
-            
-            topLogoGroup
-            
-            Spacer()
-            
-            bottomBtnGroup
-        })
-        .opacity(isVisible ? 1 : 0)
-        .safeAreaPadding(EdgeInsets(top: 162, leading: 0, bottom: 62, trailing: 0))
-        .onAppear {
-            withAnimation(.easeInOut(duration: 0.5)) {
-                isVisible = true
+        NavigationStack(path: $container.navigationRouter.destination) {
+            VStack(alignment: .leading, content: {
+                
+                topLogoGroup
+                
+                Spacer()
+                
+                bottomBtnGroup
+            })
+            .navigationDestination(for: NavigationDestination.self) { destination in
+                NavigationRoutingView(destination: destination)
+                    .environmentObject(container)
+                    .environmentObject(appFlowViewModel)
+            }
+            .opacity(isVisible ? 1 : 0)
+            .safeAreaPadding(EdgeInsets(top: 162, leading: 0, bottom: 62, trailing: 0))
+            .onAppear {
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    isVisible = true
+                }
             }
         }
     }

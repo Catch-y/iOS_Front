@@ -25,4 +25,6 @@ protocol MemberUseCaseProtocol {
     /* 위치 정보 전달 */
     func executePostLocation(locations: [StepFourStep]) -> AnyPublisher<ResponseData<StepThirdResponse>, MoyaError>
     
+    func executePatchFCMToken(token: String) -> AnyPublisher<ResponseData<EmptyResult>, MoyaError>
+    
 }

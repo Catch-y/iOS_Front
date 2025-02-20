@@ -25,4 +25,6 @@ protocol MemberRepositoryProtocol {
     
     /* 위치 정보 전달 */
     func postLocationData(locations: [StepFourStep]) -> AnyPublisher<ResponseData<StepThirdResponse>, MoyaError>
+    
+    func patchFCMToken(token: String) -> AnyPublisher<ResponseData<EmptyResult>, MoyaError>
 }

@@ -14,15 +14,22 @@ class UserState: ObservableObject {
     @Published private(set) var userNickname: String
     private var userEmail: String
     private var loginType: SocialLoginType
+    private var fcmToken: String
     
     init(
         userNickname: String = "",
         userEmail: String = "",
-        loginType: SocialLoginType = .none
+        loginType: SocialLoginType = .none,
+        fcmToken: String = ""
     ) {
         self.userNickname = userNickname
         self.userEmail = userEmail
         self.loginType = loginType
+        self.fcmToken = fcmToken
+    }
+    
+    public func setFcmToken(_ fcm: String) {
+        self.fcmToken = fcm
     }
     
     public func setUserNickname(_ userNickname: String) {
@@ -40,6 +47,10 @@ class UserState: ObservableObject {
     
     public func setUserEmail(_ userEmail: String) {
         UserDefaults.standard.setValue(userEmail, forKey: "UserEmail")
+    }
+    
+    public func getFcmToken() -> String {
+        return fcmToken
     }
     
     public func getUserEmail() -> String {

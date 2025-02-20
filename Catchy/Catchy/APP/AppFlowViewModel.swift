@@ -10,7 +10,7 @@ import Foundation
 class AppFlowViewModel: ObservableObject {
     private let tokenProvider: TokenProvider = TokenProvider()
     
-    @Published var appState: AppState = .preferrenceSurvey
+    @Published var appState: AppState = .onBoarding
     
     public func stateAppFlow(completion: @escaping (Bool, Error?) -> Void) {
         tokenProvider.refreshToken { [weak self] accessToken, error in

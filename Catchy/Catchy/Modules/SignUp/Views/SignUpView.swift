@@ -46,6 +46,7 @@ struct SignUpView: View {
             }, width: UIScreen.screenWidth - 32, height: 60, onoff: viewModel.checkMainBtn() ? .on : .off)
             
         })
+        .navigationBarBackButtonHidden(true)
         .onAppear {
             UIApplication.shared.hideKeyboard()
         }

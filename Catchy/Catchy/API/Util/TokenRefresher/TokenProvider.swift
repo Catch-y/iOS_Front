@@ -41,10 +41,10 @@ class TokenProvider: TokenProviding {
             }
         }
     }
-    
     func refreshToken(completion: @escaping (String?, (any Error)?) -> Void) {
         guard let userInfo = keyChain.loadSession(for: userSession), let refreshToken = userInfo.refreshToken else {
             let error = NSError(domain: "catchy.com", code: -2, userInfo: [NSLocalizedDescriptionKey: "UserSession or refreshToken not found"])
+            print("유저 인증 탈출")
             completion(nil, error)
             return
         }
@@ -52,6 +52,12 @@ class TokenProvider: TokenProviding {
         provider.request(.sendRefreshToken(refreshToken: refreshToken)) { result in
             switch result {
             case .success(let response):
+                if let jsonString = String(data: response.data, encoding: .utf8) {
+                    print("응답 JSON: \(jsonString)")
+                } else {
+                    print("JSON 데이터를 문자열로 변환할 수 없습니다.")
+                }
+                
                 do {
                     let tokenData = try JSONDecoder().decode(ResponseData<TokenResponse>.self, from: response.data)
                     if tokenData.isSuccess {
@@ -60,12 +66,16 @@ class TokenProvider: TokenProviding {
                         completion(self.accessToken, nil)
                     } else {
                         let error = NSError(domain: "example.com", code: -1, userInfo: [NSLocalizedDescriptionKey: "Token Refresh failed: isSuccess false"])
+                        //
                         completion(nil, error)
                     }
                 } catch {
+                    print("디코딩 에러: \(error)")
                     completion(nil, error)
                 }
+                
             case .failure(let error):
+                print("네트워크 에러 : \(error)")
                 completion(nil, error)
             }
         }

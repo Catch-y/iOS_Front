@@ -10,6 +10,7 @@ import Combine
 import Moya
 
 class MemberUseCase: MemberUseCaseProtocol {
+    
     let repository: MemberRepositoryProtocol
     
     init(repository: MemberRepositoryProtocol = MemberRepository()) {
@@ -45,4 +46,12 @@ class MemberUseCase: MemberUseCaseProtocol {
             .mapError { $0 as MoyaError }
             .eraseToAnyPublisher()
     }
+    
+    func executePatchFCMToken(token: String) -> AnyPublisher<ResponseData<EmptyResult>, Moya.MoyaError> {
+        return repository.patchFCMToken(token: token)
+            .mapError { $0 as MoyaError }
+            .eraseToAnyPublisher()
+    }
+    
+    
 }
