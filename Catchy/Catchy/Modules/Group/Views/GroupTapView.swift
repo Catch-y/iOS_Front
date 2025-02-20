@@ -53,7 +53,8 @@ struct GroupTabView: View {
                 .presentationCornerRadius(21)
                 .presentationDragIndicator(.hidden)
         }
-        .toolbar(.hidden, for: .navigationBar)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
         .task {
             let currentYear = Calendar.current.component(.year, from: Date())
             let currentMonth = Calendar.current.component(.month, from: Date())

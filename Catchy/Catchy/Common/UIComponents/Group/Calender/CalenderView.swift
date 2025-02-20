@@ -113,13 +113,14 @@ struct CalenderView: View {
         return formatter
     }()
 
-    /// 요일 텍스트 배열
+   
+    /// ✅ 요일 텍스트 배열을 '일요일'부터 시작하도록 수정
     static let localizedWeekdaySymbols: [String] = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
-        let symbols = formatter.shortWeekdaySymbols ?? []
-        return Array(symbols[1...] + symbols[...0])
+        return formatter.shortWeekdaySymbols ?? []
     }()
+
 }
 
 // MARK: - CellView
@@ -133,12 +134,14 @@ public struct CellView: View {
     @Binding var selectedDate: Date?
     @ObservedObject var viewModel: CalenderViewModel  //  ViewModel 추가
 
-    
     /// 텍스트 색상 결정
     private var textColor: Color {
+           let calendar = Calendar.current
+           let weekday = calendar.component(.weekday, from: date)
+    
         if selectedDate == date {
             return .g5 // 강조된 날짜
-        } else if isHoliday {
+        } else if isHoliday  {
             return .red // 공휴일
         } else if isCurrentMonthDay {
             return .g7 // 현재 달의 날짜
@@ -182,7 +185,7 @@ public struct CellView: View {
                 // 날짜 텍스트
                 Text("\(day)")
                     .font(.body1)
-                    .foregroundStyle(.g5)
+                    .foregroundStyle(textColor)
                     .animation(.easeInOut(duration: 0.2), value: selectedDate) // 텍스트도 함께 부드럽게 변경
             }
         }

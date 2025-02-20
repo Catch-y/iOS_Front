@@ -26,7 +26,7 @@ enum NavigationDestination: Equatable, Hashable {
     case voteDoneView
     case voteDoneCategoryView(groupId : Int , voteId : Int)
     case voteResultPlaceView(groupId : Int , category : String)
-    
+    case qrCodeInviteView
 
     // Equatable 구현 (fullScreenMap 비교 제외)
     static func == (lhs: NavigationDestination, rhs: NavigationDestination) -> Bool {
@@ -42,7 +42,8 @@ enum NavigationDestination: Equatable, Hashable {
              (.locationSelectView, .locationSelectView),
              (.createGroupView, .createGroupView),
             (.voteDoneView, .voteDoneView),
-            (.voteDoneCategoryView , voteDoneCategoryView):
+            (.voteDoneCategoryView , voteDoneCategoryView),
+            (.qrCodeInviteView , qrCodeInviteView) :
             
             return true
         case (.courseDetailView(let lId), .courseDetailView(let rId)):
@@ -105,7 +106,8 @@ enum NavigationDestination: Equatable, Hashable {
             hasher.combine("voteDoneCategoryView")
         case .voteResultPlaceView(_, _) :
             hasher.combine("voteResultPlaceView")
-            
+        case .qrCodeInviteView:
+            hasher.combine("qrCodeInviteView")
         case .fullScreenMap:
             break // `fullScreenMap`은 해싱하지 않음
         }

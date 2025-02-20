@@ -31,7 +31,8 @@ struct VoteDoneView: View {
             confirmButton
         }
         .background(mainBackground) // 전체 배경
-        .toolbar(.hidden, for: .navigationBar)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
     }
     
     // MARK: - 투표 완료 내용

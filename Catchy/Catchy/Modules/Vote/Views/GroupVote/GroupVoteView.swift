@@ -74,7 +74,8 @@ struct GroupVoteView: View {
                 .animation(.easeInOut, value: isPopupVisible)
             }
         }
-        .toolbar(.hidden, for: .navigationBar)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     // MARK: - Empty State

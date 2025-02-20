@@ -42,7 +42,8 @@ struct GroupVoteStartView: View {
             }
             .background(Color.bg2)
         }
-        .toolbar(.hidden, for: .navigationBar)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
     }
     
     // MARK: - 투표멤버뷰

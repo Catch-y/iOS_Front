@@ -37,6 +37,8 @@
                 .zIndex(1)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
             .task {
                 await viewModel.loadGroupData()
             }
@@ -123,7 +125,7 @@
                 .padding()
                 .s2t()
             }
-            .padding(.top, 10)
+           
         }
 
         // MARK: - 콘텐츠 뷰 (위에서 정의한 요소 사용)

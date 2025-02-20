@@ -66,7 +66,8 @@ extension VoteDoneCategoryView {
         }
         .padding(.horizontal, 16)
         .background(Color.white)
-        .toolbar(.hidden, for: .navigationBar)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     private var headerText: some View {

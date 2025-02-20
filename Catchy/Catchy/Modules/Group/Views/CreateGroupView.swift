@@ -13,12 +13,11 @@ struct CreateGroupView: View {
     @EnvironmentObject var container: DIContainer
     @StateObject private var viewModel: CreateGroupViewModel
 
-
-
     // MARK: - 초기화
-    init(container: DIContainer) {
-        _viewModel = StateObject(wrappedValue: .init(container: container))
+    init(container: DIContainer, calendarViewModel: CalenderViewModel) {
+        _viewModel = StateObject(wrappedValue: .init(container: container, calendarViewModel: calendarViewModel))
     }
+
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -172,9 +171,10 @@ struct CreateGroupView: View {
 struct CreateGroupView_Previews: PreviewProvider {
     static var previews: some View {
         let container = DIContainer()
-        let viewModel = CreateGroupViewModel(container: container)
+        let calendarViewModel = CalenderViewModel(container: container)
+        let viewModel = CreateGroupViewModel(container: container, calendarViewModel: calendarViewModel) 
 
-        return CreateGroupView(container: container)
+        return CreateGroupView(container: container, calendarViewModel: calendarViewModel)
             .environmentObject(container)
             .environmentObject(viewModel)
     }
