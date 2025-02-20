@@ -24,16 +24,33 @@ struct CourseGroupCard: View {
     var body: some View {
         HStack(spacing: 14) {
             if let url = URL(string: course.courseImage) {
-                KFImage(url)
-                    .placeholder {
-                        ProgressView()
-                            .controlSize(.regular)
-                    }.retry(maxCount: 2, interval: .seconds(2))
-                    .downsampling(size: CGSize(width: UIScreen.screenWidth, height: type.imageSize.height))
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: type.imageSize.width, height: type.imageSize.height)
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                ZStack(alignment: .topLeading) {
+                    KFImage(url)
+                        .placeholder {
+                            ProgressView()
+                                .controlSize(.regular)
+                        }.retry(maxCount: 2, interval: .seconds(2))
+                        .downsampling(size: CGSize(width: UIScreen.screenWidth, height: type.imageSize.height))
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: type.imageSize.width, height: type.imageSize.height)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                    
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(.white)
+                            .frame(width: 43, height: 19)
+                            .opacity(0.9)
+                            
+                        Text("\(course.courseType.rawValue)")
+                            .foregroundStyle(.sub)
+                            .font(.caption_SM)
+                        
+                    }
+                    .padding(.top, 6)
+                    .padding(.leading, 6)
+                    
+                }
             }
             courseTextGroup
         }
@@ -78,7 +95,7 @@ struct CourseGroupCard: View {
 
 struct CourseGroupCard_Preview: PreviewProvider {
     static var previews: some View {
-        CourseGroupCard(course: .init(courseId: 0, courseType: .diy, courseImage: "https://i.namu.wiki/i/-UcsURAHAZ80XN7--nJenrc3typ4s4Hi6meDe5cdmvYiqdW7nvGb8mXJHFZXUE1e8_2rkPiEGU6KNl5bfPa_i5MfsS3buN88ZXGVCVajv-ANun91l4of6AlwW7wEtF7-A6w9t4Y9PtPg1pnizVO3fw.webp", courseName: "경복궁", courseDescription: "여기는 경복궁 입니다.", categories: [.CAFE, .BAR, .SPORT, .RESTAURANT, .REST, .CULTURELIFE])
+        CourseGroupCard(course: .init(courseId: 0, courseType: .diy, courseImage: "https://lh5.googleusercontent.com/p/AF1QipM5iJkANvcV_f2P6A2eCP2Abld2lHu-f4Ngzny3=w513-h240-k-no", courseName: "경복궁", courseDescription: "여기는 경복궁 입니다.", categories: [.CAFE, .BAR, .SPORT, .RESTAURANT, .REST, .CULTURELIFE])
                         ,type: .myPage)
         .previewLayout(.sizeThatFits)
         

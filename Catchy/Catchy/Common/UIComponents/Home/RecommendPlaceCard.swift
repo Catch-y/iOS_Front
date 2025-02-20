@@ -12,10 +12,12 @@ struct RecommendPlaceCard: View {
     
     @Binding var data: RecommendPlaceResponseData
     let action: () -> Void /* 장소 좋아요를 위한 Action */
+    let reviewTap: () -> Void /* 리뷰 화면으로 이동 */
     
-    init(data: Binding<RecommendPlaceResponseData>, action: @escaping () -> Void) {
+    init(data: Binding<RecommendPlaceResponseData>, action: @escaping () -> Void, reviewTap: @escaping () -> Void) {
         self._data = data
         self.action = action
+        self.reviewTap = reviewTap
     }
     
     var body: some View {
@@ -80,6 +82,9 @@ struct RecommendPlaceCard: View {
             makeInfoTitle(Icon.star.image, "평점 \(data.rating)")
             
             makeReview(Icon.review.image, "리뷰 \(data.reviewCount)개", Icon.rightChevron.image)
+                .onTapGesture {
+                    reviewTap()
+                }
         })
     }
     
@@ -108,6 +113,7 @@ extension RecommendPlaceCard {
     }
     
     func makeReview(_ leftImage: Image, _ title: String, _ rightImage: Image) -> some View {
+        
         HStack(spacing: 6, content: {
             leftImage
                 .fixedSize()

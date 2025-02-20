@@ -66,6 +66,9 @@ struct CourseDetailView: View {
                 
             }
         }
+        .fullScreenCover(isPresented: $viewModel.isReviewPresented) {
+            CourseReviewView(container: container, courseId: viewModel.courseId, isPresented: $viewModel.isReviewPresented)
+        }
         .navigationBarBackButtonHidden(true)
     }
     
@@ -124,7 +127,7 @@ struct CourseDetailView: View {
                     }
                 }, label: {
                     returnBookMark(data.isBookMarked)
-                        .resizable()
+                    .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 18, height: 18)
                 })
@@ -144,7 +147,8 @@ struct CourseDetailView: View {
                 makeStarPoint(Icon.star.image, "\(data.rating)")
                 
                 Button(action: {
-                    //TODO: - 리뷰 네비게이션 연결
+                    viewModel.isReviewPresented = true
+                    
                 }, label: {
                     makeReview(Icon.review.image, "리뷰 \(data.reviewCount)개", Icon.rightChevron.image)
                 })
