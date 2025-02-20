@@ -57,8 +57,6 @@ struct PlaceVisitingView: View {
                         height: 55,
                         onoff: .on
                     )
-
-
                     
                     Spacer()
                     

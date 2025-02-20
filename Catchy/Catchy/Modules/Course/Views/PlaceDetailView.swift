@@ -27,34 +27,57 @@ struct PlaceDetailView: View {
     
     var body: some View {
         
-        VStack(spacing: 36) {
-            if !viewModel.isPlaceDetailLoading {
-                if let place = viewModel.placeDetailResponse {
-                    
-                    PlaceInfoSection(place: Binding(
-                        get: { place },
-                        set: { viewModel.placeDetailResponse = $0 }
-                    ), forDetailView: true,
-                        reviewTap: {
-                        container.navigationRouter.push(to: .placeReviewView(placeId: place.placeId))
-                    }
-                    )
-                                        
-                    Spacer()
-                    
-                    mainBtn(
-                        hasCategory: place.categoryName != nil,
-                        hasSelected: viewModel.selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId }
-                    )
-                    .disabled(viewModel.selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId } || !(viewModel.selectedPlaceList.count < 5))
-                    
-                    Spacer()
-                    
-                }
-            } else {
-                MainProgressComponents()
+        VStack {
+            HStack {
+                backBtn
+                Spacer()
+                closeBtn
             }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 14)
             
+            HStack{
+                Spacer()
+                bucketBtn
+            }
+            .padding(.horizontal, 16)
+            
+            Spacer()
+            
+            VStack(spacing: 36) {
+                if !viewModel.isPlaceDetailLoading {
+                    if let place = viewModel.placeDetailResponse {
+                        
+                        PlaceInfoSection(place: Binding(
+                            get: { place },
+                            set: { viewModel.placeDetailResponse = $0 }
+                        ), forDetailView: true,
+                                         reviewTap: {
+                            container.navigationRouter.push(to: .placeReviewView(placeId: place.placeId))
+                        }
+                        )
+                        .padding(.top, 40)
+                        
+                        Spacer()
+                        
+                        mainBtn(
+                            hasCategory: place.categoryName != nil,
+                            hasSelected: viewModel.selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId }
+                        )
+                        .disabled(viewModel.selectedPlaceList.contains{ $0.placeId == placeSearchResponseData.placeId } || !(viewModel.selectedPlaceList.count < 5))
+                                                
+                    }
+                } else {
+                    MainProgressComponents()
+                }
+                
+            }
+            .frame(height: 600)
+            .background(
+                UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .circular)
+                    .fill(Color.white)
+            )
+            .border(.red)
         }
         .task {
             viewModel.getPlaceDetail(placeId: placeSearchResponseData.placeId)
@@ -105,5 +128,60 @@ struct PlaceDetailView: View {
         
     }
     
+    private var backBtn: some View {
+        Button(action: {
+            viewModel.onAppearByPop = true
+            viewModel.placeDetailResponse = nil
+            viewModel.container.navigationRouter.pop()
+        }, label: {
+            ZStack {
+                
+                Circle()
+                    .frame(width: 40, height: 40)
+                    .foregroundStyle(.white)
+                
+                Icon.leftChevron.image
+            }
+        })
+    }
+    
+    private var closeBtn: some View {
+        Button(action: {
+            viewModel.container.navigationRouter.popToRootView()
+            
+        }, label: {
+            ZStack {
+                
+                Circle()
+                    .frame(width: 40, height: 40)
+                    .foregroundStyle(.white)
+                
+                Icon.close.image
+            }
+            
+        })
+    }
+    
+    private var bucketBtn: some View {
+        Button(action: {
+            viewModel.container.navigationRouter.push(to: .placeBucketView(viewModel: viewModel))
+        }, label: {
+            ZStack {
+                
+                Circle()
+                    .frame(width: 40, height: 40)
+                    .foregroundStyle(.white)
+                
+                Text("\($viewModel.selectedPlaceList.count)")
+                    .font(.Body1_2)
+                    .foregroundStyle(.main)
+                    .padding(.bottom, 24)
+                    .padding(.leading, 24)
+                
+                
+                Icon.bucket.image
+            }
+        })
+    }
     
 }
