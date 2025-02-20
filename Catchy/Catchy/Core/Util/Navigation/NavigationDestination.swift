@@ -25,6 +25,7 @@ enum NavigationDestination: Equatable, Hashable {
     case placeReviewView(placeId: Int)
     case placeDetailView(viewModel: DIYCourseViewModel, placeSearchResponseData: PlaceSearchResponseData)
     case placeBucketView(viewModel: DIYCourseViewModel)
+    case diyMap
 
     // Equatable 구현 (fullScreenMap 비교 제외)
     static func == (lhs: NavigationDestination, rhs: NavigationDestination) -> Bool {
@@ -99,6 +100,8 @@ enum NavigationDestination: Equatable, Hashable {
         case .placeDetailView(_, let placeSearchResponseData):
             hasher.combine("placeDetailView")
             hasher.combine(placeSearchResponseData.placeId)
+        case .diyMap:
+            hasher.combine("diyMap")
         case .placeBucketView:
             break
         case .fullScreenMap:

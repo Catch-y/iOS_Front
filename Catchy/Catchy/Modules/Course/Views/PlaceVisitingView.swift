@@ -15,6 +15,8 @@ struct PlaceVisitingView: View {
     // MARK: - 뷰 모델
     @StateObject var viewModel: PlaceVisitingViewModel
 
+    @State private var isBouncing = false
+
     // MARK: - 장소 방문 화면 Properties
     /// 해당 뷰의 장소 ID
     let placeId: Int
@@ -101,21 +103,32 @@ struct PlaceVisitingView: View {
     /// 방문 체크 버튼
     private var visitCheckbtn: some View {
         Button(action: {
+            isBouncing = false
             viewModel.postPlaceVisiting()
         }, label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 16.5)
-                    .fill(.white)
-                    .stroke(viewModel.isUserActuallyVisiting ? .main : .gray) // 100m 이내일 때만 활성화 색상 적용
+                    .fill(viewModel.isUserActuallyVisiting ? .main : .white)
+                    .stroke(viewModel.isUserActuallyVisiting ? .main : .g3) // 100m 이내일 때만 활성화 색상 적용
                     .frame(width: 108, height: 36)
-
+                    
                 HStack(spacing: 7) {
-                    Icon.visitCheck.image
+                    viewModel.isUserActuallyVisiting ? Icon.visitCheck.image : Icon.emptyVisitCheck.image
                     Text("방문 체크")
-                        .foregroundStyle(viewModel.isUserActuallyVisiting ? .main : .gray) // 100m 이내일 때만 활성화 색상 적용
-                        .font(.body3)
+                        .foregroundStyle(viewModel.isUserActuallyVisiting ? .white : .g4) // 100m 이내일 때만 활성화 색상 적용
+                        .font(.body3_SM)
                 }
+                .padding(.trailing, 5)
             }
+            .onChange(of: viewModel.isUserActuallyVisiting) { (_, newValue) in
+                    if newValue {
+                        startBouncing()
+                    } else {
+                        isBouncing = false
+                    }
+                }
+            .offset(y: viewModel.isUserActuallyVisiting && isBouncing ? -1.5 : 1.5) // 위아래 이동
+            .animation(viewModel.isUserActuallyVisiting ? .easeInOut(duration: 0.8).repeatForever(autoreverses: true) : .default, value: isBouncing)
         })
         .disabled(!viewModel.isUserNear) // 100m 이상이면 버튼 비활성화
     }
@@ -160,6 +173,12 @@ struct PlaceVisitingView: View {
             .padding(.leading, 10)
             .animation(.easeInOut(duration: 0.3), value: isVisited)
     }
+    
+    private func startBouncing() {
+        guard viewModel.isUserActuallyVisiting else { return }
+        isBouncing = true
+    }
+
 }
 
 struct PlaceVisitingView_Previews: PreviewProvider {
