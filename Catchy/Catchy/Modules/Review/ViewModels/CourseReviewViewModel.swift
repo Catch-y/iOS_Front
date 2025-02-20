@@ -50,7 +50,7 @@ extension CourseReviewViewModel {
                 self.isLoading = false
                 switch completion {
                 case .finished:
-                    print("✅ Get Course Review Server Completed")
+                    print("✅ Get Course Review Completed")
                 case .failure(let failure):
                     print("❌ Get Course Review Failed: \(failure)")
                 }
@@ -70,7 +70,6 @@ extension CourseReviewViewModel {
                     self.lastPage = result.last
                     
                     if !result.last, let lastReviewId = result.content.last?.reviewId {
-                        self.lastPage = result.last
                         self.lastReviewId = lastReviewId
                     }
                     

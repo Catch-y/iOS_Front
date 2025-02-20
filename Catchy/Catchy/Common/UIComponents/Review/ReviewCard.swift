@@ -27,8 +27,8 @@ struct ReviewCard: View {
     /// 리뷰 이미지
     let images: [ReviewImageData]
     
-    /// 버튼 액션
-    // let action: (Int) -> Void
+    /// 버튼 액션 (삭제 or 신고하기)
+    let action: (Int) -> Void
     
     /* 필요 시 표시할 데이터 */
     
@@ -100,8 +100,8 @@ struct ReviewCard: View {
                         }
                         
                         Button {
-                            withAnimation {
-                                //action(reviewId)
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                action(reviewId)
                             }
                         } label: {
                             Text("삭제")
@@ -126,8 +126,10 @@ struct ReviewCard: View {
                     Spacer()
                     
                     Button {
-                        withAnimation {
-                            // TODO: - 신고하기 로직
+                        withAnimation(
+                            .easeInOut(duration: 0.3))
+                        {
+                            action(reviewId)
                         }
                     } label: {
                         Text("신고하기")
@@ -148,8 +150,8 @@ struct ReviewCard: View {
                     
                     // 신고하기 버튼
                     Button {
-                        withAnimation {
-                            // TODO: - 신고하기 로직
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            action(reviewId)
                         }
                     } label: {
                         Text("신고하기")
@@ -279,8 +281,8 @@ struct ReviewCard: View {
             ReviewImageData(reviewImageId: 101, imageUrl: "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp"),
             ReviewImageData(reviewImageId: 102, imageUrl: "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp")
         ],
-        //action: { reviewId in
-        //    print("리뷰 삭제 요청 with ID: \(reviewId)")},
+        action: { reviewId in
+            print("리뷰 삭제 요청 with ID: \(reviewId)")},
         categories: [.CAFE, .BAR, .CULTURELIFE, .EXPERIENCE, .REST],
         rating: 5,
         placeOrCourseName: "스타벅스 용산점",

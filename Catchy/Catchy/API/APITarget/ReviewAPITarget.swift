@@ -205,7 +205,7 @@ extension ReviewAPITarget: APITargetType {
                         "creatorNickname": "HappyCamper"
                     }
                 ],
-                "last": true
+                "last": false
             }
         }
         """
