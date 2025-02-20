@@ -23,9 +23,6 @@ struct GroupTabView: View {
         VStack(spacing: 0) {
             // 상단 네비게이션
             GroupLogoNavigation(
-                        onHomeButtonTap: {
-                           isBottomSheetPresented.toggle() // 버튼 클릭 시 바텀시트 표시
-                        },
                         onPlusButtonTap: {
                             isBottomSheetPresented.toggle() // 버튼 클릭 시 바텀시트 표시
                         }
