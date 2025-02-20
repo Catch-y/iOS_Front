@@ -78,6 +78,9 @@ struct NavigationRoutingView: View {
             
         case .placeBucketView(let viewModel):
             PlaceBucketView(viewModel: viewModel)
+        case .diyMap:
+            DIYMap(contaienr: container)
+                .environmentObject(container)
         }
     }
 }
