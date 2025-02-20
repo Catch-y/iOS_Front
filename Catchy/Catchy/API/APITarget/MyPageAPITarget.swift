@@ -195,91 +195,60 @@ extension MyPageAPITarget: APITargetType {
                   {
                     "courseId": 1,
                     "courseType": "AI",
-                    "courseImage": "https://i.namu.wiki/i/qiIgxBLKD2DisRt4lGaFOH62EFMz_L3WFF9cU4LKlqFFLuhw9vTOJBx0RqDyZgu4_evDAqgEkca9Sqhw5_oJng.webp",
-                    "courseName": "서울 도심 산책 코스",
-                    "courseDescription": "서울 도심에서 즐기는 자연과 역사",
-                    "categories": ["CAFE", "BAR"]
-                  },
-                  {
-                    "courseId": 2,
-                    "courseType": "DIY",
-                    "courseImage": "https://i.namu.wiki/i/d1A_wD4kuLHmOOFqJdVlOXVt1TWA9NfNt_HA0CS0Y_N0zayUAX8olMuv7odG2FiDLDQZIRBqbPQwBSArXfEJlQ.webp",
-                    "courseName": "한강 야경 투어",
-                    "courseDescription": "한강에서 야경을 즐기며 힐링하는 코스",
-                    "categories": ["SPORT", "RESTAURANT"]
-                  },
-                  {
-                    "courseId": 3,
-                    "courseType": "AI",
-                    "courseImage": "https://i.namu.wiki/i/PagwakcE00JZaGpEvXym79-IMvKFBmdqOBlq778J-bvJMwz15lDLleTKc56S2wwcRcaEm3FZZ4EtniRa5bXdeQ.webp",
-                    "courseName": "부산 바닷가 드라이브 코스",
-                    "courseDescription": "부산의 해안 도로를 따라 드라이브하는 코스",
-                    "categories": ["SPORT", "CAFE"]
-                  },
-                  {
-                    "courseId": 4,
-                    "courseType": "AI",
-                    "courseImage": "https://i.namu.wiki/i/IhFrc6uiSNlonNFRXzSNrKrhPKrjpmlmsB_SDg3x0PeW_L06BFuF7mOq8AcPDYjonfNpG64cQYsINU8sICeDpg.webp",
-                    "courseName": "제주 올레길 걷기",
-                    "courseDescription": "제주의 아름다운 자연을 만끽하는 올레길 코스",
-                    "categories": ["SPORT", "EXPERIENCE"]
-                  },
-                  {
-                    "courseId": 5,
-                    "courseType": "DIY",
-                    "courseImage": "https://i.namu.wiki/i/abZPxKt_L98I8ttqw56pLHtGiR5pAV4YYmpR3Ny3_n0yvff5IDoKEQFof7EbzJUSZ_-uzR5S7tzTzGQ346Qixw.webp",
-                    "courseName": "강릉 바다 여행",
-                    "courseDescription": "강릉의 아름다운 해변을 감상하는 여행",
-                    "categories": ["CAFE", "REST"]
-                  },
-                  {
-                    "courseId": 6,
-                    "courseType": "AI",
-                    "courseImage": "https://i.namu.wiki/i/s33TC47rcGojZ5ojPn6VONdzJqQ3qg4cpOgiuFqWZ4qnu51xoQSt9vbD2VpmDrpJi8rSifhgXD5v-JWyL7DKhA.webp",
-                    "courseName": "경주 역사 탐방",
-                    "courseDescription": "신라의 수도 경주에서 역사를 배우는 여행",
-                    "categories": ["CULTURELIFE", "EXPERIENCE"]
+                    "courseImage": "https://catchy-bucket.s3.ap-northeast-2.amazonaws.com/7fd78244-f698-43fb-888c-15c9e0cd9aa5",
+                    "courseName": "한상차림 올려라 코스",
+                    "courseDescription": "한식을 제대로 즐기면서 든든하게 배를 채울 수 있는 정통 한정식 코스입니다. 전채 요리부터 메인, 후식까지 순서대로 나와서 하나하나 음미하면서 먹을 수 있습니다.",
+                    "categories": ["RESTAURANT", "CAFE"]
                   },
                   {
                     "courseId": 7,
                     "courseType": "DIY",
-                    "courseImage": "https://i.namu.wiki/i/XGgP6E-6eOwHuC84pFQpqvTvFAj1VjJQJlOOQV7Ky3MrBzI-IdXGw9r4L1YkCxUv5Uk3rYVWkmWHY8unoh8iSQ.webp",
-                    "courseName": "남해 섬 투어",
-                    "courseDescription": "남해의 아름다운 섬들을 탐방하는 코스",
-                    "categories": ["EXPERIENCE", "CULTURELIFE"]
+                    "courseImage": "https://i.namu.wiki/i/jDYl3xK8uotCA3p3dD-EFufHlRJPWbYLExnhfIp5YlewDm3FO0lggA4q1xyIpWkoQl-P-NkHuSQ5ZYDzgW_6Sg.webp",
+                    "courseName": "월미도 싹-다 깨부수기 코스",
+                    "courseDescription": "놀이기구에서 혼을 쏙 빼고 조개구이 뜯으며 바다 감성 충전 후 루프탑 바에서 기깔나게 마무리!",
+                    "categories": ["EXPERIENCE", "RESTAURANT", "BAR"]
+                  },
+                  {
+                    "courseId": 16,
+                    "courseType": "AI",
+                    "courseImage": "https://catchy-bucket.s3.ap-northeast-2.amazonaws.com/course-images/image+(5).png",
+                    "courseName": "지리산 등반 코스",
+                    "courseDescription": "지리산의 숨은 매력을 따라가는 천왕봉 정복 코스! 전설의 검사가 칼을 갈았다는 칼바위에서 강인한 기운을 받고, 웅장한 천왕봉 정상에서 한반도를 품에 안은 듯한 절경을 만끽하세요! 내려오는 길엔 지리산거북이산장식당에서 든든한 한 끼로 여정을 완성하는 완벽한 모험!",
+                    "categories": ["REST", "RESTAURANT"]
+                  },
+                  {
+                    "courseId": 14,
+                    "courseType": "DIY",
+                    "courseImage": "https://www.bogogago.com/wp-content/uploads/2023/12/인사동_12_공공3유형.webp",
+                    "courseName": "인사동 전통 문화 체험",
+                    "courseDescription": "들어는 보셨나 김치 박물관? 전통차마시고 도예까지!",
+                    "categories": ["CULTURELIFE", "CAFE", "EXPERIENCE"]
+                  },
+                  {
+                    "courseId": 6,
+                    "courseType": "AI",
+                    "courseImage": "https://catchy-bucket.s3.ap-northeast-2.amazonaws.com/course-images/image+(4).png",
+                    "courseName": "다이나믹한 놀이공원 풀코스",
+                    "courseDescription": " 에버랜드에서 신나는 놀이기구를 즐긴 후, 카페에서 여유를 만끽하고, 박물관 감상후 밥까지!",
+                    "categories": ["EXPERIENCE", "CAFE", "CULTURELIFE"]
+                  },
+                  {
+                    "courseId": 11,
+                    "courseType": "DIY",
+                    "courseImage": "https://i.pinimg.com/474x/62/f0/32/62f0324981ee60090bd1548da1473767.jpg",
+                    "courseName": "친구와 힙찔이 도전할 수 있는 코스",
+                    "courseDescription": "힙한데만 찾아가는 코스 ",
+                    "categories": ["CAFE", "EXPERIENCE", "BAR"]
                   },
                   {
                     "courseId": 8,
                     "courseType": "DIY",
-                    "courseImage": "https://i.namu.wiki/i/2VW6etn_MzSaFyu2KuVZx8Vgq0hxjnNL2IC4YxIBp-vx-Zn0GZ0lZWKaI8KdlzWbX2v1CRHwzZTWOQRt-mtQkw.webp",
-                    "courseName": "설악산 등산 코스",
-                    "courseDescription": "국립공원 설악산을 오르는 등산 코스",
-                    "categories": ["SPORT", "EXPERIENCE"]
-                  },
-                  {
-                    "courseId": 9,
-                    "courseType": "AI",
-                    "courseImage": "https://i.namu.wiki/i/SvpgHv1TNHqXY_0srovmRuf9FUND_sZZxhPQpdnqB358yAIr9nTbLs3_WqgbQVjuXFhfPMoA7MgI-LKlu-PHJQ.webp",
-                    "courseName": "대구 먹거리 투어",
-                    "courseDescription": "대구의 유명한 음식들을 맛보는 코스",
-                    "categories": ["RESTAURANT", "CAFE"]
-                  },
-                  {
-                    "courseId": 10,
-                    "courseType": "DIY",
-                    "courseImage": "https://i.namu.wiki/i/Zt8NUvVHxv8RNQdIyCD06ohLHoWj5nE5hufMc55WfyOaMLdHKsjXPgP5A5ASRI-hQHLIG-O7NckxMxnckejsgQ.webp",
-                    "courseName": "전주 한옥마을 여행",
-                    "courseDescription": "전통 한옥과 전통 문화를 체험하는 코스",
-                    "categories": ["CULTURELIFE", "EXPERIENCE"]
-                  },
-                  {
-                    "courseId": 11,
-                    "courseType": "AI",
-                    "courseImage": "https://i.namu.wiki/i/5lWzm-EzKiltQtHNvvmDZouOhbv_16dtd-A2EIbkkfcPwC6yOdqtCMaJONuqHReF5cINkERfWoR-eN0vcF0FNQ.webp",
-                    "courseName": "인천 차이나타운 탐방",
-                    "courseDescription": "인천 차이나타운의 매력을 탐방하는 코스",
-                    "categories": ["CULTURELIFE", "RESTAURANT", "EXPERIENCE", "SPORT", "REST", "CAFE"] 
+                    "courseImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfDnd3ze146S8zAHweUxYqxiyh3MxPB3ttXg&s",
+                    "courseName": "교양 한 스푼, 미식 한 입",
+                    "courseDescription": "전시회에서 감성 충전하고, 북카페에서 분위기 잡고, 맛집에서 제대로 한 끼 즐기면서 하루를 꽉 채우는 코스. 교양과 미식을 동시에 맛볼 준비됐다면 따라와!",
+                    "categories": ["CULTURELIFE", "CAFE", "RESTAURANT"]
                   }
+                  
                 ],
                 "isLast": true
               }

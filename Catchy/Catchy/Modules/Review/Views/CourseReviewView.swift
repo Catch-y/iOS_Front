@@ -47,6 +47,7 @@ struct CourseReviewView: View {
                 }
             } else {
                 MainProgressComponents()
+                    .frame(maxWidth: .infinity)
                 }
             })
         .ignoresSafeArea(.all)

@@ -15,10 +15,13 @@ import SwiftUI
 class MyPageService: MyPageServiceProtocol {
     
     let provider: MoyaProvider<MyPageAPITarget>
+    let testProvider: MoyaProvider<MyPageAPITarget>
     
-    init(provider: MoyaProvider<MyPageAPITarget> = APIManager.shared.createProvider(for: MyPageAPITarget.self)){
-        self.provider = provider
-    }
+    init(provider: MoyaProvider<MyPageAPITarget> = APIManager.shared.createProvider(for: MyPageAPITarget.self),
+             testProvider: MoyaProvider<MyPageAPITarget> = APIManager.shared.testProvider(for: MyPageAPITarget.self)) {
+            self.provider = provider
+            self.testProvider = testProvider
+        }
     
     /// 프로필 조회
     func getProfile() -> AnyPublisher<ResponseData<ProfileResponse>, MoyaError> {
@@ -29,21 +32,21 @@ class MyPageService: MyPageServiceProtocol {
     
     /// 북마크된 코스 무한 스크롤 API
     func getBookmarkCourseList(pageSize: Int, lastCourseId: Int? = nil) -> AnyPublisher<ResponseData<CourseResponse>, Moya.MoyaError> {
-        return provider.requestPublisher(.getBookmarkCourseList(pageSize: pageSize, lastCourseId: lastCourseId))
+        return testProvider.requestPublisher(.getBookmarkCourseList(pageSize: pageSize, lastCourseId: lastCourseId))
             .map(ResponseData<CourseResponse>.self)
             .eraseToAnyPublisher()
     }
     
     /// 내 코스 리뷰 조회 API
     func getMyCourseReviews(review: MyCourseReviewRequest) -> AnyPublisher<ResponseData<MyCourseReviewResponse>, Moya.MoyaError> {
-        return provider.requestPublisher(.getMyCourseReviews(review: review))
+        return testProvider.requestPublisher(.getMyCourseReviews(review: review))
             .map(ResponseData<MyCourseReviewResponse>.self)
             .eraseToAnyPublisher()
     }
     
     /// 내 장소 리뷰 조회 API
     func getMyPlaceReviews(review: MyPlaceReviewRequest) -> AnyPublisher<ResponseData<MyPlaceReviewResponse>, Moya.MoyaError> {
-        return provider.requestPublisher(.getMyPlaceReviews(review: review))
+        return testProvider.requestPublisher(.getMyPlaceReviews(review: review))
             .map(ResponseData<MyPlaceReviewResponse>.self)
             .eraseToAnyPublisher()
     }
@@ -56,7 +59,7 @@ class MyPageService: MyPageServiceProtocol {
     
     /// 리뷰 삭제 API
     func deleteReview(reviewId: Int, reviewType: ReviewType) -> AnyPublisher<ResponseData<DeleteReviewResponse>, Moya.MoyaError> {
-        return provider.requestPublisher(.deleteReview(reviewId: reviewId, reviewType: reviewType))
+        return testProvider.requestPublisher(.deleteReview(reviewId: reviewId, reviewType: reviewType))
             .map(ResponseData<DeleteReviewResponse>.self)
             .eraseToAnyPublisher()
     }

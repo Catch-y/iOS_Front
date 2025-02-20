@@ -39,6 +39,8 @@ struct DeleteReviewPopupView: View {
         }
     }
     
+    /// 리뷰 삭제 메시지 텍스트 섹션
+    /// - Returns: 텍스트 뷰
     private func textSection() -> some View {
         return VStack(spacing: 5, content: {
             (
@@ -55,6 +57,8 @@ struct DeleteReviewPopupView: View {
         })
     }
     
+    /// 버튼 섹션
+    /// - Returns: 취소 / 확인 버튼 섹션 뷰
     private func buttonSeciton() -> some View {
         return HStack(spacing: 15, content: {
             Button(action: {
