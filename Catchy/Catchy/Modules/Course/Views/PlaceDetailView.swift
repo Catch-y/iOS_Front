@@ -77,7 +77,6 @@ struct PlaceDetailView: View {
                 UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20, style: .circular)
                     .fill(Color.white)
             )
-            .border(.red)
         }
         .task {
             viewModel.getPlaceDetail(placeId: placeSearchResponseData.placeId)
