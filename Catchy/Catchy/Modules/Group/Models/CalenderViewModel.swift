@@ -132,8 +132,6 @@ final class CalenderViewModel: ObservableObject {
         do {
             let decodedResponse = try decoder.decode(ResponseData<[GroupCalendarResponse]>.self, from: sampleData)
 
-            print("📥 디코딩된 응답: \(decodedResponse)")
-
             if let schedules = decodedResponse.result {
                 self.mapSchedules(from: schedules)
                 print("✅ API Target 샘플 데이터 로드 완료: \(self.schedules)")

@@ -16,14 +16,19 @@ class QRCodeInviteViewModel: ObservableObject {
     @Published var qrCodeImage: UIImage?
 
     let container: DIContainer
+    private let groupInfo: GroupInfo
     private let filter = CIFilter.qrCodeGenerator()
     private let provider: MoyaProvider<GroupAPITarget>
     
     // MARK: - 초기화
-       init(container: DIContainer, provider: MoyaProvider<GroupAPITarget> = MoyaProvider<GroupAPITarget>()) {
-           self.container = container
-           self.provider = provider
-       }
+    init(container: DIContainer,
+         provider: MoyaProvider<GroupAPITarget> = MoyaProvider<GroupAPITarget>(),
+         groupInfo: GroupInfo) { // ✅ groupInfo 추가
+        self.container = container
+        self.provider = provider
+        self.groupInfo = groupInfo // ✅ 전달받은 그룹 정보 저장
+    }
+
     // MARK: - 서버 연동: 그룹 생성 및 초대 URL, 그룹 정보 받아오기
     func setupInviteCode() {
         let group = GroupInfo(
