@@ -18,6 +18,7 @@ class SimilarPlacesViewModel: ObservableObject {
     var currentPage: Int = 1
     var isLastPage: Bool = false
     var isNaviPop: Bool = false
+    var isPrefetching: Bool = false
     
     let container: DIContainer
     private var cancellables = Set<AnyCancellable>()
@@ -35,8 +36,12 @@ class SimilarPlacesViewModel: ObservableObject {
             return
         }
         
-        if !isRefresh  {
+        if !isRefresh && !isPrefetching  {
             self.isLoading = true
+        }
+        
+        if isPrefetching {
+            isPrefetching = false
         }
 
         BaseLocationManager.shared.getCurrentUserLocation { [weak self] location in

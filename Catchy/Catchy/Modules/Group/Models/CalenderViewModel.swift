@@ -102,7 +102,7 @@ final class CalenderViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     // MARK: - UserDefaults에서 일정 불러오기
-        private func loadLocalSchedules() {
+        public func loadLocalSchedules() {
             if let savedData = UserDefaults.standard.data(forKey: "createdGroupInfo"),
                let savedGroup = try? JSONDecoder().decode(GroupInfo.self, from: savedData) {
                 

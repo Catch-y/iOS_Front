@@ -15,7 +15,7 @@ class PlaceCourseService: PlaceCourseServiceProtocol {
     
     let provider: MoyaProvider<PlaceCourseAPITarget>
     
-    init(provider: MoyaProvider<PlaceCourseAPITarget> = APIManager.shared.testProvider(for: PlaceCourseAPITarget.self)) {
+    init(provider: MoyaProvider<PlaceCourseAPITarget> = APIManager.shared.createProvider(for: PlaceCourseAPITarget.self)) {
         self.provider = provider
     }
     

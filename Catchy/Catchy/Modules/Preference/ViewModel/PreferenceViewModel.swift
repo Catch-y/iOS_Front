@@ -9,6 +9,7 @@ import Foundation
 import CoreGraphics
 import MapKit
 import Combine
+import Moya
 
 class PreferenceViewModel: ObservableObject {
     
@@ -20,7 +21,6 @@ class PreferenceViewModel: ObservableObject {
     init(container: DIContainer, appFlowViewModel: AppFlowViewModel) {
         self.container = container
         self.appFlowViewModel = appFlowViewModel
-        
     }
     
     @Published var isLoading: Bool = false
@@ -240,11 +240,12 @@ extension PreferenceViewModel {
                 return responseData
             }
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: {completion in
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self = self else { return }
                 switch completion {
                 case .finished:
                     print("✅ 모든 취향 데이터 전송 완료")
-                    self.postSurveyStyleTime()
+                    postSurveyStyleTime()
                 case .failure(let error):
                     print("❌ 모든 취향 데이터 전송 API 호출 실패: \(error)")
                 }
@@ -269,15 +270,15 @@ extension PreferenceViewModel {
             ActiveDateDTO(dayOfWeek: day, startTime: DataFormatter.shared.timeString(from: leftTime), endTime: DataFormatter.shared.timeString(from: rightTime))
         }
         
+        print("뷰모델전송: \(activeTimes)")
+        
         container.useCaseProvider.memberUseCase.executePostServeyStyleTime(styleTime: .init(styleNames: selectedCompanion, activeTimes: activeTimes))
             .tryMap { responseData -> ResponseData<StepTwoResponse> in
+                
                 if !responseData.isSuccess {
                     throw APIError.serverError(message: responseData.message, code: responseData.code)
                 }
                 
-                guard let _ = responseData.result else {
-                    throw APIError.emptyResult
-                }
                 
                 print("✅ 취향 3 4단계 데이터 전송: \(responseData)")
                 return responseData
@@ -287,13 +288,13 @@ extension PreferenceViewModel {
                 switch completion {
                 case .finished:
                     print("✅ 모든 시간, 같이할 사람 전송 완료")
-                    self.postLocation()
                 case .failure(let error):
                     print("❌ 모든 시간, 같이할 사람 전송 실패: \(error)")
                 }
             }, receiveValue: { response in
                 if let response = response.result {
                     print("취향 3단계 및 4단계 response: \(response)")
+                    self.postLocation()
                 }
             })
             .store(in: &cancellalbes)

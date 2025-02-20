@@ -57,6 +57,7 @@ struct PlaceDetailView: View {
                 }
             } else {
                 MainProgressComponents()
+                    .frame(maxWidth: .infinity)
             }
             
         }

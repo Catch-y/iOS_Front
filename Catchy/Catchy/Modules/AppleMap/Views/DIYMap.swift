@@ -38,9 +38,30 @@ struct DIYMap: View {
                 }
                 .ignoresSafeArea(.all)
             
+            
             VStack {
-                topController
+                
+                if !isPlaceDetailPresented {
+                    
+                    topController
+                    
+                } else {
+                    VStack(spacing: 14) {
+                        HStack {
+                            DIYBackButton(viewModel: viewModel)
+                            Spacer()
+                            DIYCloseButton(viewModel: viewModel)
+                        }
+                        HStack {
+                            Spacer()
+                            DIYBucketButton(viewModel: viewModel)
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                }
+                
                 Spacer()
+
             }
 
             if isSearchViewVisible {
@@ -84,7 +105,7 @@ struct DIYMap: View {
         }
     }
     
-    /// 🔹 장소 검색 결과 뷰
+    
     private var searchView: some View {
         GeometryReader { proxy in
             let screenHeight = proxy.size.height

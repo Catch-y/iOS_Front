@@ -27,7 +27,12 @@ class DIYCourseViewModel: ObservableObject {
     @Published var placeList: [PlaceSearchResponseData] = []
     
     /// 검색어
-    @Published var searchText: String = ""
+    @Published var searchText: String = "" {
+        didSet {
+            isLast = false
+            page = 1
+        }
+    }
     
     /// 장소 목록 - API 통신 중인가?
     @Published var isPlaceListLoading: Bool = false
@@ -78,6 +83,7 @@ extension DIYCourseViewModel {
             isPlaceListLoading = true
         }
         
+        
         // 현재 위치 가져오기
 ////        BaseLocationManager.shared.getCurrentUserLocation { [weak self] userLocation in
 //            guard let self = self, let location = userLocation else {
@@ -104,7 +110,6 @@ extension DIYCourseViewModel {
                     guard let self = self else { return }
                     
                     self.isPlaceListLoading = false
-                    self.isPrefetching = false
                     
                     switch completion {
                     case .finished:
@@ -119,8 +124,14 @@ extension DIYCourseViewModel {
                         if placeSearchResponse == nil {
                             placeList = response.placeInfoPreviews
                         } else {
-                            self.placeList.append(contentsOf: response.placeInfoPreviews)
+                            if isPrefetching {
+                                self.placeList.append(contentsOf: response.placeInfoPreviews)
+                                isPrefetching = false
+                            } else {
+                                self.placeList = response.placeInfoPreviews
+                            }
                         }
+                        isPrefetching = false
                         self.placeSearchResponse = response
                         self.isLast = response.isLast
                         self.page += 1

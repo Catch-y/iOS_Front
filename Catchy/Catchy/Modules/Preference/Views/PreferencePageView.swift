@@ -17,8 +17,11 @@ struct PreferencePageView: View {
     @State var scaleFactor: CGFloat = 1.0
     @State var tappedLocation: (latitude: Double, longitude: Double)? = nil
     
-    init(container: DIContainer, appFlowViewModel: AppFlowViewModel) {
+    let fromMyPage: Bool
+    
+    init(container: DIContainer, appFlowViewModel: AppFlowViewModel, fromMyPage: Bool = false) {
         self._viewModel = StateObject(wrappedValue: .init(container: container, appFlowViewModel: appFlowViewModel))
+        self.fromMyPage = fromMyPage
     }
     
     var body: some View {
@@ -337,6 +340,8 @@ struct PreferencePageView: View {
                     viewModel.selectedWeekDay = ActiveDate.allCases
                 }
             }
+            
+            print(viewModel.selectedWeekDay)
         }, label: {
             HStack(spacing: 5, content: {
                 if viewModel.selectedWeekDay.count == ActiveDate.allCases.count {
@@ -384,11 +389,13 @@ struct PreferencePageView: View {
                                     get: { viewModel.isExpand[0] ?? false },
                                     set: { newValue in
                                         togglePicker(index: 0, newValue: newValue)
+                                        print(newValue)
                                     }
                                  )
                 )
                 
                 Text("~")
+                
                     .font(.title2)
                     .foregroundStyle(.g3)
                 
@@ -397,6 +404,7 @@ struct PreferencePageView: View {
                                     get: { viewModel.isExpand[1] ?? false },
                                     set: { newValue in
                                         togglePicker(index: 1, newValue: newValue)
+                                        print(newValue)
                                     }
                                  )
                 )

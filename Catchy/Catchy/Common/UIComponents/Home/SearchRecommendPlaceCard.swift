@@ -55,9 +55,11 @@ struct SearchRecommendPlaceCard: View {
                 .lineLimit(1)
                 .layoutPriority(1)
             
-            CategoryCard(categoryType: data.category)
-                .frame(minWidth: 50, maxWidth: 100)
-                .fixedSize()
+            if let categoryName = data.categoryName {
+                CategoryCard(categoryType: categoryName)
+                    .frame(minWidth: 50, maxWidth: 100)
+                    .fixedSize()
+            }
 
         })
     }

@@ -28,7 +28,7 @@ struct SearchPlaceData: Codable, Identifiable, Hashable {
     var placeId: Int
     var placeName: String
     var placeImage: String
-    var category: CategoryType
+    var categoryName: CategoryType?
     var roadAddress: String
     var activeTime: String?
     var rating: Double

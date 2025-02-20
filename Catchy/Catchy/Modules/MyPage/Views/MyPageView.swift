@@ -19,6 +19,8 @@ struct MyPageView: View {
     
     @Binding var isEditingNickname: Bool
     
+
+    
     init(container: DIContainer, isEditingNickname: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: MyPageViewModel(container: container))
         self._isEditingNickname = isEditingNickname
@@ -60,6 +62,9 @@ struct MyPageView: View {
             withAnimation(.easeInOut(duration: 0.3)) {
                 isVisible = true
             }
+        }
+        .fullScreenCover(isPresented: $viewModel.isPreferenceScreenView) {
+            PreferencePageView(container: container, appFlowViewModel: appFlowViewModel, fromMyPage: true)
         }
     }
     
@@ -135,7 +140,9 @@ struct MyPageView: View {
     /// - Returns: 마이 페이지 버튼 뷰
     private func myPageMenuButtons() -> some View {
         let menuItems: [(icon: Image, title: String, action: () -> Void)] = [
-            (Icon.document.image, "취향 설문", { print("취향 설문 클릭") }),
+            (Icon.document.image, "취향 설문", {
+                viewModel.isPreferenceScreenView = true
+            }),
             (Icon.myPageHeart.image, "선호 장소", { container.navigationRouter.push(to: .favoritePlacesView) }),
             (Icon.myPageReview.image, "내 리뷰", { container.navigationRouter.push(to: .myReviewsView) })
         ]

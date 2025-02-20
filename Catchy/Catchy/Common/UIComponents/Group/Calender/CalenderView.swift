@@ -40,8 +40,10 @@ struct CalenderView: View {
                 .padding(.top, 29)
         }
         .task {
-            viewModel.fetchGroupSchedules()
+            viewModel.loadLocalSchedules()  // 로컬 데이터 우선 로드
+            viewModel.fetchGroupSchedules() // 최신 데이터 동기화
         }
+
         .background(Color.bg1)
     }
     
