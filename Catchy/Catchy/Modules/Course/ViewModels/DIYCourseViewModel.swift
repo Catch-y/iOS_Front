@@ -72,7 +72,7 @@ extension DIYCourseViewModel {
     // MARK: - API 호출 함수
     /// 장소 검색 - 지역명 기반
     func getPlaceListByRegion() {
-        guard !isLast else { return }
+        guard !isLast, !isPlaceListLoading else { return }
         
         if onAppearByPop {
             onAppearByPop = false
@@ -83,7 +83,8 @@ extension DIYCourseViewModel {
             isPlaceListLoading = true
         }
         
-        
+        self.isPlaceListLoading = true
+
         // 현재 위치 가져오기
 ////        BaseLocationManager.shared.getCurrentUserLocation { [weak self] userLocation in
 //            guard let self = self, let location = userLocation else {

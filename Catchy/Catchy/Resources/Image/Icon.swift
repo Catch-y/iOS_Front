@@ -95,6 +95,7 @@ enum Icon: String {
     case addPhoto = "addPhoto"
     
     case bucket = "bucket"
+    case emptyPlaceImage = "emptyPlaceImage"
     
     //MARK: - Category
     case breaks = "breaks"

@@ -38,7 +38,7 @@ struct SearchPlaceData: Codable, Identifiable, Hashable {
         case placeId
         case placeName
         case placeImage = "imageUrl"
-        case category = "categoryName"
+        case categoryName = "categoryName"
         case roadAddress
         case activeTime
         case rating

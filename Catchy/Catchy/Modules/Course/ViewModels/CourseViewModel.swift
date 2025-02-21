@@ -106,10 +106,10 @@ extension CourseViewModel {
             return
         }
         
-        if !isPrefetching {
+        if !self.isPrefetching {
             isCourseListLoading = true
         }
-        
+
         let province = selectedUpperIndex == nil ? "" : upperLocations[selectedUpperIndex!].addrName
         let district = province == "" || selectedLowerIndex == nil ? "" : lowerLocations[selectedLowerIndex!]
         
@@ -147,7 +147,6 @@ extension CourseViewModel {
                 }
             },receiveValue: { [weak self] response in
                 guard let self = self else { return }
-                
                 if let response = response.result {
                     if courseResponse == nil {
                         self.courseList = response.content

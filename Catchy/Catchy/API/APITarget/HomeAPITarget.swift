@@ -36,7 +36,7 @@ extension HomeAPITarget: APITargetType {
     var task: Task {
         switch self {
         case .getSearch(let keyword, let page, let relevanceScore, let lastPlaceId):
-            var params: [String: Any] = ["searchKeyword": keyword, "page": page]
+            var params: [String: Any] = ["keyword": keyword, "pageSize": page]
             if let relevanceScore = relevanceScore {
                 params["relevanceScore"] = relevanceScore
             }
