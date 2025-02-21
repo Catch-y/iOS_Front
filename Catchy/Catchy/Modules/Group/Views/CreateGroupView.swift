@@ -12,11 +12,12 @@ struct CreateGroupView: View {
     
     @EnvironmentObject var container: DIContainer
     @StateObject private var viewModel: CreateGroupViewModel
+    @State private var groupInfo: GroupInfo = GroupInfo(groupName: "", groupLocation: [], promiseTime: "", groupImage: nil)
 
     // MARK: - 초기화
     init(container: DIContainer, calendarViewModel: CalenderViewModel) {
-        _viewModel = StateObject(wrappedValue: .init(container: container, calendarViewModel: calendarViewModel))
-    }
+            _viewModel = StateObject(wrappedValue: .init(container: container, calendarViewModel: calendarViewModel))
+        }
 
 
     var body: some View {
@@ -47,7 +48,7 @@ struct CreateGroupView: View {
                 }
             }
             .frame(maxWidth: .infinity, minHeight: 50)
-            .background(viewModel.isLoading ? Color.gray : Color.m5)
+            .background(viewModel.isLoading ? Color.g2 : Color.m5)
             .clipShape(RoundedRectangle(cornerRadius: 20))
             .foregroundStyle(.white)
             .padding(.horizontal, 16)
@@ -78,7 +79,10 @@ struct CreateGroupView: View {
                         .stroke(Color.g3, lineWidth: 1)
                 )
                 .onChange(of: viewModel.groupName) {
-                    viewModel.groupName = limitText(viewModel.groupName, to: 10)
+                    let limitedText = limitText(viewModel.groupName, to: 10)
+                    viewModel.groupName = limitedText
+                    UserDefaults.standard.set(limitedText, forKey: "groupName")
+                    print("📌 그룹 이름 저장됨: \(limitedText)")
                 }
         }
     }
@@ -94,14 +98,14 @@ struct CreateGroupView: View {
             Text("그룹을 대표할 이미지를 설정해주세요")
                 .font(.Subtitle3)
                 .foregroundStyle(.g7)
-
+            
             if let image = viewModel.groupImage {
                 ZStack(alignment: .topTrailing) {
                     Image(uiImage: image)
                         .resizable()
                         .frame(width: 214, height: 137)
                         .clipShape(RoundedRectangle(cornerRadius: 20))
-
+                    
                     Icon.close.image
                         .resizable()
                         .frame(width: 12, height: 12)
@@ -139,9 +143,17 @@ struct CreateGroupView: View {
                     }
                 )
             }
+            
         }
-    }
+        .onChange(of: viewModel.groupImageURL) { _, newImageURL in
+            if let imageURL = newImageURL {
+                UserDefaults.standard.set(imageURL, forKey: "groupImage")
+                print("📌 그룹 이미지 URL 저장됨: \(imageURL)")
+            }
+        }
 
+
+    }
     // MARK: - 캘린더 선택
     private var calendarSelection: some View {
         VStack(alignment: .leading, spacing: 21) {
@@ -150,11 +162,13 @@ struct CreateGroupView: View {
                 .foregroundStyle(.g7)
 
             // 기존의 CreateCalenderView 유지
-            CreateCalenderView(container: viewModel.container)
-                       .onChange(of: viewModel.selectedDate) {
-                           viewModel.promiseTime = formatDate(viewModel.selectedDate)
-                       }
-
+            CreateCalenderView(container: container, groupInfo: $groupInfo)
+                           .onChange(of: viewModel.selectedDate) { _, newDate in
+                               let formattedDate = formatDate(newDate)
+                               groupInfo.promiseTime = formattedDate
+                               UserDefaults.standard.set(formattedDate, forKey: "promiseTime") // 약속 날짜 저장
+                               print("📌 약속 날짜 저장됨: \(formattedDate)") //  로그 추가
+                           }
         }
     }
 
@@ -166,6 +180,8 @@ struct CreateGroupView: View {
         return formatter.string(from: date)
     }
 }
+
+
 
 // MARK: - Preview
 struct CreateGroupView_Previews: PreviewProvider {
@@ -179,3 +195,4 @@ struct CreateGroupView_Previews: PreviewProvider {
             .environmentObject(viewModel)
     }
 }
+

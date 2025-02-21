@@ -11,12 +11,12 @@ import SwiftUI
 struct CreateCalenderView: View {
     // MARK: - Properties
     @StateObject private var viewModel: CalenderViewModel
-
+    @Binding var groupInfo: GroupInfo
     // MARK: - 초기화
-    init(container: DIContainer) {
-        _viewModel = StateObject(wrappedValue: CalenderViewModel(container: container))
-    }
-
+    init(container: DIContainer, groupInfo: Binding<GroupInfo>) {
+            _viewModel = StateObject(wrappedValue: CalenderViewModel(container: container))
+            _groupInfo = groupInfo // Binding으로 받기
+        }
     // MARK: - Body
     var body: some View {
         VStack(spacing: 0) {
@@ -96,9 +96,19 @@ struct CreateCalenderView: View {
 struct CreateCalenderView_Previews: PreviewProvider {
     static var previews: some View {
         let container = DIContainer()
-
+        
+        // 임시 GroupInfo 데이터 생성
+        @State var sampleGroupInfo = GroupInfo(
+            groupId: 1,
+            groupName: "테스트 그룹",
+            groupLocation: ["서울", "부산"],
+            promiseTime: "2025-02-20T23:04:27Z",
+            groupImage: nil,
+            inviteCode: "TEST1234"
+        )
+        
         return ForEach(["iPhone 16 Pro", "iPhone SE"], id: \.self) { deviceName in
-            CreateCalenderView(container: container)  
+            CreateCalenderView(container: container, groupInfo: $sampleGroupInfo)
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
         }

@@ -30,6 +30,8 @@ final class CreateGroupViewModel: ObservableObject, ImageHandling {
             selectedImageCount = groupImage != nil ? 1 : 0
         }
     }
+    @Published var groupImageURL : String? = nil
+    
     @Published var selectedItem: PhotosPickerItem? = nil {
         didSet { loadImage() }
     }
@@ -58,16 +60,22 @@ final class CreateGroupViewModel: ObservableObject, ImageHandling {
 
         isLoading = true
         errorMessage = ""
+        
+        // 저장된 `UserDefaults` 값 활용
+        _ = UserDefaults.standard.string(forKey: "groupName") ?? groupName
+        _ = groupImageURL // 🔹 서버 이미지 URL
+        _ = UserDefaults.standard.string(forKey: "promiseTime") ?? formatDate(selectedDate)
 
         // `GroupInfo` 객체 생성
-        let newGroup = GroupInfo(
-            groupName: groupName,
-            groupLocation: groupLocation,
-            promiseTime: formatDate(selectedDate),
-            groupImage: nil // ✅ 서버에서 반환되므로 nil
+        let groupInfo = GroupInfo(
+            groupName: "Study Group",
+            groupLocation: ["서울특별시", "광진구"],
+            promiseTime: "2025-02-20T05:08:03.006Z",
+            groupImage: "https://i.pinimg.com/474x/1a/e2/8f/1ae28fe7bd5e3211be36f7a48b976226.jpg"
         )
 
-        groupRepository.postCreateGroup(group: newGroup)
+
+        groupRepository.postCreateGroup(group: groupInfo)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 self?.isLoading = false
@@ -81,6 +89,7 @@ final class CreateGroupViewModel: ObservableObject, ImageHandling {
                 if responseData.isSuccess, let groupResult = responseData.result?.result {
                     self.inviteCode = groupResult.inviteCode
                     self.createdGroup = groupResult // GroupResult로 저장
+                    self.groupImageURL = groupResult.groupImage
                     UserDefaults.standard.set(try? JSONEncoder().encode(groupResult), forKey: "createdGroupInfo")
                     print("✅ 그룹 생성 성공: \(groupResult)")
                     self.addGroupToCalendar(groupResult) // ✅ 캘린더에 추가
@@ -125,6 +134,7 @@ final class CreateGroupViewModel: ObservableObject, ImageHandling {
                     case .success(let imageData):
                         if let imageData = imageData, let image = UIImage(data: imageData) {
                             self.groupImage = image
+                            self.groupImageURL = nil
                         }
                     case .failure(let error):
                         print("❌ 이미지 로드 실패: \(error.localizedDescription)")
