@@ -44,6 +44,7 @@ struct DIYMap: View {
                 if !isPlaceDetailPresented {
                     
                     topController
+                        .zIndex(2)
                     
                 } else {
                     VStack(spacing: 14) {
@@ -91,6 +92,7 @@ struct DIYMap: View {
                         .resizable()
                         .frame(width: 13, height: 23)
                 })
+                .allowsHitTesting(true)
                 
                 CustomTextField(text: $viewModel.searchText, searchTextField: .mapView)
                     .onSubmit {
