@@ -63,7 +63,7 @@ struct MyPageView: View {
                 isVisible = true
             }
         }
-        .fullScreenCover(isPresented: $viewModel.isPreferenceScreenView) {
+        .sheet(isPresented: $viewModel.isPreferenceScreenView) {
             PreferencePageView(container: container, appFlowViewModel: appFlowViewModel, fromMyPage: true)
         }
     }
