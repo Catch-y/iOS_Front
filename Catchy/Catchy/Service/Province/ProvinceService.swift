@@ -19,7 +19,7 @@ class ProvinceService {
                 self.provider.requestPublisher(target)
                     .tryMap { response -> Data in
                         if let jsonString = String(data: response.data, encoding: .utf8) {
-                            print("📥 Raw JSON Response: \(jsonString)")
+                            print("Raw JSON Response: \(jsonString)")
                         }
                         return response.data
                     }
@@ -31,12 +31,12 @@ class ProvinceService {
     
     private func fetchValidToken() -> AnyPublisher<String, Error> {
         if TokenManager.shared.isTokenValid(), let token = TokenManager.shared.accessToken {
-            print("✅ 캐시된 액세스 토큰: \(token)")
+            print("캐시된 액세스 토큰: \(token)")
             return Just(token)
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         } else {
-            print("🔄 액세스 토큰 갱신중...!")
+            print("액세스 토큰 갱신중...!")
             return fetchAccessToken()
                 .map { tokenResponse in
                     TokenManager.shared.saveToken(tokenResponse.result.accessToken, timeout: 4 * 60 * 60)
@@ -47,12 +47,12 @@ class ProvinceService {
     }
     
     func fetchAccessToken() -> AnyPublisher<ProvinceAccessTokenResponse, Error> {
-        print("🔄 액세스 토큰 갱신 요청 시작..!")
+        print("액세스 토큰 갱신 요청 시작..!")
         
         return provider.requestPublisher(.getAccessToken)
             .tryMap { response -> Data in
                 if let jsonString = String(data: response.data, encoding: .utf8) {
-                    print("📥 Raw Access Token Response: \(jsonString)")
+                    print("Raw Access Token Response: \(jsonString)")
                 }
                 return response.data
             }

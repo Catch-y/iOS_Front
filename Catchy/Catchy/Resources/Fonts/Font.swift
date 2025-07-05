@@ -20,17 +20,17 @@ extension Font {
         var value: String {
             switch self {
             case .extraBold:
-                return "Pretendard-ExtraBold"
+                return "PretendardVariable-ExtraBold"
             case .bold:
-                return "Pretendard-Bold"
+                return "PretendardVariable-Bold"
             case .semibold:
-                return "Pretendard-SemiBold"
+                return "PretendardVariable-SemiBold"
             case .medium:
-                return "Pretendard-Medium"
+                return "PretendardVariable-Medium"
             case .regular:
-                return "Pretendard-Regular"
+                return "PretendardVariable-Regular"
             case .light:
-                return "Pretendard-Light"
+                return "PretendardVariable-Light"
             }
         }
     }
@@ -39,6 +39,7 @@ extension Font {
         return .custom(type.value, size: size)
     }
     
+    // MARK: - Headline
     static var Headline1: Font {
         return .pretend(type: .bold, size: 40)
     }
@@ -47,6 +48,7 @@ extension Font {
         return .pretend(type: .bold, size: 32)
     }
     
+    // MARK: - Subtite
     static var Subtitle1: Font {
         return .pretend(type: .semibold, size: 22)
     }
@@ -62,7 +64,7 @@ extension Font {
     static var Subtitle3_SM: Font {
         return .pretend(type: .semibold, size: 17)
     }
-    
+    // MARK: - Body
     static var body1: Font {
         return .pretend(type: .semibold, size: 14)
     }
@@ -83,6 +85,7 @@ extension Font {
         return .pretend(type: .semibold, size: 12)
     }
     
+    // MARK: - caption
     static var caption1: Font {
         .pretend(type: .regular, size: 11)
     }
@@ -99,7 +102,7 @@ extension Font {
         .pretend(type: .regular, size: 7)
     }
     
-    //MARK: - ETC
+    // MARK: - ETC
     static var naviFont: Font {
         return .pretend(type: .bold, size: 17)
     }
