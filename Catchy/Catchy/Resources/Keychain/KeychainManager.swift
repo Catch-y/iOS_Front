@@ -9,6 +9,7 @@ import Foundation
 import Security
 
 class KeychainManager: @unchecked Sendable {
+    
     static let standard = KeychainManager()
     
     // MARK: - KeyChainManagerFunction
@@ -18,7 +19,13 @@ class KeychainManager: @unchecked Sendable {
     ///   - data: 전달 받은 토큰값 입력
     ///   - key: 토큰 값에 쌍으로 매칭될 키값
     /// - Returns: 저장 되었는지 참거짓으로 반환
+    @discardableResult
     private func save(_ data: Data, for key: String) -> Bool {
+        
+        if load(key: key) != nil {
+            _ = delete(key: key)
+        }
+        
         let query: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrAccount: key,
@@ -26,8 +33,12 @@ class KeychainManager: @unchecked Sendable {
             kSecAttrAccessible: kSecAttrAccessibleWhenUnlocked
         ]
         
-        SecItemDelete(query as CFDictionary)
-        return SecItemAdd(query as CFDictionary, nil) == noErr
+        let status = SecItemAdd(query as CFDictionary, nil)
+        if status != errSecSuccess {
+            print("키체인 저장 실패: \(status) - \(SecCopyErrorMessageString(status, nil) ?? "알 수 없는 오류" as CFString)")
+        }
+        
+        return status == errSecSuccess
     }
     
     /// 저장된 토큰값 불러온다.
@@ -44,21 +55,28 @@ class KeychainManager: @unchecked Sendable {
         var item: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &item)
         
-        guard status == noErr, let data = item as? Data else {
-            return nil
+        if status != errSecSuccess {
+            print("키체인 로드 실패: \(status) - \(SecCopyErrorMessageString(status, nil) ?? "알 수 없는 에러" as CFString)")
         }
-        return data
+        
+        return item as? Data
     }
     
     /// 저장된 회원정보 삭제
     /// - Parameter key: 지우고자 하는 토큰의 키값 삭제
-    private func delete(key: String) {
+    @discardableResult
+    private func delete(key: String) -> Bool {
         let query: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrAccount: key
         ]
         
-        SecItemDelete(query as CFDictionary)
+        let status = SecItemDelete(query as CFDictionary)
+        if status != errSecSuccess && status != errSecItemNotFound {
+            print("키 체인 삭제 실패: \(status) - \(SecCopyErrorMessageString(status, nil) ?? "Unknown error" as CFString)")
+        }
+        
+        return status == errSecSuccess
     }
     
     /// 세션에 저장된 정보를 저장한다.
@@ -83,6 +101,7 @@ class KeychainManager: @unchecked Sendable {
     /// 유저 정보 삭제
     /// - Parameter key: 삭제하고자 하는 유저
     public func deleteSession(for key: String) {
-        delete(key: key)
+        _ = delete(key: key)
     }
 }
+
