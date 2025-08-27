@@ -1,0 +1,69 @@
+//
+//  PreferenceDistrictsView.swift
+//  Catchy
+//
+//  Created by 정의찬 on 2/1/25.
+//
+
+import SwiftUI
+
+/// 취향 설문 조사 지도 내부 구 선택 뷰
+struct PreferenceDistrictsView: View {
+    
+    @ObservedObject var viewModel: PreferenceViewModel
+    @ObservedObject var provinceViewmodel: GetProvinceViewModel
+    
+    var body: some View {
+        VStack {
+            Capsule()
+                .fill(Color.g3)
+                .frame(width: 40, height: 5)
+            
+            ScrollView(.vertical, content: {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), alignment: .leading, spacing: 17, content: {
+                    if let selectedRegion = viewModel.selectedRegion,
+                       let districts = viewModel.regionDistricts[selectedRegion]?.sorted() {
+                        ForEach(districts, id: \.self) { district in
+                            SelectDistrictBtn(
+                                isSelectedBtn: Binding(
+                                    get: { viewModel.savedDistricts.contains { $0.lowerLocation == district && $0.upperLocation == selectedRegion } },
+                                    set: { newValue in
+                                        if newValue {
+                                            let location = StepFourStep(upperLocation: selectedRegion, lowerLocation: district)
+                                            if !viewModel.savedDistricts.contains(where: { $0.lowerLocation == district && $0.upperLocation == selectedRegion }) {
+                                                viewModel.savedDistricts.append(location)
+                                            }
+                                        } else {
+                                            viewModel.savedDistricts.removeAll { $0.lowerLocation == district && $0.upperLocation == selectedRegion }
+                                        }
+                                    }
+                                ), buttonText: district)
+                        }
+                    }
+                })
+                .padding(.top, 5)
+            })
+            .padding(.top, 10)
+            
+            MainBtn(text: "홈으로 넘어가기", action: {
+                Task {
+                    viewModel.isDistrictsSheet.toggle()
+                    viewModel.postSurveyCategory()
+                }
+            }, width: UIScreen.screenWidth - 32, height: 60, onoff: viewModel.savedDistricts.isEmpty ? .off : .on)
+            .padding(.top, 32)
+            .disabled(viewModel.savedDistricts.isEmpty)
+            
+            Spacer()
+        }
+        .background(Color.white)
+        .safeAreaPadding(EdgeInsets(top: 10, leading: 16, bottom: 0, trailing: 16))
+    }
+}
+
+
+struct PreferenceDistrictsView_Preview: PreviewProvider {
+    static var previews: some View {
+        PreferencePageView(container: DIContainer(), appFlowViewModel: AppFlowViewModel())
+    }
+}
