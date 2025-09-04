@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 프로필 이미지 변경
 struct MemberProfileImageModifyRequest: Codable {
     let profileImage: Data
 }

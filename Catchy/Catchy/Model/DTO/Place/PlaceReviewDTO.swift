@@ -8,17 +8,21 @@
 import Foundation
 
 /// 장소 평점/리뷰 달기
+struct PalceReviewPath: Codable {
+    let placeId: Int
+}
+
 struct PlaceReviewRequest: Codable {
-    let rating: Double
+    let rating: Int
     let comment: String
     let visitedDate: String
-    let images: [Data]
+    let images: [Data]?
 }
 
 struct PlaceReviewResponse: Codable {
     let reviewId: Int
     let comment: String
-    let rating: Double
+    let rating: Int
     let reviewImages: [ReviewImage]
     let visitedDate: String
     let creatorNickname: String

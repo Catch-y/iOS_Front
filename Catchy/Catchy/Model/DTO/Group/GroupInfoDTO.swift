@@ -8,6 +8,10 @@
 import Foundation
 
 /// 초대 코드로 그룹 정보 조회
+struct GroupInfoPath: Codable {
+    let inviteCode: String
+}
+
 struct GroupInfoResponse: Codable {
     let groupName: String
     let groupLocation: String

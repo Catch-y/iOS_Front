@@ -8,13 +8,17 @@
 import Foundation
 
 /// 코스 리뷰 전체 보기
-struct CourseReviewAllRequest: Codable {
+struct CourseReviewAllPath: Codable {
+    let courseId: Int
+}
+
+struct CourseReviewAllQuery: Codable {
     let pageSize: Int
-    let lastReviewId: Int
+    let lastReviewId: Int?
 }
 
 struct CourseReviewAllResponse: Codable {
-    let courseRating: Int
+    let courseRating: Double
     let totalCount: Int
     let content: [CourseReviewContent]
     let last: Bool

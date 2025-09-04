@@ -8,18 +8,11 @@
 import Foundation
 
 /// 내 코스 조회
-struct CourseMyRequest: Codable {
+struct CourseMyQuery: Codable {
     let type: CourseType
-    let upperLocation: String
-    let lowerLocation: String
-    let lastId: Int
-    
-    init(type: CourseType, lastId: Int) {
-        self.type = type
-        self.lastId = lastId
-        self.upperLocation = "all"
-        self.lowerLocation = "all"
-    }
+    let upperLocation: String?
+    let lowerLocation: String?
+    let lastId: Int?
 }
 
 struct CourseMyResponse: Codable {

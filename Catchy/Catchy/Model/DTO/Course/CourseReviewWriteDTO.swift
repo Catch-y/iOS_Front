@@ -8,9 +8,13 @@
 import Foundation
 
 /// 코스 리뷰 작성
+struct CourseReviewWritePath: Codable {
+    let courseId: Int
+}
+
 struct CourseReviewWriteRequest: Codable {
     let comment: String
-    let images: [Data]
+    let images: [Data]?
 }
 
 struct CourseReviewWriteResponse: Codable {

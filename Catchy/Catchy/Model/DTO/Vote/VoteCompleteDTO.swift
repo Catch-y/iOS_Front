@@ -7,8 +7,8 @@
 
 import Foundation
 
-/// 투표 완료 + 카테고리 확인
-struct VoteCompleteRequest: Codable {
+/// 투표 완료 - 카테고리 확인
+struct VoteCompletePath: Codable {
     let groupId: Int
     let voteId: Int
 }

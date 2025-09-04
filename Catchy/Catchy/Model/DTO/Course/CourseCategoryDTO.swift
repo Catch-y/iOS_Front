@@ -8,6 +8,10 @@
 import Foundation
 
 /// 장소 카테고리 선택
+struct CourseCategoryPath: Codable {
+    let placeId: Int
+}
+
 struct CourseCategoryRequest: Codable {
     let bigCategory: String
     let smallCategory: String

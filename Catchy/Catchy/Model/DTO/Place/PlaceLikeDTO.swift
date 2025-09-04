@@ -8,6 +8,10 @@
 import Foundation
 
 /// 장소 좋아요
+struct PlaceLikePath: Codable {
+    let placeId: Int
+}
+
 struct PlaceLikeResponse: Codable {
     let placeLikeId: Int
     let liked: Bool

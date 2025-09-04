@@ -8,10 +8,16 @@
 import Foundation
 
 /// 투표 완료 - 카테고리 별 장소 확인
-struct VoteCategoryPlaceRequest: Codable {
-    let groupdId: Int
+struct VoteCategoryPlacePath: Codable {
+    let groupId: Int
     let category: CategoryType
 }
+
+struct VoteCategoryPlaceQuery: Codable {
+    var pageSize: Int
+    var lastPlaceId: Int?
+}
+
 
 struct VoteCategoryPlaceResponse: Codable {
     let groupLocation: String
@@ -24,7 +30,7 @@ struct PlaceData: Codable, Identifiable {
     let placeId: Int
     let placeName: String
     let roadAddress: String
-    let rating: Int
+    let rating: Double
     let reviewCount: Int
     let imageUrl: String
     let votedMembers: [VotedMember]

@@ -8,9 +8,20 @@
 import Foundation
 
 /// 투표 진행 중
-struct VoteStatusResponse: Codable, Identifiable {
+/// 카테고리 투표 진행 중 투표 현황 조회
+struct VoteStatusPath: Codable {
+    let voteId: Int
+}
+
+struct VoteStatusResponse: Codable {
+    let status: String
+    let totalMembers: Int
+    let results: [VoteResult]
+}
+
+struct VoteResult: Codable, Identifiable {
     var id: UUID = .init()
-    let category: CategoryType
+    let category: String
     let voteCount: Int
     let votedMembers: [VotedMember]
     let rank: Int
@@ -35,4 +46,3 @@ struct VotedMember: Codable, Identifiable {
         case profileImage
     }
 }
-

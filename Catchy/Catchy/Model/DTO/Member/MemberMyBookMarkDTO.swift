@@ -7,9 +7,10 @@
 
 import Foundation
 
+/// 북마크된 코스 무한 스크롤
 struct MemberMyBookMarkRequest: Codable {
     let pageSize: Int
-    let lastCourseId: Int
+    let lastCourseId: Int?
 }
 
 struct BookMarkCourseDTO: Codable, Identifiable {

@@ -13,7 +13,6 @@ struct GroupGenerateRequest: Codable {
     let groupLocation: String
     let promiseTime: String
     let inviteCode: String
-    let groupImage: Date
 }
 
 struct GroupGenerateResponse: Codable {

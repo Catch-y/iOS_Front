@@ -8,6 +8,11 @@
 import Foundation
 
 /// 좋아요한 장소 무한 스크롤
+struct PlaceCourseLikeQuery: Codable {
+    let pageSize: Int
+    let lastPlaceId: Int?
+}
+
 struct PlaceCourseLikeResponse: Codable {
     let content: [LikePlaceData]
     let last: Bool

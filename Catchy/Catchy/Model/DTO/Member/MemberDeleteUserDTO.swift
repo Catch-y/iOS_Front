@@ -7,6 +7,7 @@
 
 import Foundation
 
-struct MemberDeleteUserRequest: Codable {
+/// 회원탈퇴
+struct MemberDeleteUserQuery: Codable {
     let authorizationCode: String
 }

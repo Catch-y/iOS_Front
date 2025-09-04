@@ -7,6 +7,11 @@
 
 import Foundation
 
+/// 소셜 로그인
+struct MemberSocialLoginPlatform: Codable {
+    let platform: SocialLoginType
+}
+
 struct MemberSocialLoginRequest: Codable {
     let accessToken: String
 }

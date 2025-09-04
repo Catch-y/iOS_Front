@@ -8,10 +8,10 @@
 import Foundation
 
 /// 마이페이지 / 내 장소 리뷰 조회
-struct ReviewMyPlaceRequest: Codable {
+struct ReviewMyPlaceQuery: Codable {
     let pageSize: Int
-    let lastPlaceReviewDate: String
-    let lastReviewId: Int
+    let lastPlaceReviewDate: String?
+    let lastReviewId: Int?
 }
 
 struct ReviewMyPlaceResponse: Codable {

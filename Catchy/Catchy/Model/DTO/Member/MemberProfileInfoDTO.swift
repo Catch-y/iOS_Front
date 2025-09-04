@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 프로필 조회
 struct MemberProfileInfoResponse: Codable {
     let id: Int
     let profileImage: String

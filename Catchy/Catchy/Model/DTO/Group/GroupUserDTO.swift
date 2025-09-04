@@ -8,7 +8,7 @@
 import Foundation
 
 /// 사용자가 속한 그룹 조회
-struct GroupUserRequest: Codable {
+struct GroupUserQuery: Codable {
     let year: Int
     let month: Int
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 /// 사용자 장소 추천
-struct PlaceRecommendRequest: Codable {
+struct PlaceRecommendQuery: Codable {
     let latitude: Double
     let longitude: Double
     let pageSize: Int

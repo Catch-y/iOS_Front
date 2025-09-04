@@ -8,6 +8,11 @@
 import Foundation
 
 /// 지역명 기반 장소 검색
+struct PlaceCourseSearchQuery: Codable {
+    let searchKeyword: String
+    let page: Int
+}
+
 struct PlaceCourseSearchResponse: Codable {
     let placeInfoPreviews: [PlaceInfoPreview]
     let isLast: Bool

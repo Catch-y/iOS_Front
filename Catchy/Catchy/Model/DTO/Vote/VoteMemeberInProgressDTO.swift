@@ -8,6 +8,11 @@
 import Foundation
 
 /// 투표 진행 중 멤버별 확인
+struct VoteMemeberInProgressPath: Codable {
+    let groupId: Int
+    let voteId: Int
+}
+
 struct VoteMemeberInProgressResponse: Codable {
     let totalMembers: Int
     let members: [MemberData]

@@ -8,8 +8,9 @@
 import Foundation
 
 /// 내 위치 기반 장소 검색
-struct PlaceCourseCurrentSearchRequest: Codable {
+struct PlaceCourseCurrentSearchQuery: Codable {
     let searchKeyword: String
     let latitude: Double
     let longitude: Double
+    let page: Int
 }

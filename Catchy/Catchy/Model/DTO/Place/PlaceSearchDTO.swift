@@ -8,11 +8,11 @@
 import Foundation
 
 /// 장소 검색
-struct PlaceSearchRequest: Codable {
-    let keyword: String
+struct PlaceSearchQuery: Codable {
+    let keyword: String?
     let pageSize: Int
-    let relevanceScore: Int
-    let lastPlaceId: Int
+    let relevanceScore: Int?
+    let lastPlaceId: Int?
 }
 
 struct PlaceSearchResponse: Codable {
@@ -37,7 +37,7 @@ struct PlaceSearchResponse: Codable {
         let categoryName: CategoryType
         let roadAddress: String
         let activeTime: String
-        let rating: Int
+        let rating: Double
         let reviewCount: Int
     }
 }

@@ -8,6 +8,10 @@
 import Foundation
 
 /// 소셜 회원가입
+struct  MemberSignupPath: Codable {
+    let platform: SocialLoginType
+}
+
 struct MemberSignupRequest: Codable {
     let accessToken: String
     let authorizationCode: String

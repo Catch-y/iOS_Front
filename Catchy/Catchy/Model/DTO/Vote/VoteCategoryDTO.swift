@@ -8,6 +8,9 @@
 import Foundation
 
 /// 카테고리 투표 + 카테고리 재투표
+struct VoteCategoryPath: Codable {
+    let voteId: Int
+}
 struct VoteCategoryRequest: Codable {
     let categoryIds: [Int]
 }

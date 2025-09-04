@@ -7,6 +7,15 @@
 
 import Foundation
 
+/// 리뷰 삭제
+struct ReviewDeletePath: Codable {
+    let reviewId: Int
+}
+
+struct ReviewDeleteQuery: Codable {
+    let reviewType: ReviewType
+}
+
 struct ReviewDeleteResponse: Codable {
     let reviewId: Int
     let reviewType: ReviewType

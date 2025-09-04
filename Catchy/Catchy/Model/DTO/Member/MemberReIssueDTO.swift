@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 토큰 재발급
 struct MemberReIssueResponse: Codable {
     var accessToken: String
     var refreshToken: String

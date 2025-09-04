@@ -11,8 +11,8 @@ import Foundation
 struct CourseGenerateUserRequest: Codable {
     let courseName: String
     let courseDescription: String
-    let placeIds: [Int]
-    let courseImage: [Data]
+    let placeIds: [Int]?
+    let courseImage: [Data]?
     let recommendTimeStart: String
     let recommendTimeEnd: String
 }

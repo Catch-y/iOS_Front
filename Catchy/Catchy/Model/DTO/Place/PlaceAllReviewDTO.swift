@@ -8,10 +8,13 @@
 import Foundation
 
 /// 장소 리뷰 전체 조회
-struct PlaceAllReviewRequest: Codable {
+struct PlaceAllReviewPath: Codable {
+    let placeId: Int
+}
+struct PlaceAllReviewQuery: Codable {
     let pageSize: Int
-    let lastPlaceReviewDate: String
-    let lastPlaceReviewId: String
+    let lastPlaceReviewDate: String?
+    let lastPlaceReviewId: String?
 }
 
 struct PalceAllReviewResponse: Codable {
@@ -26,12 +29,22 @@ struct PalceAllReviewResponse: Codable {
         let count: Int
     }
     
-    struct Review: Codable {
+    struct Review: Codable, Identifiable {
+        var id: UUID = .init()
         let reviewId: Int
         let comment: String
         let rating: Int
         let reviewImages: [ReviewImage]
         let visitedDate: String
         let creatorNickname: String
+        
+        enum CodingKeys: CodingKey {
+            case reviewId
+            case comment
+            case rating
+            case reviewImages
+            case visitedDate
+            case creatorNickname
+        }
     }
 }

@@ -8,6 +8,10 @@
 import Foundation
 
 /// 장소 상세 화면
+struct PlaceCourseDetailPath: Codable {
+    let placeId: Int
+}
+
 struct PlaceCourseDetailResponse: Codable {
     let placeId: Int
     let imageUrl: String
