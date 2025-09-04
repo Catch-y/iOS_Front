@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftUICore
+import SwiftUI
 
 /// 시/도 Enum
 enum ProvinceType: String, CaseIterable {

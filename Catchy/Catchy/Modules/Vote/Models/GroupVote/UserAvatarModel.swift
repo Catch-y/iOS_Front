@@ -9,7 +9,7 @@
 
 import Foundation
 import Moya
-import SwiftUICore
+import SwiftUI
 import Combine
 
 

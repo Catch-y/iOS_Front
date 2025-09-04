@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -27,13 +27,11 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		48DD48BC2D63226C008E6595 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 13;
+			dstSubfolder = PlugIns;
 			files = (
 			);
 			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -66,7 +64,6 @@
 /* Begin PBXFrameworksBuildPhase section */
 		48F248652D2EB42C0079E120 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				4886721D2D3159680047E94C /* ReactiveMoya in Frameworks */,
 				483FC3462D65E20400084240 /* KakaoSDK in Frameworks */,
@@ -84,7 +81,6 @@
 				48DD48992D6305B6008E6595 /* FirebaseMessaging in Frameworks */,
 				483FC3482D65E20400084240 /* KakaoSDKAuth in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -119,8 +115,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			fileSystemSynchronizedGroups = (
 				48F2486A2D2EB42C0079E120 /* Catchy */,
 			);
@@ -154,7 +148,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					48F248672D2EB42C0079E120 = {
 						CreatedOnToolsVersion = 16.2;
@@ -178,7 +172,7 @@
 				48DD48932D6305B6008E6595 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				483FC3442D65E20400084240 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 			);
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 90;
 			productRefGroup = 48F248692D2EB42C0079E120 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -191,25 +185,21 @@
 /* Begin PBXResourcesBuildPhase section */
 		48F248662D2EB42C0079E120 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		48F248642D2EB42C0079E120 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		48F248742D2EB42D0079E120 /* Debug */ = {
+		48F248742D2EB42D0079E120 /* Debug configuration for PBXProject "Catchy" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 48F2486A2D2EB42C0079E120 /* Catchy */;
 			baseConfigurationReferenceRelativePath = Core/Util/Secret.xcconfig;
@@ -270,12 +260,13 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		48F248752D2EB42D0079E120 /* Release */ = {
+		48F248752D2EB42D0079E120 /* Release configuration for PBXProject "Catchy" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 48F2486A2D2EB42C0079E120 /* Catchy */;
 			baseConfigurationReferenceRelativePath = Core/Util/Secret.xcconfig;
@@ -329,12 +320,13 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		48F248772D2EB42D0079E120 /* Debug */ = {
+		48F248772D2EB42D0079E120 /* Debug configuration for PBXNativeTarget "Catchy" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 48F2486A2D2EB42C0079E120 /* Catchy */;
 			baseConfigurationReferenceRelativePath = Core/Util/Secret.xcconfig;
@@ -354,6 +346,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -368,7 +361,7 @@
 			};
 			name = Debug;
 		};
-		48F248782D2EB42D0079E120 /* Release */ = {
+		48F248782D2EB42D0079E120 /* Release configuration for PBXNativeTarget "Catchy" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 48F2486A2D2EB42C0079E120 /* Catchy */;
 			baseConfigurationReferenceRelativePath = Core/Util/Secret.xcconfig;
@@ -388,6 +381,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -409,19 +403,17 @@
 		48F248632D2EB42C0079E120 /* Build configuration list for PBXProject "Catchy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				48F248742D2EB42D0079E120 /* Debug */,
-				48F248752D2EB42D0079E120 /* Release */,
+				48F248742D2EB42D0079E120 /* Debug configuration for PBXProject "Catchy" */,
+				48F248752D2EB42D0079E120 /* Release configuration for PBXProject "Catchy" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		48F248762D2EB42D0079E120 /* Build configuration list for PBXNativeTarget "Catchy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				48F248772D2EB42D0079E120 /* Debug */,
-				48F248782D2EB42D0079E120 /* Release */,
+				48F248772D2EB42D0079E120 /* Debug configuration for PBXNativeTarget "Catchy" */,
+				48F248782D2EB42D0079E120 /* Release configuration for PBXNativeTarget "Catchy" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
