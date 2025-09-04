@@ -23,7 +23,8 @@ struct VoteStatusResponse: Codable, Identifiable {
     }
 }
 
-struct VotedMember: Codable {
+struct VotedMember: Codable, Identifiable {
+    var id: UUID = .init()
     let memberId: Int
     let nickname: String
     let profileImage: String
