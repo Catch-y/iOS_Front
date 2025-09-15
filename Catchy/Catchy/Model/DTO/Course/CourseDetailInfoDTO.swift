@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 코스 상세정보
 struct CourseDetailInfoPath: Codable {
     let courseId: Int
 }

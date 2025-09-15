@@ -13,7 +13,7 @@ struct VoteCompletePath: Codable {
     let voteId: Int
 }
 
-struct VoteComplteResponse: Codable {
+struct VoteCompleteResponse: Codable {
     let groupLocation: String
     let categories: [CategoryData]
 }

@@ -7,10 +7,15 @@
 
 import Foundation
 
-class AppFlowViewModel: ObservableObject {
+@Observable
+class AppFlowViewModel {
+    private var session: SessionStoring
     private let tokenProvider: TokenProvider = TokenProvider()
+    private(set) var appState: AppState = .onBoarding
     
-    @Published var appState: AppState = .onBoarding
+    init(session: SessionStoring = KeychainSessionStore()) {
+        self.session = session
+    }
     
     public func stateAppFlow(completion: @escaping (Bool, Error?) -> Void) {
         tokenProvider.refreshToken { [weak self] accessToken, error in
@@ -18,9 +23,12 @@ class AppFlowViewModel: ObservableObject {
             
             if let error = error {
                 self?.appState = .login
-                KeychainManager.standard.deleteSession(for: "catchyUser")
+                self?.session.userInfo = nil
                 completion(false, error)
+                
+                #if DEBUG
                 print("등록된 유저 정보 없음: \(error)")
+                #endif
             }
             
             if accessToken != nil {

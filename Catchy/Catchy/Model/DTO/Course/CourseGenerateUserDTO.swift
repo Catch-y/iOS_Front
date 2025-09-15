@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import Moya
 
 /// 코스 유저 생성
 struct CourseGenerateUserRequest: Codable {
     let courseName: String
     let courseDescription: String
     let placeIds: [Int]?
-    let courseImage: [Data]?
+    let courseImage: Data?
     let recommendTimeStart: String
     let recommendTimeEnd: String
 }
@@ -47,5 +48,36 @@ struct PlaceInfo: Codable, Identifiable {
         case placeLatitude
         case placeLongitude
         case isVisited
+    }
+}
+
+extension CourseGenerateUserRequest: MultipartConvertible {
+    func asMultipartFormData() -> [MultipartFormData] {
+        var builder = MultipartBuilder()
+        
+        let fields: [String: CustomStringConvertible] = [
+            "courseName": courseName,
+            "courseDescription": courseDescription,
+            "recommendTimeStart": recommendTimeStart,
+            "recommendTimeEnd": recommendTimeEnd
+        ]
+        
+        fields.forEach { key, value in
+            builder.append(key, value: value)
+        }
+        
+        if let placeIds {
+            builder.appendArray("placeIds", value: placeIds)
+        }
+        
+        if let courseImage {
+            builder.append(
+                "courseImage",
+                data: courseImage,
+                fileName: "courseImage.jpg",
+                mimeType: "image/jpeg")
+        }
+        
+        return builder.formData
     }
 }

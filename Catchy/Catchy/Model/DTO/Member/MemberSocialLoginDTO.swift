@@ -8,7 +8,7 @@
 import Foundation
 
 /// 소셜 로그인
-struct MemberSocialLoginPlatform: Codable {
+struct MemberSocialLoginPlatformPath: Codable {
     let platform: SocialLoginType
 }
 

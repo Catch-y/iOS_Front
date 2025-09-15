@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Moya
 
 /// 코스 리뷰 작성
 struct CourseReviewWritePath: Codable {
@@ -23,4 +24,33 @@ struct CourseReviewWriteResponse: Codable {
     let reviewImages: [ReviewImage]
     let createdAt: String
     let creatorNickname: String
+}
+
+extension CourseReviewWriteRequest {
+    func asMultipartForm() -> [MultipartFormData] {
+        let stringParam: [String: String] = [
+            "comment": comment
+        ]
+        
+        var formData = stringParam.map {
+            MultipartFormData(
+                provider: .data($0.value.data(using: .utf8)!),
+                name: $0.key)
+        }
+        
+        if let images = images {
+            for (index, image) in images.enumerated() {
+                formData.append(
+                    MultipartFormData(
+                        provider: .data(image),
+                        name: "images",
+                        fileName: "image\(index).jpg",
+                        mimeType: "images/jpeg"
+                    )
+                )
+            }
+        }
+        
+        return formData
+    }
 }

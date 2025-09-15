@@ -45,16 +45,28 @@
 			membershipExceptions = (
 				Core/Util/Secret.xcconfig,
 				Info.plist,
+				Modules/.gitkeep,
 			);
 			target = 48F248672D2EB42C0079E120 /* Catchy */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		5C6AC1062E711F050066381B /* Exceptions for "Catchy" folder in "Compile Sources" phase from "Catchy" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 48F248642D2EB42C0079E120 /* Sources */;
+			membershipExceptions = (
+				Modules/.gitkeep,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		48F2486A2D2EB42C0079E120 /* Catchy */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				48056DAA2D34EE970070FDAC /* Exceptions for "Catchy" folder in "Catchy" target */,
+				5C6AC1062E711F050066381B /* Exceptions for "Catchy" folder in "Compile Sources" phase from "Catchy" target */,
 			);
 			path = Catchy;
 			sourceTree = "<group>";
@@ -341,6 +353,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Catchy/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Catchy;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -376,6 +389,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Catchy/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Catchy;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

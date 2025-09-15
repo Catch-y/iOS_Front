@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import Moya
 
 /// 장소 평점/리뷰 달기
-struct PalceReviewPath: Codable {
+struct PlaceReviewPath: Codable {
     let placeId: Int
 }
 
@@ -37,5 +38,34 @@ struct ReviewImage: Codable, Identifiable {
     enum CodingKeys: CodingKey {
         case reviewImageId
         case imageUrl
+    }
+}
+
+extension PlaceReviewRequest: MultipartConvertible {
+    func asMultipartFormData() -> [MultipartFormData] {
+        var builder = MultipartBuilder()
+        
+        let fields: [String: CustomStringConvertible] = [
+            "rating": rating,
+            "comment": comment,
+            "visitedDate": visitedDate,
+        ]
+        
+        fields.forEach { key, value in
+            builder.append(key, value: value)
+        }
+        
+        if let images {
+            for (index, image) in images.enumerated() {
+                builder.append(
+                    "images",
+                    data: image,
+                    fileName: "review_\(index).jpg",
+                    mimeType: "image/jpeg"
+                )
+            }
+        }
+        
+        return builder.formData
     }
 }

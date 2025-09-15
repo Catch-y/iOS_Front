@@ -4,14 +4,16 @@
 //
 //  Created by 정의찬 on 1/13/25.
 //
-
 import Foundation
 
-class UserState: ObservableObject {
+
+// MARK: - FIXME
+@Observable
+class UserState {
     
     static let shared = UserState()
     
-    @Published private(set) var userNickname: String
+    private(set) var userNickname: String
     private var userEmail: String
     private var loginType: SocialLoginType
     private var fcmToken: String
@@ -33,7 +35,6 @@ class UserState: ObservableObject {
     }
     
     public func setUserNickname(_ userNickname: String) {
-        objectWillChange.send()
         UserDefaults.standard.setValue(userNickname, forKey: "UserNickname")
     }
     

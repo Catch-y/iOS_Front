@@ -14,10 +14,10 @@ struct PlaceAllReviewPath: Codable {
 struct PlaceAllReviewQuery: Codable {
     let pageSize: Int
     let lastPlaceReviewDate: String?
-    let lastPlaceReviewId: String?
+    let lastPlaceReviewId: Int?
 }
 
-struct PalceAllReviewResponse: Codable {
+struct PlaceAllReviewResponse: Codable {
     let averageRating: Double
     let ratingList: [Rating]
     let totalCount: Int

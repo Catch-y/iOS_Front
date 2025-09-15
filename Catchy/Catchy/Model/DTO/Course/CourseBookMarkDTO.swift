@@ -12,7 +12,7 @@ struct CourseBookMarkPath: Codable {
     let courseId: Int
 }
 
-struct CourseBookMarkRequest: Codable {
+struct CourseBookMarkResponse: Codable {
     let memberCourseId: Int
     let bookmarked: Bool
 }

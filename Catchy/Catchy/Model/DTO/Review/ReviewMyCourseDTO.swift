@@ -12,7 +12,3 @@ struct ReviewMyCourseQuery: Codable {
     let pageSize: Int
     let lastReviewId: Int?
 }
-struct ReviewMyCourseRequest: Codable {
-    let pageSize: Int
-    let lastReviewId: Int
-}
