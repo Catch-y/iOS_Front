@@ -74,15 +74,55 @@ extension MemberRouter: APITargetType {
     }
     
     var method: Moya.Method {
-        <#code#>
+        switch self {
+        case .patchNickname, .patchFCMToken, .patchProfileImage:
+            return .patch
+        case .getTokenRefresh, .getBookMarkCourse, .getMypage:
+            return .get
+        case .deleteMember:
+            return .delete
+        default:
+            return .post
+        }
     }
     
     var task: Moya.Task {
-        <#code#>
+        switch self {
+        case .postyStyke(let style):
+            return .requestJSONEncodable(style)
+        case .postLocation(let location):
+            return .requestJSONEncodable(location)
+        case .postCategory(let category):
+            return .requestJSONEncodable(category)
+        case .postSocialSignup(_, let member, let profileImage):
+            let parts = member.multipartFormParts(jsonFieldName: "info", image: profileImage)
+            return .uploadMultipart(parts)
+        case .postCheckNickname(let nickname):
+            return .requestJSONEncodable(nickname)
+        case .patchNickname(let nickname):
+            return .requestJSONEncodable(nickname)
+        case .postSocialLogin(_, let member):
+            return .requestJSONEncodable(member)
+        case .patchProfileImage(let image):
+            return .uploadMultipart(image.asMultipartFormData())
+        case .patchFCMToken(let token):
+            return .requestJSONEncodable(token)
+        case .deleteMember(let query):
+            return query.asQueryTask()
+        case .getBookMarkCourse(let query):
+            return query.asQueryTask()
+        default:
+            return .requestPlain
+        }
     }
     
     var headers: [String : String]? {
-        <#code#>
+        switch self {
+        case .postSocialSignup, .patchProfileImage:
+            return ["Content-Type": "multipart/form-data"]
+        default:
+            return ["Content-Type": "application/json"]
+        }
     }
     
     

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Moya
 
 /// 프로필 이미지 변경
 struct MemberProfileImageModifyRequest: Codable {
@@ -15,4 +16,18 @@ struct MemberProfileImageModifyRequest: Codable {
 struct MemeberProfileImageModifyResponse: Codable {
     let id: Int
     let profileImage: String
+}
+
+extension MemberProfileImageModifyRequest: MultipartConvertible {
+    func asMultipartFormData() -> [MultipartFormData] {
+        var builder = MultipartBuilder()
+         
+        builder.append(
+            "profileImage",
+            data: profileImage,
+            fileName: "profileImage.jpg",
+            mimeType: "image/jpeg")
+        
+        return builder.formData
+    }
 }

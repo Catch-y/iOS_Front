@@ -26,31 +26,29 @@ struct CourseReviewWriteResponse: Codable {
     let creatorNickname: String
 }
 
-extension CourseReviewWriteRequest {
-    func asMultipartForm() -> [MultipartFormData] {
-        let stringParam: [String: String] = [
+extension CourseReviewWriteRequest: MultipartConvertible {
+    func asMultipartFormData() -> [MultipartFormData] {
+        var builder = MultipartBuilder()
+        
+        let field: [String: CustomStringConvertible] = [
             "comment": comment
         ]
         
-        var formData = stringParam.map {
-            MultipartFormData(
-                provider: .data($0.value.data(using: .utf8)!),
-                name: $0.key)
+        field.forEach { key, value in
+            builder.append(key, value: value)
         }
         
-        if let images = images {
+        if let images {
             for (index, image) in images.enumerated() {
-                formData.append(
-                    MultipartFormData(
-                        provider: .data(image),
-                        name: "images",
-                        fileName: "image\(index).jpg",
-                        mimeType: "images/jpeg"
-                    )
+                builder.append(
+                    "images",
+                    data: image,
+                    fileName: "review_\(index).jpg",
+                    mimeType: "image/jpg"
                 )
             }
         }
         
-        return formData
+        return builder.formData
     }
 }

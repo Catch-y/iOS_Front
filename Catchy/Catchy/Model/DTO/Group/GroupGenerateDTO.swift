@@ -50,5 +50,6 @@ extension GroupGenerateRequest: MultipartConvertible {
                 mimeType: "image/jpeg")
         }
         
+        return builder.formData
     }
 }
