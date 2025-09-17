@@ -87,7 +87,7 @@ extension CourseRouter: APITargetType {
         case .postSelectCategory(_, let category):
             return .requestJSONEncodable(category)
         case .postReview(_, let review):
-            return .uploadMultipart(review.asMultipartForm())
+            return .uploadMultipart(review.asMultipartFormData())
         case .postCoursePerson(let course):
             return .uploadMultipart(course.asMultipartFormData())
         case .patchModifyCourse(_, let course):
