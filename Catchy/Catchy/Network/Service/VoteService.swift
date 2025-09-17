@@ -12,12 +12,12 @@ import Moya
 class VoteService: VoteServiceProtocol, BaseAPIService {
     typealias Target = VoteRouter
     
-    var provider: MoyaProvider<VoteRouter>
+    var provider: MoyaProvider<Target>
     var decoder: JSONDecoder
     var callbackQueue: DispatchQueue
     
     init(
-        provider: MoyaProvider<VoteRouter> = APIManager.shared.createProvider(for: VoteRouter.self),
+        provider: MoyaProvider<Target> = APIManager.shared.createProvider(for: Target.self),
         decoder: JSONDecoder = APIManager.shared.sharedDecoder,
         callbackQueue: DispatchQueue = .main
     ) {

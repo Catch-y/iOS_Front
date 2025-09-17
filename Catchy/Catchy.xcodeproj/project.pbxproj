@@ -44,29 +44,17 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Core/Util/Secret.xcconfig,
-				Modules/.gitkeep,
 				Resources/Info/Info.plist,
 			);
 			target = 48F248672D2EB42C0079E120 /* Catchy */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		5C6AC1062E711F050066381B /* Exceptions for "Catchy" folder in "Compile Sources" phase from "Catchy" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = 48F248642D2EB42C0079E120 /* Sources */;
-			membershipExceptions = (
-				Modules/.gitkeep,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		48F2486A2D2EB42C0079E120 /* Catchy */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				48056DAA2D34EE970070FDAC /* Exceptions for "Catchy" folder in "Catchy" target */,
-				5C6AC1062E711F050066381B /* Exceptions for "Catchy" folder in "Compile Sources" phase from "Catchy" target */,
 			);
 			path = Catchy;
 			sourceTree = "<group>";

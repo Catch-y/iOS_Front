@@ -9,9 +9,12 @@ import Foundation
 import Moya
 
 enum ProvinceRouter {
-    case getAccessToken // 시/도 지역 조회를 위한 토큰 생성
-    case getProvinces(accessToken: String) // 시/도 지역 데이터 얻기
-    case getDistricts(accessToken: String, provinceCode: String) // 시도에 해당하는 구 데이터 얻기
+    /// 시/도 지역 조회를 위한 토큰 생성
+    case getAccessToken
+    /// 시/도 지역 데이터 얻기
+    case getProvinces(accessToken: String)
+    /// 시도에 해당하는 구 데이터 얻기
+    case getDistricts(accessToken: String, provinceCode: String)
 }
 
 extension ProvinceRouter: TargetType {

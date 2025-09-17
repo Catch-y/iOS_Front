@@ -10,7 +10,7 @@ import Moya
 
 enum MemberRouter {
     /// 사용자 취향 설문 참여 스타일
-    case postyStyke(style: MemberStyleTimeRequest)
+    case postyStyle(style: MemberStyleTimeRequest)
     /// 사용자 취향설문 선호지역
     case postLocation(location: MemberLocationRequest)
     /// 사용자 취향설문 카테고리
@@ -42,7 +42,7 @@ enum MemberRouter {
 extension MemberRouter: APITargetType {
     var path: String {
         switch self {
-        case .postyStyke:
+        case .postyStyle:
             return "/member/survey/styletime"
         case .postLocation:
             return "/member/survey/location"
@@ -88,7 +88,7 @@ extension MemberRouter: APITargetType {
     
     var task: Moya.Task {
         switch self {
-        case .postyStyke(let style):
+        case .postyStyle(let style):
             return .requestJSONEncodable(style)
         case .postLocation(let location):
             return .requestJSONEncodable(location)

@@ -11,7 +11,7 @@ import Combine
 
 protocol MemberServiceProtocol {
     /// 사용자 취향 설문 참여 스타일
-    func postyStyke(style: MemberStyleTimeRequest) -> AnyPublisher<ResponseData<MemeberStyleTimeResponse>, MoyaError>
+    func postyStyle(style: MemberStyleTimeRequest) -> AnyPublisher<ResponseData<MemeberStyleTimeResponse>, MoyaError>
     /// 사용자 취향설문 선호지역
     func postLocation(location: MemberLocationRequest) -> AnyPublisher<ResponseData<MemberLocationResponse>, MoyaError>
     /// 사용자 취향설문 카테고리
