@@ -44,8 +44,8 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Core/Util/Secret.xcconfig,
-				Info.plist,
 				Modules/.gitkeep,
+				Resources/Info/Info.plist,
 			);
 			target = 48F248672D2EB42C0079E120 /* Catchy */;
 		};
@@ -352,7 +352,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Catchy/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Catchy/Info.plist;
+				INFOPLIST_FILE = Catchy/Resources/Info/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Catchy;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -388,7 +388,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Catchy/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Catchy/Info.plist;
+				INFOPLIST_FILE = Catchy/Resources/Info/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Catchy;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

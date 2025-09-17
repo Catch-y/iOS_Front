@@ -1,5 +1,5 @@
 //
-//  DistrictResponse.swift
+//  ProvinceResponse.swift
 //  Catchy
 //
 //  Created by 정의찬 on 2/1/25.
@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct DistrictResponse: Codable {
-    let id: String
-    let result: [District]
+struct ProvinceResponse: Codable {
+    let result: [Province]
 }
 
-struct District: Codable {
+/// 시/도 정보를 나타내는 구조체
+struct Province: Codable, Equatable {
     let cd: String        // 코드 (11, 21, 22 등)
     let addrName: String  // 시/도 이름
     let fullAddr: String  // 전체 주소

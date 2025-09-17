@@ -24,15 +24,30 @@ struct CourseReviewAllResponse: Codable {
     let last: Bool
 }
 
-struct CourseReviewContent: Codable {
+struct CourseReviewContent: Codable, Identifiable {
+    var id: UUID = .init()
     let reviewId: Int
     let comment: String
     let reviewImages: [CourseReviewImage]
     let createdAt: String
     let creatorNickname: String
+    
+    enum CodingKeys: CodingKey {
+        case reviewId
+        case comment
+        case reviewImages
+        case createdAt
+        case creatorNickname
+    }
 }
 
-struct CourseReviewImage: Codable {
+struct CourseReviewImage: Codable, Identifiable {
+    var id: UUID = .init()
     let reviewImageId: Int
     let imageUrl: String
+    
+    enum CodingKeys: CodingKey {
+        case reviewImageId
+        case imageUrl
+    }
 }

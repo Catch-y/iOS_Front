@@ -18,7 +18,7 @@ struct MemberSignupRequest: Codable {
     let nickname: String
 }
 
-struct MemberSIgnupResponse: Codable {
+struct MemberSignupResponse: Codable {
     let id: Int
     let providerId: String
     let email: String

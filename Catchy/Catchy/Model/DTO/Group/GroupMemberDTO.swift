@@ -11,3 +11,16 @@ import Foundation
 struct GroupMemberPath: Codable {
     let groupId: Int
 }
+
+struct GroupMemberResponse: Codable, Identifiable {
+    var id: UUID = .init()
+    let memberId: Int
+    let nickname: String
+    let profileImage: String
+    
+    enum CodingKeys: CodingKey {
+        case memberId
+        case nickname
+        case profileImage
+    }
+}

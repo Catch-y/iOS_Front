@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct ProvinceAccessTokenResponse: Codable {
-    let id: String
+struct ProvinceAccessResponse: Codable {
     let result: ProvinceAccessResult
     let errMsg: String
     let errCd: Int

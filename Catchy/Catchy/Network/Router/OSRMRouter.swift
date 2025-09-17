@@ -9,7 +9,7 @@ import Foundation
 import Moya
 
 enum OSRMRouter {
-    case osrmRouter(osrm: OSRMRequest)
+    case getOSRM(osrm: OSRMRequest)
 }
 
 extension OSRMRouter: APITargetType {
@@ -24,7 +24,7 @@ extension OSRMRouter: APITargetType {
     
     var task: Task {
         switch self {
-        case .osrmRouter(let osrm):
+        case .getOSRM(let osrm):
             return .requestJSONEncodable(osrm)
         }
     }
