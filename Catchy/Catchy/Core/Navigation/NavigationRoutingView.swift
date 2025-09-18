@@ -10,6 +10,8 @@ import SwiftUI
 
 struct NavigationRoutingView: View {
     @EnvironmentObject var container: DIContainer
+    @Environment(\.appFlow) var appFlow: AppFlow
+    
     @State var destination: NavigationDestination
     
     var body: some View {

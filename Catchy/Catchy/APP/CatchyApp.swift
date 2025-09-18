@@ -11,6 +11,9 @@ import KakaoSDKCommon
 @main
 struct CatchyApp: App {
     
+    @StateObject var container: DIContainer = .init()
+    @State var appFlow: AppFlow = .init()
+    
     init() {
         KakaoSDK.initSDK(appKey: Config.kakaoKey)
         BaseLocationManager.shared.requestLocationAuthorization()
