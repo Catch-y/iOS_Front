@@ -30,7 +30,7 @@ enum MemberRouter {
     /// FCM 토큰 갱신
     case patchFCMToken(token: MemberFCMTokenRequest)
     /// 토큰 검사 및 재발급
-    case getTokenRefresh
+    case getTokenRefresh(token: String)
     /// 프로필 조회
     case getMypage
     /// 회원 탈퇴
@@ -120,6 +120,10 @@ extension MemberRouter: APITargetType {
         switch self {
         case .postSocialSignup, .patchProfileImage:
             return ["Content-Type": "multipart/form-data"]
+        case .getTokenRefresh(let refresh):
+            var headers = ["Content-Type": "application/json"]
+            headers["Refresh-Token"] = "\(refresh)"
+            return headers
         default:
             return ["Content-Type": "application/json"]
         }

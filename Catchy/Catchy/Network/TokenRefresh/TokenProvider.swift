@@ -10,6 +10,8 @@ import Moya
 
 class TokenProvider: TokenProviding {
     @KeychainStored private var userInfo: UserInfo?
+    private let provider = MoyaProvider<MemberRouter>()
+    
     
     var accessToken: String? {
         get { userInfo?.accessToken }
@@ -39,9 +41,39 @@ class TokenProvider: TokenProviding {
     
     func refreshToken(completion: @escaping (String?, (any Error)?) -> Void) {
         guard let refreshToken = refreshToken else {
-            let error = NSError(domain: "ttakkeun.com", code: -2, userInfo: [NSLocalizedDescriptionKey: "UserSession or refreshToken not found"])
+            return completion(nil, TokenError.missRefreshToken)
+        }
+        
+        provider.request(.getTokenRefresh(token: refreshToken)) { [weak self] result in
+            self?.tokenRefreshAction(result, completion: completion)
+        }
+    }
+    
+    private func tokenRefreshAction(
+        _ result: Result<Response, MoyaError>,
+        completion: @escaping (String?, Error?) -> Void
+    ) {
+        switch result {
+        case .success(let success):
+            successAction(success, completion: completion)
+        case .failure(let failure):
+            completion(nil, failure)
+        }
+    }
+    
+    private func successAction(_ success: Response, completion: @escaping (String?, Error?) -> Void) {
+        do {
+            let tokenData = try JSONDecoder().decode(ResponseData<MemberReIssueResponse>.self, from: success.data)
+            guard tokenData.isSuccess, let result = tokenData.result else {
+                return completion(nil, TokenError.refreshFailed)
+            }
+            
+            self.accessToken = result.accessToken
+            self.refreshToken = result.refreshToken
+            
+            completion(result.accessToken, nil)
+        } catch {
             completion(nil, error)
-            return
         }
     }
 }
