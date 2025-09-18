@@ -31,7 +31,7 @@ protocol MemberServiceProtocol {
     /// FCM 토큰 갱신
     func patchFCMToken(token: MemberFCMTokenRequest) -> AnyPublisher<ResponseData<EmptyResponse>, MoyaError>
     /// 토큰 검사 및 재발급
-    func getTokenRefresh() -> AnyPublisher<ResponseData<MemberReIssueResponse>, MoyaError>
+    func getTokenRefresh(token: String) -> AnyPublisher<ResponseData<MemberReIssueResponse>, MoyaError>
     /// 프로필 조회
     func getMypage() -> AnyPublisher<ResponseData<MemberProfileInfoResponse>, MoyaError>
     /// 회원 탈퇴

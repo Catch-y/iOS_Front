@@ -67,8 +67,8 @@ class MemberUseCase: MemberUseCaseProtocol {
     }
     
     /// 토큰 검사 및 재발급
-    func executeGetTokenRefresh() -> AnyPublisher<ResponseData<MemberReIssueResponse>, Moya.MoyaError> {
-        service.getTokenRefresh()
+    func executeGetTokenRefresh(token: String) -> AnyPublisher<ResponseData<MemberReIssueResponse>, Moya.MoyaError> {
+        service.getTokenRefresh(token: token)
     }
     
     /// 프로필 조회

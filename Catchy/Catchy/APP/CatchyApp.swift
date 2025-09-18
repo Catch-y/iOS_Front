@@ -10,15 +10,21 @@ import KakaoSDKCommon
 
 @main
 struct CatchyApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @StateObject var container: DIContainer = .init()
+    @State var appFlow: AppFlow = .init()
     
     init() {
         KakaoSDK.initSDK(appKey: Config.kakaoKey)
-        BaseLocationManager.shared.requestLocationAuthorization()
+        LocationManager.shared.requestAuthorization()
     }
     
     var body: some Scene {
         WindowGroup {
             Text("test")
+                .task {
+                    appDelegate.configure(container: container)
+                }
         }
     }
 }

@@ -66,8 +66,8 @@ class MemberService: MemberServiceProtocol, BaseAPIService {
         request(.patchFCMToken(token: token))
     }
     
-    func getTokenRefresh() -> AnyPublisher<ResponseData<MemberReIssueResponse>, Moya.MoyaError> {
-        request(.getTokenRefresh)
+    func getTokenRefresh(token: String) -> AnyPublisher<ResponseData<MemberReIssueResponse>, Moya.MoyaError> {
+        request(.getTokenRefresh(token: token))
     }
     
     func getMypage() -> AnyPublisher<ResponseData<MemberProfileInfoResponse>, Moya.MoyaError> {
