@@ -21,10 +21,25 @@ struct CatchyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            Text("test")
+            testView()
                 .task {
                     appDelegate.configure(container: container)
                 }
+        }
+    }
+}
+
+struct testView: View {
+    @State var navi: Bool = false
+    var body: some View {
+        NavigationStack {
+            Button("cc", action: {
+                navi.toggle()
+            })
+            .navigationDestination(isPresented: $navi, destination: {
+                SignUpView(signUpData: .init(accessToken: "1", authorizationCode: "1", email: "1", loginType: .apple), container: DIContainer(), appFlow: AppFlow())
+                    .environmentObject(DIContainer())
+            })
         }
     }
 }
