@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 /// 소셜 로그인
 enum SocialLoginType: String, Equatable, Codable {
