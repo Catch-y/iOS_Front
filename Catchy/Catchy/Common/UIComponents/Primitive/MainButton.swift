@@ -29,7 +29,9 @@ struct MainButton: View {
     
     var body: some View {
         Button(action: {
-            action()
+            withAnimation(.easeInOut(duration: DefaultConstants.animationTime)) {
+                action()
+            }
         }, label: {
             buttonText
         })
