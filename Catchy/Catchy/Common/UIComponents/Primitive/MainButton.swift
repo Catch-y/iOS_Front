@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainButton: View {
     
-    // MARK: - Property
+    // MARK: - Property 
     let btnType: MainBtnType
     let height: CGFloat
     let action: () -> Void

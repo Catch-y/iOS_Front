@@ -13,7 +13,9 @@ class PreferenceViewModel {
     // MARK: - Property
     let nickname: String = UserDefaults.standard.string(forKey: AppStorageKey.userNickname) ?? "정보 없음"
     var preferencPage: PageType
-    var bigCategoryBtn: [CategoryType] = .init()
+    var bigCategoryBtn: [CategoryType] = [.BAR, .EXPERIENCE, .RESTAURANT]
+    var smallCategoryBtn: [CategoryType: [String]] = [:]
+    var categoryPage: Int = 0
     
     // MARK: - Dependency
     let container: DIContainer
