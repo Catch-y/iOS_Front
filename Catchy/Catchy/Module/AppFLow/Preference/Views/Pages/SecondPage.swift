@@ -11,6 +11,7 @@ struct SecondPage: View {
     // MARK: - Property
     @Bindable var viewModel: PreferenceViewModel
     
+    // MARK: - Constants
     fileprivate enum SecondPageConstants {
         static let middleVspacing: CGFloat = 19
         static let middleTitleVspacing: CGFloat = 10
@@ -163,6 +164,9 @@ struct SecondPage: View {
         .padding(.leading, SecondPageConstants.leadingPadding)
     }
     
+    /// 서브 카테고리 값
+    /// - Parameter category: 카테고리
+    /// - Returns: 카테고리 뷰 반환
     @ViewBuilder
     private func bottomSubCategories(_ category: CategoryType) -> some View {
         let columns = Array(repeating: GridItem(.flexible(), spacing: SecondPageConstants.columnsSpacing), count: SecondPageConstants.columnsCount)
@@ -179,6 +183,11 @@ struct SecondPage: View {
         .contentMargins(.horizontal, DefaultConstants.defaultSafeHorizon, for: .scrollContent)
     }
     
+    /// 서브 카테고리 버튼 바인딩 액션
+    /// - Parameters:
+    ///   - category: 카테고리 값
+    ///   - sub: 서브 카테고리 버튼 이름
+    /// - Returns: 바인딩 Bool 반환
     private func subCategoryBtnBinding(_ category: CategoryType, _ sub: String) -> Binding<Bool> {
         .init(
             get: { viewModel.smallCategoryBtn[category]?.contains(sub) ?? false },

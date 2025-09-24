@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 앱 내 사용 주요 버튼
 struct MainButton: View {
     
     // MARK: - Property 

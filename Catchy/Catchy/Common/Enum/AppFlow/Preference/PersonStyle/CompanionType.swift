@@ -14,7 +14,7 @@ enum CompanionType: String, CaseIterable, Codable {
     case couple = "COUPLE"
     case family = "FAMILY"
     
-    func toKorean() -> String {
+    var btnText: String {
         switch self {
         case .alone:
             return "혼자 놀기"
@@ -27,7 +27,7 @@ enum CompanionType: String, CaseIterable, Codable {
         }
     }
     
-    func returnImage() -> ImageResource {
+    var companionImage: ImageResource {
         switch self {
         case .alone:
             return .solo

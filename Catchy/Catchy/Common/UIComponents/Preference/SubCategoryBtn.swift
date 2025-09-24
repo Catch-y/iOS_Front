@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 선호 조사 - 서브 카테고리 선택 버튼
 struct SubCategoryBtn: View {
     // MARK: - Property
     @Binding var isSelected: Bool

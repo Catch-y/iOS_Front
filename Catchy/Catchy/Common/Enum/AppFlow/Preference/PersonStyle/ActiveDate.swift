@@ -17,7 +17,7 @@ enum ActiveDate: String, CaseIterable, Codable {
     case saturDay = "SATURDAY"
     case sunDay = "SUNDAY"
     
-    func toKorean() -> String {
+    var text: String {
         switch self {
         case .monDay:
             return "월"

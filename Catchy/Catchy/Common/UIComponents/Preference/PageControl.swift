@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 선호 조사 - 탭 페이지 컨트롤
 struct PageControl: View {
     // MARK: - Property
     @Binding var pageCount: Int

@@ -21,7 +21,7 @@ struct CatchyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            testView()
+            ThirdPage(viewModel: .init(container: DIContainer(), appFlow: AppFlow()))
                 .task {
                     appDelegate.configure(container: container)
                 }

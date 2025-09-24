@@ -115,6 +115,10 @@ extension Font {
         return .pretend(type: .regular, size: 16)
     }
     
+    static var companionBtn: Font {
+        return .pretend(type: .medium, size: 16)
+    }
+    
     static var inputText: Font {
         return .pretend(type: .medium, size: 15)
     }
