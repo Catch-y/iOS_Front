@@ -8,8 +8,7 @@
 import Foundation
 import Combine
 
-class FCMTokenManager
-{
+class FCMTokenManager {
     // MARK: - Property
     let container: DIContainer
     var cancellables: Set<AnyCancellable> = .init()

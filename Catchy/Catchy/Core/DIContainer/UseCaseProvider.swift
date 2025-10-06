@@ -16,6 +16,7 @@ protocol UseCaseProtocol {
     var placeUseCase: PlaceUseCaseProtocol { get set }
     var reviewUseCase: ReviewUseCaseProtocol { get set }
     var voteUseCase: VoteUseCaseProtocol { get set }
+    var provinceUseCase: ProvinceUseCaseProtocol { get set }
 }
 
 class UseCaseProvider: UseCaseProtocol {
@@ -27,6 +28,7 @@ class UseCaseProvider: UseCaseProtocol {
     var placeUseCase: PlaceUseCaseProtocol
     var reviewUseCase: ReviewUseCaseProtocol
     var voteUseCase: VoteUseCaseProtocol
+    var provinceUseCase: ProvinceUseCaseProtocol
     
     init() {
         self.courseUseCase = CourseUseCase()
@@ -37,5 +39,6 @@ class UseCaseProvider: UseCaseProtocol {
         self.placeUseCase = PlaceUseCase()
         self.reviewUseCase = ReviewUseCase()
         self.voteUseCase = VoteUseCase()
+        self.provinceUseCase = ProvinceUseCase()
     }
 }

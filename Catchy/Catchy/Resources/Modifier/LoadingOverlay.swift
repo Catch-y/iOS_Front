@@ -13,14 +13,17 @@ struct LoadingOverlay: ViewModifier {
     let loadingTextType: LoadingTextType
     
     fileprivate enum LoadingOverlayConstants {
-        static let opacity: Double = 0.8
+        static let opacity: Double = 0.5
         static let lineSpacing: CGFloat = 2.5
     }
     
     /// 로딩 텍스트 타입
     enum LoadingTextType: String {
+        case defaulLoading = "잠시만 기다려주세요"
         /// 프로필 생성 시 사용
         case signupLoading = "프로필 생성 중입니다. 잠시만 기다려주세요"
+        /// 맵 생성 시 사용
+        case mapLoading = "계정 생성 중입니다. 잠시만 기다려주세요"
     }
     
     init(isLoading: Bool, loadingTextType: LoadingTextType) {
@@ -33,7 +36,7 @@ struct LoadingOverlay: ViewModifier {
             .overlay(content: {
                 if isLoading {
                     ZStack {
-                        Color.black.opacity(LoadingOverlayConstants.opacity)
+                        Color.gray.opacity(LoadingOverlayConstants.opacity)
                             .ignoresSafeArea()
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                         
@@ -44,7 +47,7 @@ struct LoadingOverlay: ViewModifier {
                                 .font(.body1)
                                 .foregroundStyle(Color.white)
                         })
-                        .tint(.white)
+                        .tint(Color.main)
                         .controlSize(.large)
                     }
                 }

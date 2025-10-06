@@ -54,6 +54,7 @@ struct SecondPage: View {
             }
         })
         .transition(.move(edge: .leading).combined(with: .opacity))
+        .loadingOverlay(isLoading: viewModel.isLoading, loadingTextType: .mapLoading)
     }
     
     private var bodyBgImage: some View {

@@ -10,6 +10,7 @@ import Foundation
 enum DefaultConstants {
     static let defaultSafeHorizon: CGFloat = 16
     static let defaultSafeBottom: CGFloat = 56
+    static let defaultCapsuleSpacing: CGFloat = 28
     
     static let animationTime: TimeInterval = 0.3
     static let lineSpacing: CGFloat = 2.5

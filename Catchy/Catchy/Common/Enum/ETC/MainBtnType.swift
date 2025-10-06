@@ -51,6 +51,7 @@ enum MainBtnType {
     case voteResultCheck
     case next(onOff: MainBtnOnOff)
     case select(onOff: MainBtnOnOff)
+    case changeHome(onOff: MainBtnOnOff)
     case searchRoad
     case reviewWrite
     case courseInclude(onOff: MainBtnOnOff)
@@ -86,6 +87,8 @@ enum MainBtnType {
             return "취소하기"
         case .voteComplete:
             return "투표 참여하기"
+        case .changeHome:
+            return "홈으로 넘어가기"
         }
     }
     
@@ -99,7 +102,8 @@ enum MainBtnType {
                 .report(let onOff),
                 .cancel(let onOff),
                 .voteComplete(let onOff),
-                .participate(let onOff):
+                .participate(let onOff),
+                .changeHome(let onOff):
             return onOff
         default:
             return .on
