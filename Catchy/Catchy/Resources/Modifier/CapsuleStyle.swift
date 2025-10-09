@@ -14,6 +14,7 @@ struct CapsuleModifier: ViewModifier {
             .frame(width: 40, height: 5)
             .foregroundStyle(Color.g3)
             .glassEffect(.regular, in: .capsule)
+            .safeAreaPadding(.top, 10)
     }
 }
 

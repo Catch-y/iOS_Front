@@ -20,7 +20,7 @@ class PreferenceViewModel {
     var preferencPage: PageType
     
     // MARK: - First
-    var bigCategoryBtn: [CategoryType] = [.BAR, .EXPERIENCE, .RESTAURANT]
+    var bigCategoryBtn: [CategoryType] = .init()
     
     // MARK: - Second
     var smallCategoryBtn: [CategoryType: [String]] = [:]

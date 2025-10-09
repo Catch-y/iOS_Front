@@ -28,7 +28,7 @@ class ProvinceManager {
     
     /// 시/도 데이터 액세스 토큰 가져오기
     /// - Parameter code: 시/도 코드
-    func provinceAccessToken(_ code: String) {
+    func provinceAccessToken(_ code: String, completion: @escaping () -> Void) {
         container.useCaseProvider.provinceUseCase.executeGetAccessToken()
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -39,7 +39,7 @@ class ProvinceManager {
                 }
             }, receiveValue: { [weak self] result in
                 guard let self  = self else { return }
-                self.getDistricts(result.result.accessToken, code)
+                self.getDistricts(result.result.accessToken, code, completion: completion)
             })
             .store(in: &cancellables)
     }
@@ -48,18 +48,19 @@ class ProvinceManager {
     /// - Parameters:
     ///   - token: 조회 토큰
     ///   - code: 시 코드
-    private func getDistricts(_ token: String, _ code: String, ) {
+    private func getDistricts(_ token: String, _ code: String, completion: @escaping () -> Void) {
         container.useCaseProvider.provinceUseCase.executeGetDistricts(accessToken: token, provinceCode: code)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
-                    print("Get Districts Toke")
+                    print("Get Districts Token")
                 case .failure(let failure):
                     print("Get Disticts Failure: \(failure)")
                 }
             }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 self.districts = Array(parsingDistricts(response))
+                completion()
             })
             .store(in: &cancellables)
     }
@@ -71,7 +72,7 @@ class ProvinceManager {
         let parsedDistricts = Set(data.result.compactMap { districts in
             let components = districts.addrName.components(separatedBy: " ")
             
-            if let city = components.first(where: { $0.hasPrefix("시")}) {
+            if let city = components.first(where: { $0.hasSuffix("시")}) {
                 return city
             } else {
                 return districts.addrName

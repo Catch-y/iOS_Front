@@ -48,6 +48,12 @@ struct SecondPage: View {
                 bodyBgImage
             }
         })
+        .safeAreaInset(edge: .top, spacing: DefaultConstants.defaultCapsuleSpacing, content: {
+            NavigationBar(action: {
+                viewModel.preferencPage = .one(nickname: viewModel.nickname)
+            }, color: .white)
+            .padding(.horizontal, DefaultConstants.defaultSafeHorizon)
+        })
         .safeAreaBar(edge: .bottom, content: {
             if viewModel.categoryPage == viewModel.bigCategoryBtn.count - 1 {
                 bottomBtn
@@ -210,6 +216,7 @@ struct SecondPage: View {
             viewModel.preferencPage = .three
         })
         .disabled(btnCheck)
+        .padding(.horizontal, DefaultConstants.defaultSafeHorizon)
     }
     
     private var btnCheck: Bool {

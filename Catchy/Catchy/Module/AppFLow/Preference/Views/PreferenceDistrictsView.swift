@@ -41,6 +41,7 @@ struct PreferenceDistrictsView: View {
             })
             .disabled(viewModel.postDistrictsInfo.isEmpty)
         })
+        .safeAreaPadding(.horizontal, DefaultConstants.defaultSafeHorizon)
     }
     
     // MARK: - Middle

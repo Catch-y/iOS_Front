@@ -11,6 +11,7 @@ struct FourthPage: View {
     // MARK: - Property
     @Bindable var viewModel: PreferenceViewModel
     @State var provinceManager: ProvinceManager
+    @EnvironmentObject var container: DIContainer
     
     // MARK: - Constants
     fileprivate enum FourthPageConstants {
@@ -31,6 +32,15 @@ struct FourthPage: View {
             topTitle
             middleContents
         })
+        .safeAreaBar(edge: .top, spacing: DefaultConstants.defaultCapsuleSpacing, content: {
+            NavigationBar(action: {
+                viewModel.preferencPage = .three
+            }, color: .black)
+        })
+        .safeAreaPadding(.horizontal, DefaultConstants.defaultSafeHorizon)
+        .task {
+            viewModel.loadGeoJSON()
+        }
         .sheet(
             isPresented: .init(
                 get: { viewModel.selectedRegion != nil },
@@ -64,13 +74,12 @@ struct FourthPage: View {
                 polygonName(geo: geo)
             }
             .gesture(
-                // TODO: - 터치 애니메이션 넣기
                 DragGesture(minimumDistance: .zero)
+                    .onEnded({ value in
+                        mapGestureAction(at: value.location, in: geo.frame(in: .local))
+                    })
             )
         })
-        .task {
-            viewModel.loadGeoJSON()
-        }
     }
     
     private func mapGestureAction(at location: CGPoint, in rect: CGRect) {
@@ -81,8 +90,9 @@ struct FourthPage: View {
         viewModel.selectedRegion = regionInfo.name
         viewModel.selectedRegionCode = regionInfo.code
         
-        provinceManager.provinceAccessToken(regionInfo.code)
-        viewModel.regionDistricts[regionInfo.name] = provinceManager.districts
+        provinceManager.provinceAccessToken(regionInfo.code) {
+            viewModel.regionDistricts[regionInfo.name] = provinceManager.districts
+        }
     }
     
     private func polygonMap(geo: GeometryProxy) -> some View {

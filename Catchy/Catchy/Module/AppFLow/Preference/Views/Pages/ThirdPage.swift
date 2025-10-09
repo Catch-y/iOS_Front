@@ -49,6 +49,11 @@ struct ThirdPage: View {
                     middleContetns
                     .id(ThirdPageConstants.scrollId)
                 })
+                .safeAreaBar(edge: .top, spacing: DefaultConstants.defaultCapsuleSpacing, content: {
+                    NavigationBar(action: {
+                        viewModel.preferencPage = .two
+                    }, color: .black)
+                })
             })
             .safeAreaBar(edge: .bottom, content: {
                 mainBtn

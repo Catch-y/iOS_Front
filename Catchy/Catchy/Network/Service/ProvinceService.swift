@@ -17,8 +17,12 @@ class ProvinceService: ProvinceServiceProtocol, BaseAPIService {
     var callbackQueue: DispatchQueue
     
     init(
-        provider: MoyaProvider<Target> = APIManager.shared.createProvider(for: Target.self),
-        decoder: JSONDecoder = APIManager.shared.sharedDecoder,
+        provider: MoyaProvider<Target> = MoyaProvider<Target>(
+            plugins: [
+                NetworkLoggerPlugin(configuration: .init(logOptions: .verbose))
+            ]
+        ),
+        decoder: JSONDecoder = JSONDecoder(),
         callbackQueue: DispatchQueue = .main
     ) {
         self.provider = provider

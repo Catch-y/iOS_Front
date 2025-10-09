@@ -22,7 +22,11 @@ class APIManager: @unchecked Sendable {
     }
     
     public func createProvider<T: TargetType>(for targetType: T.Type) -> MoyaProvider<T> {
-        return MoyaProvider<T>(session: session)
+        let logger = NetworkLoggerPlugin(configuration: .init(
+            logOptions: [.requestBody, .successResponseBody, .errorResponseBody, .formatRequestAscURL, .verbose]
+        ))
+        
+        return MoyaProvider<T>(session: session, plugins: [logger])
     }
     
     public func testProvider<T: TargetType>(for targetType: T.Type) -> MoyaProvider<T> {
