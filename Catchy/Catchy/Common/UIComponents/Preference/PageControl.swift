@@ -35,9 +35,11 @@ struct PageControl: View {
         VStack(alignment: .leading, spacing: PageControlConstants.mainVSpacing, content: {
             pageControl
             
-            Text(PageControlConstants.guideText)
-                .font(.body3)
-                .foregroundStyle(Color.g4)
+            if pageCount >= 2 {
+                Text(PageControlConstants.guideText)
+                    .font(.body3)
+                    .foregroundStyle(Color.g4)
+            }
         })
     }
     
