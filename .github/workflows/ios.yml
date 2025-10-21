@@ -36,8 +36,8 @@ jobs:
           file_to_build="`ls -A | grep -i \\.xcodeproj\$`"
         fi
         file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-        # 간단하게 "Any iOS Simulator Device" 사용
-        xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,name=Any iOS Simulator Device"
+        # 구체적인 iPhone 시뮬레이터 사용
+        xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,name=iPhone 16"
 
     - name: Test
       env:
@@ -53,4 +53,4 @@ jobs:
           file_to_build="`ls -A | grep -i \\.xcodeproj\$`"
         fi
         file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-        xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,name=Any iOS Simulator Device"
+        xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,name=iPhone 16"
