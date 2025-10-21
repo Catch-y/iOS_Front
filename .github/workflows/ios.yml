@@ -16,7 +16,7 @@ jobs:
 
     - name: Set Default Scheme
       run: |
-        cd Catchy  # iOS_App/ 제거
+        cd Catchy
         scheme_list=$(xcodebuild -list -json | tr -d "\n")
         default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
         echo $default | cat >default
@@ -27,21 +27,34 @@ jobs:
         scheme: ${{ 'default' }}
         platform: ${{ 'iOS Simulator' }}
       run: |
-        cd Catchy  # iOS_App/ 제거
-        device=`instruments -s -devices | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}'`
+        cd Catchy
+        # instruments 대신 xcrun simctl 사용
+        device=$(xcrun simctl list devices available | grep -m 1 "iPhone" | sed -E 's/.*\(([0-9A-F-]+)\).*/\1/')
         if [ $scheme = default ]; then scheme=$(cat default); fi
-        if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
+        if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then 
+          filetype_parameter="workspace"
+          file_to_build="`ls -A | grep -i \\.xcworkspace\$`"
+        else 
+          filetype_parameter="project"
+          file_to_build="`ls -A | grep -i \\.xcodeproj\$`"
+        fi
         file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-        xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
+        xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,id=$device"
 
     - name: Test
       env:
         scheme: ${{ 'default' }}
         platform: ${{ 'iOS Simulator' }}
       run: |
-        cd Catchy  # iOS_App/ 제거
-        device=`instruments -s -devices | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}'`
+        cd Catchy
+        device=$(xcrun simctl list devices available | grep -m 1 "iPhone" | sed -E 's/.*\(([0-9A-F-]+)\).*/\1/')
         if [ $scheme = default ]; then scheme=$(cat default); fi
-        if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
+        if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then 
+          filetype_parameter="workspace"
+          file_to_build="`ls -A | grep -i \\.xcworkspace\$`"
+        else 
+          filetype_parameter="project"
+          file_to_build="`ls -A | grep -i \\.xcodeproj\$`"
+        fi
         file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-        xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
+        xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,id=$device"
