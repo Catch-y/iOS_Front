@@ -91,7 +91,7 @@ extension Font {
     }
     
     static var caption_SM: Font {
-        .pretend(type: .semibold, size: 11)
+        .pretend(type: .semibold, size: 12)
     }
     
     static var caption2: Font {

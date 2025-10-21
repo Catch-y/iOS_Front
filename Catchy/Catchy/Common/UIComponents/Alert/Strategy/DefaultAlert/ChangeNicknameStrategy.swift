@@ -10,17 +10,29 @@ import SwiftUI
 
 /// 이름 변경창 전략 패턴
 struct ChangeNicknameStrategy: AlertStrategy {
+    
+    // MARK: - Let Property
     let title: String = "변경할 닉네임을 입력해주세요"
     let message: String? = nil
     let icon: Image? = nil
-    let buttons: [MainBtnType]? =  [.change(onOff: .on)]
+    let buttons: [MainBtnType]?
     
+    // MARK: - Action
     let changeAction: (String) -> Void
+    let duplicateAction: () -> Void
+    
+    // MARK: - TextBinding
+    var textBinding: Binding<String>? {
+        $nickname
+    }
     @Binding var nickname: String
     
+    // MARK: - Method
     func primaryAction() {
         changeAction(nickname)
     }
     
-    func secondaryAction() {}
+    func secondaryAction() {
+        duplicateAction()
+    }
 }

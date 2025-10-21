@@ -13,7 +13,7 @@ struct GenerateVotwStrategy: AlertStrategy {
     let message: String? = nil
     let icon: Image? = nil
     let buttons: [MainBtnType]? = [.voteComplete(onOff: .on)]
-    
+    var textBinding: Binding<String>? = nil
     let joinPoll: () -> Void
     
     func primaryAction() {

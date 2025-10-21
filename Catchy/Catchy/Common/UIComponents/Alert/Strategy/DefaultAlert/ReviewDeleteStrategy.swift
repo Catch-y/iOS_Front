@@ -13,6 +13,7 @@ struct ReviewDeleteStrategy: AlertStrategy {
     let message: String? = "리뷰를 삭제하면 다시 복구할 수 없어요."
     let icon: Image? = Image(.warningIntro)
     let buttons: [MainBtnType]? = [.cancel(onOff: .off), .check(onOff: .on)]
+    var textBinding: Binding<String>? = nil
     
     let confirmAction: () -> Void
     let cancelAction: () -> Void

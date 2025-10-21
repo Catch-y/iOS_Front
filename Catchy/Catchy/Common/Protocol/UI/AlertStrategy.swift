@@ -13,6 +13,7 @@ protocol AlertStrategy {
     var message: String? { get }
     var icon: Image? { get }
     var buttons: [MainBtnType]? { get }
+    var textBinding: Binding<String>? { get }
     func primaryAction()
     func secondaryAction()
 }

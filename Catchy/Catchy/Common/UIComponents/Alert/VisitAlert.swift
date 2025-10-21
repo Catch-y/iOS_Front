@@ -21,6 +21,7 @@ struct VisitAlert: View {
         static let sectionInnerVspacing: CGFloat = 21
         
         static let mainPadding: EdgeInsets = .init(top: 40, leading: 34, bottom: 24, trailing: 34)
+        static let lineSpacing: CGFloat = 2.5
         
         static let btnHeight: CGFloat = 52
         static let cornerRadius: CGFloat = 20
@@ -35,7 +36,7 @@ struct VisitAlert: View {
     
     // MARK: - Init
     var body: some View {
-        VStack(spacing: GuideAlertConstant.mainVspacing, content: {
+        VStack(alignment: .leading, spacing: GuideAlertConstant.mainVspacing, content: {
             sectionContents
             MainButton(btnType: strategy.buttonType, height: GuideAlertConstant.btnHeight, action: {
                 dismissAction()
@@ -50,7 +51,7 @@ struct VisitAlert: View {
     }
     
     private var sectionContents: some View {
-        VStack(spacing: GuideAlertConstant.sectionVspacing, content: {
+        VStack(alignment: .leading, spacing: GuideAlertConstant.sectionVspacing, content: {
             ForEach(strategy.sections.enumerated(), id: \.offset) { idx, section in
                 sectionGenerate(section)
                 
@@ -72,9 +73,10 @@ struct VisitAlert: View {
                 .font(.Subtitle3_SM)
                 .foregroundStyle(.g7)
             
-            Text(strategy.sections.first?.description ?? "")
+            Text(section.description)
                 .font(.body3)
                 .foregroundStyle(.g6)
+                .lineSpacing(GuideAlertConstant.lineSpacing)
         })
     }
     

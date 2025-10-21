@@ -13,6 +13,7 @@ struct LoadingGenerateStrategy: AlertStrategy {
     let message: String? = "잠시만 기다려주세요."
     let icon: Image? = nil
     let buttons: [MainBtnType]? = nil
+    var textBinding: Binding<String>? = nil
     
     func primaryAction() {}
     

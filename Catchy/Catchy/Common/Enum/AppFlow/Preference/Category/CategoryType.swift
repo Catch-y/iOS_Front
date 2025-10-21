@@ -166,4 +166,23 @@ enum CategoryType: String, Codable, CaseIterable {
             return isVisited ? UIImage(named: "notClickRestMark") ?? UIImage(systemName: "bed.double.fill")! : UIImage(named: "clickRestMark") ?? UIImage(systemName: "bed.double.fill")!
         }
     }
+    
+    var voteImage: ImageResource {
+        switch self {
+        case .CAFE:
+            return .voteCafe
+        case .BAR:
+            return .voteBar
+        case .RESTAURANT:
+            return .voteRestaurant
+        case .EXPERIENCE:
+            return .voteExperience
+        case .CULTURELIFE:
+            return .voteCultureLife
+        case .SPORT:
+            return .voteSport
+        case .REST:
+            return .voteBreaks
+        }
+    }
 }
