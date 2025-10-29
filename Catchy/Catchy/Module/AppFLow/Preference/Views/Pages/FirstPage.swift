@@ -15,7 +15,6 @@ struct FirstPage: View {
     fileprivate enum FirstPageConstants {
         static let lineSpacing: CGFloat = 3.3
         static let rowSpacing: CGFloat = 28
-        static let mainVspacing: CGFloat = 69
         static let gridSpacing: CGFloat = 30
         
         static let columnCount: Int = 2
@@ -28,8 +27,7 @@ struct FirstPage: View {
     
     // MARK: - Body
     var body: some View {
-        VStack(alignment: .leading, spacing:
-            FirstPageConstants.mainVspacing, content: {
+        VStack(alignment: .leading, spacing: .zero, content: {
             Spacer()
             topContents
             Spacer()
@@ -81,6 +79,7 @@ struct FirstPage: View {
             viewModel.preferencPage = .two
         })
         .disabled(mainBtnCheck)
+        .padding(.bottom, DefaultConstants.defaultSafeBtnPadding)
     }
     
     private var mainBtnCheck: Bool {

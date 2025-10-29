@@ -100,6 +100,8 @@ struct LoginView: View {
             action()
         }, label: {
             Image(image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
         })
         .glassEffect(.regular)
     }

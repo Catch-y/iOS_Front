@@ -15,7 +15,7 @@ struct FourthPage: View {
     
     // MARK: - Constants
     fileprivate enum FourthPageConstants {
-        static let titleText: String = "마지막으로 관심 지역을 \n선택해주세요"
+        static let titleText: String = "마지막으로 관심 지역을 선택해주세요"
         static let polygonGwangju: String = "광주광역시"
         static let opacity: CGFloat = 0.5
     }
@@ -28,16 +28,10 @@ struct FourthPage: View {
     
     // MARK: - Body
     var body: some View {
-        VStack(alignment: .leading, content: {
-            topTitle
-            middleContents
-        })
+        middleContents
         .safeAreaBar(edge: .top, spacing: DefaultConstants.defaultCapsuleSpacing, content: {
-            NavigationBar(action: {
-                viewModel.preferencPage = .three
-            }, color: .black)
+            topNaviBar
         })
-        .safeAreaPadding(.horizontal, DefaultConstants.defaultSafeHorizon)
         .task {
             viewModel.loadGeoJSON()
         }
@@ -56,11 +50,21 @@ struct FourthPage: View {
         .loadingOverlay(isLoading: viewModel.isLoading, loadingTextType: .defaulLoading)
     }
     
+    /// 상단 탑 네비
+    private var topNaviBar: some View {
+        NavigationBar(action: {
+            viewModel.preferencPage = .three
+        }, color: .black) {
+            topTitle
+        }
+        .safeAreaPadding(.horizontal, DefaultConstants.defaultSafeHorizon)
+    }
+        
     // MARK: - Top
     /// 상단 타이틀
     private var topTitle: some View {
         Text(FourthPageConstants.titleText)
-            .font(.Subtitle1)
+            .font(.Subtitle3_SM)
             .foregroundStyle(Color.g7)
             .lineSpacing(DefaultConstants.lineSpacing)
     }
@@ -69,38 +73,39 @@ struct FourthPage: View {
     /// 한반도 지도 컨텐츠
     private var middleContents: some View {
         GeometryReader(content: { geo in
+            let dynamicScale = min(geo.size.width / 375, 1.0)
             ZStack {
-                polygonMap(geo: geo)
-                polygonName(geo: geo)
+                polygonMap(geo: geo, dynamicScale: dynamicScale)
+                polygonName(geo: geo, dynamicScale: dynamicScale)
             }
             .gesture(
                 DragGesture(minimumDistance: .zero)
                     .onEnded({ value in
-                        mapGestureAction(at: value.location, in: geo.frame(in: .local))
+                        mapGestureAction(at: value.location, in: geo.frame(in: .local), dynamicScale: dynamicScale)
                     })
             )
         })
     }
     
-    private func mapGestureAction(at location: CGPoint, in rect: CGRect) {
+    private func mapGestureAction(at location: CGPoint, in rect: CGRect, dynamicScale: CGFloat) {
         let latLong = viewModel.convertToLatLon(from: location, in: rect)
         viewModel.tappedLocatoin = .init(latitude: latLong.latitude, longitude: latLong.longitude)
-        
+
         guard let regionInfo = viewModel.getRegionInfo(at: location, in: rect) else { return }
         viewModel.selectedRegion = regionInfo.name
         viewModel.selectedRegionCode = regionInfo.code
-        
+
         provinceManager.provinceAccessToken(regionInfo.code) {
             viewModel.regionDistricts[regionInfo.name] = provinceManager.districts
         }
     }
     
-    private func polygonMap(geo: GeometryProxy) -> some View {
+    private func polygonMap(geo: GeometryProxy, dynamicScale: CGFloat) -> some View {
         ForEach(viewModel.polygons, id: \.id) { polygon in
             if let _ = ProvinceType(rawValue: polygon.regionName) {
                 PolygonShape(
                     points: polygon.points,
-                    scale: polygon.scale * viewModel.viewScaleFactor,
+                    scale: polygon.scale * viewModel.viewScaleFactor * dynamicScale,
                     offset: polygon.offset
                 )
                 .fill(polygonColor(provinceName: polygon.regionName))
@@ -111,11 +116,11 @@ struct FourthPage: View {
     }
     
     @ViewBuilder
-    private func polygonName(geo: GeometryProxy) -> some View {
+    private func polygonName(geo: GeometryProxy, dynamicScale: CGFloat) -> some View {
         let regionGroups = Dictionary(grouping: viewModel.polygons, by: { $0.regionName })
         ForEach(regionGroups.keys.sorted(), id: \.self) { regionName in
             if let polygon = regionGroups[regionName]?.first {
-                drawRegionName(polygon, geometry: geo)
+                drawRegionName(polygon, geometry: geo, dynamicScale: dynamicScale)
             }
         }
     }
@@ -131,16 +136,16 @@ struct FourthPage: View {
         }
     }
     
-    private func drawRegionName(_ polygon: PolygonData, geometry: GeometryProxy) -> some View {
+    private func drawRegionName(_ polygon: PolygonData, geometry: GeometryProxy, dynamicScale: CGFloat) -> some View {
         let transformedCenter = CGPoint(
-            x: (polygon.center.x - polygon.offset.x) * polygon.scale * viewModel.viewScaleFactor + geometry.size.width / 2,
-            y: (polygon.center.y - polygon.offset.y) * polygon.scale * viewModel.viewScaleFactor + geometry.size.height / 2
+            x: (polygon.center.x - polygon.offset.x) * polygon.scale * viewModel.viewScaleFactor * dynamicScale + geometry.size.width / 2,
+            y: (polygon.center.y - polygon.offset.y) * polygon.scale * viewModel.viewScaleFactor * dynamicScale + geometry.size.height / 2
         )
-        
+
         return Text(polygon.regionName)
             .font(.caption_SM)
             .foregroundStyle(Color.g7)
-            .offset(y: adjustTextOffset(for: polygon.regionName))
+            .offset(y: adjustTextOffset(for: polygon.regionName) * dynamicScale)
             .position(x: transformedCenter.x, y: transformedCenter.y)
             .alignmentGuide(.leading) { _ in transformedCenter.x }
             .alignmentGuide(.top) { _ in transformedCenter.y }

@@ -39,6 +39,7 @@ struct PreferenceDistrictsView: View {
             MainButton(btnType: .changeHome(onOff: viewModel.postDistrictsInfo.isEmpty ? .off : .on), action: {
                 //TODO: - 버튼 액션 넣기
             })
+            .padding(.bottom, DefaultConstants.defaultSafeBtnPadding)
             .disabled(viewModel.postDistrictsInfo.isEmpty)
         })
         .safeAreaPadding(.horizontal, DefaultConstants.defaultSafeHorizon)

@@ -52,12 +52,12 @@ struct ThirdPage: View {
                 .safeAreaBar(edge: .top, spacing: DefaultConstants.defaultCapsuleSpacing, content: {
                     NavigationBar(action: {
                         viewModel.preferencPage = .two
-                    }, color: .black)
+                    }, color: .black) {
+                        mainBtn
+                    }
                 })
             })
-            .safeAreaBar(edge: .bottom, content: {
-                mainBtn
-            })
+            .contentMargins(.bottom, DefaultConstants.defaultSafeBottom, for: .scrollContent)
             .contentMargins(.horizontal, DefaultConstants.defaultSafeHorizon, for: .scrollContent)
             .onChange(of: viewModel.isExpand, { old, new in
                 if !old.values.contains(true) && new.values.contains(true) {
@@ -301,11 +301,10 @@ struct ThirdPage: View {
     
     // MARK: - Bottom
     private var mainBtn: some View {
-        MainButton(btnType: .next(onOff: btnConditional ? .off : .on), action: {
+        NextButton(action: {
             viewModel.preferencPage = .four
-        })
+        }, value: btnConditional)
         .disabled(btnConditional)
-        .safeAreaPadding(.horizontal, DefaultConstants.defaultSafeHorizon)
     }
     
     private var btnConditional: Bool {

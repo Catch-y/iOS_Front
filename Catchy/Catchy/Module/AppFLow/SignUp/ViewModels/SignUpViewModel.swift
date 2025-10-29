@@ -13,7 +13,7 @@ import SwiftUI
 @Observable
 class SignUpViewModel {
     // MARK: - StateProperty
-    var isLoading: Bool = true
+    var isLoading: Bool = false
     var showPhotoPicker: Bool = false
     var checkBtn: Bool {
         if pickerImage == nil {

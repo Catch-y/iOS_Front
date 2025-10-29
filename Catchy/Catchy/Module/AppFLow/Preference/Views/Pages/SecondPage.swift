@@ -15,12 +15,13 @@ struct SecondPage: View {
     fileprivate enum SecondPageConstants {
         static let middleVspacing: CGFloat = 19
         static let middleTitleVspacing: CGFloat = 10
-        static let mainVspacing: CGFloat = 40
         static let bottomSubVspacing: CGFloat = 39
         static let columnsSpacing: CGFloat = 56
         static let columnRowSpacing: CGFloat = 32
+        static let minSpacer: CGFloat = 60
+        static let maxSpacer: CGFloat = 40
+        
         static let leadingPadding: CGFloat = 28
-        static let minSpacer: CGFloat = 100
         
         static let middleIconSize: CGSize = .init(width: 30, height: 30)
         static let middleScrollSize: CGFloat = 200
@@ -30,6 +31,7 @@ struct SecondPage: View {
         static let blur: CGFloat = 7.5
         
         static let bottomSubCategoryDescrip: [String] = ["선호하는", "장소", "를 한개 이상 선택하세요!"]
+        static let nextBtn: String = "chevron.right"
     }
     
     // MARK: - Init
@@ -40,8 +42,9 @@ struct SecondPage: View {
     // MARK: - Body
     var body: some View {
         GeometryReader(content: { _ in
-            VStack(alignment: .leading, spacing: SecondPageConstants.mainVspacing, content: {
+            VStack(alignment: .leading, spacing: .zero, content: {
                 topContents
+                Spacer().frame(maxHeight: SecondPageConstants.maxSpacer)
                 middleContents
             })
             .background {
@@ -49,20 +52,13 @@ struct SecondPage: View {
             }
         })
         .safeAreaInset(edge: .top, spacing: DefaultConstants.defaultCapsuleSpacing, content: {
-            NavigationBar(action: {
-                viewModel.preferencPage = .one(nickname: viewModel.nickname)
-            }, color: .white)
-            .padding(.horizontal, DefaultConstants.defaultSafeHorizon)
-        })
-        .safeAreaBar(edge: .bottom, content: {
-            if viewModel.categoryPage == viewModel.bigCategoryBtn.count - 1 {
-                bottomBtn
-            }
+            navigationBtn
         })
         .transition(.move(edge: .leading).combined(with: .opacity))
         .loadingOverlay(isLoading: viewModel.isLoading, loadingTextType: .mapLoading)
     }
     
+    /// 배경 백그라운드
     private var bodyBgImage: some View {
         ZStack {
             Image(viewModel.bigCategoryBtn[viewModel.categoryPage].categoryBgImage)
@@ -84,7 +80,19 @@ struct SecondPage: View {
         }
     }
     
+    private var navigationBtn: some View {
+        NavigationBar(action: {
+            viewModel.preferencPage = .one(nickname: viewModel.nickname)
+        }, color: .white) {
+            if viewModel.categoryPage == viewModel.bigCategoryBtn.count - 1 {
+                nexButton
+            }
+        }
+        .padding(.horizontal, DefaultConstants.defaultSafeHorizon)
+    }
+    
     // MARK: - Top
+    /// 상단 페이지 컨트롤
     private var topContents: some View {
         PageControl(pageCount: $viewModel.categoryPage, totalPageCount: viewModel.bigCategoryBtn.count)
             .padding(.leading, SecondPageConstants.leadingPadding)
@@ -96,9 +104,8 @@ struct SecondPage: View {
             ForEach(Array(viewModel.bigCategoryBtn.enumerated()), id: \.offset) { index, category in
                 VStack(alignment: .leading, spacing: .zero, content: {
                     middleTopGroup(category)
-                    Spacer(minLength: SecondPageConstants.minSpacer)
+                    Spacer().frame(maxHeight: SecondPageConstants.minSpacer)
                     bottomSubCategory(category)
-                    Spacer()
                 })
             }
         })
@@ -148,6 +155,9 @@ struct SecondPage: View {
     }
     
     // MARK: - Bottom
+    /// 하단 버튼 영역
+    /// - Parameter category: 버튼 영역에 해당하는 카테고리
+    /// - Returns: 소 카테고리 뷰
     private func bottomSubCategory(_ category: CategoryType) -> some View {
         VStack(alignment: .leading, spacing: SecondPageConstants.bottomSubVspacing, content: {
             bottomSubCategoryDescrip(category)
@@ -211,10 +221,11 @@ struct SecondPage: View {
     }
     
     /// 하단 마지막 페이지 버튼
-    private var bottomBtn: some View {
-        MainButton(btnType: .next(onOff: btnCheck ? .off : .on), action: {
+    private var nexButton: some View {
+        NextButton(action: {
             viewModel.preferencPage = .three
-        })
+        }, value: btnCheck)
+        .glassEffect(.regular, in: .circle)
         .disabled(btnCheck)
         .padding(.horizontal, DefaultConstants.defaultSafeHorizon)
     }
@@ -222,4 +233,8 @@ struct SecondPage: View {
     private var btnCheck: Bool {
         (viewModel.smallCategoryBtn[viewModel.bigCategoryBtn.last!] ?? []).isEmpty
     }
+}
+
+#Preview {
+    SecondPage(viewModel: .init(container: DIContainer(), appFlow: AppFlow()))
 }

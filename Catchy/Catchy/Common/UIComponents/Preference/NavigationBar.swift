@@ -8,13 +8,15 @@
 import SwiftUI
 
 /// 선호 조사 네비게이션
-struct NavigationBar: View {
+struct NavigationBar<Content: View>: View {
     let action: () -> Void
     let color: Color
+    let content: Content
     
-    init(action: @escaping () -> Void, color: Color) {
+    init(action: @escaping () -> Void, color: Color, @ViewBuilder content: () -> Content) {
         self.action = action
         self.color = color
+        self.content = content()
     }
     
     var body: some View {
@@ -30,6 +32,8 @@ struct NavigationBar: View {
             .glassEffect(.regular, in: .circle)
             
             Spacer()
+            
+            content
         }
     }
 }

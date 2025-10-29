@@ -40,8 +40,9 @@ struct SignUpView: View {
     
     // MARK: - Body
     var body: some View {
-        VStack(spacing: SignUpConstants.middleVspacing, content: {
+        VStack(spacing: .zero, content: {
             topContents
+            Spacer()
             middleContents
             Spacer()
             bottomContents
@@ -190,10 +191,11 @@ struct SignUpView: View {
             // TODO: - 회원가입 액션
         })
         .disabled(!viewModel.checkBtn)
+        .padding(.bottom, DefaultConstants.defaultSafeBtnPadding)
     }
 }
 
 #Preview {
-    SignUpView(signUpData: .init(accessToken: "1", authorizationCode: "1", email: "1", loginType: .apple), container: DIContainer(), appFlow: AppFlow())
+    SignUpView(signUpData: .init(accessToken: "123", authorizationCode: "1", email: "1", loginType: .apple), container: DIContainer(), appFlow: AppFlow())
         .environmentObject(DIContainer())
 }
