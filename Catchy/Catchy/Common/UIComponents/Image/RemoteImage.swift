@@ -22,7 +22,7 @@ struct RemoteImage: View {
         urlString: String,
         size: CGSize,
         cornerRadius: CGFloat = 15,
-        contentMode: ContentMode = .fit
+        contentMode: ContentMode = .fill
     ) {
         self.urlString = urlString
         self.size = size
@@ -38,10 +38,11 @@ struct RemoteImage: View {
                     ProgressView()
                         .controlSize(.regular)
                 }
+                .resizable()
                 .retry(maxCount: 2, interval: .seconds(2))
-                .downsampling(size: size)
                 .aspectRatio(contentMode: contentMode)
-                .frame(maxWidth: .infinity, maxHeight: size.height)
+                .frame(maxWidth: .infinity)
+                .frame(height: size.height)
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
         }
     }
