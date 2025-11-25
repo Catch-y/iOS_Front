@@ -57,7 +57,7 @@ struct CourseCard: View {
     }
     /// 코스 사진
     private var courseImage: some View {
-        RemoteImage(urlString: data.courseImage, size: .init(width: UIScreen.screenWidth, height: CourseCardConstraint.courseImageHeight))
+        RemoteImage(urlString: data.courseImage, size: .init(width: getScreenSize().width, height: CourseCardConstraint.courseImageHeight))
     }
     
     /// 코스 태그
