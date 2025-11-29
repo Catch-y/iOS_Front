@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CourseCard: View {
+struct CourseCard: View, Equatable {
     
     // MARK: - Property
     let data: CourseRecommendResponse
@@ -27,6 +27,11 @@ struct CourseCard: View {
         static let lineLinmit: Int = 2
         static let lineSpacing: CGFloat = 3
         static let cornerRadius: CGFloat = 15
+    }
+    
+    // MARK: - Equatable
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.data.courseImage == rhs.data.courseImage
     }
     
     // MARK: - Init

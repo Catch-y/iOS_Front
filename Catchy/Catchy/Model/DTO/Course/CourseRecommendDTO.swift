@@ -8,10 +8,15 @@
 import Foundation
 
 /// 홈화면 추천 코스
-struct CourseRecommendResponse: Codable {
+struct CourseRecommendResponse: Codable, Identifiable {
+    var id: UUID = .init()
     let courseId: Int
     let courseName: String
     let courseDescription: String
     let courseImage: String
     let courseType: CourseType
+    
+    enum CodingKeys: String, CodingKey {
+        case courseId, courseName, courseDescription, courseImage, courseType
+    }
 }

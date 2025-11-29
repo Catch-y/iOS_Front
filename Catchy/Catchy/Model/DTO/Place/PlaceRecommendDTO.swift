@@ -20,19 +20,19 @@ struct PlaceRecommendResponse: Codable {
     let isLast: Bool
 }
 
-struct PlaceRecommendContentDTO: Codable, Identifiable {
+struct PlaceRecommendContentDTO: Codable, Identifiable, Likeable {
     var id: UUID = .init()
     let placeId: Int
     let placeName: String
     let placeImage: String
     let category: String
     let roadAddress: String
-    let activeTime: String
+    let activeTime: String?
     let rating: Double
     let placeLatitude: Double
     let placeLongitude: Double
     let reviewCount: Int
-    let liked: Bool
+    var liked: Bool
     
     enum CodingKeys: CodingKey {
         case placeId
