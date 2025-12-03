@@ -7,7 +7,13 @@
 
 import SwiftUI
 
+/// 홈 첫 번째 섹션 카드
 struct CourseCard: View, Equatable {
+    // TODO: - 이미지 배경 수정
+    /*
+     카드 이미지 AI 활용
+     만약, AI 리소스 없을 경우, 지정된 이미지로 보이게 수정 필요
+     */
     
     // MARK: - Property
     let data: CourseRecommendResponse
@@ -38,6 +44,7 @@ struct CourseCard: View, Equatable {
     init(data: CourseRecommendResponse) {
         self.data = data
     }
+    
     // MARK: - Body
     var body: some View {
         VStack(alignment: .leading, spacing: CourseCardConstraint.courseCardVspacing, content: {

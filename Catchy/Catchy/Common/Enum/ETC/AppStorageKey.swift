@@ -12,4 +12,6 @@ enum AppStorageKey: CaseIterable {
     static let userNickname: String = "UserNickname"
     static let userEmail: String = "UserEmail"
     static let UserLoginType: String = "UserLoginType"
+    static let UserNickname: String = "UserNickname"
+    // TODO:  - 앱 삭제 후 재설치 시, AppStroagekey 채울 수 있도록 하기
 }

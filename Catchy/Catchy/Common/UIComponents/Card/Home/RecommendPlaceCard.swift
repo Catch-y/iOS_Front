@@ -5,6 +5,7 @@
 //  Created by Apple Coding machine on 11/25/25.
 //
 
+
 import SwiftUI
 
 struct RecommendPlaceCard: View, Equatable {
