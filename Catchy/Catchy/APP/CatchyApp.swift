@@ -10,7 +10,8 @@ import KakaoSDKCommon
 
 @main
 struct CatchyApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    // !!!: - FCM 토큰 연결 작업 오류 문제
+    //@UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var container: DIContainer = .init()
     @State var appFlow: AppFlow = .init()
     
@@ -21,10 +22,7 @@ struct CatchyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ThirdPage(viewModel: .init(container: DIContainer(), appFlow: AppFlow()))
-                .task {
-                    appDelegate.configure(container: container)
-                }
+            HeaderSection(baseTitle: "가장 유연한 단던", rangeWord: ["유연"])
         }
     }
 }

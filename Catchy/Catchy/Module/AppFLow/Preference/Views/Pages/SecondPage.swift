@@ -149,8 +149,7 @@ struct SecondPage: View {
         Text(category.categoryDescription)
             .font(.body2)
             .foregroundStyle(Color.g3)
-            .lineLimit(SecondPageConstants.middleLinelimit)
-            .lineSpacing(DefaultConstants.lineSpacing)
+            .lineModifier(lineLimit: SecondPageConstants.middleLinelimit, lineSpacing: DefaultConstants.lineSpacing)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
     
