@@ -14,22 +14,42 @@ struct HeaderSection: View {
     let baseTitle: String
     let rangeWord: [String]
     let highlightColor: Color
+    let action: (() -> Void)?
     
     // MARK: - Init
-    init(baseTitle: String, rangeWord: [String], highlightColor: Color = .main) {
+    init(baseTitle: String, rangeWord: [String], highlightColor: Color = .main, action: (() -> Void)?) {
         self.baseTitle = baseTitle
         self.rangeWord = rangeWord
         self.highlightColor = highlightColor
+        self.action = action
     }
     
     var body: some View {
-        Text(baseTitle.highlight(rangeWord.map { ($0, highlightColor) }))
-            .foregroundStyle(.g7)
-            .font(.Subtitle2)
-            .padding(.leading, DefaultConstants.defaultSafeHorizon)
+        HStack {
+            Text(baseTitle.highlight(rangeWord.map { ($0, highlightColor) }))
+                .foregroundStyle(.g7)
+                .font(.Subtitle2)
+            
+            Spacer()
+            
+            if action != nil {
+                label
+            }
+        }
+        .padding(.horizontal, DefaultConstants.defaultSafeHorizon)
     }
-}
-
-#Preview {
-    HeaderSection(baseTitle: "가장 유연한 단던", rangeWord: ["유연"])
+    
+    private var label: some View {
+        Button(action: {
+            action?()
+        }, label: {
+            HStack(spacing: 9, content: {
+                Text("자세히 보기")
+                    .font(.body3)
+                    .foregroundStyle(.g4)
+                Image(.rightChevron)
+            })
+        })
+        .buttonStyle(.glass)
+    }
 }

@@ -48,7 +48,7 @@ struct HomeView: View {
     @ViewBuilder
     private func makeSection(_ type: HomeSectionType) -> some View {
         let config = sectionConfig(type)
-        HomeSectionFormView(baseTitle: config.baseTitle, rangeWord: config.rangeWord, content: {
+        HomeSectionFormView(baseTitle: config.baseTitle, rangeWord: config.rangeWord, action: action(type), content: {
             sectionContent(type)
                 .contentMargins(.top, DefaultConstants.defaultContentTopMargins, for: .scrollContent)
         })
@@ -71,7 +71,7 @@ struct HomeView: View {
             )
         case .recommendPlaceCard:
             return (
-                baseTitle: "\(nickname)님과 비슷한 취향을 가진 \n사람들이 좋아하는 장소!",
+                baseTitle: "\(nickname)님과 비슷한 취향을 가진 사람들이 좋아하는 장소!",
                 rangeWord: [nickname, "비슷한 취향"]
             )
         }
@@ -89,6 +89,15 @@ struct HomeView: View {
             popularCardSection
         case .recommendPlaceCard:
             recommendPlaceCard
+        }
+    }
+    
+    private func action(_ type: HomeSectionType) -> (() -> Void)? {
+        switch type {
+        case .recommendPlaceCard:
+            return { print("hello") }
+        default:
+            return nil
         }
     }
     
@@ -125,8 +134,10 @@ struct HomeView: View {
                         .frame(height: HomeConstants.popularCardHeight)
                 }
             })
+            .scrollTargetLayout()
         })
         .contentMargins(.bottom, HomeConstants.popularBottomPadding, for: .scrollContent)
+        .scrollTargetBehavior(.viewAligned)
     }
     
     /// 세 번째 섹션 컨텐츠
