@@ -41,7 +41,7 @@ struct RemoteImage: View {
                 .resizable()
                 .retry(maxCount: 2, interval: .seconds(2))
                 .aspectRatio(contentMode: contentMode)
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: size.width)
                 .frame(height: size.height)
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
         }

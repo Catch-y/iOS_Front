@@ -14,9 +14,14 @@ struct HomeView: View {
     
     // MARK: - Constant
     fileprivate enum HomeConstants {
-        static let lazyVspacing: CGFloat = 42
+        static let lazyVspacing: CGFloat = 10
         static let containerSpacing: CGFloat = 40
-        static let popularSectionSpacing: CGFloat = 16
+        static let popularSectionSpacing: CGFloat = 8
+        static let popularBottomPadding: CGFloat = 20
+        static let recommendCardSpacing: CGFloat = 18
+        
+        static let popularCardHeight: CGFloat = 270
+        
         static let containerCount: Int = 1
     }
     
@@ -33,7 +38,6 @@ struct HomeView: View {
                 }
             })
         })
-        .safeAreaPadding(.horizontal, 16)
         .scrollEdgeEffectStyle(.soft, for: .all)
     }
     
@@ -46,6 +50,7 @@ struct HomeView: View {
         let config = sectionConfig(type)
         HomeSectionFormView(baseTitle: config.baseTitle, rangeWord: config.rangeWord, content: {
             sectionContent(type)
+                .contentMargins(.top, DefaultConstants.defaultContentTopMargins, for: .scrollContent)
         })
     }
     
@@ -81,9 +86,9 @@ struct HomeView: View {
         case .courseCardSection:
             courseCardSection
         case .popularCourseCard:
-            Text("!")
+            popularCardSection
         case .recommendPlaceCard:
-            Text("!")
+            recommendPlaceCard
         }
     }
     
@@ -94,6 +99,7 @@ struct HomeView: View {
             HStack(spacing: .zero, content: {
                 ForEach(viewModel.courseData, id: \.id) {
                     CourseCard(data: $0)
+                        .equatable()
                         .containerRelativeFrame(.horizontal, count: HomeConstants.containerCount, spacing: HomeConstants.containerSpacing)
                         .scrollTransition(.interactive, axis: .horizontal, transition: { content, phase in
                             content
@@ -105,32 +111,36 @@ struct HomeView: View {
             .scrollTargetLayout()
         })
         .contentMargins(.bottom, DefaultConstants.defaultContentBottomMargins, for: .scrollContent)
-        .contentMargins(.top, DefaultConstants.defaultContentTopMargins, for: .scrollContent)
         .scrollTargetBehavior(.viewAligned)
     }
     
-//    /// 두 번째 섹션 컨텐츠
-//    private var popularCardSection: some View {
-//        ScrollView(.horizontal, content: {
-//            HStack(spacing: HomeConstants.popularSectionSpacing, content: {
-//                ForEach(viewModel.popularData, id: \.id) {
-//                    PopularCourseCard(data: $0)
-//                        .scrollTransition(axis: .horizontal, transition: { content, phase in
-//                            content
-//                                .rotation3DEffect(
-//                                    .degrees(phase.value * -30),
-//                                    axis: (x: 0, y: 1, z: 0),
-//                                    perspective: 0.5
-//                                )
-//                                .scaleEffect(phase.isIdentity ? 1.0 : 0.8)
-//                                .offset(y: phase.isIdentity ? 0 : 20)
-//                                .brightness(phase.isIdentity ? 0 : -0.3)
-//                        })
-//                        .zIndex(phaseVa)
-//                }
-//            })
-//        })
-//    }
+    /// 두 번째 섹션 컨텐츠
+    private var popularCardSection: some View {
+        ScrollView(.horizontal, content: {
+            HStack(spacing: HomeConstants.popularSectionSpacing, content: {
+                ForEach(viewModel.popularData.enumerated(), id: \.offset) {
+                    PopularCourseCard(data: $1, rank: $0)
+                        .equatable()
+                        .containerRelativeFrame(.horizontal, count: HomeConstants.containerCount, spacing: HomeConstants.containerSpacing)
+                        .frame(height: HomeConstants.popularCardHeight)
+                }
+            })
+        })
+        .contentMargins(.bottom, HomeConstants.popularBottomPadding, for: .scrollContent)
+    }
+    
+    /// 세 번째 섹션 컨텐츠
+    private var recommendPlaceCard: some View {
+        VStack(alignment: .leading, spacing: HomeConstants.recommendCardSpacing, content: {
+            ForEach($viewModel.recommendData, id: \.id) {
+                RecommendPlaceCard(data: $0, action: {
+                    print("hello")
+                })
+            }
+        })
+        .safeAreaPadding(.top, DefaultConstants.defaultContentTopMargins)
+        .safeAreaPadding(.horizontal, DefaultConstants.defaultSafeHorizon)
+    }
     
 }
 #Preview {

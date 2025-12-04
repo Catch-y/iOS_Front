@@ -45,7 +45,7 @@ struct RecommendPlaceCard: View, Equatable {
     
     // MARK: - Left
     private var leftImage: some View {
-        RemoteImage(urlString: data.placeImage, size: .init(width: getScreenSize().width, height: RecommendPlaceConstants.imageHeight))
+        RemoteImage(urlString: data.placeImage, size: .init(width: getScreenSize().width * 0.4, height: RecommendPlaceConstants.imageHeight))
     }
     
     private var leftPlace: some View {
@@ -67,7 +67,7 @@ struct RecommendPlaceCard: View, Equatable {
     
     /// 오른쪽 장소 이름 및 포인트
     private var rightPlaceTop: some View {
-        VStack(spacing: RecommendPlaceConstants.rightPlaceSpacing, content: {
+        VStack(alignment: .leading, spacing: RecommendPlaceConstants.rightPlaceSpacing, content: {
             rightPlaceTitle
             rightPlacePoint
         })

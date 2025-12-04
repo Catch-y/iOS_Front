@@ -26,6 +26,7 @@ struct HeaderSection: View {
         Text(baseTitle.highlight(rangeWord.map { ($0, highlightColor) }))
             .foregroundStyle(.g7)
             .font(.Subtitle2)
+            .padding(.leading, DefaultConstants.defaultSafeHorizon)
     }
 }
 

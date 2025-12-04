@@ -12,7 +12,7 @@ struct PlaceTitleTagView: View {
     let placeName: String
     
     var body: some View {
-        Text(placeName)
+        Text(placeName.customLineBreak())
             .font(.body1)
             .foregroundStyle(.g7)
     }

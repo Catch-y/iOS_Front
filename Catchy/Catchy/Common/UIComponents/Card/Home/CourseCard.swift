@@ -56,6 +56,7 @@ struct CourseCard: View, Equatable {
             RoundedRectangle(cornerRadius: CourseCardConstraint.cornerRadius)
                 .fill(Color.white)
         }
+        .padding(.horizontal, DefaultConstants.defaultSafeHorizon)
         .glassEffect(.regular.interactive(), in: RoundedRectangle(cornerRadius: CourseCardConstraint.cornerRadius))
         .glassEffectID("card", in: namespace)
     }
