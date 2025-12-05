@@ -66,6 +66,84 @@ class HomeViewModel {
             placeLongitude: 126.9705,
             reviewCount: 842,
             liked: true
+        ),
+        .init(
+            placeId: 4,
+            placeName: "심퍼티쿠시 용산점",
+            placeImage: "https://i.namu.wiki/i/dYB5Cd-rFWKdv9ywxqQMj8wI0lz7KYGt7iwNVw8hfl6yUHXrIx6J0Ra4WCyIBNuHkad7yr0s3M41a7OzoIhbql5fiQqpuvMVpWtuE5Zx-okPTyCIMnhkfRc5UOQtnRr39iQCGaYbMukt_dgfKzoJEw.webp",
+            category: "이탈리안 퓨전",
+            roadAddress: "서울 용산구 한강대로52길 17-3",
+            activeTime: "11:00 - 22:00",
+            rating: 4.6,
+            placeLatitude: 37.5313,
+            placeLongitude: 126.9705,
+            reviewCount: 842,
+            liked: true
+        ),
+        .init(
+            placeId: 5,
+            placeName: "심퍼티쿠시 용산점",
+            placeImage: "https://i.namu.wiki/i/dYB5Cd-rFWKdv9ywxqQMj8wI0lz7KYGt7iwNVw8hfl6yUHXrIx6J0Ra4WCyIBNuHkad7yr0s3M41a7OzoIhbql5fiQqpuvMVpWtuE5Zx-okPTyCIMnhkfRc5UOQtnRr39iQCGaYbMukt_dgfKzoJEw.webp",
+            category: "이탈리안 퓨전",
+            roadAddress: "서울 용산구 한강대로52길 17-3",
+            activeTime: "11:00 - 22:00",
+            rating: 4.6,
+            placeLatitude: 37.5313,
+            placeLongitude: 126.9705,
+            reviewCount: 842,
+            liked: true
+        ),
+        .init(
+            placeId: 6,
+            placeName: "심퍼티쿠시 용산점",
+            placeImage: "https://i.namu.wiki/i/dYB5Cd-rFWKdv9ywxqQMj8wI0lz7KYGt7iwNVw8hfl6yUHXrIx6J0Ra4WCyIBNuHkad7yr0s3M41a7OzoIhbql5fiQqpuvMVpWtuE5Zx-okPTyCIMnhkfRc5UOQtnRr39iQCGaYbMukt_dgfKzoJEw.webp",
+            category: "이탈리안 퓨전",
+            roadAddress: "서울 용산구 한강대로52길 17-3",
+            activeTime: "11:00 - 22:00",
+            rating: 4.6,
+            placeLatitude: 37.5313,
+            placeLongitude: 126.9705,
+            reviewCount: 842,
+            liked: true
+        ),
+        .init(
+            placeId: 7,
+            placeName: "심퍼티쿠시 용산점",
+            placeImage: "https://i.namu.wiki/i/dYB5Cd-rFWKdv9ywxqQMj8wI0lz7KYGt7iwNVw8hfl6yUHXrIx6J0Ra4WCyIBNuHkad7yr0s3M41a7OzoIhbql5fiQqpuvMVpWtuE5Zx-okPTyCIMnhkfRc5UOQtnRr39iQCGaYbMukt_dgfKzoJEw.webp",
+            category: "이탈리안 퓨전",
+            roadAddress: "서울 용산구 한강대로52길 17-3",
+            activeTime: "11:00 - 22:00",
+            rating: 4.6,
+            placeLatitude: 37.5313,
+            placeLongitude: 126.9705,
+            reviewCount: 842,
+            liked: true
+        ),
+        .init(
+            placeId: 8,
+            placeName: "심퍼티쿠시 용산점",
+            placeImage: "https://i.namu.wiki/i/dYB5Cd-rFWKdv9ywxqQMj8wI0lz7KYGt7iwNVw8hfl6yUHXrIx6J0Ra4WCyIBNuHkad7yr0s3M41a7OzoIhbql5fiQqpuvMVpWtuE5Zx-okPTyCIMnhkfRc5UOQtnRr39iQCGaYbMukt_dgfKzoJEw.webp",
+            category: "이탈리안 퓨전",
+            roadAddress: "서울 용산구 한강대로52길 17-3",
+            activeTime: "11:00 - 22:00",
+            rating: 4.6,
+            placeLatitude: 37.5313,
+            placeLongitude: 126.9705,
+            reviewCount: 842,
+            liked: true
+        ),
+        .init(
+            placeId: 9,
+            placeName: "심퍼티쿠시 용산점",
+            placeImage: "https://i.namu.wiki/i/dYB5Cd-rFWKdv9ywxqQMj8wI0lz7KYGt7iwNVw8hfl6yUHXrIx6J0Ra4WCyIBNuHkad7yr0s3M41a7OzoIhbql5fiQqpuvMVpWtuE5Zx-okPTyCIMnhkfRc5UOQtnRr39iQCGaYbMukt_dgfKzoJEw.webp",
+            category: "이탈리안 퓨전",
+            roadAddress: "서울 용산구 한강대로52길 17-3",
+            activeTime: "11:00 - 22:00",
+            rating: 4.6,
+            placeLatitude: 37.5313,
+            placeLongitude: 126.9705,
+            reviewCount: 842,
+            liked: true
         )
     ]
     

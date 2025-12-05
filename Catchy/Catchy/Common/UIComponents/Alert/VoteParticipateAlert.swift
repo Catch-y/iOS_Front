@@ -56,7 +56,7 @@ struct VoteParticipateAlert: View {
     // MARK: - Middle
     private var middleContents: some View {
         Text(strategy.title)
-            .font(.Subtitle3)
+            .font(.subtitle3)
             .foregroundStyle(.g7)
             .multilineTextAlignment(.center)
             .lineSpacing(VoteParticipateAlertConstant.lineSpacing)

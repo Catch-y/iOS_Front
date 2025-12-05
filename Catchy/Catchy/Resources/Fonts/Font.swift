@@ -40,28 +40,32 @@ extension Font {
     }
     
     // MARK: - Headline
-    static var Headline1: Font {
+    static var headline1: Font {
         return .pretend(type: .bold, size: 40)
     }
     
-    static var Headline2: Font {
+    static var headline2: Font {
         return .pretend(type: .bold, size: 32)
     }
     
+    static var headline3: Font {
+        return .pretend(type: .bold, size: 28)
+    }
+    
     // MARK: - Subtite
-    static var Subtitle1: Font {
+    static var subtitle1: Font {
         return .pretend(type: .semibold, size: 22)
     }
     
-    static var Subtitle2: Font {
+    static var subtitle2: Font {
         return .pretend(type: .semibold, size: 20)
     }
     
-    static var Subtitle3: Font {
+    static var subtitle3: Font {
         return .pretend(type: .medium, size: 17)
     }
     
-    static var Subtitle3_SM: Font {
+    static var subtitle3_SM: Font {
         return .pretend(type: .semibold, size: 17)
     }
     // MARK: - Body
@@ -69,7 +73,7 @@ extension Font {
         return .pretend(type: .semibold, size: 14)
     }
     
-    static var Body1_2: Font {
+    static var body1_2: Font {
         return .pretend(type: .regular, size: 14)
     }
     

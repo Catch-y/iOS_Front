@@ -53,7 +53,7 @@ struct LoadingAlert: View {
     private var middleContents: some View {
         VStack(spacing: LoadingAlertConstant.middleVspacing, content: {
             Text(title)
-                .font(.Subtitle3_SM)
+                .font(.subtitle3_SM)
                 .foregroundStyle(.g7)
                 .multilineTextAlignment(.center)
                 .lineSpacing(LoadingAlertConstant.lineSpacing)
@@ -69,7 +69,7 @@ struct LoadingAlert: View {
         var str = AttributedString(strategy.title)
         if let range = str.range(of: LoadingAlertConstant.generateText) {
             str[range].foregroundColor = .m6
-            str[range].font = .Subtitle3_SM
+            str[range].font = .subtitle3_SM
         }
         return str
     }

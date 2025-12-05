@@ -22,7 +22,9 @@ struct CatchyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            Text("1")
+            CatchyTab()
+                .environment(AppFlow())
+                .environmentObject(DIContainer())
         }
     }
 }

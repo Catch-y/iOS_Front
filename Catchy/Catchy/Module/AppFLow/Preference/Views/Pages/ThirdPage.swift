@@ -81,7 +81,7 @@ struct ThirdPage: View {
     /// 상단 컨텐츠
     private var topContents: some View {
         Text(ThirdPageConstants.titleText)
-            .font(.Subtitle1)
+            .font(.subtitle1)
             .foregroundStyle(Color.g7)
             .lineSpacing(DefaultConstants.lineSpacing)
     }
@@ -329,7 +329,7 @@ struct ThirdPage: View {
     /// - Returns: 뷰 반환
     private func sectionTitle(_ text: String) -> some View {
         Text(text)
-            .font(.Subtitle3)
+            .font(.subtitle3)
             .foregroundStyle(Color.g7)
     }
     
@@ -348,7 +348,7 @@ struct ThirdPage: View {
             ), displayedComponents: .hourAndMinute,
                 label: {
                     Text(index == 0 ? ThirdPageConstants.picerStartText : ThirdPageConstants.picerEndText)
-                        .font(.Subtitle3)
+                        .font(.subtitle3)
                         .foregroundStyle(Color.main)
                 }
             )

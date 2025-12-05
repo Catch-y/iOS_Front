@@ -137,7 +137,7 @@ struct SecondPage: View {
                 .frame(width: SecondPageConstants.middleIconSize.width, height: SecondPageConstants.middleIconSize.height)
             
             Text(category.rawValue)
-                .font(.Headline1)
+                .font(.headline1)
                 .foregroundStyle(Color.white)
         })
     }
@@ -170,11 +170,11 @@ struct SecondPage: View {
     private func bottomSubCategoryDescrip(_ category: CategoryType) -> some View {
         HStack(spacing: .zero, content: {
             Text(SecondPageConstants.bottomSubCategoryDescrip[0])
-                .font(.Subtitle3)
+                .font(.subtitle3)
             Text(" \(category.rawValue) \(SecondPageConstants.bottomSubCategoryDescrip[1])")
                 .font(.naviFont)
             Text(SecondPageConstants.bottomSubCategoryDescrip[2])
-                .font(.Subtitle3)
+                .font(.subtitle3)
         })
         .foregroundStyle(Color.categoryDes)
         .padding(.leading, SecondPageConstants.leadingPadding)

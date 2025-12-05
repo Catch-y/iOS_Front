@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     // MARK:  - Property
     @State var viewModel: HomeViewModel
+    @EnvironmentObject var container: DIContainer
     @AppStorage(AppStorageKey.userNickname) var nickname: String = "닉네임 없음"
     
     // MARK: - Constant
@@ -38,7 +39,6 @@ struct HomeView: View {
                 }
             })
         })
-        .scrollEdgeEffectStyle(.soft, for: .all)
     }
     
     // MARK: - SectionBuilder

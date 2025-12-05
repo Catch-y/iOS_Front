@@ -107,7 +107,7 @@ struct PopularCourseCard: View, Equatable {
             
             // 코스 제목
             Text(data.courseName)
-                .font(.Subtitle3)
+                .font(.subtitle3)
                 .fontWeight(.bold)
                 .foregroundStyle(.white)
                 .lineLimit(2)

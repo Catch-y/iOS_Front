@@ -16,7 +16,7 @@ enum SingleAlertType {
     var titleFont: Font {
         switch self {
         case .joinPoll:
-            return .Subtitle3
+            return .subtitle3
         case .changeNickname:
             return .body2
         }

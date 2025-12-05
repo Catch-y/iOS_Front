@@ -70,7 +70,7 @@ struct VisitAlert: View {
     private func sectionGenerate(_ section: GuideSection) ->  some View {
         VStack(alignment: .leading, spacing: GuideAlertConstant.sectionInnerVspacing, content: {
             Text(sectionTitle(section.title))
-                .font(.Subtitle3_SM)
+                .font(.subtitle3_SM)
                 .foregroundStyle(.g7)
             
             Text(section.description)
@@ -87,7 +87,7 @@ struct VisitAlert: View {
         var str = AttributedString(title)
         if let range = str.range(of: GuideAlertConstant.checkText) {
             str[range].foregroundColor = .m6
-            str[range].font = .Subtitle3_SM
+            str[range].font = .subtitle3_SM
         }
         return str
     }

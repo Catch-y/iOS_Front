@@ -39,7 +39,7 @@ struct SubCategoryBtn: View {
     
     private var btnText: some View {
         Text(subCategory)
-            .font(.Subtitle3)
+            .font(.subtitle3)
             .foregroundStyle(isSelected ? Color.m2 : Color.g6)
             .frame(maxWidth: .infinity)
             .frame(height: SubCategoryConstants.btnHeight)

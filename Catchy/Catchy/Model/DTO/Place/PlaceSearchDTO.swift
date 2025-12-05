@@ -18,19 +18,20 @@ struct PlaceSearchQuery: Codable {
 struct PlaceSearchResponse: Codable {
     let content: [PlaceSearchContent]
     let last: Bool
+}
+
+struct PlaceSearchContent: Codable, Identifiable {
+    var id: UUID = .init()
+    let placeInfoResponse: PlaceInfoResponse
+    let relevanceScore: Int
     
-    struct PlaceSearchContent: Codable, Identifiable {
-        var id: UUID = .init()
-        let placeInfoResponse: PlaceInfoResponse
-        let relevanceScore: Int
-        
-        enum CodingKeys: CodingKey {
-            case placeInfoResponse
-            case relevanceScore
-        }
+    enum CodingKeys: CodingKey {
+        case placeInfoResponse
+        case relevanceScore
     }
     
-    struct PlaceInfoResponse: Codable {
+    struct PlaceInfoResponse: Codable, Identifiable {
+        var id: UUID = .init()
         let placeId: Int
         let imageUrl: String
         let placeName: String
@@ -39,5 +40,18 @@ struct PlaceSearchResponse: Codable {
         let activeTime: String
         let rating: Double
         let reviewCount: Int
+        
+        enum CodingKeys: CodingKey {
+            case placeId
+            case imageUrl
+            case placeName
+            case categoryName
+            case roadAddress
+            case activeTime
+            case rating
+            case reviewCount
+        }
     }
 }
+
+
