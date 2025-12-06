@@ -20,6 +20,8 @@ struct HomeView: View {
         static let popularSectionSpacing: CGFloat = 8
         static let popularBottomPadding: CGFloat = 20
         static let recommendCardSpacing: CGFloat = 18
+        static let logoSize: CGSize = .init(width: 76, height: 30)
+        static let logoSpacing: CGFloat = 30
         
         static let popularCardHeight: CGFloat = 270
         
@@ -31,6 +33,7 @@ struct HomeView: View {
         self._viewModel = State(wrappedValue: .init())
     }
     
+    // MARK: - Body
     var body: some View {
         ScrollView(.vertical, content: {
             LazyVStack(alignment: .leading, spacing: HomeConstants.lazyVspacing, content: {
@@ -38,6 +41,13 @@ struct HomeView: View {
                     makeSection($0)
                 }
             })
+        })
+        .safeAreaBar(edge: .top, alignment: .leading, spacing: HomeConstants.logoSpacing, content: {
+            Image(.logo)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: HomeConstants.logoSize.width, height: HomeConstants.logoSize.height)
+                .padding(.leading, DefaultConstants.defaultSafeHorizon)
         })
     }
     
@@ -128,7 +138,7 @@ struct HomeView: View {
         ScrollView(.horizontal, content: {
             HStack(spacing: HomeConstants.popularSectionSpacing, content: {
                 ForEach(viewModel.popularData.enumerated(), id: \.offset) {
-                    PopularCourseCard(data: $1, rank: $0)
+                    PopularCourseCard(data: $1, rank: $0 + 1)
                         .equatable()
                         .containerRelativeFrame(.horizontal, count: HomeConstants.containerCount, spacing: HomeConstants.containerSpacing)
                         .frame(height: HomeConstants.popularCardHeight)
