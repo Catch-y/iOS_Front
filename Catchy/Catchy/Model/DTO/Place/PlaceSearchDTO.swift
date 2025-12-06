@@ -37,7 +37,7 @@ struct PlaceSearchContent: Codable, Identifiable {
         let placeName: String
         let categoryName: CategoryType
         let roadAddress: String
-        let activeTime: String
+        let activeTime: String?
         let rating: Double
         let reviewCount: Int
         

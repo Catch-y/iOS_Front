@@ -23,11 +23,13 @@ struct SearchView: View, Equatable {
     // MARK: - Constant
     fileprivate enum SearchConstants {
         static let titleSpacing: CGFloat = 8
-        static let lineSpacing: CGFloat = 4.5
+        static let lineSpacing: CGFloat = 5
         static let flowSpacing: CGFloat = 10
         static let buttonRadius: CGFloat = 15
         static let bottomSpacing: CGFloat = 14
         static let mainSpacing: CGFloat = 30
+        static let cardListPadding: EdgeInsets = .init(top: 20, leading: 16, bottom: 20, trailing: 16)
+        static let noResultText: (String, String) = ("검색어와 일치하는 내용이 없어요", "확인 후 다시 검색해주세요")
         static let mainTitle: String = "어떤 장소를 찾고 계신가요?"
         static let subTitle: String = "Catch:y에서 알려드릴게요"
         static let recentTitle: String = "최근 검색어"
@@ -41,37 +43,38 @@ struct SearchView: View, Equatable {
     
     // MARK: - Body
     var body: some View {
-        VStack(alignment: .leading, spacing: SearchConstants.mainSpacing, content: {
-            Spacer()
-            
-            if !isSearching && viewModel.searchText.isEmpty {
-                topContent
-            }
-            
-            middleContent
-            
-            if !viewModel.recentSearch.isEmpty {
-                bottomContent
-            }
-            
-            if !viewModel.searchText.isEmpty {
-                placeList
-            }
-            
-            Spacer()
-        })
-        .animation(.spring(), value: viewModel.recentSearch)
-        .animation(.spring(), value: viewModel.searchText)
-        .task {
-            await viewModel.searchManager.save("안녕")
-            await  viewModel.searchManager.save("오늘")
-            await  viewModel.searchManager.save("가나다라마바사")
-            await  viewModel.searchManager.save("엊그제 그들")
-            await  viewModel.searchManager.save("그들거ㅏ 안녕")
-            await  viewModel.searchManager.save("그들에게 난")
-            await viewModel.fetchingData()
-        }
-        .safeAreaPadding(.horizontal, DefaultConstants.defaultSafeHorizon)
+          VStack(alignment: .leading, spacing: spacing) {
+              // 검색 전 상태 (타이틀 표시)
+              if !isSearching && viewModel.searchText.isEmpty {
+                  Spacer()
+                  topContent
+                      .padding(.horizontal, DefaultConstants.defaultSafeHorizon)
+              }
+
+              // 검색 필드 (항상 표시)
+              middleContent
+                  .padding(.horizontal, DefaultConstants.defaultSafeHorizon)
+
+              // 검색 결과 or 최근 검색어
+              if viewModel.searchText.isEmpty {
+                  Spacer()
+                  if !viewModel.recentSearch.isEmpty {
+                      bottomContent
+                          .padding(.horizontal, DefaultConstants.defaultSafeHorizon)
+                  }
+              } else {
+                  placeList
+              }
+          }
+          .animation(.spring(), value: viewModel.recentSearch)
+          .animation(.spring(), value: viewModel.searchText)
+          .task {
+              await viewModel.fetchingData()
+          }
+      }
+    
+    private var spacing: CGFloat {
+        return viewModel.searchText.isEmpty ? SearchConstants.mainSpacing : SearchConstants.lineSpacing
     }
     
     // MARK: - Top
@@ -163,9 +166,10 @@ struct SearchView: View, Equatable {
     @ViewBuilder
     private var placeList: some View {
         if viewModel.searchData.isEmpty {
+            Spacer()
             emptyView
         } else {
-            //            cardSearchView
+            cardSearchView
         }
     }
     
@@ -175,12 +179,12 @@ struct SearchView: View, Equatable {
             Image(.emptyResult)
                 .fixedSize()
             
-            Text("검색어와 일치하는 내용이 없어요!")
+            Text(SearchConstants.noResultText.0)
                 .font(.subtitle2)
                 .foregroundStyle(Color.g7)
                 .padding(.top, 15)
             
-            Text("확인 후 다시 검색해주세요.")
+            Text(SearchConstants.noResultText.1)
                 .font(.body1_2)
                 .foregroundStyle(Color.g4)
             
@@ -190,19 +194,18 @@ struct SearchView: View, Equatable {
         .frame(maxWidth: .infinity, alignment: .center)
     }
     
-    //    /// 검색 데이터 존재할 경우
-    //    private var cardSearchView: some View {
-    //        List {
-    //            ForEach(viewModel.searchData, id: \.id) { data in
-    //                Text(data.placeName)
-    //            }
-    //        }
-    //        .listStyle(.plain)
-    //        .scrollContentBackground(.hidden)
-    //        .refreshable {
-    //            <#code#>
-    //        }
-    //    }
+    /// 검색 데이터 존재할 경우
+    private var cardSearchView: some View {
+        List {
+            ForEach(viewModel.searchData, id: \.id) { data in
+                SearchRecommendCard(data: data)
+            }
+            .listRowInsets(SearchConstants.cardListPadding)
+            .alignmentGuide(.listRowSeparatorLeading, computeValue: { _ in 0 })
+        }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+    }
 }
 
 #Preview {

@@ -10,6 +10,14 @@ import SwiftUI
 struct PlaceCategoryTag: View {
     
     let category: String
+    let fontColor: Color
+    let color: Color
+    
+    init(category: String, fontColor: Color = .g6 ,color: Color = .g2) {
+        self.category = category
+        self.fontColor = fontColor
+        self.color = color
+    }
     
     fileprivate enum PlaceCategoryTagContsants {
         static let categoryTagPadding: EdgeInsets = .init(top: 4, leading: 13, bottom: 4, trailing: 13)
@@ -18,11 +26,11 @@ struct PlaceCategoryTag: View {
     var body: some View {
         Text(category)
             .font(.courseTag)
-            .foregroundStyle(.g6)
+            .foregroundStyle(fontColor)
             .padding(PlaceCategoryTagContsants.categoryTagPadding)
             .background {
                 RoundedRectangle(cornerRadius: DefaultConstants.defaultCornerRadius)
-                    .fill(.g2)
+                    .fill(color)
             }
     }
 }
