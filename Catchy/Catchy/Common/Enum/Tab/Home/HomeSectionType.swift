@@ -22,4 +22,8 @@ enum HomeSectionType: CaseIterable, Identifiable {
             return "RecommendPlaceCard"
         }
     }
+    
+    var isChevron: Bool {
+        self == .recommendPlaceCard
+    }
 }

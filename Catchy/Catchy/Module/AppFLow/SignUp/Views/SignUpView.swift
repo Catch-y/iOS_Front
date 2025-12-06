@@ -73,7 +73,7 @@ struct SignUpView: View {
     private var topTitle: some View {
         Text(SignUpConstants.topTitleText)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .font(.Subtitle1)
+            .font(.subtitle1)
             .foregroundStyle(Color.g7)
             .lineSpacing(SignUpConstants.lineSpacing)
     }

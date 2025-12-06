@@ -42,7 +42,7 @@ struct FirstPage: View {
     /// 상단 타이틀
     private var topContents: some View {
         Text(viewModel.preferencPage.titleAttributed)
-            .font(.Subtitle1)
+            .font(.subtitle1)
             .lineSpacing(FirstPageConstants.lineSpacing)
     }
     

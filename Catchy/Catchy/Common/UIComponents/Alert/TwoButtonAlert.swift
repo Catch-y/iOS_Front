@@ -52,7 +52,7 @@ struct TwoButtonAlert: View {
     private var middleContents: some View {
         VStack(spacing: TwoButtonAlertConstant.middleVspacing, content: {
             Text(title)
-                .font(.Subtitle3_SM)
+                .font(.subtitle3_SM)
                 .foregroundStyle(.g7)
             
             if let message = strategy.message {
@@ -68,7 +68,7 @@ struct TwoButtonAlert: View {
         var str = AttributedString(strategy.title)
         if let range = str.range(of: TwoButtonAlertConstant.deleteText) {
             str[range].foregroundColor = .m6
-            str[range].font = .Subtitle3_SM
+            str[range].font = .subtitle3_SM
         }
         return str
     }

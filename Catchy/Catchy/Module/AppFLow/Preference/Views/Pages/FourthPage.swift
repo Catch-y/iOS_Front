@@ -64,7 +64,7 @@ struct FourthPage: View {
     /// 상단 타이틀
     private var topTitle: some View {
         Text(FourthPageConstants.titleText)
-            .font(.Subtitle3_SM)
+            .font(.subtitle3_SM)
             .foregroundStyle(Color.g7)
             .lineSpacing(DefaultConstants.lineSpacing)
     }

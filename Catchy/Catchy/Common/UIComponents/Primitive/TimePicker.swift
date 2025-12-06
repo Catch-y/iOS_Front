@@ -44,7 +44,7 @@ struct TimePicker: View {
     private var btnText: some View {
         HStack(content: {
             Text(selectedTime?.timeString() ?? TimePickerConstants.timeText)
-                .font(.Body1_2)
+                .font(.body1_2)
                 .foregroundStyle(selectedTime == nil ? Color.g3 : Color.g6)
             Spacer()
             Image(.bottomChevron)

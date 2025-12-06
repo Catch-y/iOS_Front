@@ -59,13 +59,7 @@ struct CatchyTab: View {
     private func tabView(_ tab: TabCase) -> some View {
         switch tabcase {
         case .home:
-            ScrollView(.vertical, content: {
-                VStack(content: {
-                    ForEach(0...100, id: \.self) {_ in
-                        Text("11")
-                    }
-                })
-            })
+            HomeView()
         case .course:
             Text("course")
         case .group:
@@ -73,7 +67,7 @@ struct CatchyTab: View {
         case .mypage:
             Text("mypage")
         case .search:
-            Text("Search")
+            SearchView()
         }
     }
 }

@@ -71,7 +71,7 @@ struct LoginView: View {
     /// 로고 타이틀
     private var topLogoTitle: some View {
         Text(LoginConstants.logoText)
-            .font(.Subtitle3)
+            .font(.subtitle3)
             .foregroundStyle(Color.g6)
             .lineSpacing(LoginConstants.lineSpacing)
             .multilineTextAlignment(.leading)

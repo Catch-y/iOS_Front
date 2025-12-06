@@ -43,7 +43,7 @@ struct MainButton: View {
     /// 버튼 내부 텍스트
     private var buttonText: some View {
         Text(btnType.text)
-            .font(.Subtitle3_SM)
+            .font(.subtitle3_SM)
             .foregroundStyle(btnType.onOff.textColor)
             .frame(maxWidth: .infinity)
             .frame(height: height)

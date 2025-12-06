@@ -12,15 +12,18 @@ struct HomeSectionFormView<Content: View>: View {
     
     let baseTitle: String
     let rangeWord: [String]
+    let action: (() -> Void)?
     let content: Content
     
     init(
         baseTitle: String,
         rangeWord: [String],
+        action: (() -> Void)?,
         @ViewBuilder content: () -> Content
     ) {
         self.baseTitle = baseTitle
         self.rangeWord = rangeWord
+        self.action = action
         self.content = content()
     }
     
@@ -29,7 +32,7 @@ struct HomeSectionFormView<Content: View>: View {
             Section(content: {
                 content
             }, header: {
-                HeaderSection(baseTitle: baseTitle, rangeWord: rangeWord)
+                HeaderSection(baseTitle: baseTitle, rangeWord: rangeWord, action: action)
             })
         })
     }

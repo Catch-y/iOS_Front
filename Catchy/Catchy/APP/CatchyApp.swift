@@ -22,7 +22,9 @@ struct CatchyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            HeaderSection(baseTitle: "가장 유연한 단던", rangeWord: ["유연"])
+            CatchyTab()
+                .environment(AppFlow())
+                .environmentObject(DIContainer())
         }
     }
 }

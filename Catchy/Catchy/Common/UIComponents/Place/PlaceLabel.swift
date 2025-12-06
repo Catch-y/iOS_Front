@@ -25,13 +25,13 @@ struct PlaceLabel: View {
             generateInfoText(text)
         }, icon: {
             image
-                .fixedSize()
         })
         .labelIconToTitleSpacing(labelSpacing)
+        .labelStyle(.titleAndIcon)
     }
     
     private func generateInfoText(_ text: String) -> some View {
-        Text(text)
+        Text(text.customLineBreak())
             .font(.caption)
             .foregroundStyle(.g4)
     }

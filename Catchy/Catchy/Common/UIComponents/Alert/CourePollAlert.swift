@@ -66,7 +66,7 @@ struct CourePollAlert: View {
         VStack(spacing: CoursePollAlertConstant.topVspacing, content: {
             ForEach(strategy.sections, id: \.id) { section in
                 Text(title(section.title))
-                    .font(.Subtitle3)
+                    .font(.subtitle3)
                     .foregroundStyle(.g7)
                     .multilineTextAlignment(.center)
                     .lineSpacing(CoursePollAlertConstant.lineSpacing)
@@ -93,7 +93,7 @@ struct CourePollAlert: View {
         var str = AttributedString(title)
         if let range = str.range(of: CoursePollAlertConstant.generateTitle) {
             str[range].foregroundColor = .main
-            str[range].font = .Subtitle3
+            str[range].font = .subtitle3
         }
         
         return str
@@ -151,7 +151,7 @@ struct CourePollAlert: View {
                 .frame(width: CoursePollAlertConstant.iconSize.width, height: CoursePollAlertConstant.iconSize.height)
             
             Text(type.rawValue)
-                .font(.Body1_2)
+                .font(.body1_2)
                 .foregroundStyle(.g6)
         })
     }
