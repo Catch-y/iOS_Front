@@ -70,7 +70,7 @@ struct CourseCard: View, Equatable {
     }
     /// 코스 사진
     private var courseImage: some View {
-        RemoteImage(urlString: data.courseImage, size: .init(width: getScreenSize().width, height: CourseCardConstraint.courseImageHeight))
+        RemoteImage(urlString: data.courseImage, size: .init(width: getScreenSize().width, height: CourseCardConstraint.courseImageHeight), ratio: 311/140)
     }
     
     /// 코스 태그
@@ -90,7 +90,7 @@ struct CourseCard: View, Equatable {
         VStack(alignment: .leading, spacing: CourseCardConstraint.courseInfoVspacing, content: {
             Text(data.courseName)
                 .font(.body1)
-                .foregroundStyle(.g7)
+                .foregroundStyle(.black)
             
             Text(data.courseDescription)
                 .font(.body3)

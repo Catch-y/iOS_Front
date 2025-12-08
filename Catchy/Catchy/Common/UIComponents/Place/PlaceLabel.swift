@@ -37,6 +37,29 @@ struct PlaceLabel: View {
     }
 }
 
-#Preview {
-    PlaceLabel(image: Image(.star), text: "평점 4.3", labelSpacing: 5)
+struct RatingPoint: View {
+    let point: String
+    
+    var body: some View {
+        PlaceLabel(image: Image(.star), text: "평점 \(point)", labelSpacing: 2)
+    }
+}
+
+struct ReviewPoint: View {
+    
+    let point: String
+    let id: Int
+    @EnvironmentObject var container: DIContainer
+    
+    var body: some View {
+        Button(action: {
+            print("hello")
+        }, label: {
+            HStack(spacing: 6, content: {
+                PlaceLabel(image: Image(.review), text: "리뷰 \(point)개", labelSpacing: 2)
+                Image(.rightChevron)
+            })
+            .underline(color: .g4)
+        })
+    }
 }

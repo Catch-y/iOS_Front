@@ -64,7 +64,7 @@ struct PopularCourseCard: View, Equatable {
         RemoteImage(
             urlString: data.courseImage,
             size: .init(width: size.width * 1.4, height: size.height),
-            cornerRadius: PopularCourseConstants.cornerRadius
+            cornerRadius: PopularCourseConstants.cornerRadius, ratio: nil
         )
         .offset(x: -minX * 0.5)
     }

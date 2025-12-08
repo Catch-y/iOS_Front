@@ -181,7 +181,7 @@ struct SearchView: View, Equatable {
             
             Text(SearchConstants.noResultText.0)
                 .font(.subtitle2)
-                .foregroundStyle(Color.g7)
+                .foregroundStyle(Color.black)
                 .padding(.top, 15)
             
             Text(SearchConstants.noResultText.1)

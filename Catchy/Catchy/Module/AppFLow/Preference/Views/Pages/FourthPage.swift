@@ -65,7 +65,7 @@ struct FourthPage: View {
     private var topTitle: some View {
         Text(FourthPageConstants.titleText)
             .font(.subtitle3_SM)
-            .foregroundStyle(Color.g7)
+            .foregroundStyle(Color.black)
             .lineSpacing(DefaultConstants.lineSpacing)
     }
     
@@ -144,7 +144,7 @@ struct FourthPage: View {
 
         return Text(polygon.regionName)
             .font(.caption_SM)
-            .foregroundStyle(Color.g7)
+            .foregroundStyle(Color.black)
             .offset(y: adjustTextOffset(for: polygon.regionName) * dynamicScale)
             .position(x: transformedCenter.x, y: transformedCenter.y)
             .alignmentGuide(.leading) { _ in transformedCenter.x }

@@ -71,7 +71,7 @@ struct VisitAlert: View {
         VStack(alignment: .leading, spacing: GuideAlertConstant.sectionInnerVspacing, content: {
             Text(sectionTitle(section.title))
                 .font(.subtitle3_SM)
-                .foregroundStyle(.g7)
+                .foregroundStyle(.black)
             
             Text(section.description)
                 .font(.body3)
@@ -93,7 +93,7 @@ struct VisitAlert: View {
     }
 }
 
-#Preview {
+#Preview(traits: .sizeThatFitsLayout) {
     VisitAlert(strategy: VisitCheckStrategy(), dismissAction: {
         print("hello")
     })

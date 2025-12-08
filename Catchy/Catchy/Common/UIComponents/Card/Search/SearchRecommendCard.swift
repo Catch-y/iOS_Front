@@ -37,7 +37,7 @@ struct SearchRecommendCard: View {
     // MARK: - Left
     /// 장소 이미지
     private var placeImage: some View {
-        RemoteImage(urlString: data.imageUrl, size: .init(width: getScreenSize().width * 0.4, height: SearchRecommendConstants.placeHeight))
+        RemoteImage(urlString: data.imageUrl, size: .init(width: getScreenSize().width * 0.4, height: SearchRecommendConstants.placeHeight), ratio: 133/120)
     }
     
     // MARK: - Right
@@ -72,8 +72,8 @@ struct SearchRecommendCard: View {
     /// 오른쪽 장소 포인트
     private var rightPlacePoint: some View {
         HStack(spacing: SearchRecommendConstants.placePointSpacing, content: {
-            PlaceLabel(image: Image(.star), text: "평점 \(data.rating)", labelSpacing: SearchRecommendConstants.placeLabelSpacing)
-            PlaceLabel(image: Image(.review), text: "리뷰 \(data.reviewCount)개", labelSpacing: SearchRecommendConstants.labelSpacing)
+            RatingPoint(point: "\(data.rating)")
+            ReviewPoint(point: "\(data.reviewCount)", id: data.placeId)
         })
         .offset(y: -10)
     }

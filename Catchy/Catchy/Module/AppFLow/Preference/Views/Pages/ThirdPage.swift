@@ -82,7 +82,7 @@ struct ThirdPage: View {
     private var topContents: some View {
         Text(ThirdPageConstants.titleText)
             .font(.subtitle1)
-            .foregroundStyle(Color.g7)
+            .foregroundStyle(Color.black)
             .lineSpacing(DefaultConstants.lineSpacing)
     }
     
@@ -164,7 +164,7 @@ struct ThirdPage: View {
                 
                 Text(ThirdPageConstants.allClickText)
                     .font(.body3)
-                    .foregroundStyle(Color.g7)
+                    .foregroundStyle(Color.black)
             })
         })
     }
@@ -330,7 +330,7 @@ struct ThirdPage: View {
     private func sectionTitle(_ text: String) -> some View {
         Text(text)
             .font(.subtitle3)
-            .foregroundStyle(Color.g7)
+            .foregroundStyle(Color.black)
     }
     
     /// 피커 생성

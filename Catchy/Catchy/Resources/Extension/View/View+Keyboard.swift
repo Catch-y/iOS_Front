@@ -22,7 +22,7 @@ extension View {
                 }, label: {
                     Image(systemName: "chevron.down")
                         .renderingMode(.template)
-                        .foregroundStyle(Color.g7)
+                        .foregroundStyle(Color.black)
                 })
             })
         })

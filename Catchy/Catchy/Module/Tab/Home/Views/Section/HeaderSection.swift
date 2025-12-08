@@ -27,7 +27,7 @@ struct HeaderSection: View {
     var body: some View {
         HStack {
             Text(baseTitle.highlight(rangeWord.map { ($0, highlightColor) }))
-                .foregroundStyle(.g7)
+                .foregroundStyle(.black)
                 .font(.subtitle2)
             
             Spacer()

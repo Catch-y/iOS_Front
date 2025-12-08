@@ -14,7 +14,6 @@ class SearchViewModel {
     var searchData: [PlaceSearchContent.PlaceInfoResponse] = .init()
     let searchManager: SearchManager = .shared
     
-
     // MARK:  - Search Logic
     @MainActor
     public func fetchingData() async {

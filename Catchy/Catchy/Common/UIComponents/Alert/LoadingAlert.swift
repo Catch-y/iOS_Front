@@ -54,7 +54,7 @@ struct LoadingAlert: View {
         VStack(spacing: LoadingAlertConstant.middleVspacing, content: {
             Text(title)
                 .font(.subtitle3_SM)
-                .foregroundStyle(.g7)
+                .foregroundStyle(.black)
                 .multilineTextAlignment(.center)
                 .lineSpacing(LoadingAlertConstant.lineSpacing)
             

@@ -74,7 +74,7 @@ struct SignUpView: View {
         Text(SignUpConstants.topTitleText)
             .frame(maxWidth: .infinity, alignment: .leading)
             .font(.subtitle1)
-            .foregroundStyle(Color.g7)
+            .foregroundStyle(Color.black)
             .lineSpacing(SignUpConstants.lineSpacing)
     }
     
@@ -149,7 +149,7 @@ struct SignUpView: View {
             TextField(type.placeholder, text: value)
                 .textFieldStyle(.plain)
                 .font(.inputText)
-                .foregroundStyle(Color.g7)
+                .foregroundStyle(Color.black)
                 .tint(Color.black)
                 .keyboardType(type.keyboardType)
                 .focused($isFocused)
