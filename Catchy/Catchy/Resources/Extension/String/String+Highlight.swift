@@ -11,7 +11,7 @@ import SwiftUI
 extension String {
     func highlight(_ words: [(text: String, color: Color)]) -> AttributedString {
         var attr = AttributedString(self)
-        attr.foregroundColor = .g7
+        attr.foregroundColor = .black
         
         for word in words {
             if let range = attr.range(of: word.text) {

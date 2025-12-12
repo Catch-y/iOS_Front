@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct RecommendPlaceCard: View, Equatable {
-    
+    @EnvironmentObject var container: DIContainer
     @Binding var data: PlaceRecommendContentDTO
     let action: () -> Void // 장소 좋아요를 위한 Action
     
@@ -38,14 +38,13 @@ struct RecommendPlaceCard: View, Equatable {
     var body: some View {
         HStack(alignment: .top) {
             leftPlace
-            Spacer()
             rightInfo
         }
     }
     
     // MARK: - Left
     private var leftImage: some View {
-        RemoteImage(urlString: data.placeImage, size: .init(width: getScreenSize().width * 0.4, height: RecommendPlaceConstants.imageHeight))
+        RemoteImage(urlString: data.placeImage, size: .init(width: getScreenSize().width * 0.4, height: RecommendPlaceConstants.imageHeight), ratio: 168/103)
     }
     
     private var leftPlace: some View {
@@ -63,6 +62,7 @@ struct RecommendPlaceCard: View, Equatable {
             rightPlaceTop
             rightPlaceBottom
         })
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     /// 오른쪽 장소 이름 및 포인트
@@ -77,6 +77,7 @@ struct RecommendPlaceCard: View, Equatable {
     private var rightPlaceTitle: some View {
         HStack(content: {
             PlaceTitleTagView(placeName: data.placeName)
+            Spacer()
             PlaceCategoryTag(category: data.category)
         })
     }
@@ -84,10 +85,8 @@ struct RecommendPlaceCard: View, Equatable {
     /// 오른쪽 장소 포인트
     private var rightPlacePoint: some View {
         HStack(spacing: RecommendPlaceConstants.rightPlaceSpacing, content: {
-            PlaceLabel(image: Image(.star), text: "평점 \(data.rating)", labelSpacing: RecommendPlaceConstants.labelSpacing)
-            PlaceLabel(image: Image(.review), text: "리뷰 \(data.reviewCount)개", labelSpacing: RecommendPlaceConstants.labelSpacing)
-            Spacer()
-            Image(.rightChevron)
+            RatingPoint(point: "\(data.rating)")
+            ReviewPoint(point: "\(data.reviewCount)", id: data.placeId)
         })
     }
     

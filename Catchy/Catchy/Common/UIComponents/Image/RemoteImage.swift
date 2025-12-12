@@ -15,6 +15,7 @@ struct RemoteImage: View {
     let urlString: String
     let size: CGSize
     let cornerRadius: CGFloat
+    let ratio: CGFloat?
     let contentMode: ContentMode
     
     // MARK: - Init
@@ -22,11 +23,13 @@ struct RemoteImage: View {
         urlString: String,
         size: CGSize,
         cornerRadius: CGFloat = 15,
+        ratio: CGFloat?,
         contentMode: ContentMode = .fill
     ) {
         self.urlString = urlString
         self.size = size
         self.cornerRadius = cornerRadius
+        self.ratio = ratio
         self.contentMode = contentMode
     }
     
@@ -40,7 +43,7 @@ struct RemoteImage: View {
                 }
                 .resizable()
                 .retry(maxCount: 2, interval: .seconds(2))
-                .aspectRatio(contentMode: contentMode)
+                .aspectRatio(ratio, contentMode: contentMode)
                 .frame(maxWidth: size.width)
                 .frame(height: size.height)
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))

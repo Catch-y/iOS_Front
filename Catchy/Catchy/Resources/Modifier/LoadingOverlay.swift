@@ -24,6 +24,7 @@ struct LoadingOverlay: ViewModifier {
         case signupLoading = "프로필 생성 중입니다. 잠시만 기다려주세요"
         /// 맵 생성 시 사용
         case mapLoading = "계정 생성 중입니다. 잠시만 기다려주세요"
+        case courseDetailLoading = "코스 상세 정보를 가져오는 중입니다."
     }
     
     init(isLoading: Bool, loadingTextType: LoadingTextType) {
@@ -36,7 +37,8 @@ struct LoadingOverlay: ViewModifier {
             .overlay(content: {
                 if isLoading {
                     ZStack {
-                        Color.gray.opacity(LoadingOverlayConstants.opacity)
+                        Color.black.opacity(LoadingOverlayConstants.opacity)
+                            .background(Material.thinMaterial)
                             .ignoresSafeArea()
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                         
@@ -47,7 +49,7 @@ struct LoadingOverlay: ViewModifier {
                                 .font(.body1)
                                 .foregroundStyle(Color.white)
                         })
-                        .tint(Color.main)
+                        .tint(.m5)
                         .controlSize(.large)
                     }
                 }

@@ -67,7 +67,7 @@ struct CourePollAlert: View {
             ForEach(strategy.sections, id: \.id) { section in
                 Text(title(section.title))
                     .font(.subtitle3)
-                    .foregroundStyle(.g7)
+                    .foregroundStyle(.black)
                     .multilineTextAlignment(.center)
                     .lineSpacing(CoursePollAlertConstant.lineSpacing)
                 

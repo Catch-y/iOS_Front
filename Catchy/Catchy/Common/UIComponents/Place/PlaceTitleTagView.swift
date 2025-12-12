@@ -14,6 +14,6 @@ struct PlaceTitleTagView: View {
     var body: some View {
         Text(placeName.customLineBreak())
             .font(.body1)
-            .foregroundStyle(.g7)
+            .foregroundStyle(.black)
     }
 }

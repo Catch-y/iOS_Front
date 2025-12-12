@@ -23,6 +23,6 @@ enum SingleAlertType {
     }
     
     var titleColor: Color {
-        return .g7
+        return .black
     }
 }

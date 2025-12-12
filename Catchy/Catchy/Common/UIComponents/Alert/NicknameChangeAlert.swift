@@ -55,7 +55,7 @@ struct NicknameChangeAlert: View {
                 Spacer()
                 Text(strategy.title)
                     .font(.body2)
-                    .foregroundStyle(.g7)
+                    .foregroundStyle(.black)
                 
                 Spacer()
             }

@@ -53,7 +53,7 @@ struct CategoryBtn: View {
             .frame(width: CategoryConstants.btnTextWidth, alignment: .center)
             .frame(height: CategoryConstants.btnHeight)
             .font(.body1)
-            .foregroundStyle(isSelected ? Color.m6 : Color.g7)
+            .foregroundStyle(isSelected ? Color.m6 : Color.black)
     }
 }
 

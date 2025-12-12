@@ -53,7 +53,7 @@ struct TwoButtonAlert: View {
         VStack(spacing: TwoButtonAlertConstant.middleVspacing, content: {
             Text(title)
                 .font(.subtitle3_SM)
-                .foregroundStyle(.g7)
+                .foregroundStyle(.black)
             
             if let message = strategy.message {
                 Text(message)

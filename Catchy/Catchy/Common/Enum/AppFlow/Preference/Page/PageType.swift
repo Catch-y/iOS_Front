@@ -35,6 +35,6 @@ enum PageType {
     }
     
     var fontColor: Color {
-        return Color.g7
+        return .black
     }
 }

@@ -10,8 +10,8 @@ import Foundation
 @Observable
 class HomeViewModel {
     var courseData: [CourseRecommendResponse] = [
-        .init(courseId: 0, courseName: "코스 이름", courseDescription: "코스에 대한 설명 어쩌구 저쩌구 텍스트 길이 테스트 해볼게요. 두 줄 정렬하게 되면 이 정도 간격 블라블라", courseImage: "https://i.namu.wiki/i/vyQx2-xaBmrzyYUAwYYR-YYz8q-c2wdXEXOJPQVK2MQjH6vmxu2Tz9A_Q37BwrVZnxiPjgUbljgoc2EeCN492NpU_maRzr6B0vqwou5EL7vOCWtzY5IeNNMMa5dxq8FK5iTOPrewSpznLmwpUX_Xdw.webp", courseType: .ai),
-        .init(courseId: 1, courseName: "코스 이름", courseDescription: "코스에 대한 설명 어쩌구 저쩌구 텍스트 길이 테스트 해볼게요. 두 줄 정렬하게 되면 이 정도 간격 블라블라", courseImage: "https://i.namu.wiki/i/vyQx2-xaBmrzyYUAwYYR-YYz8q-c2wdXEXOJPQVK2MQjH6vmxu2Tz9A_Q37BwrVZnxiPjgUbljgoc2EeCN492NpU_maRzr6B0vqwou5EL7vOCWtzY5IeNNMMa5dxq8FK5iTOPrewSpznLmwpUX_Xdw.webp", courseType: .ai),
+        .init(courseId: 0, courseName: "코스 이름", courseDescription: "코스에 대한 설명 어쩌구 저쩌구 텍스트 길이 테스트 해볼게요. 두 줄 정렬하게 되면 이 정도 간격 블라블라", courseImage: "https://i.namu.wiki/i/Gc-iRxDS_rz8040Rpoin7pvpuEhXgYCWFqwKNXMqb-xz322o0PllwsnjeC3yjgSo8sjaxBtTbUuw5xDfp2_r72x5GtuW9rTtFaR30zVAi4UlnblRfoJ2XEBQyPfEZbtEn2LqUZZPdEsFu5nQICjxAg.webp", courseType: .ai),
+        .init(courseId: 1, courseName: "코스 이름", courseDescription: "코스에 대한 설명 어쩌구 저쩌구 텍스트 길이 테스트 해볼게요. 두 줄 정렬하게 되면 이 정도 간격 블라블라", courseImage: "https://i.namu.wiki/i/Gc-iRxDS_rz8040Rpoin7pvpuEhXgYCWFqwKNXMqb-xz322o0PllwsnjeC3yjgSo8sjaxBtTbUuw5xDfp2_r72x5GtuW9rTtFaR30zVAi4UlnblRfoJ2XEBQyPfEZbtEn2LqUZZPdEsFu5nQICjxAg.webp", courseType: .ai),
         .init(courseId: 2, courseName: "코스 이름", courseDescription: "코스에 대한 설명 어쩌구 저쩌구 텍스트 길이 테스트 해볼게요. 두 줄 정렬하게 되면 이 정도 간격 블라블라", courseImage: "https://i.namu.wiki/i/vyQx2-xaBmrzyYUAwYYR-YYz8q-c2wdXEXOJPQVK2MQjH6vmxu2Tz9A_Q37BwrVZnxiPjgUbljgoc2EeCN492NpU_maRzr6B0vqwou5EL7vOCWtzY5IeNNMMa5dxq8FK5iTOPrewSpznLmwpUX_Xdw.webp", courseType: .ai)
     ]
     
@@ -31,7 +31,7 @@ class HomeViewModel {
         .init(
             placeId: 1,
             placeName: "심퍼티쿠시 용산점",
-            placeImage: "https://i.namu.wiki/i/dYB5Cd-rFWKdv9ywxqQMj8wI0lz7KYGt7iwNVw8hfl6yUHXrIx6J0Ra4WCyIBNuHkad7yr0s3M41a7OzoIhbql5fiQqpuvMVpWtuE5Zx-okPTyCIMnhkfRc5UOQtnRr39iQCGaYbMukt_dgfKzoJEw.webp",
+            placeImage: "https://i.namu.wiki/i/Gc-iRxDS_rz8040Rpoin7pvpuEhXgYCWFqwKNXMqb-xz322o0PllwsnjeC3yjgSo8sjaxBtTbUuw5xDfp2_r72x5GtuW9rTtFaR30zVAi4UlnblRfoJ2XEBQyPfEZbtEn2LqUZZPdEsFu5nQICjxAg.webp",
             category: "이탈리안 퓨전",
             roadAddress: "서울 용산구 한강대로52길 17-3",
             activeTime: "11:00 - 22:00",
