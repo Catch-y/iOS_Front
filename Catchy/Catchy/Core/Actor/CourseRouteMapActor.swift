@@ -9,11 +9,75 @@ import Foundation
 import CoreLocation
 import MapKit
 
+/// MKRoute와 호환되는 간소화된 경로 구조체
+private class SimplifiedRoute: MKRoute {
+    private let _polyline: MKPolyline
+    private let _distance: CLLocationDistance
+    private let _expectedTravelTime: TimeInterval
+
+    init(polyline: MKPolyline, distance: CLLocationDistance, expectedTravelTime: TimeInterval) {
+        self._polyline = polyline
+        self._distance = distance
+        self._expectedTravelTime = expectedTravelTime
+        super.init()
+    }
+
+    override var polyline: MKPolyline { _polyline }
+    override var distance: CLLocationDistance { _distance }
+    override var expectedTravelTime: TimeInterval { _expectedTravelTime }
+}
+
 actor CourseRouteMapActor {
     private var segmenetCache: [String: [RouteSegment]] = .init()
     private var routeCache: [String: CalculatedRoute] = .init()
     
     // MARK: - Public Methods
+
+    /// 경유지 순서 최적화 (Nearest Neighbor TSP 휴리스틱)
+    /// 첫 번째 장소를 시작점으로 고정하고, 가장 가까운 장소를 순차적으로 선택
+    public func optimizePlaceOrder(places: [PlaceInfo]) -> [PlaceInfo] {
+        guard places.count > 2 else { return places }
+
+        var optimized: [PlaceInfo] = []
+        var remaining = Array(places.dropFirst())
+
+        guard let first = places.first else { return places }
+        optimized.append(first)
+
+        var current = first
+
+        while !remaining.isEmpty {
+            guard let nearest = remaining.min(by: {
+                calculateDistance(from: current, to: $0) < calculateDistance(from: current, to: $1)
+            }) else { break }
+
+            optimized.append(nearest)
+            remaining.removeAll { $0.placeId == nearest.placeId }
+            current = nearest
+        }
+
+        return optimized
+    }
+
+    /// 두 장소 간 거리 계산 (Haversine formula)
+    private func calculateDistance(from: PlaceInfo, to: PlaceInfo) -> Double {
+        let lat1 = from.placeLatitude * .pi / 180
+        let lon1 = from.placeLongitude * .pi / 180
+        let lat2 = to.placeLatitude * .pi / 180
+        let lon2 = to.placeLongitude * .pi / 180
+
+        let dLat = lat2 - lat1
+        let dLon = lon2 - lon1
+
+        let a = sin(dLat / 2) * sin(dLat / 2) +
+                cos(lat1) * cos(lat2) *
+                sin(dLon / 2) * sin(dLon / 2)
+        let c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        let R = 6371000.0 // 지구 반지름 (미터)
+        return R * c
+    }
+
     public func calculateCourseSegments(places: [PlaceInfo], transportType: CourseTransportType = .walking) async throws -> [RouteSegment] {
         guard places.count >= 2 else {
             throw RouteError.insufficientPlaces
@@ -47,31 +111,69 @@ actor CourseRouteMapActor {
         guard places.count >= 2 else {
             throw RouteError.insufficientPlaces
         }
-        
+
         let cacheKey = generateRouteCacheKey(places: places, transportType: transportType)
         if let cached = routeCache[cacheKey] {
             return cached
         }
-        
-        let segments = try await calculateCourseSegments(places: places, transportType: transportType)
-        
-        let combinePolyline = combinePolylines(from: segments)
-        let totalDistance = segments.reduce(0) { $0 + $1.distance }
-        let totalDuration = segments.reduce(0) { $0 + $1.expectedTravelTime }
-        
+
+        // 전달받은 places 순서대로 경로 계산 (최적화는 ViewModel에서 처리)
+        let route = try await requestDirectionWithWaypoints(
+            places: places,
+            transportType: transportType
+        )
+
         let waypoints = places.count > 2 ? Array(places.dropFirst().dropLast()) : []
-        
-        let calculateRoute = CalculatedRoute(
-            polyline: combinePolyline,
-            distance: totalDistance,
-            expectedTravelTime: totalDuration,
+
+        let calculatedRoute = CalculatedRoute(
+            polyline: route.polyline,
+            distance: route.distance,
+            expectedTravelTime: route.expectedTravelTime,
             transportType: transportType,
             fromPlace: places.first,
             waypoints: waypoints,
             toPlace: places.last
         )
-        
-        return calculateRoute
+
+        routeCache[cacheKey] = calculatedRoute
+
+        return calculatedRoute
+    }
+
+    /// 경유지를 포함한 경로 요청 (순차적으로 연결)
+    private func requestDirectionWithWaypoints(places: [PlaceInfo], transportType: CourseTransportType) async throws -> MKRoute {
+        guard places.count >= 2 else {
+            throw RouteError.insufficientPlaces
+        }
+
+        // 각 구간별로 경로를 계산하고 합침
+        var allPolylines: [MKPolyline] = []
+        var totalDistance: Double = 0
+        var totalDuration: Double = 0
+
+        for i in 0..<(places.count - 1) {
+            let from = places[i]
+            let to = places[i + 1]
+
+            let route = try await requestDirection(
+                from: CLLocationCoordinate2D(latitude: from.placeLatitude, longitude: from.placeLongitude),
+                to: CLLocationCoordinate2D(latitude: to.placeLatitude, longitude: to.placeLongitude),
+                transportType: transportType
+            )
+
+            allPolylines.append(route.polyline)
+            totalDistance += route.distance
+            totalDuration += route.expectedTravelTime
+        }
+
+        let combinedPolyline = combinePolylinesFromArray(allPolylines)
+
+        // MKRoute를 직접 반환할 수 없으므로, 임시 래퍼 사용
+        return SimplifiedRoute(
+            polyline: combinedPolyline,
+            distance: totalDistance,
+            expectedTravelTime: totalDuration
+        )
     }
     
     public func calculateRouteBetween(

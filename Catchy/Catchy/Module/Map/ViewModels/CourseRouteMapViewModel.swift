@@ -69,22 +69,25 @@ final class CourseRouteMapViewModel {
             clearRouteInfo()
             return
         }
-        
+
         loadingState = .loading
         errorMessage = nil
-        
+
         do {
-            let segments = try await actor.calculateCourseSegments(
-                places: places, transportType: transportType
-            )
-            routeSegmenets = segments
-            
+            // 캐시 클리어 후 TSP 최적화 적용
+            await actor.clearCache()
+
+            // TSP 최적화된 순서로 장소 업데이트
+            let optimizedPlaces = await actor.optimizePlaceOrder(places: places)
+            places = optimizedPlaces
+
+            // 최적화된 순서로 전체 경로 계산
             let fullRoute = try await actor.calculateFullCourseRoute(
-                places: places,
+                places: optimizedPlaces,
                 transportType: transportType
             )
             fullCourseRoute = fullRoute
-            
+
             updateRouteInfo(distance: fullRoute.distance, duration: fullRoute.expectedTravelTime)
             loadingState = .loaded
         } catch {
@@ -386,7 +389,7 @@ extension CourseRouteMapViewModel {
     }
     
     var isLoading: Bool {
-        loadingState == .loaded
+        loadingState == .loading
     }
     
     var hasError: Bool {
