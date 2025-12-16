@@ -15,9 +15,8 @@ struct CourseMarkerView: View {
     
     fileprivate enum CourseMarkerConstants {
         static let size: CGFloat = 40
-        static let selectedSize: CGFloat = 48
-        static let iconSize: CGFloat = 20
-        static let selectedIconSize: CGFloat = 24
+        static let iconSize: CGFloat = 32
+        static let selectedIconSize: CGFloat = 48
     }
     
     var body: some View {

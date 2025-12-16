@@ -32,7 +32,7 @@ struct CourseGenerateUserResponse: Codable {
     let placeInfos: [PlaceInfo]
 }
 
-struct PlaceInfo: Codable, Identifiable {
+struct PlaceInfo: Codable, Identifiable, Equatable {
     var id: UUID = .init()
     let placeId: Int
     let placeName: String

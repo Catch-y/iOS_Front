@@ -17,9 +17,8 @@ final class CourseRouteMapViewModel {
     var cameraPosition: MapCameraPosition
     
     // MARK: - RouteData
-    var routeSegmenets: [RouteSegment] = .init()
-    var fullCourseRoute: CalculatedRoute?
-    var navigationRoute: CalculatedRoute?
+    var fullCourseRoute: MKPolyline?
+    var navigationRoute: MKPolyline?
     
     // MARK: - UI State
     var loadingState: RouteLoadingState = .idle
@@ -31,6 +30,7 @@ final class CourseRouteMapViewModel {
     // MARK: - Route Info Display
     var totalDistance: String = ""
     var totalDuration: String = ""
+    var totalSteps: String = ""
     
     // MARK: - Dependency
     private let actor: CourseRouteMapActor
@@ -39,11 +39,11 @@ final class CourseRouteMapViewModel {
     // MARK:  - Init
     init(
         places: [PlaceInfo],
-        actor: CourseRouteMapActor = .init(),
+        container: DIContainer,
         locationManager: LocationManager = .init()
     ) {
         self.places = places
-        self.actor = actor
+        self.actor = CourseRouteMapActor(container: container)
         self.locationManager = locationManager
         
         let region = Self.calculateInitialRegion(for: places)
@@ -64,7 +64,6 @@ final class CourseRouteMapViewModel {
     @MainActor
     func loadCourseRoute() async {
         guard places.count >= 2 else {
-            routeSegmenets = []
             fullCourseRoute = nil
             clearRouteInfo()
             return
@@ -74,21 +73,17 @@ final class CourseRouteMapViewModel {
         errorMessage = nil
 
         do {
-            // 캐시 클리어 후 TSP 최적화 적용
             await actor.clearCache()
 
-            // TSP 최적화된 순서로 장소 업데이트
-            let optimizedPlaces = await actor.optimizePlaceOrder(places: places)
-            places = optimizedPlaces
+            let routeInfo = try await actor.getRouteInfo(places: places)
 
-            // 최적화된 순서로 전체 경로 계산
-            let fullRoute = try await actor.calculateFullCourseRoute(
-                places: optimizedPlaces,
-                transportType: transportType
-            )
-            fullCourseRoute = fullRoute
-
-            updateRouteInfo(distance: fullRoute.distance, duration: fullRoute.expectedTravelTime)
+            if !routeInfo.polylineCoordinates.isEmpty {
+                fullCourseRoute = MKPolyline(
+                    coordinates: routeInfo.polylineCoordinates, count: routeInfo.polylineCoordinates.count
+                )
+            }
+            
+            updateRouteInfo(from: routeInfo)
             loadingState = .loaded
         } catch {
             handleRouteError(error)
@@ -165,7 +160,7 @@ final class CourseRouteMapViewModel {
                     latitude: place.placeLatitude,
                     longitude: place.placeLongitude
                 ),
-                span: MKCoordinateSpan(latitudeDelta: 0.008, longitudeDelta: 0.008)
+                span: MKCoordinateSpan(latitudeDelta: 0.004, longitudeDelta: 0.004)
             ))
         }
     }
@@ -175,6 +170,7 @@ final class CourseRouteMapViewModel {
         let region = Self.calculateInitialRegion(for: places)
         withAnimation(.easeInOut(duration: 0.3)) {
             cameraPosition = .region(region)
+            self.selectedPlace = nil
         }
     }
     
@@ -208,44 +204,18 @@ final class CourseRouteMapViewModel {
             loadingState = .loading
             errorMessage = nil
             
-            let route = try await actor.calculateRouteFromCurrentLocation(
-                currentLocation: currentLoc,
-                to: destination,
-                transportType: transportType
-            )
+            let routeInfo = try await actor.getRouteFromCurrentLocation(currentLocation: currentLoc, to: destination)
             
-            navigationRoute = route
-            updateRouteInfo(distance: route.distance, duration: route.expectedTravelTime)
+            if !routeInfo.polylineCoordinates.isEmpty {
+                navigationRoute = MKPolyline(coordinates: routeInfo.polylineCoordinates, count: routeInfo.polylineCoordinates.count)
+            }
+            
+            updateRouteInfo(from: routeInfo)
             loadingState = .loaded
             
-            fitRouteInView(route.polyline)
-        } catch {
-            handleRouteError(error)
-            isNavigating = false
-        }
-    }
-    
-    @MainActor
-    func startNavigationThroughCourse() async {
-        guard !places.isEmpty else { return }
-        
-        do {
-            let currentLoc = try await locationManager.requestCurrentLocation()
-            isNavigating = true
-            loadingState = .loading
-            errorMessage = nil
-            
-            let route = try await actor.calculateRouteFromCurrentLocation(
-                currentLocation: currentLoc,
-                through: places,
-                transportType: transportType
-            )
-            
-            navigationRoute = route
-            updateRouteInfo(distance: route.distance, duration: route.expectedTravelTime)
-            loadingState = .loaded
-            
-            fitRouteInView(route.polyline)
+            if let polyline = navigationRoute {
+                fitRouteInView(polyline)
+            }
         } catch {
             handleRouteError(error)
             isNavigating = false
@@ -273,19 +243,6 @@ final class CourseRouteMapViewModel {
     
     func stopLocationUpdates() {
         locationManager.stopUpdating()
-    }
-    
-    // MARK: - Public Methods (Segment Info)
-    func getSegmentInfo(at index: Int) -> RouteSegment? {
-        guard index >= 0 && index < routeSegmenets.count else { return nil }
-        return routeSegmenets[index]
-    }
-    
-    func getSegmentBetween(from: PlaceInfo, to: PlaceInfo) -> RouteSegment? {
-        routeSegmenets.first { segment in
-            segment.fromPlace.placeId == from.placeId &&
-            segment.toPlace.placeId == to.placeId
-        }
     }
     
     // MARK: - Private Method
@@ -332,26 +289,37 @@ final class CourseRouteMapViewModel {
         }
     }
     
-    private func updateRouteInfo(distance: Double, duration: Double) {
+    private func updateRouteInfo(from routeInfo: RouteInfo) {
+        let distance = routeInfo.totalDistance
         if distance >= 1000 {
-            totalDistance = String(format: "%.1fkm", distance / 1000)
+            totalDistance = String(format: "%.1fkm", Double(distance) / 1000)
         } else {
-            totalDistance = String(format: "%.0fm", distance)
+            totalDistance = "\(distance)m"
         }
         
-        let minutes = Int(duration / 60)
+        let minutes = routeInfo.toalTime / 60
         if minutes >= 60 {
             let hours = minutes / 60
-            let remaningMinutes = minutes % 60
-            totalDuration = remaningMinutes > 0 ? "\(hours)시간 \(remaningMinutes)분" : "\(hours)시간"
+            let remainingMinutes = minutes % 60
+            totalDuration = remainingMinutes > 0 ? "\(hours)시간 \(remainingMinutes)분" : "\(hours)시간"
         } else {
             totalDuration = "\(max(1, minutes))분"
+        }
+        
+        let steps = routeInfo.totalSteps
+        if steps >= 10000 {
+            totalSteps = String(format: "%.1f만 걸음", Double(steps) / 10000)
+        } else if steps >= 10000 {
+            totalSteps = String(format: "%d,%03d 걸음", steps / 1000, steps % 1000)
+        } else {
+            totalSteps = "\(steps) 걸음"
         }
     }
     
     private func clearRouteInfo() {
         totalDistance = ""
         totalDuration = ""
+        totalSteps = ""
     }
     
     @MainActor
@@ -363,15 +331,8 @@ final class CourseRouteMapViewModel {
 }
 
 extension CourseRouteMapViewModel {
-    var activeRoute: CalculatedRoute? {
+    var activeRoute: MKPolyline? {
         isNavigating ? navigationRoute : fullCourseRoute
-    }
-    
-    var activePolyline: [MKPolyline] {
-        if isNavigating, let navRoute = navigationRoute {
-            return [navRoute.polyline]
-        }
-        return routeSegmenets.map { $0.polyline }
     }
     
     var selectedPlaceIndex: Int? {

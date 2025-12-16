@@ -18,8 +18,8 @@ extension TmapRouter: TargetType {
     }
     
     var path: String {
-          return "/tmap/routes/pedestrian?version=1"
-      }
+        return "/tmap/routes/pedestrian"
+    }
     
     var method: Moya.Method {
         return .post
@@ -28,7 +28,7 @@ extension TmapRouter: TargetType {
     var task: Moya.Task {
         switch self {
         case .postTmap(let tmap):
-            return .requestJSONEncodable(tmap)
+            return .requestCompositeData(bodyData: try! JSONEncoder().encode(tmap), urlParameters: ["version": 1])
         }
     }
     
