@@ -50,4 +50,11 @@ enum Config {
         }
         return locationImageKey
     }()
+    
+    static let tmapKey: String = {
+        guard let tmapKey = Config.infoDictionary["TMAP_KEY"] as? String else {
+            fatalError("TMAP_KEY")
+        }
+        return tmapKey
+    }()
 }

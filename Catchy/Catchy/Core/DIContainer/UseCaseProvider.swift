@@ -11,7 +11,7 @@ protocol UseCaseProtocol {
     var courseUseCase: CourseUseCaseProtocol { get set }
     var groupUseCase: GroupUseCaseProtocol { get set }
     var memberUseCase: MemberUseCaseProtocol { get set }
-    var osrmUseCase: OSRMUseCaseProtocol { get set }
+    var tmapUseCase: TmapUseCaseProtocol { get set }
     var placeCourseUseCase: PlaceCourseUseCaseProtocol { get set }
     var placeUseCase: PlaceUseCaseProtocol { get set }
     var reviewUseCase: ReviewUseCaseProtocol { get set }
@@ -23,7 +23,7 @@ class UseCaseProvider: UseCaseProtocol {
     var courseUseCase: CourseUseCaseProtocol
     var groupUseCase:  GroupUseCaseProtocol
     var memberUseCase: MemberUseCaseProtocol
-    var osrmUseCase: OSRMUseCaseProtocol
+    var tmapUseCase: TmapUseCaseProtocol
     var placeCourseUseCase: PlaceCourseUseCaseProtocol
     var placeUseCase: PlaceUseCaseProtocol
     var reviewUseCase: ReviewUseCaseProtocol
@@ -34,7 +34,7 @@ class UseCaseProvider: UseCaseProtocol {
         self.courseUseCase = CourseUseCase()
         self.groupUseCase = GroupUseCase()
         self.memberUseCase = MemberUseCase()
-        self.osrmUseCase = OSRMUseCase()
+        self.tmapUseCase = TmapUseCase()
         self.placeCourseUseCase = PlaceCourseUseCase()
         self.placeUseCase = PlaceUseCase()
         self.reviewUseCase = ReviewUseCase()

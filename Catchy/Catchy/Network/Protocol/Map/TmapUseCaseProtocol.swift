@@ -9,6 +9,6 @@ import Foundation
 import Moya
 import Combine
 
-protocol OSRMUseCaseProtocol {
-    func executeGetOSRM(osrm: OSRMRequest) ->  AnyPublisher<ResponseData<OSRMResponse>, MoyaError>
+protocol TmapUseCaseProtocol {
+    func executePostTmap(tmap: TMapRouteRequest) ->  AnyPublisher<TMapRouteResponse, MoyaError>
 }

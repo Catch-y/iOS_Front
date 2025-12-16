@@ -9,15 +9,17 @@ import Foundation
 import Moya
 import Combine
 
-class OSRMService: OSRMServiceProtocol, BaseAPIService {
-    typealias Target = OSRMRouter
+class TmapService: TmapServiceProtocol, BaseAPIService {
+
+    typealias Target = TmapRouter
     
     var provider: MoyaProvider<Target>
     var decoder: JSONDecoder
     var callbackQueue: DispatchQueue
     
+    
     init(
-        provider: MoyaProvider<Target> = APIManager.shared.createProvider(for: Target.self),
+        provider: MoyaProvider<Target> = MoyaProvider<Target>(plugins: [NetworkLoggerPlugin(configuration: .init(logOptions: .verbose))]),
         decoder: JSONDecoder = APIManager.shared.sharedDecoder,
         callbackQueue: DispatchQueue = .main
     ) {
@@ -26,8 +28,8 @@ class OSRMService: OSRMServiceProtocol, BaseAPIService {
         self.callbackQueue = callbackQueue
     }
     
-    func getOSRM(osrm: OSRMRequest) -> AnyPublisher<ResponseData<OSRMResponse>, Moya.MoyaError> {
-        request(.getOSRM(osrm: osrm))
+    func postTmap(tmap: TMapRouteRequest) -> AnyPublisher<TMapRouteResponse, Moya.MoyaError> {
+        request(.postTmap(tmap: tmap))
     }
     
 }

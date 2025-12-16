@@ -9,6 +9,6 @@ import Foundation
 import Moya
 import Combine
 
-protocol OSRMServiceProtocol {
-    func getOSRM(osrm: OSRMRequest) ->  AnyPublisher<ResponseData<OSRMResponse>, MoyaError>
+protocol TmapServiceProtocol {
+    func postTmap(tmap: TMapRouteRequest) ->  AnyPublisher<TMapRouteResponse, MoyaError>
 }
