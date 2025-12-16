@@ -55,7 +55,6 @@ struct SecondPage: View {
             navigationBtn
         })
         .transition(.move(edge: .leading).combined(with: .opacity))
-        .loadingOverlay(isLoading: viewModel.isLoading, loadingTextType: .mapLoading)
     }
     
     /// 배경 백그라운드

@@ -23,6 +23,8 @@
 	<string>$(KAKAO_KEY)</string>
 	<key>LOCATIONIMAGE_KEY</key>
 	<string>$(LOCATIONIMAGE_KEY)</string>
+	<key>TMAP_KEY</key>
+	<string>$(TMAP_KEY)</string>
 	<key>NSUserActivityType</key>
 	<array>
 		<string>INSendMessageIntent</string>

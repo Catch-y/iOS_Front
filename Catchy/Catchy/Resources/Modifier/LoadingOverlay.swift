@@ -20,10 +20,7 @@ struct LoadingOverlay: ViewModifier {
     /// 로딩 텍스트 타입
     enum LoadingTextType: String {
         case defaulLoading = "잠시만 기다려주세요"
-        /// 프로필 생성 시 사용
         case signupLoading = "프로필 생성 중입니다. 잠시만 기다려주세요"
-        /// 맵 생성 시 사용
-        case mapLoading = "계정 생성 중입니다. 잠시만 기다려주세요"
         case courseDetailLoading = "코스 상세 정보를 가져오는 중입니다."
     }
     
