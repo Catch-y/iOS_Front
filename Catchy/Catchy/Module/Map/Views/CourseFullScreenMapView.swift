@@ -103,6 +103,7 @@ struct CourseFullScreenMapView: View, Equatable {
         HStack(spacing: FullScreenConstants.routeInfoSpacing, content: {
             generateLabel(text: viewModel.totalDistance, image: "map")
             generateLabel(text: viewModel.totalDuration, image: "clock")
+            generateLabel(text: viewModel.totalSteps, image: "figure.walk")
             Spacer()
             if viewModel.isNavigating {
                 Button(action: {
@@ -126,8 +127,14 @@ struct CourseFullScreenMapView: View, Equatable {
         }, icon: {
             Image(systemName: image)
         })
-        .font(.body1_2)
-        .foregroundStyle(.g6)
+        .font(.categoryBtn)
+        .foregroundStyle(.white)
+        .padding(DefaultConstants.defaltBtnPadding)
+        .background {
+            Capsule()
+                .fill(.m6)
+                .glassEffect(in: .capsule)
+        }
     }
 }
 
@@ -171,5 +178,7 @@ private struct PreviewData {
             container: PreviewData.container
         )
         .equatable() // ✅ 성능 최적화 적용 확인
+        .navigationTitle("확장")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
