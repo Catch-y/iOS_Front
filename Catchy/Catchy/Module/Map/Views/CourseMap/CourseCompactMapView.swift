@@ -42,6 +42,9 @@ struct CourseCompactMapView: View, Equatable {
             }
             .onDisappear {
                 viewModel.stopLocationUpdates()
+                Task {
+                    await viewModel.stopGeofence()
+                }
             }
     }
     

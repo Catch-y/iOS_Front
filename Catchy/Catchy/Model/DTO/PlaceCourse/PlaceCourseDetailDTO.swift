@@ -12,19 +12,19 @@ struct PlaceCourseDetailPath: Codable {
     let placeId: Int
 }
 
-struct PlaceCourseDetailResponse: Codable {
+struct PlaceCourseDetailResponse: Codable, Likeable {
     let placeId: Int
-    let imageUrl: String
+    let imageUrl: String?
     let placeName: String
-    let placeDescription: String
-    let categoryName: CategoryType
+    let placeDescription: String?
+    let categoryName: CategoryType?
     let roadAddress: String
-    let activeTime: String
-    let placeSite: String
+    let activeTime: String?
+    let placeSite: String?
     let rating: Double
     let reviewCount: Int
     let placeLatitude: Double
     let placeLongitude: Double
-    let liked: Bool
+    var liked: Bool
     let visited: Bool
 }

@@ -21,23 +21,27 @@ struct CatchyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            CatchyTab()
-                .environment(AppFlow())
-                .environmentObject(DIContainer())
+            testView()
+//            CatchyTab()
+//                .environment(AppFlow())
+//                .environmentObject(DIContainer())
         }
     }
 }
 
 struct testView: View {
-    @State var navi: Bool = false
+    @State var sheet: Bool = false
     var body: some View {
-        NavigationStack {
-            Button("cc", action: {
-                navi.toggle()
+        VStack {
+            Button(action: {
+                sheet.toggle()
+            }, label: {
+                Text("1")
             })
-            .navigationDestination(isPresented: $navi, destination: {
-                SignUpView(signUpData: .init(accessToken: "1", authorizationCode: "1", email: "1", loginType: .apple), container: DIContainer(), appFlow: AppFlow())
-                    .environmentObject(DIContainer())
+            .sheet(isPresented: $sheet, content: {
+                CourseSheetView(viewModel: .init(places: [
+                    .init(placeId: 0, placeName: "1", category: .BAR, placeLatitude: 1.0, placeLongitude: 1.0, isVisited: true)
+                ], container: DIContainer()))
             })
         }
     }
