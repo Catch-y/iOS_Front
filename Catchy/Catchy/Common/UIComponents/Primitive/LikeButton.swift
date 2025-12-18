@@ -28,8 +28,6 @@ struct LikeButton<T: Likeable>: View {
         }, label: {
             styledHeartIcon
         })
-        .glassEffect(.regular.interactive(), in: .circle)
-        .glassEffectID("like", in: namespace)
     }
     
     @ViewBuilder
@@ -40,12 +38,12 @@ struct LikeButton<T: Likeable>: View {
                 Circle()
                     .fill(.white)
                     .frame(width: size, height: size)
-                heartIcon
+               heart(size: 12)
             }
+            .glassEffect(.regular.interactive(), in: .circle)
+            .glassEffectID("like", in: namespace)
         case .plain(let size):
-            heartIcon
-                .resizable()
-                .frame(width: size, height: size)
+            heart(size: size)
         }
     }
     
@@ -54,7 +52,15 @@ struct LikeButton<T: Likeable>: View {
         action()
     }
     
+    private func heart(size: CGFloat) -> some View {
+        heartIcon
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: size, height: size)
+            .tint(data.liked ? .main : .g4)
+    }
+    
     private var heartIcon: Image {
-        data.liked ? Image(.heart) : Image(.emptyHeart)
+        data.liked ? Image(systemName: "heart.fill") : Image(systemName: "heart")
     }
 }

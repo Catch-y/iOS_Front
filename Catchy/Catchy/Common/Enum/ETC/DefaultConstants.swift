@@ -16,6 +16,7 @@ enum DefaultConstants {
     static let defaultContentBottomMargins: CGFloat = 40
     static let defaultContentTopMargins: CGFloat = 20
     static let defaltBtnPadding: CGFloat = 8
+    static let defaultTopCapsuleSpacing: CGFloat = 10
     
     static let animationTime: TimeInterval = 0.3
     static let lineSpacing: CGFloat = 2.5

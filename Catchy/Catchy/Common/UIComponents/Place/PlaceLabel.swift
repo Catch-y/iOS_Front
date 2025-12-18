@@ -53,6 +53,7 @@ struct ReviewPoint: View {
     
     var body: some View {
         Button(action: {
+            // TODO: - Navi 연결
             print("hello")
         }, label: {
             HStack(spacing: 6, content: {
@@ -61,5 +62,21 @@ struct ReviewPoint: View {
             })
             .underline(color: .g4)
         })
+    }
+}
+
+struct RoadAddress: View {
+    let text: String
+    
+    var body: some View {
+        PlaceLabel(image: Image(.location), text: text, labelSpacing: 1)
+    }
+}
+
+struct OperatingTime: View {
+    let text: String
+    
+    var body: some View {
+        PlaceLabel(image: Image(.time), text: text, labelSpacing: 1)
     }
 }

@@ -29,9 +29,12 @@ struct CourseMapBaseView: View, Equatable {
     // MARK: - Body
     var body: some View {
         Map(position: $viewModel.cameraPosition, content: {
+            // 지오펜스 오버레이 (가장 먼저 그려서 아래에 위치)
+            geofenceOverlay
+
             routePolylines
             placemarkers
-            
+
             if viewModel.isNavigating {
                 UserAnnotation()
             }
@@ -74,9 +77,33 @@ struct CourseMapBaseView: View, Equatable {
             Annotation(place.placeName, coordinate: .init(latitude: place.placeLatitude, longitude: place.placeLongitude), anchor: .bottom, content: {
                 CourseMarkerView(place: place, index: index, isSelected: viewModel.selectedPlace?.id == place.id)
                     .onTapGesture {
-                        viewModel.selectPlace(place)
+                        Task {
+                            await viewModel.selectPlace(place)
+                        }
                     }
             })
+        }
+    }
+
+    // MARK: - Geofence Overlay
+    @MapContentBuilder
+    private var geofenceOverlay: some MapContent {
+        if viewModel.showGeofenceOverlay,
+           let center = viewModel.geofenceCenter {
+            MapCircle(center: center, radius: viewModel.geofenceRadius)
+                .foregroundStyle(
+                    viewModel.isUserInsideGeofence
+                        ? Color.green.opacity(0.15)
+                        : Color.main.opacity(0.15)
+                )
+                .stroke(
+                    viewModel.isUserInsideGeofence ? .green : .main,
+                    style: StrokeStyle(
+                        lineWidth: 2,
+                        lineCap: .round,
+                        dash: [8, 4]
+                    )
+                )
         }
     }
 }

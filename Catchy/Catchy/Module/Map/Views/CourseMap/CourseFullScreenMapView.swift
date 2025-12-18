@@ -42,6 +42,9 @@ struct CourseFullScreenMapView: View, Equatable {
             }
             .onDisappear {
                 viewModel.stopLocationUpdates()
+                Task {
+                    await viewModel.stopGeofence()
+                }
             }
     }
     
@@ -78,10 +81,12 @@ struct CourseFullScreenMapView: View, Equatable {
             mapControlButton(icon: "location.fill", action: {
                 viewModel.moveCameraToCurrentLocation()
             })
-            
+
             /* 전체 보기 */
             mapControlButton(icon: "arrow.up.left.and.arrow.down.right", action: {
-                viewModel.fitAllPlaces()
+                Task {
+                    await viewModel.fitAllPlaces()
+                }
             })
         })
     }
@@ -139,7 +144,7 @@ struct CourseFullScreenMapView: View, Equatable {
 }
 
 // MARK: - Preview Mock Data
-private struct PreviewData {
+struct PreviewData {
     static let container = DIContainer()
     
     static let places: [PlaceInfo] = [

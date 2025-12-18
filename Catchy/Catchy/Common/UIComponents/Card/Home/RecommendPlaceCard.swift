@@ -22,7 +22,6 @@ struct RecommendPlaceCard: View, Equatable {
     fileprivate enum RecommendPlaceConstants {
         static let imageHeight: CGFloat = 103
         static let titleTagSpacing: CGFloat = 8
-        static let labelSpacing: CGFloat = 1
         static let rightPlaceSpacing: CGFloat = 7
         static let rightInfoSpacing: CGFloat = 10
         static let rightPlaceBottomSpacing: CGFloat = 3
@@ -93,10 +92,10 @@ struct RecommendPlaceCard: View, Equatable {
     /// 오른쪽 장소 및 운영시간 안내
     private var rightPlaceBottom: some View {
         VStack(alignment: .leading, spacing: RecommendPlaceConstants.rightPlaceBottomSpacing, content: {
-            PlaceLabel(image: Image(.location), text: data.roadAddress, labelSpacing: RecommendPlaceConstants.labelSpacing)
+            RoadAddress(text: data.roadAddress)
             
             if let time = data.activeTime, !time.isEmpty {
-                PlaceLabel(image: Image(.time), text: time, labelSpacing: RecommendPlaceConstants.labelSpacing)
+                OperatingTime(text: time)
             }
         })
     }
