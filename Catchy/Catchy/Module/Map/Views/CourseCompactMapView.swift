@@ -31,7 +31,6 @@ struct CourseCompactMapView: View, Equatable {
     var body: some View {
         CourseMapBaseView(viewModel: viewModel, showControl: false)
             .frame(height: CompactConstants.height)
-            .clipShape(RoundedRectangle(cornerRadius: DefaultConstants.defaultCornerRadius))
             .disabled(true)
             .overlay(alignment: .topTrailing, content: {
                 if let onExpandTapped {

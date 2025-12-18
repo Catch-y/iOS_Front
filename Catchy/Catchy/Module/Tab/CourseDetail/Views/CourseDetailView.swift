@@ -13,6 +13,7 @@ struct CourseDetailView: View, Equatable {
     
     // MARK:  - Property
     @State var viewModel: CourseViewModel
+    @EnvironmentObject var container: DIContainer
     @Environment(\.alert) var alert
     
     // MARK: - Equatable
@@ -154,6 +155,14 @@ struct CourseDetailView: View, Equatable {
     private func bottomMap(_ data: Data) -> some View {
         VStack(alignment: .leading, spacing: CourseConstants.courseMapVspacing, content: {
             courseRouteTitle
+            CourseCompactMapView(
+                places: data.placeInfos,
+                container: container,
+                onExpandTapped: {
+                    // TODO: - FullMapNavi
+                    print("naviGation")
+                })
+            .equatable()
         })
     }
     
@@ -183,6 +192,7 @@ struct CourseDetailView: View, Equatable {
 #Preview {
     NavigationStack {
         CourseDetailView(id: 1)
+            .environmentObject(DIContainer())
             .environment(AppAlert())
     }
 }

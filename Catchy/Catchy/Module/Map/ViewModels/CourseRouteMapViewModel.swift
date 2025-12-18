@@ -267,8 +267,8 @@ final class CourseRouteMapViewModel {
             longitude: (minLon + maxLon) / 2
         )
         
-        let latDelta = max((maxLat - minLat) * 1.5, 0.02)
-        let lonDelta = max((maxLon - minLon) * 1.5, 0.02)
+        let latDelta = max((maxLat - minLat) * 1.2, 0.01)
+        let lonDelta = max((maxLon - minLon) * 1.2, 0.01)
         
         return MKCoordinateRegion(
             center: center,

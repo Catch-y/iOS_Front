@@ -64,7 +64,7 @@ struct CourseFullScreenMapView: View, Equatable {
             })
             .safeAreaPadding(.horizontal, DefaultConstants.defaultSafeHorizon)
             
-            if viewModel.showPlaceDetail, let place = viewModel.selectedPlace {
+            if viewModel.showPlaceDetail, let _ = viewModel.selectedPlace {
                 Text("시범")
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
@@ -155,7 +155,6 @@ private struct PreviewData {
         Text("코스 상세 페이지 예시")
             .font(.headline)
         
-        // 실제 사용 예시 (Equatable 적용)
         CourseCompactMapView(
             places: PreviewData.places,
             container: PreviewData.container,
@@ -163,7 +162,7 @@ private struct PreviewData {
                 print("확장 버튼 탭됨")
             }
         )
-        .equatable() // ✅ 성능 최적화 적용 확인
+        .equatable()
         .padding()
         
         Spacer()
@@ -177,7 +176,7 @@ private struct PreviewData {
             places: PreviewData.places,
             container: PreviewData.container
         )
-        .equatable() // ✅ 성능 최적화 적용 확인
+        .equatable()
         .navigationTitle("확장")
         .navigationBarTitleDisplayMode(.inline)
     }
