@@ -35,6 +35,7 @@ struct CourseFullScreenMapView: View, Equatable {
     // MARK: - Body
     var body: some View {
         CourseMapBaseView(viewModel: viewModel, showControl: true)
+            .equatable()
             .safeAreaBar(edge: .top, content: {
                 topControlSection
             })
