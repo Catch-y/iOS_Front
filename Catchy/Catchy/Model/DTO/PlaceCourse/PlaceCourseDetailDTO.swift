@@ -12,7 +12,8 @@ struct PlaceCourseDetailPath: Codable {
     let placeId: Int
 }
 
-struct PlaceCourseDetailResponse: Codable, Likeable {
+struct PlaceCourseDetailResponse: Codable, Likeable, Identifiable {
+    let id: UUID = .init()
     let placeId: Int
     let imageUrl: String?
     let placeName: String
@@ -27,4 +28,21 @@ struct PlaceCourseDetailResponse: Codable, Likeable {
     let placeLongitude: Double
     var liked: Bool
     let visited: Bool
+    
+    enum CodingKeys: CodingKey {
+        case placeId
+        case imageUrl
+        case placeName
+        case placeDescription
+        case categoryName
+        case roadAddress
+        case activeTime
+        case placeSite
+        case rating
+        case reviewCount
+        case placeLatitude
+        case placeLongitude
+        case liked
+        case visited
+    }
 }

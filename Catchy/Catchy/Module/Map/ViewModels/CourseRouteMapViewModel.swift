@@ -13,11 +13,16 @@ import MapKit
 final class CourseRouteMapViewModel {
     // MARK: - Loading Property
     var isVisitingCheckLoading: Bool = false
+    
     // MARK: - State
     var places: [PlaceInfo]
     var selectedPlace: PlaceInfo?
     var cameraPosition: MapCameraPosition
-    var selectedDetailPlace: PlaceCourseDetailResponse? = .init(placeId: 1, imageUrl: nil, placeName: "심퍼티쿠시 용산점", placeDescription: "유러피언 요리를 아시안 스타일로 풀어내는 파인캐주얼 레스토랑", categoryName: .RESTAURANT, roadAddress: "서울시 용산구 한강대로52길 17-3 1F", activeTime: "월-금 16:00 - 21:00", placeSite: "http://www.naver.com", rating: 4.3, reviewCount: 203, placeLatitude: 1.1, placeLongitude: 1.1, liked: true, visited: true)
+    var selectedDetailPlace: PlaceCourseDetailResponse?
+    
+    // MARK: - Sheet State
+    var sheetHeight: CGFloat = 520
+    var selectedDetent: PresentationDetent = .height(520)
     
     // MARK: - RouteData
     var fullCourseRoute: MKPolyline?
@@ -28,18 +33,19 @@ final class CourseRouteMapViewModel {
     var transportType: CourseTransportType = .walking
     var isNavigating: Bool = false
     var showPlaceDetail: Bool = false
+    var showUserLocation: Bool = false
     var errorMessage: String?
     
     // MARK: - Route Info Display
     var totalDistance: String = ""
     var totalDuration: String = ""
     var totalSteps: String = ""
-
+    
     // MARK: - Geofencing State
     var showGeofenceOverlay: Bool = false
     var geofenceCenter: CLLocationCoordinate2D?
     var geofenceRadius: CLLocationDistance = 100
-
+    
     // MARK: - Dependency
     private let actor: CourseRouteMapActor
     private let locationManager: LocationManager
@@ -68,6 +74,7 @@ final class CourseRouteMapViewModel {
     }
     
     // MARK: - Public Method (API Method)
+    /// 방문체크하기 API
     @MainActor
     public func postPlaceVisiting() async {
         guard let _ = selectedDetailPlace, canVisitCheck else { return }
@@ -82,12 +89,12 @@ final class CourseRouteMapViewModel {
             latitude: place.placeLatitude,
             longitude: place.placeLongitude
         )
-
+        
         // 지도에 표시할 오버레이 정보 설정
         geofenceCenter = coordinate
         geofenceRadius = LocationManager.geofenceRadius
         showGeofenceOverlay = true
-
+        
         // LocationManager를 통해 지오펜싱 모니터링 시작
         await locationManager.startGeofenceMonitoring(
             at: coordinate,
@@ -95,7 +102,7 @@ final class CourseRouteMapViewModel {
             radius: geofenceRadius
         )
     }
-
+    
     @MainActor
     func stopGeofence() async {
         showGeofenceOverlay = false
@@ -111,15 +118,15 @@ final class CourseRouteMapViewModel {
             clearRouteInfo()
             return
         }
-
+        
         loadingState = .loading
         errorMessage = nil
-
+        
         do {
             await actor.clearCache()
-
+            
             let routeInfo = try await actor.getRouteInfo(places: places)
-
+            
             if !routeInfo.polylineCoordinates.isEmpty {
                 fullCourseRoute = MKPolyline(
                     coordinates: routeInfo.polylineCoordinates, count: routeInfo.polylineCoordinates.count
@@ -139,28 +146,38 @@ final class CourseRouteMapViewModel {
         await loadCourseRoute()
     }
     
-    // MARK: - Public Method (Transport Type)
-    @MainActor
-    func changeTransportType(_ type: CourseTransportType) async {
-        guard transportType != type else { return }
-        
-        transportType = type
-        
-        if isNavigating {
-            await startNavigationToSelectedPlace()
-        } else {
-            await loadCourseRoute()
-        }
-    }
-    
     // MARK: - Public Methods (Place Selection)
     @MainActor
     func selectPlace(_ place: PlaceInfo?) async {
+        showUserLocation = false
+        
         withAnimation(.easeInOut(duration: 0.25)) {
             selectedPlace = place
-            showPlaceDetail = place != nil
+            
+            //TODO: - 현재 선택한 장소 API로 다시 가져오기 넣기
+            selectedDetailPlace = .init(
+                placeId: 1,
+                imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24",
+                placeName: "성수 레이어드 센터",
+                placeDescription: "빈티지한 인테리어와 수제 디저트가 유명한 성수동의 핫플레이스입니다. 넓은 테라스 좌석이 특징입니다.",
+                categoryName: .CAFE,
+                roadAddress: "서울특별시 성동구 아차산로 123",
+                activeTime: "매일 10:00 ~ 22:00 (라스트오더 21:30)",
+                placeSite: "https://www.instagram.com/seongsu_layered",
+                rating: 4.8,
+                reviewCount: 324,
+                placeLatitude: 37.5446,
+                placeLongitude: 127.0567,
+                liked: true,
+                visited: false
+            )
+            showPlaceDetail = selectedDetailPlace != nil
+            
+            if place != nil {
+                selectedDetent = .height(520)
+            }
         }
-
+        
         if let place = place {
             moveCameraToPlace(place)
             await startGeofenceForPlace(place)
@@ -168,7 +185,7 @@ final class CourseRouteMapViewModel {
             await stopGeofence()
         }
     }
-
+    
     @MainActor
     func closePlaceDetail() async {
         withAnimation(.easeInOut(duration: 0.25)) {
@@ -177,7 +194,7 @@ final class CourseRouteMapViewModel {
         }
         await stopGeofence()
     }
-
+    
     @MainActor
     func selectNextPlace() async {
         guard let current = selectedPlace,
@@ -187,7 +204,7 @@ final class CourseRouteMapViewModel {
         }
         await selectPlace(places[currentIndex + 1])
     }
-
+    
     @MainActor
     func selectPreviousPlace() async {
         guard let current = selectedPlace,
@@ -217,8 +234,9 @@ final class CourseRouteMapViewModel {
         let region = Self.calculateInitialRegion(for: places)
         withAnimation(.easeInOut(duration: 0.3)) {
             cameraPosition = .region(region)
-            self.selectedPlace = nil
+            self.showPlaceDetail = false
         }
+        selectedDetent = .height(520)
         await stopGeofence()
     }
     
@@ -228,6 +246,8 @@ final class CourseRouteMapViewModel {
             locationManager.requestAuthorization()
             return
         }
+        
+        showUserLocation = true
         
         withAnimation(.easeInOut(duration: 0.3)) {
             cameraPosition = .region(MKCoordinateRegion(
@@ -239,23 +259,32 @@ final class CourseRouteMapViewModel {
     
     // MARK: - Public Methods (Navigation)
     @MainActor
-    func startNavigationToSelectedPlace() async {
-        guard let destination = selectedPlace else { return }
-        await startNavigation(to: destination)
-    }
-    
-    @MainActor
-    func startNavigation(to destination: PlaceInfo) async {
+    func startNavigation(to destination: PlaceCourseDetailResponse) async {
         do {
             let currentLoc = try await locationManager.requestCurrentLocation()
             isNavigating = true
             loadingState = .loading
             errorMessage = nil
             
-            let routeInfo = try await actor.getRouteFromCurrentLocation(currentLocation: currentLoc, to: destination)
+            let placeInfo = PlaceInfo(
+                placeId: destination.placeId,
+                placeName: destination.placeName,
+                category: destination.categoryName ?? .CAFE,
+                placeLatitude: destination.placeLatitude,
+                placeLongitude: destination.placeLongitude,
+                isVisited: destination.visited
+            )
+            
+            let routeInfo = try await actor.getRouteFromCurrentLocation(
+                currentLocation: currentLoc,
+                to: placeInfo
+            )
             
             if !routeInfo.polylineCoordinates.isEmpty {
-                navigationRoute = MKPolyline(coordinates: routeInfo.polylineCoordinates, count: routeInfo.polylineCoordinates.count)
+                navigationRoute = MKPolyline(
+                    coordinates: routeInfo.polylineCoordinates,
+                    count: routeInfo.polylineCoordinates.count
+                )
             }
             
             updateRouteInfo(from: routeInfo)
@@ -275,10 +304,25 @@ final class CourseRouteMapViewModel {
         isNavigating = false
         navigationRoute = nil
         errorMessage = nil
-
+        
+        await stopGeofence()
         await loadCourseRoute()
         await fitAllPlaces()
     }
+    
+    @MainActor
+      func dismissSheet() async {
+          withAnimation(.easeInOut(duration: 0.25)) {
+              showPlaceDetail = false
+          }
+          await stopGeofence()
+          
+          if isNavigating {
+              await stopNavigation()
+          }
+          
+          selectedDetent = .height(520)
+      }
     
     // MARK: - Public Methods (Location)
     func requestLocationPermission() {
@@ -409,13 +453,13 @@ extension CourseRouteMapViewModel {
     var canShowRouteInfo: Bool {
         !totalDistance.isEmpty && !totalDuration.isEmpty
     }
-
+    
     // MARK: - Geofencing Computed Properties
     /// 사용자가 지오펜스 내부에 있는지 여부
     var isUserInsideGeofence: Bool {
         locationManager.isInsideGeofence
     }
-
+    
     /// 선택한 장소까지의 거리
     var distanceToSelectedPlace: CLLocationDistance? {
         guard let place = selectedDetailPlace else { return nil }
@@ -425,7 +469,7 @@ extension CourseRouteMapViewModel {
         )
         return locationManager.distance(to: coordinate)
     }
-
+    
     /// 포맷된 거리 문자열
     var formattedDistance: String {
         guard let distance = distanceToSelectedPlace else { return "" }
@@ -435,7 +479,7 @@ extension CourseRouteMapViewModel {
             return String(format: "%.0fm", distance)
         }
     }
-
+    
     /// 방문 체크 가능 여부 (지오펜스 내부 + 아직 방문 안 함)
     var canVisitCheck: Bool {
         guard let place = selectedDetailPlace else { return false }

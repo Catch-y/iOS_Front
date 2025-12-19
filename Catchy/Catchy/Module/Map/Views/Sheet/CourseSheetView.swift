@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CourseSheetView: View {
+struct CourseSheetView: View, Equatable {
     typealias Place = PlaceCourseDetailResponse
     
     // MARK: - Property
@@ -38,6 +38,11 @@ struct CourseSheetView: View {
         static let labelText: String = "리뷰 남기기"
     }
     
+    // MARK: - Equtable
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.viewModel.selectedDetailPlace?.placeId == rhs.viewModel.selectedDetailPlace?.placeId
+    }
+    
     // MARK: - Body
     var body: some View {
         if let data = viewModel.selectedDetailPlace {
@@ -47,15 +52,16 @@ struct CourseSheetView: View {
                 middleContents(data)
                 Spacer().frame(height: SheetConstants.mainSpacerHeight.1)
                 MainButton(btnType: .searchRoad, height: SheetConstants.btnHeight, action: {
-                    // TODO: - 길 찾기 액션
+                    guard let place = viewModel.selectedDetailPlace else { return }
+                    Task {
+                        await viewModel.startNavigation(to: place)
+                        viewModel.selectedDetent = .height(20)
+                    }
                 })
                 Spacer()
             }
-            .safeAreaInset(edge: .top, spacing: DefaultConstants.defaultTopCapsuleSpacing, content: {
-                Capsule()
-                    .capsuleStyle()
-            })
             .safeAreaPadding(.horizontal, DefaultConstants.defaultSafeHorizon)
+            .safeAreaPadding(.top, DefaultConstants.defaultContentTopMargins)
         }
     }
     

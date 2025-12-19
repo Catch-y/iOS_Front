@@ -29,13 +29,12 @@ struct CourseMapBaseView: View, Equatable {
     // MARK: - Body
     var body: some View {
         Map(position: $viewModel.cameraPosition, content: {
-            // 지오펜스 오버레이 (가장 먼저 그려서 아래에 위치)
             geofenceOverlay
 
             routePolylines
             placemarkers
 
-            if viewModel.isNavigating {
+            if viewModel.isNavigating || viewModel.isUserInsideGeofence || viewModel.showUserLocation {
                 UserAnnotation()
             }
         })
@@ -53,7 +52,7 @@ struct CourseMapBaseView: View, Equatable {
     var routePolylines: some MapContent {
         if viewModel.isNavigating, let navRoute = viewModel.navigationRoute {
             MapPolyline(navRoute)
-                .stroke(.blue, style: StrokeStyle(
+                .stroke(.m4, style: StrokeStyle(
                     lineWidth: MapSharedConstants.navigationRouteLineWidth,
                     lineCap: .round,
                     lineJoin: .round
