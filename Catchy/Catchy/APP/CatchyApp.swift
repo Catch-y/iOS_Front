@@ -32,17 +32,14 @@ struct CatchyApp: App {
 struct testView: View {
     @State var sheet: Bool = false
     var body: some View {
-        VStack {
-            Button(action: {
-                sheet.toggle()
-            }, label: {
-                Text("1")
-            })
-            .sheet(isPresented: $sheet, content: {
-                CourseSheetView(viewModel: .init(places: [
-                    .init(placeId: 0, placeName: "1", category: .BAR, placeLatitude: 1.0, placeLongitude: 1.0, isVisited: true)
-                ], container: DIContainer()))
-            })
+        NavigationStack {
+            CourseFullScreenMapView(
+                places: PreviewData.places,
+                container: PreviewData.container
+            )
+            .equatable()
+            .navigationTitle("확장")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

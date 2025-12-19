@@ -81,23 +81,35 @@ final class LocationManager: NSObject {
     }
     
     // MARK: - Geofencing Methods
-    func startGeofenceMonitoring(
-        at coordinate: CLLocationCoordinate2D,
-        identifier: String,
-        radius: CLLocationDistance = geofenceRadius
-    ) async {
-        await stopAllGeofenceMonitoring()
-        monitor = await CLMonitor(monitorName)
-        
-        let condition = CLMonitor.CircularGeographicCondition(center: coordinate, radius: radius)
-        
-        await monitor?.add(condition, identifier: identifier, assuming: .unsatisfied)
-        activeGeofencedId = identifier
-        
-        checkCurrentLocationInGeofence(center: coordinate, radius: radius)
-        
-        startMonitoringEvents()
-    }
+      func startGeofenceMonitoring(
+          at coordinate: CLLocationCoordinate2D,
+          identifier: String,
+          radius: CLLocationDistance = geofenceRadius
+      ) async {
+          // 같은 identifier로 이미 모니터링 중이면 스킵
+          if activeGeofencedId == identifier {
+              checkCurrentLocationInGeofence(center: coordinate, radius: radius)
+              return
+          }
+
+          // 기존 identifier만 제거 (monitor는 재사용)
+          if let currentId = activeGeofencedId {
+              await monitor?.remove(currentId)
+          }
+                     
+          // monitor가 없을 때만 새로 생성
+          if monitor == nil {
+              monitor = await CLMonitor(monitorName)
+              startMonitoringEvents()
+          }
+                     
+          let condition = CLMonitor.CircularGeographicCondition(center: coordinate, radius: radius)
+          await monitor?.add(condition, identifier: identifier, assuming: .unsatisfied)
+          activeGeofencedId = identifier
+                                                                                                                   
+          checkCurrentLocationInGeofence(center: coordinate, radius: radius)
+      }
+             
     
     func stopGeofenceMonitoring(withIdentifier identifier: String) async {
         await monitor?.remove(identifier)
@@ -116,6 +128,7 @@ final class LocationManager: NSObject {
                 await monitor.remove(identifier)
             }
         }
+        
         
         activeGeofencedId = nil
         isInsideGeofence = false
