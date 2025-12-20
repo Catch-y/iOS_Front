@@ -60,8 +60,9 @@ struct CourseCard: View, Equatable {
         .glassEffectID("card", in: namespace)
         .padding(.horizontal, DefaultConstants.defaultSafeHorizon)
     }
-    
-    // MARK: - Top
+}
+// MARK: - Top
+extension CourseCard {
     private var topContent: some View {
         ZStack(alignment: .topLeading, content: {
             courseImage
@@ -84,7 +85,10 @@ struct CourseCard: View, Equatable {
             }
             .offset(x: CourseCardConstraint.courseTagOffset, y: CourseCardConstraint.courseTagOffset)
     }
-    // MARK: - Bottom
+}
+
+// MARK: - Bottom
+extension CourseCard {
     /// 코스 카드 내부 코스 정보
     private var bottomContent: some View {
         VStack(alignment: .leading, spacing: CourseCardConstraint.courseInfoVspacing, content: {

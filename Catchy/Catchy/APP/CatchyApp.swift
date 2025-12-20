@@ -33,13 +33,7 @@ struct testView: View {
     @State var sheet: Bool = false
     var body: some View {
         NavigationStack {
-            CourseFullScreenMapView(
-                places: PreviewData.places,
-                container: PreviewData.container
-            )
-            .equatable()
-            .navigationTitle("확장")
-            .navigationBarTitleDisplayMode(.inline)
+            ReviewWriteView(container: DIContainer())
         }
     }
 }
