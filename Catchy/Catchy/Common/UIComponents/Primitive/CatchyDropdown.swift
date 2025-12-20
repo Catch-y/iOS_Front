@@ -7,12 +7,17 @@
 
 import SwiftUI
 
-struct CatchyDropdown: View {
+struct CatchyDropdown: View, Equatable {
     // MARK: - Property
     @State private var isExpand: Bool = false
     @Binding var selectedValue: String?
     let headerText: String
     let values: [String]
+    
+    // MARK: - Equtable
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.values == rhs.values
+    }
     
     // MARK: - Constant
     fileprivate enum DropdownConstants {
