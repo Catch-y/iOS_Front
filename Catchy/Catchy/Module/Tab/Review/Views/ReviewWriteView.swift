@@ -8,6 +8,7 @@
 import SwiftUI
 import ImageIO
 
+/// 리뷰 작성 뷰
 struct ReviewWriteView: View, Equatable {
     // MARK: - Property
     @State var viewModel: ReviewWriteViewModel
@@ -80,6 +81,7 @@ struct ReviewWriteView: View, Equatable {
 
 // MARK: - ToolBarContent
 extension ReviewWriteView {
+    /// 상단 리뷰 남기기
     @ToolbarContentBuilder
     private var toolbarView: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
@@ -96,6 +98,7 @@ extension ReviewWriteView {
 
 // MARK: - TopContent
 extension ReviewWriteView {
+    /// 방문한 날짜 선택
     private var topContent: some View {
         VStack(alignment: .leading, spacing: ReviewConstants.topVspacing, content: {
             generateTitle(ReviewConstants.visitDateTitle)
@@ -109,6 +112,7 @@ extension ReviewWriteView {
 
 // MARK: - MiddleContent
 extension ReviewWriteView {
+    /// 방문한 장소 평가 및 글 작성
     private var middleContent: some View {
         VStack(alignment: .leading, spacing: ReviewConstants.middleVspacing, content: {
             middleHeader
@@ -117,6 +121,7 @@ extension ReviewWriteView {
         })
     }
     
+    /// 방문한 장소 타이틀 + 별점 표기
     private var middleHeader: some View {
         VStack(alignment: .leading, spacing: ReviewConstants.middleHeaderVspacing, content: {
             generateTitle(ReviewConstants.visitPlaceTitle)
@@ -133,6 +138,7 @@ extension ReviewWriteView {
 
 // MARK: - BottomContent
 extension ReviewWriteView {
+    /// 첨부한 사진 표시
     private var bottomImages: some View {
         ScrollView(.horizontal, content: {
             LazyHStack(spacing: ReviewConstants.imageHspacing, content: {
@@ -155,18 +161,29 @@ extension ReviewWriteView {
                 await viewModel.loadIamges(from: new)
             }
         })
+        .fullScreenCover(isPresented: $viewModel.showCameraPicker, content: {
+            CameraImagePicker(image: $viewModel.cameraImage)
+                .ignoresSafeArea()
+        })
+        .onChange(of: viewModel.cameraImage, { _, new in
+            if let image = new {
+                viewModel.images.append(image)
+                viewModel.cameraImage = nil
+            }
+        })
         .contentMargins(.bottom, ReviewConstants.scrollBottomPadding, for: .scrollContent)
     }
 }
 
 // MARK: - ToolBar
 extension ReviewWriteView {
+    /// 카메라 + 앨범 + 키보드 내리기 도구모음(키보드 등장 시 등장)
     private var bottomToolbar: some View {
         GlassEffectContainer(spacing: ReviewConstants.glassSpacing, content: {
             HStack(spacing: .zero, content: {
                 toolBarButton(action: {
                     isFocused = false
-                    print("e")
+                    viewModel.showCameraPicker.toggle()
                 }, image: "camera")
                 
                 toolBarButton(action: {
@@ -184,6 +201,11 @@ extension ReviewWriteView {
         .padding([.horizontal, .bottom], DefaultConstants.defaultSafeHorizon)
     }
     
+    /// 반복되는 하단 도구 모음 생성
+    /// - Parameters:
+    ///   - action: 하단 도구 액션
+    ///   - image: 도구 이미지
+    /// - Returns: 하단 도구 단일 뷰 생성
     private func toolBarButton(action: @escaping () -> Void, image: String) -> some View {
         Button(action: {
             action()
@@ -202,6 +224,9 @@ extension ReviewWriteView {
 
 // MARK: - Method
 extension ReviewWriteView {
+    /// 타이틀 재생성
+    /// - Parameter text: 반복되는 상단 타이틀 재생성
+    /// - Returns: 타이틀 반환
     func generateTitle(_ text: String) -> some View {
         Text(text)
             .font(.subtitle2)

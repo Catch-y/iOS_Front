@@ -13,6 +13,7 @@ import PhotosUI
 class ReviewWriteViewModel {
     // MARK: - StateProperty
     var showPhotoPicker: Bool = false
+    var showCameraPicker: Bool = false
     
     // MARK: - Property
     var dropValues: [String] = ["2025.01.13","2025.01.14","2025.01.15"]
@@ -22,6 +23,7 @@ class ReviewWriteViewModel {
     
     // MARK: - Image
     var images: [UIImage] = .init()
+    var cameraImage: UIImage?
     var selectedItems: [PhotosPickerItem] = .init()
     
     // MARK: - Dependencies
