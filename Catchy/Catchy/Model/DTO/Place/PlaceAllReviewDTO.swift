@@ -17,19 +17,25 @@ struct PlaceAllReviewQuery: Codable {
     let lastPlaceReviewId: Int?
 }
 
-struct PlaceAllReviewResponse: Codable {
+struct PlaceAllReviewResponse: Codable, Equatable {
     let averageRating: Double
     let ratingList: [Rating]
     let totalCount: Int
     let content: [Review]
     let last: Bool
     
-    struct Rating: Codable {
+    struct Rating: Codable, Equatable, Identifiable {
+        let id: UUID = .init()
         let score: Int
         let count: Int
+        
+        enum CodingKeys: CodingKey {
+            case score
+            case count
+        }
     }
     
-    struct Review: Codable, Identifiable {
+    struct Review: Codable, Identifiable, Equatable {
         var id: UUID = .init()
         let reviewId: Int
         let comment: String

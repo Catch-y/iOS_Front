@@ -30,7 +30,7 @@ struct PlaceReviewResponse: Codable {
 }
 
 
-struct ReviewImage: Codable, Identifiable {
+struct ReviewImage: Codable, Identifiable, Equatable {
     var id: UUID = .init()
     let reviewImageId: Int
     let imageUrl: String
