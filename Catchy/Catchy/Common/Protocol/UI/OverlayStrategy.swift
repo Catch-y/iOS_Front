@@ -23,7 +23,7 @@ extension ChangeNicknameStrategy: OverlayStrategy {
     var overlayType: OverlayType { .nicknameChange }
 }
 
-extension GenerateVotwStrategy: OverlayStrategy {
+extension GenerateVoteStrategy: OverlayStrategy {
     var overlayType: OverlayType { .voteParticipate }
 }
 

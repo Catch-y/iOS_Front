@@ -18,7 +18,7 @@ struct CourseGenerateUserRequest: Codable {
     let recommendTimeEnd: String
 }
 
-struct CourseGenerateUserResponse: Codable {
+struct CourseGenerateUserResponse: Codable, Equatable {
     let courseId: Int
     let courseImage: String
     let courseName: String

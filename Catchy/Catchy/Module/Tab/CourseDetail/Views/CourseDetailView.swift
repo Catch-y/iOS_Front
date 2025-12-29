@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CourseDetailView: View, Equatable {
+struct CourseDetailView: View {
     
     typealias Data = CourseGenerateUserResponse
     
@@ -16,31 +16,11 @@ struct CourseDetailView: View, Equatable {
     @EnvironmentObject var container: DIContainer
     @Environment(\.alert) var alert
     
-    // MARK: - Equatable
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.viewModel.courseId == rhs.viewModel.courseId
-    }
-    
     // MARK: - Contants
     fileprivate enum CourseConstants {
-        static let glassPadding: CGFloat = 8
-        static let pointSpacing: CGFloat = 12
-        static let highlightSpacing: CGFloat = 9
-        static let courseRouteSpcing: CGFloat = 4
         static let labelSpacing: CGFloat = 3
-        static let courseMapVspacing: CGFloat = 14
-        static let middleSpacing: CGFloat = 16
         static let mainSpacing: CGFloat = 24
-        
-        static let imageHeight: CGFloat = 231
-        static let bookMarkSize: CGSize = .init(width: 18, height: 18)
         static let titleWidth: CGFloat = 230
-        static let capsuleSize: CGSize = .init(width: 1, height: 12)
-        
-        static let lineLimit: Int = 2
-        
-        static let courseRouteText: String = "코스 경로"
-        static let courseRouteSubText: String = "지도를 클릭하여 길을 찾고 장소 정보를 확인해보세요!"
         static let navigationTitle: String = "코스 정보"
         
     }
@@ -56,11 +36,20 @@ struct CourseDetailView: View, Equatable {
             if let data = viewModel.courseDetail {
                 ScrollView {
                     VStack(alignment: .leading, spacing: CourseConstants.mainSpacing) {
-                        placeImage(data)
-                        courseInfo(data)
+                        CourseHeaderImageView(imageUrl: data.courseImage)
+                        
+                        CourseInfoSection(data: data, onBookMarkTapped: {
+                            print("Bookmark Tapped: \(data.courseId)")
+                        }).equatable()
+                        
                         Divider()
                             .foregroundStyle(.g3)
-                        bottomMap(data)
+                        
+                        CourseMapSection(placeInfos: data.placeInfos, container: container, onExpandTapped: {
+                            print("Navigation Tapped")
+                        }, onWariningTapped: {
+                            alert.show(VisitCheckStrategy())
+                        }).equatable()
                     }
                     .safeAreaPadding(.horizontal, DefaultConstants.defaultSafeHorizon)
                 }
@@ -73,22 +62,50 @@ struct CourseDetailView: View, Equatable {
         .loadingOverlay(isLoading: viewModel.isLoading, loadingTextType: .courseDetailLoading)
         .catchyAlert(alert: alert)
     }
+}
+
+// MARK: - CourseImage
+fileprivate struct CourseHeaderImageView: View, Equatable {
+    let imageUrl: String
     
-    // MARK: - Top
-    @ViewBuilder
-    private func placeImage(_ data: Data) -> some View {
+    private enum Constant {
+        static let imageHeight: CGFloat = 231
+    }
+    
+    var body: some View {
         RemoteImage(
-            urlString: data.courseImage,
-            size: .init(width: getScreenSize().width, height: CourseConstants.imageHeight),
+            urlString: imageUrl,
+            size: .init(width: getScreenSize().width, height: Constant.imageHeight),
             cornerRadius: DefaultConstants.defaultCornerRadius,
             ratio: 360/231
         )
     }
+}
+
+// MARK: - CourseInfo
+fileprivate struct CourseInfoSection: View, Equatable {
+    typealias Data = CourseGenerateUserResponse
     
-    // MARK: - Middle
-    @ViewBuilder
-    private func courseInfo(_ data: Data) -> some View {
-        VStack(alignment: .leading, spacing: CourseConstants.middleSpacing, content: {
+    let data: CourseGenerateUserResponse
+    let onBookMarkTapped: () -> Void
+    
+    private enum Constant {
+        static let mainVspacing: CGFloat = 16
+        static let glassPadding: CGFloat = 8
+        static let pointSpacing: CGFloat = 12
+        static let highlightSpacing: CGFloat = 9
+        
+        static let capsuleSize: CGSize = .init(width: 1, height: 12)
+        static let bookMarkSize: CGSize = .init(width: 18, height: 18)
+        static let lineLimit: Int = 2
+    }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.data == rhs.data
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: Constant.mainVspacing, content: {
             courseTitle(data)
             courseDescription(data)
             coursePoint(data)
@@ -102,21 +119,21 @@ struct CourseDetailView: View, Equatable {
             Text(data.courseName)
                 .font(.subtitle2)
                 .foregroundStyle(.black)
-                .lineModifier(lineLimit: CourseConstants.lineLimit, lineSpacing: DefaultConstants.lineSpacing)
+                .lineModifier(lineLimit: Constant.lineLimit, lineSpacing: DefaultConstants.lineSpacing)
             
             Spacer()
             
             Button(action: {
                 withAnimation {
-                    print("hello")
+                    onBookMarkTapped()
                 }
             }, label: {
                 Image(data.isBookMarked ? .bookMarkTrue : .bookmark)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: CourseConstants.bookMarkSize.width, height: CourseConstants.bookMarkSize.height)
+                    .frame(width: Constant.bookMarkSize.width, height: Constant.bookMarkSize.height)
             })
-            .padding(CourseConstants.glassPadding)
+            .padding(Constant.glassPadding)
             .glassEffect(.regular.interactive(), in: .circle)
         }
     }
@@ -126,17 +143,17 @@ struct CourseDetailView: View, Equatable {
         Text(data.courseDescription)
             .font(.body2)
             .foregroundStyle(.g5)
-            .lineModifier(lineLimit: CourseConstants.lineLimit, lineSpacing: DefaultConstants.lineSpacing)
+            .lineModifier(lineLimit: Constant.lineLimit, lineSpacing: DefaultConstants.lineSpacing)
     }
     
     @ViewBuilder
     private func coursePoint(_ data: Data) -> some View {
-        HStack(spacing: CourseConstants.pointSpacing, content: {
+        HStack(spacing: Constant.pointSpacing, content: {
             RatingPoint(point: "\(data.rating)")
             
             Capsule()
                 .fill(Color.g3)
-                .frame(width: CourseConstants.capsuleSize.width, height: CourseConstants.capsuleSize.height)
+                .frame(width: Constant.capsuleSize.width, height: Constant.capsuleSize.height)
             
             ReviewPoint(point: "\(data.reviewCount)", id: data.courseId)
         })
@@ -144,43 +161,60 @@ struct CourseDetailView: View, Equatable {
     
     @ViewBuilder
     private func courseHighlight(_ data: Data) -> some View {
-        HStack(spacing: CourseConstants.highlightSpacing, content: {
+        HStack(spacing: Constant.highlightSpacing, content: {
             RecommendTime(subText: data.recommendTime)
             ParticipateCount(count: data.participantsNumber)
         })
     }
+}
+
+// MARK: - CourseMap
+fileprivate struct CourseMapSection: View, Equatable {
+    let placeInfos: [PlaceInfo]
+    let container: DIContainer
+    let onExpandTapped: () -> Void
+    let onWariningTapped: () -> Void
     
-    // MARK: - Bottom
-    @ViewBuilder
-    private func bottomMap(_ data: Data) -> some View {
-        VStack(alignment: .leading, spacing: CourseConstants.courseMapVspacing, content: {
+    private enum Constant {
+        static let courseMapVspacing: CGFloat = 14
+        static let courseRouteSpcing: CGFloat = 4
+        static let courseRouteText: String = "코스 경로"
+        static let courseRouteSubText: String = "지도를 클릭하여 길을 찾고 장소 정보를 확인해보세요!"
+    }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.placeInfos == rhs.placeInfos
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: Constant.courseMapVspacing, content: {
             courseRouteTitle
             CourseCompactMapView(
-                places: data.placeInfos,
+                places: placeInfos,
                 container: container,
                 onExpandTapped: {
-                    // TODO: - FullMapNavi
-                    print("naviGation")
+                    onExpandTapped()
                 })
             .equatable()
         })
     }
     
+    
     private var courseRouteTitle: some View {
-        VStack(alignment: .leading, spacing: CourseConstants.courseRouteSpcing, content: {
-            Text(CourseConstants.courseRouteText)
+        VStack(alignment: .leading, spacing: Constant.courseRouteSpcing, content: {
+            Text(Constant.courseRouteText)
                 .font(.subtitle3)
                 .foregroundStyle(.black)
             
             HStack {
-                Text(CourseConstants.courseRouteSubText)
+                Text(Constant.courseRouteSubText)
                     .font(.body3)
                     .foregroundStyle(.g4)
+                
                 Spacer()
+                
                 Button(action: {
-                    alert.show(
-                        VisitCheckStrategy()
-                    )
+                    onWariningTapped()
                 }, label: {
                     Image(.warningIntro)
                 })

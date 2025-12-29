@@ -74,7 +74,7 @@ struct VoteParticipateAlert: View {
 }
 
 #Preview {
-    VoteParticipateAlert(strategy: GenerateVotwStrategy(joinPoll: {
+    VoteParticipateAlert(strategy: GenerateVoteStrategy(joinPoll: {
         print("참여")
     }))
 }

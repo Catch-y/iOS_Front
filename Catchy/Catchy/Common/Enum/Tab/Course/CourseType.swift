@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CourseType: String, Codable {
+enum CourseType: String, Codable, Equatable {
     case diy = "DIY"
     case ai = "AI"
 }
