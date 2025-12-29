@@ -35,6 +35,7 @@ struct ReviewCard: View, Equatable {
         VStack(alignment: .leading, spacing: Constants.spacing, content: {
             topTag
             ReviewCardForm(images: images, text: comment, nickname: nickname, visitDate: visitDate, reviewCreateDate: reviewCreateDate)
+                .equatable()
         })
     }
     
