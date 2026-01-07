@@ -9,19 +9,22 @@ import SwiftUI
 
 struct NavigationModifier: ViewModifier {
     
-    enum Navititle {
-        static let review: String = "평점, 리뷰 남기기"
+    let naviTitle: Navititle
+    
+    enum Navititle: String {
+        case review = "평점, 리뷰 남기기"
+        case reviewRead = "평점, 리뷰 보기"
     }
     
     func body(content: Content) -> some View {
         content
-            .navigationTitle(Navititle.review)
+            .navigationTitle(naviTitle.rawValue)
             .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 extension View {
-    func navigation() -> some View {
-        self.modifier(NavigationModifier())
+    func navigation(naviTitle: NavigationModifier.Navititle) -> some View {
+        self.modifier(NavigationModifier(naviTitle: naviTitle))
     }
 }

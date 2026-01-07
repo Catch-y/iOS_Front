@@ -74,7 +74,7 @@ struct ReviewWriteView: View, Equatable {
         .toolbar(content: {
             toolbarView
         })
-        .navigation()
+        .navigation(naviTitle: .review)
         .contentMargins(.horizontal, DefaultConstants.defaultSafeHorizon, for: .scrollContent)
     }
 }

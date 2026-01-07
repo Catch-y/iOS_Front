@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ReviewCard: View, Equatable {
 
-    let rating: Double?
-    let images: [UIImage]
+    let rating: Int?
+    let images: [ReviewImage]
     let comment: String
     let nickname: String
     let visitDate: String?
@@ -43,7 +43,7 @@ struct ReviewCard: View, Equatable {
     private var topTag: some View {
         HStack(alignment: .firstTextBaseline) {
             if let rating = rating {
-                ReviewStars(rating: .constant(Int(rating.rounded())), size: .init(width: 18, height: 18))
+                ReviewStars(rating: .constant(rating), size: .init(width: 18, height: 18))
             } else {
                 Text(nickname)
                     .font(.caption)
@@ -62,10 +62,4 @@ struct ReviewCard: View, Equatable {
             })
         }
     }
-}
-
-#Preview {
-    ReviewCard(rating: 4.5, images: .init(), comment: "친구들과 함께한 코스였는데, 모든 장소가 만족스러웠어요. 특히 마지막 카페가 최고!", nickname: "제옹", visitDate: "2025.12.25", reviewCreateDate: nil, action: {
-        print("hello")
-    })
 }

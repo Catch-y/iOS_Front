@@ -10,7 +10,7 @@ import SwiftUI
 struct ReviewCardForm: View, Equatable {
 
     // MARK: - Property
-    let images: [UIImage]
+    let images: [ReviewImage]
     let text: String
     let nickname: String
     let visitDate: String?
@@ -34,7 +34,7 @@ struct ReviewCardForm: View, Equatable {
 
     // MARK: - Init
     init(
-        images: [UIImage] = [],
+        images: [ReviewImage] = [],
         text: String,
         nickname: String,
         visitDate: String? = nil,
@@ -67,7 +67,7 @@ struct ReviewCardForm: View, Equatable {
 /// 리뷰 이미지 스크롤 뷰
 fileprivate struct ReviewImages: View, Equatable {
     
-    let images: [UIImage]
+    let images: [ReviewImage]
     
     private enum Constants {
         static let imageSize: CGFloat = 85
@@ -79,23 +79,20 @@ fileprivate struct ReviewImages: View, Equatable {
     }
     
     // MARK: - Init
-    init(images: [UIImage]) {
+    init(images: [ReviewImage]) {
         self.images = images
     }
     
     // MARK: - Body
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
+        ScrollView(.horizontal, content: {
             HStack(spacing: 8) {
-                ForEach(images, id: \.self) { image in
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: Constants.imageSize, height: Constants.imageSize)
-                        .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
+                ForEach(images, id: \.id) { image in
+                    RemoteImage(urlString: image.imageUrl, size: .init(width: 85, height: 85), ratio: 85/85)
                 }
             }
-        }
+        })
+        .scrollIndicators(.hidden)
     }
 }
 
