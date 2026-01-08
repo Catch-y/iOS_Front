@@ -28,7 +28,7 @@ struct CourseReviewContent: Codable, Identifiable {
     var id: UUID = .init()
     let reviewId: Int
     let comment: String
-    let reviewImages: [CourseReviewImage]
+    let reviewImages: [ReviewImage]
     let createdAt: String
     let creatorNickname: String
     
@@ -38,16 +38,5 @@ struct CourseReviewContent: Codable, Identifiable {
         case reviewImages
         case createdAt
         case creatorNickname
-    }
-}
-
-struct CourseReviewImage: Codable, Identifiable {
-    var id: UUID = .init()
-    let reviewImageId: Int
-    let imageUrl: String
-    
-    enum CodingKeys: CodingKey {
-        case reviewImageId
-        case imageUrl
     }
 }

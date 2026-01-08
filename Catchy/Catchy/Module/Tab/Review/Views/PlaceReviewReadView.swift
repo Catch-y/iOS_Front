@@ -19,6 +19,7 @@ struct PlaceReviewReadView: View {
         VStack {
             if let totalInfo = viewModel.reviewTotalInfo() {
                 PlaceReviewTotal(totalInfo: totalInfo)
+                    .equatable()
                     .safeAreaPadding(.horizontal, DefaultConstants.defaultSafeHorizon)
             }
             
@@ -64,7 +65,7 @@ struct PlaceReviewReadView: View {
 }
 
 
-fileprivate struct PlaceNotReview: View {
+struct PlaceNotReview: View {
     var body: some View {
         VStack(spacing: 5, content: {
             Text("작성된 리뷰가 없습니다.")

@@ -186,7 +186,7 @@ fileprivate struct RatingRow: View {
     }
 }
 
-#Preview {
+#Preview(traits: .sizeThatFitsLayout) {
     PlaceReviewTotal(totalInfo: .init(totalCount: 44, averageRating: 4.7, ratingInfo: [
         .init(score: 5, count: 50),
         .init(score: 4, count: 40),
